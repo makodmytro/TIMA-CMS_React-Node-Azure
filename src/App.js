@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { Admin, ListGuesser, Resource } from 'react-admin';
+import theme from './common/theme';
+import authProvider from './common/providers/authProvider';
+import i18nProvider from './common/i18nProvider';
+import resDataProvider from './common/providers/resDataProvider';
+
+import topic from './topics';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Admin
+      title="TIMA Management"
+      theme={theme}
+      i18nProvider={i18nProvider}
+      authProvider={authProvider}
+      dataProvider={resDataProvider}
+    >
+      <Resource
+        name="topics"
+        list={ListGuesser}
+        {...topic}
+      />
+    </Admin>
   );
 }
 
