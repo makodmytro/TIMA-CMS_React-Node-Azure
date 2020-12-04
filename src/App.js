@@ -1,26 +1,35 @@
 import React from 'react';
 import './App.css';
-import { Admin, ListGuesser, Resource } from 'react-admin';
+import { Admin, Resource } from 'react-admin';
 import theme from './common/theme';
 import authProvider from './common/providers/authProvider';
 import i18nProvider from './common/i18nProvider';
 import resDataProvider from './common/providers/resDataProvider';
 
 import topic from './topics';
+import MyLayout from './common/components/Layout';
+import lngReducer from './common/reducer/lngReducer';
 
 function App() {
   return (
     <Admin
       title="TIMA Management"
       theme={theme}
+      layout={MyLayout}
       i18nProvider={i18nProvider}
       authProvider={authProvider}
       dataProvider={resDataProvider}
+      customReducers={{ lng: lngReducer }}
     >
       <Resource
         name="topics"
-        list={ListGuesser}
         {...topic}
+      />
+      <Resource
+        name="editors"
+      />
+      <Resource
+        name="languages"
       />
     </Admin>
   );

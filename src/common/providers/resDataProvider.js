@@ -8,12 +8,20 @@ const resDataProvider = {
   getList: async (resource) => {
     const url = `${baseApi}/${resource}`;
 
-    const { data } = await httpClient(url);
-
+    const { json } = await httpClient(url);
     return {
-      data,
-      total: data.length,
+      data: json,
+      total: json.length,
     };
+  },
+
+  update: async (resource, params) => {
+    const url = `${baseApi}/${resource}/${params.id}`;
+    await httpClient(url, {
+      method: 'PUT',
+      body: JSON.stringify(params.data),
+    });
+    return httpClient(url).then(({ json }) => ({ data: json }));
   },
 };
 

@@ -3,6 +3,21 @@ import englishMessages from 'ra-language-english';
 
 const english = {
   ...englishMessages,
+  appbar: {
+    languageSelect: 'Language',
+
+  },
+  resources: {
+    topics: {
+      name: 'Topic |||| Topics',
+      fields: {
+        fallbackTopicLevel: 'Fallback Topic Level',
+        updatedAt: 'Updated',
+        language: 'Language',
+        editor: 'Editor',
+      },
+    },
+  },
 };
 
 const i18nProvider = polyglotI18nProvider(() => english,
