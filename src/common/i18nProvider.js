@@ -27,6 +27,18 @@ const english = {
         welcomeButton: 'Button Text',
       },
     },
+    questions: {
+      name: 'Question |||| Questions',
+      fields: {
+        text: 'Text',
+        fk_editorId: 'Editor',
+        fk_languageId: 'Language',
+        fk_topicId: 'Topic',
+        fk_answerId: 'Answer',
+        fk_parentQuestionId: 'Parent Question',
+        fk_questionId: 'Related Question',
+      },
+    },
   },
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {
-  Admin, Resource, ListGuesser, EditGuesser,
+  Admin, EditGuesser, ListGuesser, Resource,
 } from 'react-admin';
 import theme from './common/theme';
 import authProvider from './common/providers/authProvider';
@@ -10,6 +10,7 @@ import resDataProvider from './common/providers/resDataProvider';
 
 import topic from './topics';
 import language from './languages';
+import question from './questions';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
 
@@ -37,6 +38,10 @@ function App() {
       />
       <Resource
         name="questions"
+        {...question}
+      />
+      <Resource
+        name="answers"
         list={ListGuesser}
         edit={EditGuesser}
       />
