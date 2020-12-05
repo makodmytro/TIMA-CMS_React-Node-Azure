@@ -1,7 +1,7 @@
 import { fetchUtils } from 'react-admin';
 
 const httpClient = (url, options = {}) => {
-  if (!options.headers) {
+  if (!options.headers || !(options.headers instanceof Headers)) {
     // eslint-disable-next-line no-param-reassign
     options.headers = new Headers({ Accept: 'application/json' });
   }

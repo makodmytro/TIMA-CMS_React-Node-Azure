@@ -17,6 +17,16 @@ const english = {
         editor: 'Editor',
       },
     },
+    languages: {
+      name: 'Language |||| Languages',
+      fields: {
+        updatedAt: 'Updated',
+        name: 'Name',
+        code: 'Code',
+        welcomeText: 'Welcome Text',
+        welcomeButton: 'Button Text',
+      },
+    },
   },
 };
 

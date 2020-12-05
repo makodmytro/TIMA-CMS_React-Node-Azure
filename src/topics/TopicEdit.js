@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
+  Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput, NumberInput,
 } from 'react-admin';
 
 const TopicEdit = (props) => (
   <Edit {...props}>
     <SimpleForm>
       <TextInput source="name" validate={required()} />
-      <TextInput source="fallbackTopicLevel" />
+      <NumberInput source="fallbackTopicLevel" />
       <ReferenceInput
         validate={required()}
         source="fk_languageId"

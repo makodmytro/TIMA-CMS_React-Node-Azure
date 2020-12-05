@@ -1,4 +1,5 @@
 import React from 'react';
+import { isNil } from 'lodash';
 import { AppBar, useGetList, useTranslate } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     color: 'white',
   },
+  white: {
+    color: 'white',
+  },
 }));
 
 const MyAppBar = (props) => {
@@ -41,12 +45,18 @@ const MyAppBar = (props) => {
       />
       <span className={classes.spacer} />
 
-      {(!loading && data && !error) && (
-        <FormControl className={classes.formControl}>
-          <InputLabel id="lng-select-label">{translate('appbar.languageSelect')}</InputLabel>
+      {(!loading && !isNil(data) && Object.values(data).length > 0 && !error) && (
+        <FormControl classes={{ root: classes.white }} className={classes.formControl}>
+          <InputLabel
+            classes={{ root: classes.white }}
+            id="lng-select-label"
+          >
+            {translate('appbar.languageSelect')}
+          </InputLabel>
           <Select
             labelId="lng-select-label"
             id="demo-simple-select"
+            classes={{ root: classes.white, icon: classes.white }}
             value={language}
             onChange={(e) => onLanguageChange(e.target.value)}
           >
