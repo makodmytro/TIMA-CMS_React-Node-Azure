@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { setLanguage } from '../reducer/lngReducer';
+import Logo from '../../assets/TIMA_logo.png';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -16,15 +17,17 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
   },
+  logo: {
+    background: `url(${Logo})`,
+    width: 100,
+    height: 70,
+  },
   spacer: {
     flex: 1,
   },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    color: 'white',
-  },
-  white: {
     color: 'white',
   },
 }));
@@ -36,7 +39,7 @@ const MyAppBar = (props) => {
   const translate = useTranslate();
 
   return (
-    <AppBar {...rest}>
+    <AppBar color="transparent" {...rest}>
       <Typography
         variant="h6"
         color="inherit"
@@ -45,10 +48,12 @@ const MyAppBar = (props) => {
       />
       <span className={classes.spacer} />
 
-      {(!loading && !isNil(data) && Object.values(data).length > 0 && !error) && (
-        <FormControl classes={{ root: classes.white }} className={classes.formControl}>
+      <div className={classes.logo} />
+      <span className={classes.spacer} />
+
+      {(!loading && !isNil(data) && Object.values(data).length > 0 && !error) ? (
+        <FormControl className={classes.formControl}>
           <InputLabel
-            classes={{ root: classes.white }}
             id="lng-select-label"
           >
             {translate('appbar.languageSelect')}
@@ -56,7 +61,6 @@ const MyAppBar = (props) => {
           <Select
             labelId="lng-select-label"
             id="demo-simple-select"
-            classes={{ root: classes.white, icon: classes.white }}
             value={language}
             onChange={(e) => onLanguageChange(e.target.value)}
           >
@@ -64,7 +68,7 @@ const MyAppBar = (props) => {
               .map((d) => (<MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>))}
           </Select>
         </FormControl>
-      )}
+      ) : <span className={classes.formControl} />}
 
     </AppBar>
   );

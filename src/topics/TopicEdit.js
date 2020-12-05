@@ -3,8 +3,10 @@ import {
   Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput, NumberInput,
 } from 'react-admin';
 
+const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
+
 const TopicEdit = (props) => (
-  <Edit {...props}>
+  <Edit {...props} title={<TopicTitle />}>
     <SimpleForm>
       <TextInput source="name" validate={required()} />
       <NumberInput source="fallbackTopicLevel" />

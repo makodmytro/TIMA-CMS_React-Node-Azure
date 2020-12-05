@@ -37,6 +37,17 @@ const english = {
         fk_answerId: 'Answer',
         fk_parentQuestionId: 'Parent Question',
         fk_questionId: 'Related Question',
+        updatedAt: 'Updated',
+      },
+    },
+    answers: {
+      name: 'Answer |||| Answers',
+      fields: {
+        text: 'Text',
+        fk_editorId: 'Editor',
+        fk_languageId: 'Language',
+        fk_topicId: 'Topic',
+        updatedAt: 'Updated',
       },
     },
   },
