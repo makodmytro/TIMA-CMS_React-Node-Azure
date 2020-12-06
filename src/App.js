@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
-import {
-  Admin, Resource,
-} from 'react-admin';
+import { Admin, Resource } from 'react-admin';
 import theme from './common/theme';
 import authProvider from './common/providers/authProvider';
 import i18nProvider from './common/i18nProvider';
@@ -12,6 +10,7 @@ import topic from './topics';
 import language from './languages';
 import question from './questions';
 import answer from './answers';
+import source from './sources';
 
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
@@ -45,6 +44,13 @@ function App() {
       <Resource
         name="answers"
         {...answer}
+      />
+      <Resource
+        name="sources"
+        {...source}
+      />
+      <Resource
+        name="keywords"
       />
     </Admin>
   );

@@ -50,6 +50,14 @@ const english = {
         updatedAt: 'Updated',
       },
     },
+    sources: {
+      name: 'Source |||| Sources',
+      fields: {
+        text: 'Text',
+        fk_languageId: 'Language',
+        updatedAt: 'Updated',
+      },
+    },
   },
 };
 

@@ -14,6 +14,13 @@ const theme = createMuiTheme({
       secondary: '#000000DE',
     },
   },
+  overrides: {
+    RaLayout: {
+      appFrame: {
+        marginTop: '70px !important',
+      },
+    },
+  },
 });
 
 export default theme;

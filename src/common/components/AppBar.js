@@ -51,7 +51,7 @@ const MyAppBar = (props) => {
       <div className={classes.logo} />
       <span className={classes.spacer} />
 
-      {(!loading && !isNil(data) && Object.values(data).length > 0 && !error) ? (
+      {(!loading && !isNil(data) && Object.values(data).length > 1 && !error) ? (
         <FormControl className={classes.formControl}>
           <InputLabel
             id="lng-select-label"
