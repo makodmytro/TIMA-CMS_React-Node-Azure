@@ -1,18 +1,52 @@
 import simpleRestProvider from 'ra-data-simple-rest';
+import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
 
 const dataProvider = simpleRestProvider(baseApi, httpClient);
 
 const resDataProvider = {
   ...dataProvider,
-  getList: async (resource) => {
-    const url = `${baseApi}/${resource}`;
+  getList: async (resource, params) => {
+    let url = `${baseApi}/${resource}`;
+    if (params) {
+      const { field, order } = params.sort || {};
+
+      const { q, ...filter } = params.filter || {};
+
+      const query = {
+        orderBy: field && order ? `${field} ${order}` : null,
+        search: q || null,
+        filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
+      };
+
+      url += `?${stringify(query)}`;
+    }
 
     const { json } = await httpClient(url);
-    return {
-      data: json,
-      total: json.length,
+    if (Array.isArray(json)) {
+      return {
+        data: json,
+        total: json.length,
+      };
+    }
+    return json;
+  },
+  getMany: async (resource, params) => {
+    const query = {
+      filter: params.ids && params.ids.length > 0
+        ? JSON.stringify({ id: params.ids }) : null,
     };
+
+    const url = `${baseApi}/${resource}?${stringify(query)}`;
+
+    const { json } = await httpClient(url);
+    if (Array.isArray(json)) {
+      return {
+        data: json,
+        total: json.length,
+      };
+    }
+    return json;
   },
 
   update: async (resource, params) => {
