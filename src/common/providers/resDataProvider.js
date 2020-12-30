@@ -13,9 +13,13 @@ const resDataProvider = {
 
       const { q, ...filter } = params.filter || {};
 
+      const { page, perPage } = params.pagination || { page: 1, perPage: 100 };
+
       const query = {
+        limit: perPage,
+        offset: (page - 1) * perPage,
         orderBy: field && order ? `${field} ${order}` : null,
-        search: q || null,
+        search: q || undefined,
         filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
       };
 
