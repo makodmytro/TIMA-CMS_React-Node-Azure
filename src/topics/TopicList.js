@@ -2,8 +2,9 @@ import React from 'react';
 import {
   Datagrid, DateField, List, ReferenceField, TextField,
 } from 'react-admin';
+import { connect } from 'react-redux';
 
-const TopicList = (props) => (
+const TopicList = ({ language, ...props }) => (
   <List {...props}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
@@ -29,4 +30,8 @@ const TopicList = (props) => (
   </List>
 );
 
-export default TopicList;
+const mapStateToProps = (state) => ({
+  language: state.lng.language,
+});
+
+export default connect(mapStateToProps)(TopicList);
