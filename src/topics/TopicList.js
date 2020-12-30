@@ -45,7 +45,7 @@ const TopicList = ({ language, ...props }) => (
       <TextField source="fallbackTopicLevel" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

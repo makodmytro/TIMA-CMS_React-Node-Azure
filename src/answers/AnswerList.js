@@ -44,14 +44,10 @@ const AnswerList = (props) => (
   <List {...props} filters={<Filters />}>
     <Datagrid rowClick="edit">
       <TextField source="text" />
-      <ReferenceField source="fk_languageId" reference="languages">
-        <TextField
-          source="name"
-        />
-      </ReferenceField>
+      <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
       <TextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

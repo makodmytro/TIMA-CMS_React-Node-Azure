@@ -40,10 +40,11 @@ const Filters = (props) => {
 const QuestionList = (props) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false}>
     <Datagrid rowClick="show">
-      <TextField source="clientIP" label="IP" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
-      <DateField source="updatedAt" />
+      <TextField source="duration" label="duration" />
+      <TextField source="questionsCount" label="# of questions" />
+      <TextField source="answersCount" label="# of answers" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

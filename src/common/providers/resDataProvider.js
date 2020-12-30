@@ -7,7 +7,7 @@ const getResourceAssociations = (resource) => {
   switch (resource) {
     case 'questions': {
       return {
-        include: ['Topic', 'Answer', 'Language'],
+        include: ['Answer'],
       };
     }
     case 'topics': {
@@ -17,7 +17,7 @@ const getResourceAssociations = (resource) => {
     }
     case 'answers': {
       return {
-        include: ['Editor', 'Topic'],
+        include: ['Editor', 'Topic', 'Language'],
       };
     }
     case 'stats/sessions': {

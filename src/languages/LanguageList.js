@@ -13,7 +13,7 @@ const LanguageList = (props) => (
       <TextField source="name" />
       <TextField source="welcomeText" />
       <TextField source="welcomeButton" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

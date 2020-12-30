@@ -12,7 +12,7 @@ const SessionShow = (props) => (
       <TextField source="clientIP" label="IP" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" someTime />
     </SimpleShowLayout>
   </Show>
 );
