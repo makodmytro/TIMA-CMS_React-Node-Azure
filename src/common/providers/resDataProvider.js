@@ -10,8 +10,8 @@ const resDataProvider = {
 
     const { json } = await httpClient(url);
     return {
-      data: json,
-      total: json.length,
+      data: json.data,
+      total: json.total,
     };
   },
 
