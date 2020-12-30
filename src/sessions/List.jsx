@@ -1,9 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   Datagrid,
   DateField,
   List,
-  ReferenceField,
   TextField,
   Filter,
   TextInput,
@@ -11,7 +11,6 @@ import {
   SelectArrayInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -27,31 +26,26 @@ const Filters = (props) => {
 
   return (
     <Filter {...props} className={classes.padded}>
-      <TextInput label="Text" source="q" alwaysOn />
+      <TextInput label="IP" source="clientIP" alwaysOn />
       <ReferenceArrayInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
         <SelectArrayInput optionText="name" className={classes.select} />
       </ReferenceArrayInput>
-      <ReferenceArrayInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
+      <ReferenceArrayInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
         <SelectArrayInput optionText="name" className={classes.select} />
       </ReferenceArrayInput>
     </Filter>
   );
 };
 
-const TopicList = ({ language, ...props }) => (
-  <List {...props} filters={<Filters />}>
-    <Datagrid rowClick="edit">
-      <TextField source="name" />
-      <TextField source="fallbackTopicLevel" />
+const QuestionList = (props) => (
+  <List {...props} filters={<Filters />} bulkActionButtons={false}>
+    <Datagrid rowClick="show">
+      <TextField source="clientIP" label="IP" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
+      <TextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
       <DateField source="updatedAt" />
     </Datagrid>
   </List>
 );
 
-const mapStateToProps = (state) => ({
-  language: state.lng.language,
-});
-
-export default connect(mapStateToProps)(TopicList);
+export default QuestionList;

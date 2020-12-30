@@ -11,6 +11,7 @@ import language from './languages';
 import question from './questions';
 import answer from './answers';
 import source from './sources';
+import sessions from './sessions';
 
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
@@ -48,6 +49,10 @@ function App() {
       <Resource
         name="sources"
         {...source}
+      />
+      <Resource
+        name="stats/sessions"
+        {...sessions}
       />
       <Resource
         name="keywords"

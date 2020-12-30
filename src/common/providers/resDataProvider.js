@@ -3,6 +3,33 @@ import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
 
 const dataProvider = simpleRestProvider(baseApi, httpClient);
+const getResourceAssociations = (resource) => {
+  switch (resource) {
+    case 'questions': {
+      return {
+        include: ['Topic', 'Answer', 'Language'],
+      };
+    }
+    case 'topics': {
+      return {
+        include: ['Language', 'Editor'],
+      };
+    }
+    case 'answers': {
+      return {
+        include: ['Editor', 'Topic'],
+      };
+    }
+    case 'stats/sessions': {
+      return {
+        include: ['Language', 'Topic'],
+      };
+    }
+    default: {
+      return {};
+    }
+  }
+};
 
 const resDataProvider = {
   ...dataProvider,
@@ -21,6 +48,8 @@ const resDataProvider = {
         orderBy: field && order ? `${field} ${order}` : null,
         search: q || undefined,
         filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
+        ...(resource === 'questions' ? { group: 1 } : {}),
+        ...getResourceAssociations(resource),
       };
 
       url += `?${stringify(query)}`;
