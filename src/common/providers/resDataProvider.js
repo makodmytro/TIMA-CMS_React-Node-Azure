@@ -13,7 +13,7 @@ const resDataProvider = {
 
       const { q, ...filter } = params.filter || {};
 
-      const { page, perPage } = params.pagination || { page: 1, perPage: 100 };
+      const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
 
       const query = {
         limit: perPage,
