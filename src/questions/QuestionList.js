@@ -4,7 +4,7 @@ import {
 } from 'react-admin';
 
 const QuestionList = (props) => (
-  <List {...props} perPage={50} pagination={false}>
+  <List {...props}>
     <Datagrid rowClick="edit">
       <TextField source="text" />
       <ReferenceField source="fk_languageId" reference="languages">
