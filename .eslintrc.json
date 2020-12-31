@@ -29,6 +29,7 @@
     "prefer-promise-reject-errors": "off",
     "react/destructuring-assignment": "warn",
     "react/no-array-index-key": "warn",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react/jsx-one-expression-per-line": "off"
   }
 }

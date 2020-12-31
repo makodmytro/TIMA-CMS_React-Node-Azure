@@ -8,6 +8,8 @@ import {
   Filter,
   TextInput,
   ReferenceArrayInput,
+  ReferenceInput,
+  SelectInput,
   SelectArrayInput,
   EditButton,
   useListContext,
@@ -23,16 +25,28 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import ViewIcon from '@material-ui/icons/Visibility';
-import ExpandIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
+import { Form } from 'react-final-form'; // eslint-disable-line
+import { InputAdornment } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import ContentFilter from '@material-ui/icons/FilterList';
 
-const styles = makeStyles(() => ({
+const styles = makeStyles((theme) => ({
   padded: {
     paddingTop: '1rem',
   },
   select: {
     minWidth: 150,
+  },
+  related: {
+    color: theme.palette.primary.main,
+    cursor: 'pointer',
+
+    '& svg': {
+      verticalAlign: 'middle',
+      fontSize: '0.9rem',
+    },
   },
 }));
 
@@ -42,11 +56,11 @@ const Filters = (props) => {
   return (
     <Filter {...props} className={classes.padded}>
       <TextInput label="Text" source="q" alwaysOn />
-      <ReferenceArrayInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectArrayInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
+      <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
+        <SelectInput optionText="name" className={classes.select} />
+      </ReferenceInput>
       <ReferenceArrayInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
-        <SelectArrayInput optionText="name" className={classes.select} />
+        <SelectInput optionText="name" className={classes.select} />
       </ReferenceArrayInput>
     </Filter>
   );
@@ -63,7 +77,8 @@ const AnswerField = ({ record }) => {
         component={Link}
         to="/answers/create"
         size="small"
-        color="primary"
+        style={{ color: 'red', borderColor: '#ff0000a6' }}
+        variant="outlined"
       >
         <AddIcon />
         &nbsp;Create
@@ -78,27 +93,40 @@ const AnswerField = ({ record }) => {
       size="small"
       color="primary"
     >
-      <ViewIcon />
-      &nbsp;View
+      {
+        record.Answer && (
+          <>
+            {record.Answer.text.substr(0, 40)}...
+          </>
+        )
+      }
+      {
+        !record.Answer && (
+          <>
+            <ViewIcon />
+            &nbsp;View
+          </>
+        )
+      }
     </Button>
   );
 };
 
 const RelatedQuestions = ({ record, expanded, setExpanded }) => {
+  const classes = styles();
+
   if (!record.relatedQuestions.length) {
-    return (<>-</>);
+    return (<>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</>);
   }
 
   return (
-    <Button
-      size="small"
-      color="primary"
+    <span
+      className={classes.related}
       onClick={() => setExpanded(!expanded)}
-      type="button"
     >
       {record.relatedQuestions.length}
-      &nbsp;{ expanded ? <ExpandLessIcon /> : <ExpandIcon />} { /* eslint-disable-line */ }
-    </Button>
+      { expanded ? <ExpandLessIcon size="small" /> : <AddIcon size="small" />} { /* eslint-disable-line */ }
+    </span>
   );
 };
 
@@ -107,15 +135,14 @@ const CustomGridItem = ({ record, basePath }) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}>
         <TableCell>
+          <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
+          &nbsp;
           <TextField source="text" record={record} />
         </TableCell>
         <TableCell>
           <AnswerField label="Answer" record={record} />
-        </TableCell>
-        <TableCell align="center">
-          <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
         </TableCell>
         <TableCell>
           <DateField source="updatedAt" showTime record={record} />
@@ -134,7 +161,6 @@ const CustomGridItem = ({ record, basePath }) => {
               <TableCell>
                 <AnswerField label="Answer" record={related} />
               </TableCell>
-              <TableCell align="center">-</TableCell>
               <TableCell>
                 <DateField source="updatedAt" showTime record={related} />
               </TableCell>
@@ -150,11 +176,7 @@ const CustomGridItem = ({ record, basePath }) => {
 };
 
 const CustomGrid = () => {
-  const { ids, data, basePath, ...rest } = useListContext(); // eslint-disable-line
-  console.log(rest);
-  React.useEffect(() => {
-    rest.onSelect([ids[0]]);
-  }, []);
+  const { ids, data, basePath } = useListContext(); // eslint-disable-line
 
   return (
     <Grid container spacing={2}>
@@ -184,8 +206,84 @@ const CustomGrid = () => {
   );
 };
 
+const PostFilter = (props) => { // eslint-disable-line
+  return props.context === 'button' ? (
+    null
+  ) : (
+    <PostFilterForm {...props} />
+  );
+};
+
+const PostFilterButton = () => {
+  const { showFilter } = useListContext();
+  return (
+    <Button
+      size="small"
+      color="primary"
+      onClick={() => showFilter('main')}
+      startIcon={<ContentFilter />}
+    >
+      Filter
+    </Button>
+  );
+};
+
+const PostFilterForm = ({ open }) => {
+  const classes = styles();
+  const {
+    filterValues,
+    setFilters,
+    resource,
+  } = useListContext();
+
+  const onSubmit = (values) => {
+    setFilters(values);
+  };
+
+  const resetFilter = () => {
+    setFilters({}, []);
+  };
+
+  return (
+    <div>
+      <Form onSubmit={onSubmit} initialValues={filterValues}>
+        {({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={1}>
+              <Grid item xs={6} lg={3}>
+                <TextInput label="Text" source="q" alwaysOn fullWidth />
+              </Grid>
+              <Grid item xs={6} lg={3}>
+                <ReferenceInput label="Language" source="fk_languageId" reference="languages" resource={resource} allowEmpty alwaysOn>
+                  <SelectInput optionText="name" className={classes.select} allowEmpty fullWidth />
+                </ReferenceInput>
+              </Grid>
+              <Grid item xs={6} lg={3}>
+                <ReferenceArrayInput label="Topic" source="fk_topicId" reference="topics" resource={resource} alwaysOn allowEmpty perPage={100}>
+                  <SelectInput optionText="name" className={classes.select} fullWidth allowEmpty />
+                </ReferenceArrayInput>
+              </Grid>
+              <Grid item xs={6} lg={3}>
+                <Box py={2}>
+                  <Button variant="contained" color="secondary" type="submit" size="small">
+                    Filter
+                  </Button>
+                  &nbsp;
+                  <Button variant="outlined" onClick={resetFilter} size="small">
+                    Clear
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
+    </div>
+  );
+};
+
 const QuestionList = (props) => (
-  <List {...props} filters={<Filters />}>
+  <List {...props} filters={<PostFilter />}>
     <CustomGrid />
   </List>
 );

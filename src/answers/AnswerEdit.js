@@ -25,18 +25,6 @@ const AnswerEdit = (props) => (
           optionText="name"
         />
       </ReferenceInput>
-      <ReferenceInput
-        allowEmpty
-        source="fk_answerId"
-        reference="answers"
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
     </SimpleForm>
   </Edit>
 );

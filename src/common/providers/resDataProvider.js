@@ -33,6 +33,15 @@ const getResourceAssociations = (resource) => {
 
 const resDataProvider = {
   ...dataProvider,
+  getOne: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/${resource}/${params.id}`);
+
+    if (resource === 'sessions') {
+      return json;
+    }
+
+    return { data: json };
+  },
   getList: async (resource, params) => {
     let url = `${baseApi}/${resource}`;
     if (params) {

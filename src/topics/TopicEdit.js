@@ -8,13 +8,15 @@ const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const TopicEdit = (props) => (
   <Edit {...props} title={<TopicTitle />}>
     <SimpleForm>
-      <TextInput source="name" validate={required()} />
-      <NumberInput source="fallbackTopicLevel" />
+      <TextInput source="name" validate={required()} fullWidth />
+      <TextInput source="topicKey" fullWidth />
+      <TextInput source="topicImageUrl" fullWidth />
       <ReferenceInput
         validate={required()}
         source="fk_languageId"
         reference="languages"
         label="resources.topics.fields.language"
+        fullWidth
       >
         <SelectInput
           optionText="name"

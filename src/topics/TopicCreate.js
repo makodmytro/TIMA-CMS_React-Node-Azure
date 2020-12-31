@@ -7,7 +7,8 @@ const TopicCreate = (props) => (
   <Create {...props}>
     <SimpleForm>
       <TextInput source="name" validate={required()} />
-      <NumberInput source="fallbackTopicLevel" />
+      <TextInput source="topicKey" />
+      <TextInput source="topicImageUrl" />
       <ReferenceInput
         validate={required()}
         source="fk_languageId"

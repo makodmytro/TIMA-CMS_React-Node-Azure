@@ -3,7 +3,8 @@ import {
   Datagrid,
   DateField,
   List,
-  ReferenceField,
+  ReferenceInput,
+  SelectInput,
   TextField,
   Filter,
   TextInput,
@@ -28,11 +29,11 @@ const Filters = (props) => {
   return (
     <Filter {...props} className={classes.padded}>
       <TextInput label="Text" source="q" alwaysOn />
-      <ReferenceArrayInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectArrayInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
+      <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
+        <SelectInput optionText="name" className={classes.select} />
+      </ReferenceInput>
       <ReferenceArrayInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
-        <SelectArrayInput optionText="name" className={classes.select} />
+        <SelectInput optionText="name" className={classes.select} />
       </ReferenceArrayInput>
     </Filter>
   );
@@ -42,7 +43,7 @@ const TopicList = ({ language, ...props }) => (
   <List {...props} filters={<Filters />}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
-      <TextField source="fallbackTopicLevel" />
+      <TextField source="topicKey" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
       <DateField source="updatedAt" showTime />

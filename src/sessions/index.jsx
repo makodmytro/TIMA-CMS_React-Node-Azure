@@ -4,7 +4,7 @@ import Show from './Show';
 
 export default {
   icon: ChatIcon,
-  list: List,
   show: Show,
+  list: List,
   options: { label: 'Sessions' },
 };
