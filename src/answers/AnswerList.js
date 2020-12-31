@@ -8,8 +8,6 @@ import {
   TextField,
   Filter,
   TextInput,
-  ReferenceArrayInput,
-  SelectArrayInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -29,20 +27,20 @@ const Filters = (props) => {
     <Filter {...props} className={classes.padded}>
       <TextInput label="Text" source="q" alwaysOn />
       <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} />
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
-      <ReferenceArrayInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
-      <ReferenceArrayInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
+      <ReferenceInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+      </ReferenceInput>
+      <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+      </ReferenceInput>
     </Filter>
   );
 };
 
 const AnswerList = (props) => (
-  <List {...props} filters={<Filters />}>
+  <List {...props} filters={<Filters />} bulkActionButtons={false}>
     <Datagrid rowClick="edit">
       <TextField source="text" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />

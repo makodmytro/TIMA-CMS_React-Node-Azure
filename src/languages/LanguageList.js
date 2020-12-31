@@ -7,7 +7,7 @@ import {
 } from 'react-admin';
 
 const LanguageList = (props) => (
-  <List {...props}>
+  <List {...props} bulkActionButtons={false}>
     <Datagrid rowClick="edit">
       <TextField source="code" />
       <TextField source="name" />

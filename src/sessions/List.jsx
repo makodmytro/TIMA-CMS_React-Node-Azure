@@ -1,15 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   Datagrid,
   DateField,
   List,
   TextField,
   Filter,
-  TextInput,
-  ReferenceArrayInput,
   ReferenceInput,
-  SelectArrayInput,
   SelectInput,
   ShowButton,
 } from 'react-admin';
@@ -29,13 +25,12 @@ const Filters = (props) => {
 
   return (
     <Filter {...props} className={classes.padded}>
-      <TextInput label="IP" source="clientIP" alwaysOn />
       <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} />
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
-      <ReferenceArrayInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
+      <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+      </ReferenceInput>
     </Filter>
   );
 };
@@ -52,13 +47,12 @@ const ConditionalShow = ({ record, basePath }) => {
 
 const QuestionList = (props) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false}>
-    <Datagrid rowClick={null}>
+    <Datagrid rowClick="show">
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="duration" label="duration" />
       <TextField source="questionsCount" label="# of questions" />
       <TextField source="answersCount" label="# of answers" />
       <DateField source="updatedAt" showTime />
-      <ConditionalShow />
     </Datagrid>
   </List>
 );

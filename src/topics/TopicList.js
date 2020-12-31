@@ -8,11 +8,10 @@ import {
   TextField,
   Filter,
   TextInput,
-  ReferenceArrayInput,
-  SelectArrayInput,
 } from 'react-admin';
+import { Link } from 'react-router-dom'; // eslint-disable-line
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -30,29 +29,41 @@ const Filters = (props) => {
     <Filter {...props} className={classes.padded}>
       <TextInput label="Text" source="q" alwaysOn />
       <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} />
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
-      <ReferenceArrayInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} />
-      </ReferenceArrayInput>
+      <ReferenceInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
+        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+      </ReferenceInput>
     </Filter>
   );
 };
 
+export const ShowQuestions = ({ record }) => (
+  <Button
+    component={Link}
+    onClick={(e) => {
+      e.stopPropagation();
+    }}
+    size="small"
+    color="primary"
+    variant="outlined"
+    to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
+  >
+    Show questions
+  </Button>
+);
+
 const TopicList = ({ language, ...props }) => (
-  <List {...props} filters={<Filters />}>
+  <List {...props} filters={<Filters />} bulkActionButtons={false}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="topicKey" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
       <DateField source="updatedAt" showTime />
+      <ShowQuestions />
     </Datagrid>
   </List>
 );
 
-const mapStateToProps = (state) => ({
-  language: state.lng.language,
-});
-
-export default connect(mapStateToProps)(TopicList);
+export default TopicList;
