@@ -10,13 +10,14 @@ const Toolbar = (props) => {
   const history = useHistory();
 
   return (
-    <TopToolbar>
+    <TopToolbar style={{ justifyContent: 'flex-start' }}>
       <Button
         color="secondary"
         size="small"
+        variant="outlined"
         onClick={() => history.goBack()}
       >
-        <BackIcon />
+        <BackIcon size="small" /> BACK
       </Button>
       &nbsp;
       {props.children}

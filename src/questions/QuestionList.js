@@ -26,6 +26,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
+import PlayableText from '../common/components/playable-text-field';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -162,7 +163,7 @@ const CustomGridItem = ({ record, basePath }) => {
         <TableCell>
           <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
           &nbsp;
-          <TextField source="text" record={record} />
+          <PlayableText text={record.text} lang={record.Language.code}/>
         </TableCell>
         <TableCell>
           <AnswerField label="Answer" record={record} />

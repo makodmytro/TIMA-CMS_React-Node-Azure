@@ -7,7 +7,7 @@ const getResourceAssociations = (resource) => {
   switch (resource) {
     case 'questions': {
       return {
-        include: ['Answer'],
+        include: ['Answer', 'Language'],
       };
     }
     case 'topics': {
@@ -98,6 +98,15 @@ const resDataProvider = {
       body: JSON.stringify(params.data),
     });
     return httpClient(url).then(({ json }) => ({ data: json }));
+  },
+
+  tts: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/admin/tts`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
   },
 };
 

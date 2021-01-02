@@ -38,15 +38,16 @@ const Filters = (props) => {
   );
 };
 
-export const ShowQuestions = ({ record }) => (
+export const ShowQuestions = ({ record, size }) => (
   <Button
     component={Link}
     onClick={(e) => {
       e.stopPropagation();
     }}
-    size="small"
+    size={size || 'small'}
     color="primary"
     variant="outlined"
+    style={{ marginLeft: '10px' }}
     to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
   >
     Show questions
@@ -54,7 +55,7 @@ export const ShowQuestions = ({ record }) => (
 );
 
 const TopicList = ({ language, ...props }) => (
-  <List {...props} filters={<Filters />} bulkActionButtons={false}>
+  <List {...props} filters={<Filters />} bulkActionButtons={false} sort={{ field: 'fk_languageId', order: 'DESC' }}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="topicKey" />
