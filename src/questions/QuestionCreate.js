@@ -1,51 +1,59 @@
 import React from 'react';
 import {
-  Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
+  Create,
+  SimpleForm,
+  useNotify,
 } from 'react-admin';
+import { useField } from 'react-final-form'; // eslint-disable-line
+import Button from '@material-ui/core/Button';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import AutocompleteInput from './autocomplete-input';
+import Form from './form';
 
-const QuestionCreate = (props) => (
-  <Create {...props} actions={<CustomTopToolbar />}>
-    <SimpleForm>
-      <TextInput source="text" validate={required()} />
-      <ReferenceInput
-        source="fk_languageId"
-        reference="languages"
-        validate={required()}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <ReferenceInput
-        source="fk_topicId"
-        reference="topics"
-        validate={required()}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <AutocompleteInput />
-      <ReferenceInput allowEmpty source="fk_parentQuestionId" reference="questions">
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
-      <ReferenceInput allowEmpty source="fk_questionId" reference="questions">
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
-    </SimpleForm>
-  </Create>
+const Toolbar = ({ onClick }) => (
+  <CustomTopToolbar>
+    <Button
+      type="button"
+      onClick={onClick}
+      color="primary"
+      variant="outlined"
+    >
+      Create and insert answer
+    </Button>
+  </CustomTopToolbar>
 );
+
+const FormFields = ({ open, setOpen }) => {
+  const notify = useNotify();
+  const {
+    input: { onChange },
+  } = useField('fk_answerId');
+
+  const onAnswerCreated = (data) => {
+    if (data.id) {
+      notify(`Answer created with id: ${data.id}`);
+      onChange(data.id);
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <Form open={open} setOpen={setOpen} onAnswerCreated={onAnswerCreated} />
+  );
+};
+
+const QuestionCreate = (props) => {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      <Create {...props} actions={<Toolbar onClick={() => setOpen(true)} />}>
+        <SimpleForm>
+          <FormFields open={open} setOpen={setOpen} />
+        </SimpleForm>
+      </Create>
+    </>
+  );
+};
 
 export default QuestionCreate;

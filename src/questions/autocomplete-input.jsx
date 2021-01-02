@@ -55,11 +55,13 @@ const AutocompleteInput = () => {
     }
   };
 
+  // handles when the value is changed from outside
+  // for example when we create a new answer to go with this question
   React.useEffect(() => {
-    if (currentValue) {
+    if (currentValue && (!value || value.id !== currentValue)) {
       getPresetAnswer();
     }
-  }, []);
+  }, [currentValue]);
 
   React.useEffect(() => {
     let active = true;
@@ -107,13 +109,15 @@ const AutocompleteInput = () => {
         disableClearable
         value={value}
         onChange={(event, newValue) => {
-          if (newValue) {
-            onChange(newValue.id);
+          if (newValue && (!value || value.id !== newValue.id)) {
             setValue(newValue);
+            onChange(newValue.id);
           }
         }}
         onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
+          if (event && event.type !== 'click') {
+            setInputValue(newInputValue);
+          }
         }}
         renderInput={(params) => (
           <TextField
