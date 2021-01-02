@@ -3,6 +3,7 @@ import {
   Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import AutocompleteInput from './autocomplete-input';
 
 const QuestionCreate = (props) => (
   <Create {...props} actions={<CustomTopToolbar />}>
@@ -26,11 +27,7 @@ const QuestionCreate = (props) => (
           optionText="name"
         />
       </ReferenceInput>
-      <ReferenceInput source="fk_answerId" reference="answers">
-        <SelectInput
-          optionText="text"
-        />
-      </ReferenceInput>
+      <AutocompleteInput />
       <ReferenceInput allowEmpty source="fk_parentQuestionId" reference="questions">
         <SelectInput
           allowEmpty

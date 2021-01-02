@@ -3,15 +3,17 @@ import {
   Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import AutocompleteInput from './autocomplete-input';
 
 const QuestionEdit = (props) => (
-  <Edit {...props} actions={<CustomTopToolbar />}>
+  <Edit {...props} actions={<CustomTopToolbar />} undoable={false}>
     <SimpleForm>
-      <TextInput source="text" validate={required()} />
+      <TextInput source="text" validate={required()} fullWidth />
       <ReferenceInput
         source="fk_languageId"
         reference="languages"
         validate={required()}
+        fullWidth
       >
         <SelectInput
           optionText="name"
@@ -21,17 +23,14 @@ const QuestionEdit = (props) => (
         source="fk_topicId"
         reference="topics"
         validate={required()}
+        fullWidth
       >
         <SelectInput
           optionText="name"
         />
       </ReferenceInput>
-      <ReferenceInput source="fk_answerId" reference="answers">
-        <SelectInput
-          optionText="text"
-        />
-      </ReferenceInput>
-      <ReferenceInput allowEmpty source="fk_parentQuestionId" reference="questions">
+      <AutocompleteInput />
+      <ReferenceInput allowEmpty source="fk_parentQuestionId" reference="questions" fullWidth>
         <SelectInput
           allowEmpty
           resettable
@@ -39,7 +38,7 @@ const QuestionEdit = (props) => (
           optionText="text"
         />
       </ReferenceInput>
-      <ReferenceInput allowEmpty source="fk_questionId" reference="questions">
+      <ReferenceInput allowEmpty source="fk_questionId" reference="questions" fullWidth>
         <SelectInput
           allowEmpty
           resettable
