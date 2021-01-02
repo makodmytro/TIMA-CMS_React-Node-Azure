@@ -163,7 +163,7 @@ const CustomGridItem = ({ record, basePath }) => {
         <TableCell>
           <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
           &nbsp;
-          <PlayableText text={record.text} lang={record.Language.code}/>
+          <PlayableText text={record.text} lang={record.Language.code} />
         </TableCell>
         <TableCell>
           <AnswerField label="Answer" record={record} />
