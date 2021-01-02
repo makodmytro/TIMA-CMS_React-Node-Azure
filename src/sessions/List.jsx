@@ -8,6 +8,7 @@ import {
   ReferenceInput,
   SelectInput,
   ShowButton,
+  DateInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 

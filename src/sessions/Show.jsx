@@ -53,7 +53,6 @@ const QuestionLink = ({ record }) => {
   return (
     <Link
       to={`/questions/${record.fk_questionId}`}
-      target="_blank"
       className={classes.link}
     >
       {record.questionText}
@@ -82,7 +81,6 @@ const AnswerLink = ({ record }) => {
   return (
     <Link
       to={`/answers/${record.fk_answerId}`}
-      target="_blank"
       className={classes.link}
     >
       {record.answerText.substr(0, 100)}...

@@ -10,6 +10,7 @@ import {
   SelectInput,
   EditButton,
   useListContext,
+  useRedirect,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -23,6 +24,8 @@ import AddIcon from '@material-ui/icons/Add';
 import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
+import ArrowDown from '@material-ui/icons/ArrowDownward';
+import ArrowUp from '@material-ui/icons/ArrowUpward';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -38,6 +41,18 @@ const styles = makeStyles((theme) => ({
     '& svg': {
       verticalAlign: 'middle',
       fontSize: '0.9rem',
+    },
+  },
+  cursor: {
+    cursor: 'pointer',
+  },
+  thead: {
+    cursor: 'pointer',
+    fontWeight: 'bold',
+
+    '& svg': {
+      fontSize: '0.8rem',
+      verticalAlign: 'middle',
     },
   },
 }));
@@ -71,6 +86,7 @@ const AnswerField = ({ record }) => {
         size="small"
         style={{ color: 'red', borderColor: '#ff0000a6' }}
         variant="outlined"
+        onClick={(e) => e.stopPropagation()}
       >
         <AddIcon />
         &nbsp;Create
@@ -84,6 +100,7 @@ const AnswerField = ({ record }) => {
       to={`/answers/${record.fk_answerId}`}
       size="small"
       color="primary"
+      onClick={(e) => e.stopPropagation()}
     >
       {
         record.Answer && (
@@ -114,7 +131,10 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
   return (
     <span
       className={classes.related}
-      onClick={() => setExpanded(!expanded)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setExpanded(!expanded);
+      }}
     >
       {record.relatedQuestions.length}
       { expanded ? <ExpandLessIcon size="small" /> : <AddIcon size="small" />} { /* eslint-disable-line */ }
@@ -123,11 +143,22 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
 };
 
 const CustomGridItem = ({ record, basePath }) => {
+  const classes = styles();
+  const redirect = useRedirect();
   const [expanded, setExpanded] = React.useState(false);
+
+  const link = (id) => (e) => {
+    e.stopPropagation();
+    redirect(`/questions/${id}`);
+  };
 
   return (
     <>
-      <TableRow style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}>
+      <TableRow
+        className={classes.cursor}
+        style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}
+        onClick={link(record.id)}
+      >
         <TableCell>
           <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
           &nbsp;
@@ -146,7 +177,12 @@ const CustomGridItem = ({ record, basePath }) => {
       {
         expanded && (
           record.relatedQuestions.map((related, i) => (
-            <TableRow key={i} style={{ backgroundColor: '#fdfdd6' }}>
+            <TableRow
+              className={classes.cursor}
+              key={i}
+              style={{ backgroundColor: '#fdfdd6' }}
+              onClick={link(related.id)}
+            >
               <TableCell>
                 <TextField source="text" record={related} />
               </TableCell>
@@ -168,7 +204,24 @@ const CustomGridItem = ({ record, basePath }) => {
 };
 
 const CustomGrid = () => {
-  const { ids, data, basePath } = useListContext(); // eslint-disable-line
+  const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
+  const classes = styles();
+
+  const Th = ({ label, field }) => (
+    <TableCell className={classes.thead} onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}>
+      {label}&nbsp;
+      {
+        field === currentSort.field && currentSort.order === 'DESC' && (
+          <ArrowUp size="small" />
+        )
+      }
+      {
+        field === currentSort.field && currentSort.order === 'ASC' && (
+          <ArrowDown size="small" />
+        )
+      }
+    </TableCell>
+  );
 
   return (
     <Grid container spacing={2}>
@@ -177,10 +230,9 @@ const CustomGrid = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Text</TableCell>
-                <TableCell>Answer</TableCell>
-                <TableCell>Related questions</TableCell>
-                <TableCell>Updated at</TableCell>
+                <Th label="Text" field="text" />
+                <Th label="Answer" field="fk_answerId" />
+                <Th label="Updated at" field="updatedAt" />
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
