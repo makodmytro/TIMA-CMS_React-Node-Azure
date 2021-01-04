@@ -108,6 +108,29 @@ const resDataProvider = {
 
     return { data: json };
   },
+
+  activeSessions: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/stats/sessions/active`);
+
+    return { data: json };
+  },
+  pastSessions: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/stats/sessions/past?${stringify(params)}`);
+
+    return { data: json };
+  },
+  topicStats: async (resource = null, params) => {
+    const filters = {};
+
+    if (params.fk_languageId) {
+      filters.fk_languageId = [params.fk_languageId];
+    }
+
+    const { json } = await httpClient(`${baseApi}/stats/topics?filter=${stringify(filters)}`);
+
+    return { data: json };
+  },
+
 };
 
 export default resDataProvider;

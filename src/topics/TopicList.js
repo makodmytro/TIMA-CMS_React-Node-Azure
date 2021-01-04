@@ -12,7 +12,6 @@ import {
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { PlayableTextField } from '../common/components/playable-text-field';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -58,7 +57,7 @@ export const ShowQuestions = ({ record, size }) => (
 const TopicList = ({ language, ...props }) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false} sort={{ field: 'fk_languageId', order: 'DESC' }}>
     <Datagrid rowClick="edit">
-      <PlayableTextField source="name" />
+      <TextField source="name" />
       <TextField source="topicKey" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />

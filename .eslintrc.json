@@ -30,6 +30,8 @@
     "react/destructuring-assignment": "warn",
     "react/no-array-index-key": "warn",
     "no-unused-vars": "warn",
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "arrow-body-style": "warn",
+    "no-mixed-operators": "off"
   }
 }

@@ -53,6 +53,7 @@ const TopicEdit = (props) => (
           optionText="name"
         />
       </ReferenceInput>
+      <TextInput source="welcomeText" fullWidth />
     </SimpleForm>
   </Edit>
 );

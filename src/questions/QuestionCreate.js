@@ -3,24 +3,11 @@ import {
   Create,
   SimpleForm,
   useNotify,
+  useDataProvider,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
-import Button from '@material-ui/core/Button';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
-
-const Toolbar = ({ onClick }) => (
-  <CustomTopToolbar>
-    <Button
-      type="button"
-      onClick={onClick}
-      color="primary"
-      variant="outlined"
-    >
-      Create and insert answer
-    </Button>
-  </CustomTopToolbar>
-);
 
 const FormFields = ({ open, setOpen }) => {
   const notify = useNotify();
@@ -43,11 +30,45 @@ const FormFields = ({ open, setOpen }) => {
 };
 
 const QuestionCreate = (props) => {
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
   const [open, setOpen] = React.useState(false);
+
+  const createAnswer = async (values) => {
+    try {
+      const { data } = await dataProvider.create('answers', {
+        data: values,
+      });
+
+      return data;
+    } catch (err) {
+      notify(`Failed to create new answer for the question: ${err.message}`);
+
+      throw err;
+    }
+  };
 
   return (
     <>
-      <Create {...props} actions={<Toolbar onClick={() => setOpen(true)} />}>
+      <Create
+        {...props}
+        actions={<CustomTopToolbar />}
+        transform={async (data) => {
+          const { answer_text: answerText, ...rest } = data;
+
+          if (answerText && !rest.fk_answerId) {
+            const answer = await createAnswer({
+              text: answerText,
+              fk_topicId: rest.fk_topicId,
+              fk_languageId: rest.fk_languageId,
+            });
+
+            rest.fk_answerId = answer.id;
+          }
+
+          return rest;
+        }}
+      >
         <SimpleForm>
           <FormFields open={open} setOpen={setOpen} />
         </SimpleForm>

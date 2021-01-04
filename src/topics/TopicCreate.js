@@ -6,19 +6,21 @@ import {
 const TopicCreate = (props) => (
   <Create {...props}>
     <SimpleForm>
-      <TextInput source="name" validate={required()} />
-      <TextInput source="topicKey" />
-      <TextInput source="topicImageUrl" />
+      <TextInput source="name" validate={required()} fullWidth />
+      <TextInput source="topicKey" fullWidth />
+      <TextInput source="topicImageUrl" fullWidth />
       <ReferenceInput
         validate={required()}
         source="fk_languageId"
         reference="languages"
         label="resources.topics.fields.language"
+        fullWidth
       >
         <SelectInput
           optionText="name"
         />
       </ReferenceInput>
+      <TextInput source="welcomeText" fullWidth />
     </SimpleForm>
   </Create>
 );

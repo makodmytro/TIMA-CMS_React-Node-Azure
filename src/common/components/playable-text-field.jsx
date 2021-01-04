@@ -5,6 +5,7 @@ import {
   useNotify,
 } from 'react-admin';
 import PlayArrow from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
 import { makeStyles } from '@material-ui/core/styles';
 import Audio from '../audio';
 
@@ -24,6 +25,7 @@ const PlayableTextField = ({ record, source }) => (
 );
 
 const PlayableText = ({ el, text, lang }) => {
+  const [playing, setPlaying] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const classes = styles();
@@ -41,18 +43,37 @@ const PlayableText = ({ el, text, lang }) => {
 
       if (data.audio) {
         notify('Playing audio...');
-        Audio.load(data.audio, null);
+        setPlaying(true);
+        Audio.load(data.audio, null, () => {
+          setPlaying(false);
+        });
       }
     } catch (err) {
       notify(`Failed to play audio: ${err.message}`, 'error');
     }
   };
 
+  const stop = (e) => {
+    e.stopPropagation();
+
+    Audio.pause();
+    setPlaying(false);
+  };
+
   return (
     <>
       {el || text}
       &nbsp;
-      <PlayArrow size="small" className={classes.play} onClick={getAudio} color="secondary" />
+      {
+        playing && (
+          <StopIcon size="small" className={classes.play} onClick={stop} color="secondary" />
+        )
+      }
+      {
+        !playing && (
+          <PlayArrow size="small" className={classes.play} onClick={getAudio} color="secondary" />
+        )
+      }
     </>
   );
 };

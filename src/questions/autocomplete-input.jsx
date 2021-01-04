@@ -12,15 +12,19 @@ import Box from '@material-ui/core/Box';
 
 const AutocompleteInput = () => {
   const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const {
     input: { onChange, value: currentValue },
-    meta: { touched, error },
   } = useField('fk_answerId');
+  const {
+    input: {
+      onChange: setInputValue,
+      value: inputValue,
+    },
+  } = useField('answer_text');
 
   const fetch = React.useMemo(
     () => debounce(async (query, callback) => {
@@ -106,10 +110,13 @@ const AutocompleteInput = () => {
         autoComplete
         includeInputInList
         filterSelectedOptions
-        disableClearable
         value={value}
+        freeSolo
         onChange={(event, newValue) => {
-          if (newValue && (!value || value.id !== newValue.id)) {
+          if (!newValue) {
+            setValue(null);
+            onChange(null);
+          } else if (newValue && (!value || value.id !== newValue.id)) {
             setValue(newValue);
             onChange(newValue.id);
           }
