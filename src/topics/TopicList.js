@@ -38,7 +38,7 @@ const Filters = (props) => {
   );
 };
 
-export const ShowQuestions = ({ record, size }) => (
+const ShowQuestions = ({ record, size }) => (
   <Button
     component={Link}
     onClick={(e) => {
@@ -54,7 +54,7 @@ export const ShowQuestions = ({ record, size }) => (
   </Button>
 );
 
-export const Img = ({ record }) => {
+const Img = ({ record }) => {
   if (!record.topicImageUrl) {
     return null;
   }
@@ -78,4 +78,5 @@ const TopicList = (props) => (
   </List>
 );
 
+export { ShowQuestions, Img };
 export default TopicList;
