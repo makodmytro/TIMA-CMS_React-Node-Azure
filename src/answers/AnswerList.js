@@ -10,6 +10,7 @@ import {
   TextInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
+import { PlayableTextField } from '../common/components/playable-text-field';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -42,10 +43,10 @@ const Filters = (props) => {
 const AnswerList = (props) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false}>
     <Datagrid rowClick="edit">
-      <TextField source="text" />
+      <PlayableTextField source="text" />
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
       <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
-      <TextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
+      <PlayableTextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
       <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>

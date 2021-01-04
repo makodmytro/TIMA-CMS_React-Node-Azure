@@ -1,6 +1,6 @@
 import React from 'react';
+import get from 'lodash/get';
 import {
-  TextField,
   useDataProvider,
   useNotify,
 } from 'react-admin';
@@ -12,10 +12,20 @@ const styles = makeStyles((theme) => ({
   play: {
     cursor: 'pointer',
     verticalAlign: 'middle',
+
+    '&:hover': {
+      backgroundColor: '#b8d2cc5e',
+    },
   },
 }));
 
-const PlayableTextField = ({ text, lang }) => {
+const PlayableTextField = ({ record, source }) => {
+  return (
+    <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-US'} />
+  );
+};
+
+const PlayableText = ({ el, text, lang }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const classes = styles();
@@ -42,11 +52,12 @@ const PlayableTextField = ({ text, lang }) => {
 
   return (
     <>
-      {text}
+      {el || text}
       &nbsp;
-      <PlayArrow size="small" className={classes.play} onClick={getAudio} color="primary" />
+      <PlayArrow size="small" className={classes.play} onClick={getAudio} color="secondary" />
     </>
   );
 };
 
-export default PlayableTextField;
+export { PlayableTextField };
+export default PlayableText;

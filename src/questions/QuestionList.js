@@ -26,7 +26,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
-import PlayableText from '../common/components/playable-text-field';
+import PlayableText, { PlayableTextField } from '../common/components/playable-text-field';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -38,6 +38,13 @@ const styles = makeStyles((theme) => ({
   related: {
     color: theme.palette.primary.main,
     cursor: 'pointer',
+    fontSize: '1rem',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+
+    '&:hover': {
+      backgroundColor: '#4ec2a826',
+    },
 
     '& svg': {
       verticalAlign: 'middle',
@@ -90,12 +97,12 @@ const AnswerField = ({ record }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <AddIcon />
-        &nbsp;Create
+        &nbsp;Create answer
       </Button>
     );
   }
 
-  return (
+  const link = (
     <Button
       component={Link}
       to={`/answers/${record.fk_answerId}`}
@@ -119,6 +126,14 @@ const AnswerField = ({ record }) => {
         )
       }
     </Button>
+  );
+
+  if (!record.Answer) {
+    return link;
+  }
+
+  return (
+    <PlayableText text={record.Answer.text} el={link} lang={record.Language ? record.Language.code : 'en-US'} />
   );
 };
 
@@ -163,7 +178,7 @@ const CustomGridItem = ({ record, basePath }) => {
         <TableCell>
           <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
           &nbsp;
-          <PlayableText text={record.text} lang={record.Language.code} />
+          <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-US'} />
         </TableCell>
         <TableCell>
           <AnswerField label="Answer" record={record} />
@@ -171,9 +186,14 @@ const CustomGridItem = ({ record, basePath }) => {
         <TableCell>
           <DateField source="updatedAt" showTime record={record} />
         </TableCell>
-        <TableCell>
-          <EditButton basePath={basePath} record={record} />
-        </TableCell>
+        {
+          /*
+            <TableCell>
+              <EditButton basePath={basePath} record={record} />
+            </TableCell>
+          */
+        }
+
       </TableRow>
       {
         expanded && (
@@ -185,7 +205,7 @@ const CustomGridItem = ({ record, basePath }) => {
               onClick={link(related.id)}
             >
               <TableCell>
-                <TextField source="text" record={related} />
+                <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
               </TableCell>
               <TableCell>
                 <AnswerField label="Answer" record={related} />
@@ -193,9 +213,13 @@ const CustomGridItem = ({ record, basePath }) => {
               <TableCell>
                 <DateField source="updatedAt" showTime record={related} />
               </TableCell>
-              <TableCell>
-                <EditButton basePath={basePath} record={related} />
-              </TableCell>
+              {
+                /*
+                  <TableCell>
+                    <EditButton basePath={basePath} record={related} />
+                  </TableCell>
+                */
+              }
             </TableRow>
           ))
         )
@@ -234,7 +258,6 @@ const CustomGrid = () => {
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Updated at" field="updatedAt" />
-                <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
