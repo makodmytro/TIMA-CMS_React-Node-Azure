@@ -19,11 +19,9 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const PlayableTextField = ({ record, source }) => {
-  return (
-    <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-US'} />
-  );
-};
+const PlayableTextField = ({ record, source }) => (
+  <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-US'} />
+);
 
 const PlayableText = ({ el, text, lang }) => {
   const dataProvider = useDataProvider();
