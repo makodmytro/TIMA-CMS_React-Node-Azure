@@ -12,7 +12,7 @@ const getResourceAssociations = (resource) => {
     }
     case 'topics': {
       return {
-        include: ['Language', 'Editor'],
+        include: ['Language'],
       };
     }
     case 'answers': {

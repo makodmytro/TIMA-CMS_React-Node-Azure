@@ -10,7 +10,7 @@ import {
   TextInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
-import { PlayableTextField } from '../common/components/playable-text-field';
+import { PlayableTextField } from '../common/components/playable-text';
 
 const styles = makeStyles(() => ({
   padded: {

@@ -54,13 +54,24 @@ export const ShowQuestions = ({ record, size }) => (
   </Button>
 );
 
-const TopicList = ({ language, ...props }) => (
+export const Img = ({ record }) => {
+  if (!record.topicImageUrl) {
+    return null;
+  }
+
+  return (
+    <div>
+      <img style={{ maxWidth: '200px' }} src={record.topicImageUrl} alt="topic" />
+    </div>
+  );
+};
+
+const TopicList = (props) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false} sort={{ field: 'fk_languageId', order: 'DESC' }}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="topicKey" />
-      <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
+      <Img label="Image" />
       <DateField source="updatedAt" showTime />
       <ShowQuestions />
     </Datagrid>

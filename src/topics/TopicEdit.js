@@ -9,8 +9,10 @@ import {
   Toolbar,
   SaveButton,
 } from 'react-admin';
+import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import { ShowQuestions } from './TopicList';
+import { ShowQuestions, Img } from './TopicList';
+import { PlayableTextInput } from '../common/components/playable-text';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const CustomToolbar = (props) => (
@@ -23,39 +25,51 @@ const CustomToolbar = (props) => (
     <ShowQuestions size="medium" />
   </Toolbar>
 );
-const Img = ({ record }) => {
-  if (!record.topicImageUrl) {
-    return null;
-  }
+
+const TopicEdit = ({ languages, dispatch, ...props }) => {
+  const getLang = (r) => {
+    if (!r || !languages[r.fk_languageId]) {
+      return null;
+    }
+
+    return languages[r.fk_languageId].code;
+  };
 
   return (
-    <div>
-      <img style={{ maxWidth: '200px' }} src={record.topicImageUrl} alt="topic" />
-    </div>
+    <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />}>
+      <SimpleForm toolbar={<CustomToolbar />}>
+        <PlayableTextInput
+          source="name"
+          validate={required()}
+          fullWidth
+          lang={getLang}
+        />
+        <TextInput source="topicKey" fullWidth />
+        <TextInput source="topicImageUrl" fullWidth />
+        <Img />
+        <ReferenceInput
+          validate={required()}
+          source="fk_languageId"
+          reference="languages"
+          label="resources.topics.fields.language"
+          fullWidth
+        >
+          <SelectInput
+            optionText="name"
+          />
+        </ReferenceInput>
+        <PlayableTextInput
+          source="welcomeText"
+          fullWidth
+          lang={getLang}
+        />
+      </SimpleForm>
+    </Edit>
   );
 };
 
-const TopicEdit = (props) => (
-  <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />}>
-    <SimpleForm toolbar={<CustomToolbar />}>
-      <TextInput source="name" validate={required()} fullWidth />
-      <TextInput source="topicKey" fullWidth />
-      <TextInput source="topicImageUrl" fullWidth />
-      <Img />
-      <ReferenceInput
-        validate={required()}
-        source="fk_languageId"
-        reference="languages"
-        label="resources.topics.fields.language"
-        fullWidth
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <TextInput source="welcomeText" fullWidth />
-    </SimpleForm>
-  </Edit>
-);
+const mapStateToProps = (state) => ({
+  languages: state.admin.resources.languages.data,
+});
 
-export default TopicEdit;
+export default connect(mapStateToProps)(TopicEdit);

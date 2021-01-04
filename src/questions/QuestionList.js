@@ -26,7 +26,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
-import PlayableText, { PlayableTextField } from '../common/components/playable-text-field';
+import PlayableText, { PlayableTextField } from '../common/components/playable-text';
 
 const styles = makeStyles((theme) => ({
   padded: {

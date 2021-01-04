@@ -5,7 +5,7 @@ import {
   TextField,
   DateField,
 } from 'react-admin';
-import { PlayableTextField } from '../common/components/playable-text-field';
+import { PlayableTextField } from '../common/components/playable-text';
 
 const LanguageList = (props) => (
   <List {...props} bulkActionButtons={false}>

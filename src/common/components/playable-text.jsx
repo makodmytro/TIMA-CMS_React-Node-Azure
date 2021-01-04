@@ -1,9 +1,14 @@
 import React from 'react';
 import get from 'lodash/get';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 import {
   useDataProvider,
   useNotify,
+  TextInput,
 } from 'react-admin';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { useField } from 'react-final-form'; // eslint-disable-line
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,11 +25,39 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
+const PlayableTextInput = ({ lang, ...props }) => {
+  const {
+    input: { value },
+  } = useField(props.source);
+
+  return (
+    <TextInput
+      {...props}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <PlayableText
+              text={value}
+              lang={isFunction(lang) ? lang(props.record) : lang}
+              hideText
+            />
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+};
+
 const PlayableTextField = ({ record, source }) => (
   <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-US'} />
 );
 
-const PlayableText = ({ el, text, lang }) => {
+const PlayableText = ({
+  el,
+  text,
+  lang,
+  hideText,
+}) => {
   const [playing, setPlaying] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -32,6 +65,18 @@ const PlayableText = ({ el, text, lang }) => {
 
   const getAudio = async (e) => {
     e.stopPropagation();
+
+    if (!text) {
+      notify('The text is empty. Can not play', 'error');
+
+      return;
+    }
+
+    if (!lang || !isString(lang)) {
+      notify('Missing language. Can not play', 'error');
+
+      return;
+    }
 
     try {
       const { data } = await dataProvider.tts(null, {
@@ -62,7 +107,13 @@ const PlayableText = ({ el, text, lang }) => {
 
   return (
     <>
-      {el || text}
+      {
+        !hideText && (
+          <>
+            {el || text}
+          </>
+        )
+      }
       &nbsp;
       {
         playing && (
@@ -78,5 +129,5 @@ const PlayableText = ({ el, text, lang }) => {
   );
 };
 
-export { PlayableTextField };
+export { PlayableTextField, PlayableTextInput };
 export default PlayableText;
