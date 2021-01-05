@@ -4,6 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import TablePagination from '@material-ui/core/TablePagination';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
@@ -12,7 +13,6 @@ import {
   ReferenceInput,
 } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
-import SessionCharts from './sessions-charts';
 
 const Filters = ({ onSubmit, initialValues }) => (
   <Form
@@ -47,27 +47,55 @@ const Filters = ({ onSubmit, initialValues }) => (
 );
 
 const PastSessions = () => {
+  const [form, setForm] = React.useState({
+    fk_languageId: null,
+  });
+  const [pagination, setPagination] = React.useState({
+    perPage: 5,
+    page: 1,
+  });
+  const [count, setCount] = React.useState(0);
   const [topics, setTopics] = React.useState([]);
   const dataProvider = useDataProvider();
   const notify = useNotify();
 
-  const initialValues = {
-    fk_languageId: null,
-  };
-
-  const fetch = async (params) => {
+  const fetch = async (params, paging = pagination) => {
     try {
-      const res = await dataProvider.topicStats(null, params);
-      const { data } = res.data;
+      setForm(params);
+      const res = await dataProvider.topicStats(null, {
+        filters: params,
+        pagination: paging,
+      });
+      const { data, total } = res.data;
 
       setTopics(data);
+      setCount(total);
     } catch (err) {
       notify(`Failed to fetch past sessions: ${err.message}`, 'error');
     }
   };
 
+  const setPage = (page, submit = true) => {
+    setPagination({
+      ...pagination,
+      page: page + 1,
+    });
+
+    if (submit) {
+      fetch(form, { perPage: pagination.perPage, page: page + 1 });
+    }
+  };
+  const setPageSize = (val) => {
+    setPagination({
+      page: 1,
+      perPage: val,
+    });
+
+    fetch(form, { perPage: val, page: 1 });
+  };
+
   React.useEffect(() => {
-    fetch(initialValues);
+    fetch(form);
   }, []);
 
   const options = {
@@ -110,15 +138,39 @@ const PastSessions = () => {
   return (
     <Box>
       <Box py={2}>
-        <Filters onSubmit={fetch} initialValues={initialValues} />
+        <Filters
+          onSubmit={(values) => {
+            setPage(0, false);
+            fetch(values, { perPage: pagination.perPage, page: 1 });
+          }}
+          initialValues={form}
+        />
       </Box>
       <Box>
         {
           !!topics.length && (
-            <HighchartsReact
-              highcharts={Highcharts}
-              options={options}
-            />
+            <>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+              />
+              <Box textAlign="center">
+                <TablePagination
+                  component="div"
+                  count={count}
+                  page={pagination.page - 1}
+                  onChangePage={(e, value) => {
+                    setPage(value);
+                  }}
+                  rowsPerPage={pagination.perPage}
+                  rowsPerPageOptions={[5, 10, 15]}
+                  onChangeRowsPerPage={(e) => {
+                    const value = parseInt(e.target.value, 10);
+                    setPageSize(value);
+                  }}
+                />
+              </Box>
+            </>
           )
         }
         {

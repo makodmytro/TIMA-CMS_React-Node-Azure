@@ -4,6 +4,19 @@ import HighchartsReact from 'highcharts-react-official';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
+const secondsToTime = (seconds) => {
+  if (!seconds) {
+    return '00:00';
+  }
+
+  const minutes = Math.floor(seconds / 60) > 0
+    ? Math.floor(seconds / 60)
+    : '00';
+  const left = seconds % 60;
+
+  return `${String(minutes).padStart(2, '0')}:${String(left).padStart(2, '0')}`;
+};
+
 const getStacked = (sessions) => {
   const u = (session) => {
     if (!session.avgUnanswered) {
@@ -35,14 +48,7 @@ const getStacked = (sessions) => {
         text: 'Percentage',
       },
       stackLabels: {
-        enabled: true,
-        style: {
-          fontWeight: 'bold',
-          color: ( // theme
-            Highcharts.defaultOptions.title.style
-            && Highcharts.defaultOptions.title.style.color
-          ) || 'gray',
-        },
+        enabled: false,
       },
     },
     legend: {
@@ -54,7 +60,6 @@ const getStacked = (sessions) => {
       borderWidth: 1,
       shadow: false,
     },
-    tooltip: false,
     plotOptions: {
       column: {
         stacking: 'normal',
@@ -83,6 +88,9 @@ const getBars = (sessions) => {
       title: {
         text: 'Duration',
       },
+      labels: {
+        formatter: (e) => secondsToTime(e.value),
+      },
     },
     xAxis: {
       categories: sessions.map((session) => session.date),
@@ -94,15 +102,18 @@ const getBars = (sessions) => {
       series: {
         borderWidth: 0,
         dataLabels: {
-          enabled: true,
-          format: '{point.y}',
+          enabled: false,
         },
       },
     },
+    tooltip: {
+      formatter: function () { // eslint-disable-line
+        return `<b>Duration: </b> ${secondsToTime(this.y)}`;
+      },
+    },
     series: [{
-      name: 'Dates',
+      name: 'Duration',
       data: sessions.map((session) => ({
-        name: 'session.date',
         colorByPoint: true,
         y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
       })),

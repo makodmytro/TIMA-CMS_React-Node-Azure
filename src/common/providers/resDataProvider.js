@@ -122,11 +122,19 @@ const resDataProvider = {
   topicStats: async (resource = null, params) => {
     const filters = {};
 
-    if (params.fk_languageId) {
-      filters.fk_languageId = [params.fk_languageId];
+    if (params.filters.fk_languageId) {
+      filters.fk_languageId = [params.filters.fk_languageId];
     }
 
-    const { json } = await httpClient(`${baseApi}/stats/topics?filter=${stringify(filters)}`);
+    const { page, perPage: limit } = params.pagination || { page: 1, perPage: 5 };
+    const offset = (page - 1) * limit;
+    const query = {
+      filter: Object.values(filters).length > 0 ? JSON.stringify(filters) : null,
+      limit,
+      offset,
+    };
+
+    const { json } = await httpClient(`${baseApi}/stats/topics?${stringify(query)}`);
 
     return { data: json };
   },

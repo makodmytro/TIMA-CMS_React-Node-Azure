@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
+  Edit, SimpleForm,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
