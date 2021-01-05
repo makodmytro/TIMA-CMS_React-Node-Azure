@@ -11,7 +11,9 @@ import {
 } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+import QrDialog from './qr-dialog';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -38,20 +40,34 @@ const Filters = (props) => {
   );
 };
 
-const ShowQuestions = ({ record, size }) => (
-  <Button
-    component={Link}
-    onClick={(e) => {
-      e.stopPropagation();
-    }}
-    size={size || 'small'}
-    color="primary"
-    variant="outlined"
-    style={{ marginLeft: '10px' }}
-    to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
-  >
-    Show questions
-  </Button>
+const ShowQuestions = ({
+  record, size, fullWidth, ml,
+}) => (
+  <Box ml={ml}>
+    <Button
+      component={Link}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      size={size || 'small'}
+      color="primary"
+      variant="outlined"
+      to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
+      fullWidth={!!fullWidth}
+    >
+      Show questions
+    </Button>
+  </Box>
+);
+const Buttons = ({ record }) => (
+  <div>
+    <Box mb={1}>
+      <ShowQuestions record={record} fullWidth />
+    </Box>
+    <div>
+      <QrDialog record={record} fullWidth />
+    </div>
+  </div>
 );
 
 const Img = ({ record }) => {
@@ -73,7 +89,7 @@ const TopicList = (props) => (
       <TextField source="topicKey" />
       <Img label="Image" />
       <DateField source="updatedAt" showTime />
-      <ShowQuestions />
+      <Buttons />
     </Datagrid>
   </List>
 );

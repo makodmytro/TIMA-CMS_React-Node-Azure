@@ -40,3 +40,10 @@
 .highcharts-credits {
   display: none;
 }
+
+@media print {
+  #root {
+    display: none;
+  }
+}
+

@@ -9,10 +9,12 @@ import {
   Toolbar,
   SaveButton,
 } from 'react-admin';
+import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { ShowQuestions, Img } from './TopicList';
 import { PlayableTextInput } from '../common/components/playable-text';
+import QrDialog from './qr-dialog';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const CustomToolbar = (props) => (
@@ -22,7 +24,9 @@ const CustomToolbar = (props) => (
       redirect="list"
       submitOnEnter
     />
-    <ShowQuestions size="medium" />
+    &nbsp;
+    <ShowQuestions size="medium" ml={1} />
+    <QrDialog ml={1} />
   </Toolbar>
 );
 
