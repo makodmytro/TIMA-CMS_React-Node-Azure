@@ -109,6 +109,26 @@ const resDataProvider = {
     return { data: json };
   },
 
+  questionSuggestions: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/questions/${params.id}/suggestions`);
+
+    return { data: json };
+  },
+  createQuestionAssociation: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/questions/${params.id}/suggestions/${params.parentId}`, {
+      method: 'PUT',
+    });
+
+    return { data: json };
+  },
+  deleteQuestionAssociation: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/questions/${params.id}/suggestions/${params.parentId}`, {
+      method: 'DELETE',
+    });
+
+    return { data: json };
+  },
+
   activeSessions: async (resource = null, params) => {
     const { json } = await httpClient(`${baseApi}/stats/sessions/active`);
 

@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   DateField,
   List,
-  TextField,
   Filter,
   TextInput,
   ReferenceInput,
   SelectInput,
-  EditButton,
   useListContext,
   useRedirect,
+  useDataProvider,
+  useRefresh,
+  useNotify,
+  Confirm,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -18,6 +20,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,7 +31,12 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
+import ExpandIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
+import RemoveIcon from '@material-ui/icons/HighlightOff';
+import RelatedIcon from '@material-ui/icons/SyncProblem';
 import PlayableText, { PlayableTextField } from '../common/components/playable-text';
+import SuggestionsDialog from './suggestions-dialog';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -120,8 +130,7 @@ const AnswerField = ({ record }) => {
       {
         !record.Answer && (
           <>
-            <ViewIcon />
-            &nbsp;View
+            View related  answer
           </>
         )
       }
@@ -158,7 +167,90 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
   );
 };
 
-const CustomGridItem = ({ record, basePath }) => {
+const DropdownMenu = ({
+  record, openSuggestions, deleteQuestion, removeAnswer,
+}) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+
+    return false;
+  };
+
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  const onOpen = (e) => {
+    e.stopPropagation();
+    openSuggestions(record);
+    setAnchorEl(null);
+  };
+
+  const onDeleteClicked = (e) => {
+    e.stopPropagation();
+
+    deleteQuestion(record);
+    setAnchorEl(null);
+  };
+
+  const onRemoveClicked = (e) => {
+    e.stopPropagation();
+
+    removeAnswer(record);
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <Button
+        aria-controls="simple-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        variant="contained"
+        color="secondary"
+        size="small"
+      >
+        Actions <ExpandIcon />
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MenuItem onClick={onOpen}>
+          <ListItemIcon><RelatedIcon /></ListItemIcon>
+          Related suggestions
+        </MenuItem>
+        <MenuItem onClick={onDeleteClicked}>
+          <ListItemIcon><DeleteIcon /></ListItemIcon>
+          Delete question
+        </MenuItem>
+        {
+          record.fk_answerId && (
+            <MenuItem onClick={onRemoveClicked}>
+              <ListItemIcon><RemoveIcon /></ListItemIcon>
+              Remove answer
+            </MenuItem>
+          )
+        }
+      </Menu>
+    </div>
+  );
+};
+
+const CustomGridItem = ({
+  record, openSuggestions, deleteQuestion, removeAnswer,
+  removeAssociation,
+}) => {
   const classes = styles();
   const redirect = useRedirect();
   const [expanded, setExpanded] = React.useState(false);
@@ -186,14 +278,14 @@ const CustomGridItem = ({ record, basePath }) => {
         <TableCell>
           <DateField source="updatedAt" showTime record={record} />
         </TableCell>
-        {
-          /*
-            <TableCell>
-              <EditButton basePath={basePath} record={record} />
-            </TableCell>
-          */
-        }
-
+        <TableCell>
+          <DropdownMenu
+            record={record}
+            openSuggestions={openSuggestions}
+            deleteQuestion={deleteQuestion}
+            removeAnswer={removeAnswer}
+          />
+        </TableCell>
       </TableRow>
       {
         expanded && (
@@ -211,15 +303,23 @@ const CustomGridItem = ({ record, basePath }) => {
                 <AnswerField label="Answer" record={related} />
               </TableCell>
               <TableCell>
-                <DateField source="updatedAt" showTime record={related} />
+                &nbsp;
               </TableCell>
-              {
-                /*
-                  <TableCell>
-                    <EditButton basePath={basePath} record={related} />
-                  </TableCell>
-                */
-              }
+              <TableCell>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    removeAssociation(record, related.id);
+                  }}
+                  type="button"
+                  variant="outlined"
+                  color="default"
+                  size="small"
+                >
+                  Remove association
+                </Button>
+              </TableCell>
             </TableRow>
           ))
         )
@@ -228,7 +328,9 @@ const CustomGridItem = ({ record, basePath }) => {
   );
 };
 
-const CustomGrid = () => {
+const CustomGrid = ({
+  openSuggestions, deleteQuestion, removeAnswer, removeAssociation,
+}) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
 
@@ -258,12 +360,21 @@ const CustomGrid = () => {
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Updated at" field="updatedAt" />
+                <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {
                 ids.map((id) => (
-                  <CustomGridItem key={id} record={data[id]} basePath={basePath} />
+                  <CustomGridItem
+                    key={id}
+                    record={data[id]}
+                    basePath={basePath}
+                    openSuggestions={openSuggestions}
+                    deleteQuestion={deleteQuestion}
+                    removeAnswer={removeAnswer}
+                    removeAssociation={removeAssociation}
+                  />
                 ))
               }
             </TableBody>
@@ -274,10 +385,119 @@ const CustomGrid = () => {
   );
 };
 
-const QuestionList = (props) => (
-  <List {...props} filters={<Filters />}>
-    <CustomGrid />
-  </List>
-);
+const QuestionList = (props) => {
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
+  const refresh = useRefresh();
+  const [suggestionsOpened, setSuggestionsOpened] = React.useState(false);
+  const [record, setRecord] = React.useState(null);
+  const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
+  const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
+
+  const onOpen = (r) => {
+    setRecord(r);
+    setSuggestionsOpened(true);
+  };
+  const onClose = () => {
+    setRecord(null);
+    setSuggestionsOpened(false);
+  };
+
+  const onDeletedOpen = (r) => {
+    setRecord(r);
+    setDeleteConfirmedOpened(true);
+  };
+
+  const onDeleteClose = () => {
+    setRecord(null);
+    setDeleteConfirmedOpened(false);
+  };
+
+  const deleteQuestion = async () => {
+    try {
+      await dataProvider.delete('questions', {
+        id: record.id,
+      });
+
+      notify('The record has been deleted');
+      refresh();
+    } catch (err) {
+      notify(`Failed to delete the question: ${err.message}`, 'error');
+    }
+    onDeleteClose();
+  };
+
+  const onRemoveAnswerOpen = (r) => {
+    setRecord(r);
+    setRemoveAnswerConfirmOpened(true);
+  };
+
+  const onRemoveAnswerClose = () => {
+    setRecord(null);
+    setRemoveAnswerConfirmOpened(false);
+  };
+
+  const removeAnswer = async () => {
+    try {
+      await dataProvider.update('questions', {
+        id: record.id,
+        data: { fk_answerId: null },
+      });
+
+      refresh();
+    } catch (err) {
+      notify(`Failed to remove the answer: ${err.message}`, 'error');
+    }
+    onRemoveAnswerClose();
+  };
+
+  const removeAssociation = async (resource, parentId) => {
+    try {
+      await dataProvider.deleteQuestionAssociation(null, {
+        id: resource.id,
+        parentId,
+      });
+
+      notify('The association has been removed');
+      refresh();
+    } catch (err) {
+      notify(`Failed to remove question association: ${err.message}`, 'error');
+    }
+  };
+
+  return (
+    <>
+      <SuggestionsDialog
+        open={suggestionsOpened}
+        onClose={onClose}
+        record={record}
+      />
+      <Confirm
+        isOpen={deleteConfirmOpened}
+        loading={false}
+        title="Delete question"
+        content="Are you sure you want to delete the question?"
+        onConfirm={deleteQuestion}
+        onClose={onDeleteClose}
+      />
+      <Confirm
+        isOpen={removeAnswerConfirmOpened}
+        loading={false}
+        title="Remove answer"
+        content="Are you sure you want to remove the answer from the question?"
+        onConfirm={removeAnswer}
+        onClose={onRemoveAnswerClose}
+      />
+      <List {...props} filters={<Filters />}>
+        <CustomGrid
+          openSuggestions={onOpen}
+          deleteQuestion={onDeletedOpen}
+          removeAnswer={onRemoveAnswerOpen}
+          removeAssociation={removeAssociation}
+        />
+      </List>
+    </>
+  );
+};
 
 export default QuestionList;
