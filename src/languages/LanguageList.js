@@ -5,15 +5,16 @@ import {
   TextField,
   DateField,
 } from 'react-admin';
+import { PlayableTextField } from '../common/components/playable-text';
 
 const LanguageList = (props) => (
-  <List {...props}>
+  <List {...props} bulkActionButtons={false}>
     <Datagrid rowClick="edit">
       <TextField source="code" />
       <TextField source="name" />
-      <TextField source="welcomeText" />
+      <PlayableTextField source="welcomeText" />
       <TextField source="welcomeButton" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

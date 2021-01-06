@@ -1,13 +1,7 @@
 import React from 'react';
-import { isNil } from 'lodash';
-import { AppBar, useGetList, useTranslate } from 'react-admin';
+import { AppBar } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  FormControl, InputLabel, MenuItem, Select,
-} from '@material-ui/core';
-import { connect } from 'react-redux';
-import { setLanguage } from '../reducer/lngReducer';
 import Logo from '../../assets/TIMA_logo.png';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,11 +10,13 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
+
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
   logo: {
-    background: `url(${Logo})`,
-    width: 100,
-    height: 70,
+    flex: 1,
   },
   spacer: {
     flex: 1,
@@ -35,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
 const MyAppBar = (props) => {
   const classes = useStyles();
   const { onLanguageChange, language, ...rest } = props;
-  const { data, loading, error } = useGetList('languages', null, null, null);
-  const translate = useTranslate();
 
   return (
     <AppBar color="transparent" {...rest}>
@@ -46,42 +40,11 @@ const MyAppBar = (props) => {
         className={classes.title}
         id="react-admin-title"
       />
-      <span className={classes.spacer} />
-
-      <div className={classes.logo} />
-      <span className={classes.spacer} />
-
-      {(!loading && !isNil(data) && Object.values(data).length > 1 && !error) ? (
-        <FormControl className={classes.formControl}>
-          <InputLabel
-            id="lng-select-label"
-          >
-            {translate('appbar.languageSelect')}
-          </InputLabel>
-          <Select
-            labelId="lng-select-label"
-            id="demo-simple-select"
-            value={language}
-            onChange={(e) => onLanguageChange(e.target.value)}
-          >
-            {Object.values(data)
-              .map((d) => (<MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>))}
-          </Select>
-        </FormControl>
-      ) : <span className={classes.formControl} />}
-
+      <div className={classes.logo}>
+        <img src={Logo} alt="logo" />
+      </div>
     </AppBar>
   );
 };
 
-const mapStateToProps = (state) => ({
-  language: state.lng.language,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLanguageChange: (lng) => {
-    dispatch(setLanguage(lng));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyAppBar);
+export default MyAppBar;

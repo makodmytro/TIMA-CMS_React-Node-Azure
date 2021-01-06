@@ -12,7 +12,7 @@ const SourceList = (props) => (
           source="name"
         />
       </ReferenceField>
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

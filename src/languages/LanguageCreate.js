@@ -2,9 +2,10 @@ import React from 'react';
 import {
   Create, required, SimpleForm, TextInput,
 } from 'react-admin';
+import CustomTopToolbar from '../common/components/custom-top-toolbar';
 
 const LanguageCreate = (props) => (
-  <Create {...props}>
+  <Create {...props} actions={<CustomTopToolbar />}>
     <SimpleForm>
       <TextInput source="name" validate={required()} />
       <TextInput source="code" validate={required()} />
