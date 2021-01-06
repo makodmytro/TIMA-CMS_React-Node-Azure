@@ -13,6 +13,7 @@ import {
   useRefresh,
   useNotify,
   Confirm,
+  BooleanInput,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -88,6 +89,7 @@ const Filters = (props) => {
       <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
         <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
+      <BooleanInput label="Unanswered questions" source="unanswered" alwaysOn />
     </Filter>
   );
 };

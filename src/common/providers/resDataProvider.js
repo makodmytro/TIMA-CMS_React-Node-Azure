@@ -47,7 +47,11 @@ const resDataProvider = {
     if (params) {
       const { field, order } = params.sort || {};
 
-      const { q, ...filter } = params.filter || {};
+      const { q, unanswered, ...filter } = params.filter || {};
+
+      if (unanswered) {
+        filter.fk_answerId = null;
+      }
 
       const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
 
