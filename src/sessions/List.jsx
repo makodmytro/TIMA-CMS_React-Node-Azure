@@ -3,14 +3,13 @@ import {
   Datagrid,
   DateField,
   List,
-  ReferenceInput,
-  SelectInput,
   TextField,
   Filter,
-  TextInput,
+  ReferenceInput,
+  SelectInput,
+  DateTimeInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
-import { PlayableTextField } from '../common/components/playable-text';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -26,30 +25,28 @@ const Filters = (props) => {
 
   return (
     <Filter {...props} className={classes.padded}>
-      <TextInput label="Text" source="q" alwaysOn />
       <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-      </ReferenceInput>
-      <ReferenceInput label="Editor" source="fk_editorId" reference="editors" alwaysOn perPage={100}>
         <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
       <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
         <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
+      <DateTimeInput source="from" alwaysOn />
+      <DateTimeInput source="until" alwaysOn />
     </Filter>
   );
 };
 
-const AnswerList = (props) => (
+const QuestionList = (props) => (
   <List {...props} filters={<Filters />} bulkActionButtons={false}>
-    <Datagrid rowClick="edit">
-      <PlayableTextField source="text" />
+    <Datagrid rowClick="show">
       <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
-      <PlayableTextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
+      <TextField source="duration" label="duration" />
+      <TextField source="questionsCount" label="# of questions" />
+      <TextField source="answersCount" label="# of answers" />
       <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );
 
-export default AnswerList;
+export default QuestionList;

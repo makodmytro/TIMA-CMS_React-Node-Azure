@@ -9,6 +9,7 @@ const httpClient = (url, options = {}) => {
   if (token) {
     options.headers.set('Authorization', `Bearer ${token}`);
   }
+
   return fetchUtils.fetchJson(url, options);
 };
 

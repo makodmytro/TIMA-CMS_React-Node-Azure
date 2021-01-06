@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.highcharts-credits {
+  display: none;
+}
+
+@media print {
+  #root {
+    display: none;
+  }
+}
+

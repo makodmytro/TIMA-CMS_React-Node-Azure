@@ -1,42 +1,15 @@
 import React from 'react';
 import {
-  Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
+  Create,
+  SimpleForm,
 } from 'react-admin';
+import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import Form from './form';
 
 const AnswerCreate = (props) => (
-  <Create {...props}>
-    <SimpleForm>
-      <TextInput source="text" validate={required()} />
-      <ReferenceInput
-        source="fk_languageId"
-        reference="languages"
-        validate={required()}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <ReferenceInput
-        source="fk_topicId"
-        reference="topics"
-        validate={required()}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <ReferenceInput
-        allowEmpty
-        source="fk_answerId"
-        reference="answers"
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
+  <Create {...props} actions={<CustomTopToolbar />}>
+    <SimpleForm redirect="list">
+      <Form />
     </SimpleForm>
   </Create>
 );
