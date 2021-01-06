@@ -64,6 +64,11 @@ const PastSessions = () => {
         filters: params,
         pagination: paging,
       });
+
+      if (!res) {
+        throw new Error('Unauthenticated');
+      }
+
       const { data, total } = res.data;
 
       setTopics(data);

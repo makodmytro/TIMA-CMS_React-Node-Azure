@@ -15,6 +15,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import { PlayableTextField } from '../common/components/playable-text';
+import DropdownMenu from './list-dropdown-menu';
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -33,10 +34,16 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const SuggestionDialog = ({ record, open, onClose }) => {
+const SuggestionDialog = ({
+  record,
+  open,
+  onClose,
+  deleteQuestion,
+  removeAnswer,
+}) => {
   const classes = styles();
 
-  if (!record) {
+  if (!record || !record.relatedQuestions) {
     return null;
   }
 
@@ -54,8 +61,7 @@ const SuggestionDialog = ({ record, open, onClose }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Text</TableCell>
-                <TableCell>Answer</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -66,26 +72,11 @@ const SuggestionDialog = ({ record, open, onClose }) => {
                       <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
                     </TableCell>
                     <TableCell>
-                      <Button
-                        component={Link}
-                        to={`/answers/${related.fk_answerId}`}
-                        size="small"
-                        color="primary"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        View related answer
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        component={Link}
-                        to={`/questions/${related.id}`}
-                        size="small"
-                        color="primary"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        View question
-                      </Button>
+                      <DropdownMenu
+                        record={{ ...related, Language: record.Language }}
+                        deleteQuestion={deleteQuestion}
+                        removeAnswer={removeAnswer}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

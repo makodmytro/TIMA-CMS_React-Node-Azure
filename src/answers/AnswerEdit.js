@@ -10,7 +10,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
 import {
-  Edit, SimpleForm,
+  Edit,
+  SimpleForm,
+  useRefresh,
+  useNotify,
+  useDataProvider,
+  Confirm,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
@@ -21,7 +26,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const RelatedQuestions = ({ record }) => {
+const RelatedQuestions = ({ record, onRemoveAnswer }) => {
   const classes = styles();
   if (!record || !record.Questions || !record.Questions.length) {
     return null;
@@ -36,6 +41,7 @@ const RelatedQuestions = ({ record }) => {
         <TableHead>
           <TableRow>
             <TableCell>Text</TableCell>
+            <TableCell>&nbsp;</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
         </TableHead>
@@ -57,6 +63,20 @@ const RelatedQuestions = ({ record }) => {
                     View
                   </Button>
                 </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveAnswer(question);
+                    }}
+                    variant="outlined"
+                    size="small"
+                    type="button"
+                    style={{ color: 'red', borderColor: '#ff0000a6' }}
+                  >
+                    Unlink answer
+                  </Button>
+                </TableCell>
               </TableRow>
             ))
           }
@@ -66,13 +86,55 @@ const RelatedQuestions = ({ record }) => {
   );
 };
 
-const AnswerEdit = (props) => (
-  <Edit {...props} actions={<CustomTopToolbar />}>
-    <SimpleForm>
-      <Form />
-      <RelatedQuestions />
-    </SimpleForm>
-  </Edit>
-);
+const AnswerEdit = (props) => {
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
+  const refresh = useRefresh();
+  const [record, setRecord] = React.useState(null);
+  const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
+
+  const onRemoveAnswerOpen = (r) => {
+    setRecord(r);
+    setRemoveAnswerConfirmOpened(true);
+  };
+
+  const onRemoveAnswerClose = () => {
+    setRecord(null);
+    setRemoveAnswerConfirmOpened(false);
+  };
+
+  const removeAnswer = async () => {
+    try {
+      await dataProvider.update('questions', {
+        id: record.id,
+        data: { fk_answerId: null },
+      });
+
+      refresh();
+    } catch (err) {
+      notify(`Failed to remove the answer: ${err.message}`, 'error');
+    }
+    onRemoveAnswerClose();
+  };
+
+  return (
+    <>
+      <Edit {...props} actions={<CustomTopToolbar />}>
+        <SimpleForm>
+          <Form />
+          <RelatedQuestions onRemoveAnswer={onRemoveAnswerOpen} />
+        </SimpleForm>
+      </Edit>
+      <Confirm
+        isOpen={removeAnswerConfirmOpened}
+        loading={false}
+        title="Unlink answer"
+        content="Are you sure you want to unlink the answer from the question?"
+        onConfirm={removeAnswer}
+        onClose={onRemoveAnswerClose}
+      />
+    </>
+  );
+};
 
 export default AnswerEdit;

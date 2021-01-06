@@ -33,6 +33,11 @@ const ActiveSessions = () => {
   const fetch = async () => {
     try {
       const res = await dataProvider.activeSessions(null, {});
+
+      if (!res) {
+        throw new Error('Unauthenticated');
+      }
+
       const { data } = res.data;
       const active = countRef.current
         .slice(countRef.current.length - 30, countRef.current.length) // keep only 30 elements max

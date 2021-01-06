@@ -21,7 +21,7 @@ class AudioUtils {
     }
 
     this.audio.addEventListener('canplay', () => {
-      this.audio.play().catch((e) => {
+      this.audio.play().catch(() => {
         // console.error(e);
       });
     });

@@ -83,6 +83,11 @@ const PastSessions = () => {
   const fetch = async (params) => {
     try {
       const res = await dataProvider.pastSessions(null, params);
+
+      if (!res) {
+        throw new Error('Unauthenticated');
+      }
+
       const data = res.data.data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       setSessions(data);

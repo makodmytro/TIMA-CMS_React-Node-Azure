@@ -25,18 +25,23 @@ const AutocompleteInput = () => {
       value: inputValue,
     },
   } = useField('answer_text');
+  let active = true;
 
   const fetch = React.useMemo(
     () => debounce(async (query, callback) => {
       try {
-        setLoading(true);
+        if (active) {
+          setLoading(true);
+        }
 
         const { data } = await dataProvider.getList('answers', {
           pagination: { perPage: 10, page: 1 },
           filter: { q: query },
         });
 
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
 
         return callback(data);
       } catch (err) {
@@ -53,7 +58,9 @@ const AutocompleteInput = () => {
         id: currentValue,
       });
 
-      setValue(data);
+      if (active) {
+        setValue(data);
+      }
     } catch (err) {
       notify(`Failed to fetch related answer: ${err.message}`, 'error');
     }
@@ -63,13 +70,17 @@ const AutocompleteInput = () => {
   // for example when we create a new answer to go with this question
   React.useEffect(() => {
     if (currentValue && (!value || value.id !== currentValue)) {
-      getPresetAnswer();
+      if (active) {
+        getPresetAnswer();
+      }
     }
+
+    return () => {
+      active = false;
+    };
   }, [currentValue]);
 
   React.useEffect(() => {
-    let active = true;
-
     if (inputValue === '') {
       setOptions(value ? [value] : []);
       return undefined;

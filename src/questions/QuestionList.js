@@ -21,25 +21,20 @@ import Badge from '@material-ui/core/Badge';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
-import ExpandIcon from '@material-ui/icons/ExpandMore';
-import DeleteIcon from '@material-ui/icons/Delete';
-import RemoveIcon from '@material-ui/icons/HighlightOff';
-import RelatedIcon from '@material-ui/icons/Cached';
+import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
 import PlayableText, { PlayableTextField } from '../common/components/playable-text';
 import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
+import DropdownMenu from './list-dropdown-menu';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -173,116 +168,6 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
   );
 };
 
-const DropdownMenu = ({
-  record, deleteQuestion, removeAnswer,
-  openRelatedQuestions,
-}) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-
-    return false;
-  };
-
-  const handleClose = (e) => {
-    e.stopPropagation();
-    setAnchorEl(null);
-  };
-
-  const onDeleteClicked = (e) => {
-    e.stopPropagation();
-
-    deleteQuestion(record);
-    setAnchorEl(null);
-  };
-
-  const onRemoveClicked = (e) => {
-    e.stopPropagation();
-
-    removeAnswer(record);
-    setAnchorEl(null);
-  };
-
-  const onOpenRelatedQuestions = (e) => {
-    e.stopPropagation();
-    openRelatedQuestions(record);
-
-    setAnchorEl(null);
-  };
-
-  return (
-    <div>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        variant="contained"
-        color="secondary"
-        size="small"
-      >
-        Actions <ExpandIcon />
-      </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        getContentAnchorEl={null}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        {
-          record.relatedQuestions && !!record.relatedQuestions.length && (
-            <MenuItem onClick={onOpenRelatedQuestions}>
-              <ListItemIcon><RelatedIcon /></ListItemIcon>
-              Related questions
-            </MenuItem>
-          )
-        }
-        {
-          !record.fk_answerId && (
-            <MenuItem
-              component={Link}
-              to={`/questions/${record.id}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ListItemIcon><AddIcon /></ListItemIcon>
-              Create answer
-            </MenuItem>
-          )
-        }
-        {
-          !!record.fk_answerId && (
-            <MenuItem
-              component={Link}
-              to={`/answers/${record.fk_answerId}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ListItemIcon><ViewIcon /></ListItemIcon>
-              View answer
-            </MenuItem>
-          )
-        }
-        <MenuItem onClick={onDeleteClicked}>
-          <ListItemIcon><DeleteIcon /></ListItemIcon>
-          Delete question
-        </MenuItem>
-        {
-          record.fk_answerId && (
-            <MenuItem onClick={onRemoveClicked}>
-              <ListItemIcon><RemoveIcon /></ListItemIcon>
-              Remove answer
-            </MenuItem>
-          )
-        }
-      </Menu>
-    </div>
-  );
-};
-
 const CustomGridItem = ({
   record, deleteQuestion, removeAnswer,
   openRelatedQuestions,
@@ -345,13 +230,18 @@ const CustomGridItem = ({
               <TableCell>
                 <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
               </TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
               <TableCell>
-                <AnswerField label="Answer" record={related} />
+                <DropdownMenu
+                  record={{ ...related, Language: record.Language }}
+                  deleteQuestion={deleteQuestion}
+                  removeAnswer={removeAnswer}
+                  openRelatedQuestions={openRelatedQuestions}
+                />
               </TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
             </TableRow>
           ))
         )
@@ -392,8 +282,8 @@ const CustomGrid = ({
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Updated at" field="updatedAt" />
-                <TableCell>&nbsp;</TableCell>
-                <TableCell>&nbsp;</TableCell>
+                <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
+                <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
@@ -491,6 +381,8 @@ const QuestionList = (props) => {
         open={relatedQuestionsOpened}
         onClose={onCloseRelatedQuestions}
         record={record}
+        deleteQuestion={onDeletedOpen}
+        removeAnswer={onRemoveAnswerOpen}
       />
       <Confirm
         isOpen={deleteConfirmOpened}
@@ -503,8 +395,8 @@ const QuestionList = (props) => {
       <Confirm
         isOpen={removeAnswerConfirmOpened}
         loading={false}
-        title="Remove answer"
-        content="Are you sure you want to remove the answer from the question?"
+        title="Unlink answer"
+        content="Are you sure you want to unlink the answer from the question?"
         onConfirm={removeAnswer}
         onClose={onRemoveAnswerClose}
       />

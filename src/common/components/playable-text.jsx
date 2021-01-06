@@ -28,7 +28,7 @@ const styles = makeStyles(() => ({
 const PlayableTextInput = ({ lang, ...props }) => {
   const {
     input: { value },
-  } = useField(props.source);
+  } = useField(props.source); // eslint-disable-line
 
   return (
     <TextInput
@@ -38,7 +38,7 @@ const PlayableTextInput = ({ lang, ...props }) => {
           <InputAdornment position="end">
             <PlayableText
               text={value}
-              lang={isFunction(lang) ? lang(props.record) : lang}
+              lang={isFunction(lang) ? lang(props.record) : lang} // eslint-disable-line
               hideText
             />
           </InputAdornment>
