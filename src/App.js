@@ -54,10 +54,6 @@ function App() {
         {...answer}
       />
       <Resource
-        name="sources"
-        {...source}
-      />
-      <Resource
         name="stats/sessions"
         {...sessions}
       />
