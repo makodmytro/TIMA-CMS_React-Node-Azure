@@ -6,7 +6,6 @@ import {
   useDataProvider,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
-import Button from '@material-ui/core/Button';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
 

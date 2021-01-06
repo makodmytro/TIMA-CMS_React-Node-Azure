@@ -14,7 +14,7 @@ import StopIcon from '@material-ui/icons/Stop';
 import { makeStyles } from '@material-ui/core/styles';
 import Audio from '../audio';
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles(() => ({
   play: {
     cursor: 'pointer',
     verticalAlign: 'middle',

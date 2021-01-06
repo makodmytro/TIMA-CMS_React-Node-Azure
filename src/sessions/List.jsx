@@ -7,8 +7,7 @@ import {
   Filter,
   ReferenceInput,
   SelectInput,
-  ShowButton,
-  DateInput,
+  DateTimeInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -32,17 +31,9 @@ const Filters = (props) => {
       <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
         <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
       </ReferenceInput>
+      <DateTimeInput source="from" alwaysOn />
+      <DateTimeInput source="until" alwaysOn />
     </Filter>
-  );
-};
-
-const ConditionalShow = ({ record, basePath }) => {
-  if (record.questionsCount === 0 && record.answersCount === 0) {
-    return null;
-  }
-
-  return (
-    <ShowButton record={record} basePath={basePath} />
   );
 };
 

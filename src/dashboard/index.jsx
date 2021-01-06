@@ -21,9 +21,6 @@ const Dashboard = () => {
     <Box py={2}>
       <Title title="Dashboard" />
       <Box>
-        <Typography variant="h5" className={classes.title}>
-          Active sessions
-        </Typography>
         <ActiveSessions />
       </Box>
 

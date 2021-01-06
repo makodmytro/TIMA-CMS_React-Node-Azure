@@ -29,45 +29,43 @@ const Filters = ({ onSubmit, initialValues }) => (
       return errors;
     }}
     initialValues={initialValues}
-    render={({ handleSubmit }) => {
-      return (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4} md={3}>
-              <SelectInput
-                source="period"
-                label="Period"
-                choices={[
-                  { id: 'days', name: 'Days' },
-                  { id: 'weeks', name: 'Weeks' },
-                  { id: 'months', name: 'Months' },
-                ]}
-                validate={required()}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <DateInput source="from" validate={required()} fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <DateInput source="until" validate={required()} fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <Box pt={2}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                >
-                  Search
-                </Button>
-              </Box>
-            </Grid>
+    render={({ handleSubmit }) => (
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4} md={3}>
+            <SelectInput
+              source="period"
+              label="Period"
+              choices={[
+                { id: 'days', name: 'Days' },
+                { id: 'weeks', name: 'Weeks' },
+                { id: 'months', name: 'Months' },
+              ]}
+              validate={required()}
+              fullWidth
+            />
           </Grid>
-        </form>
-      );
-    }}
+          <Grid item xs={12} sm={4} md={3}>
+            <DateInput source="from" validate={required()} fullWidth />
+          </Grid>
+          <Grid item xs={12} sm={4} md={3}>
+            <DateInput source="until" validate={required()} fullWidth />
+          </Grid>
+          <Grid item xs={12} sm={4} md={3}>
+            <Box pt={2}>
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                fullWidth
+              >
+                Search
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </form>
+    )}
   />
 );
 

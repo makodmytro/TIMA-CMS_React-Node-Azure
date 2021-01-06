@@ -17,6 +17,7 @@ import {
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
+import Badge from '@material-ui/core/Badge';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
@@ -34,9 +35,11 @@ import ArrowUp from '@material-ui/icons/ArrowUpward';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RemoveIcon from '@material-ui/icons/HighlightOff';
-import RelatedIcon from '@material-ui/icons/SyncProblem';
+import RelatedIcon from '@material-ui/icons/Cached';
 import PlayableText, { PlayableTextField } from '../common/components/playable-text';
-import SuggestionsDialog from './suggestions-dialog';
+import RelatedQuestionsDialog from './related-questions-dialog';
+import ThumbsUp from '../assets/thumbs-up.png';
+import ThumbsDown from '../assets/thumbs-down.png';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -72,6 +75,9 @@ const styles = makeStyles((theme) => ({
       fontSize: '0.8rem',
       verticalAlign: 'middle',
     },
+  },
+  badge: {
+    right: '-5px',
   },
 }));
 
@@ -130,7 +136,7 @@ const AnswerField = ({ record }) => {
       {
         !record.Answer && (
           <>
-            View related  answer
+            View related answer
           </>
         )
       }
@@ -168,7 +174,8 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
 };
 
 const DropdownMenu = ({
-  record, openSuggestions, deleteQuestion, removeAnswer,
+  record, deleteQuestion, removeAnswer,
+  openRelatedQuestions,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -184,12 +191,6 @@ const DropdownMenu = ({
     setAnchorEl(null);
   };
 
-  const onOpen = (e) => {
-    e.stopPropagation();
-    openSuggestions(record);
-    setAnchorEl(null);
-  };
-
   const onDeleteClicked = (e) => {
     e.stopPropagation();
 
@@ -201,6 +202,13 @@ const DropdownMenu = ({
     e.stopPropagation();
 
     removeAnswer(record);
+    setAnchorEl(null);
+  };
+
+  const onOpenRelatedQuestions = (e) => {
+    e.stopPropagation();
+    openRelatedQuestions(record);
+
     setAnchorEl(null);
   };
 
@@ -226,10 +234,38 @@ const DropdownMenu = ({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <MenuItem onClick={onOpen}>
-          <ListItemIcon><RelatedIcon /></ListItemIcon>
-          Related suggestions
-        </MenuItem>
+        {
+          record.relatedQuestions && !!record.relatedQuestions.length && (
+            <MenuItem onClick={onOpenRelatedQuestions}>
+              <ListItemIcon><RelatedIcon /></ListItemIcon>
+              Related questions
+            </MenuItem>
+          )
+        }
+        {
+          !record.fk_answerId && (
+            <MenuItem
+              component={Link}
+              to={`/questions/${record.id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ListItemIcon><AddIcon /></ListItemIcon>
+              Create answer
+            </MenuItem>
+          )
+        }
+        {
+          !!record.fk_answerId && (
+            <MenuItem
+              component={Link}
+              to={`/answers/${record.fk_answerId}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ListItemIcon><ViewIcon /></ListItemIcon>
+              View answer
+            </MenuItem>
+          )
+        }
         <MenuItem onClick={onDeleteClicked}>
           <ListItemIcon><DeleteIcon /></ListItemIcon>
           Delete question
@@ -248,8 +284,8 @@ const DropdownMenu = ({
 };
 
 const CustomGridItem = ({
-  record, openSuggestions, deleteQuestion, removeAnswer,
-  removeAssociation,
+  record, deleteQuestion, removeAnswer,
+  openRelatedQuestions,
 }) => {
   const classes = styles();
   const redirect = useRedirect();
@@ -279,11 +315,21 @@ const CustomGridItem = ({
           <DateField source="updatedAt" showTime record={record} />
         </TableCell>
         <TableCell>
+          <Badge badgeContent={record.feedbackPositiveCount || 0} color="secondary" classes={{ badge: classes.badge }} showZero>
+            <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+          </Badge>
+        </TableCell>
+        <TableCell>
+          <Badge badgeContent={record.feedbackNegativeCount || 0} color="error" classes={{ badge: classes.badge }} showZero>
+            <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+          </Badge>
+        </TableCell>
+        <TableCell>
           <DropdownMenu
             record={record}
-            openSuggestions={openSuggestions}
             deleteQuestion={deleteQuestion}
             removeAnswer={removeAnswer}
+            openRelatedQuestions={openRelatedQuestions}
           />
         </TableCell>
       </TableRow>
@@ -302,24 +348,10 @@ const CustomGridItem = ({
               <TableCell>
                 <AnswerField label="Answer" record={related} />
               </TableCell>
-              <TableCell>
-                &nbsp;
-              </TableCell>
-              <TableCell>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-
-                    removeAssociation(record, related.id);
-                  }}
-                  type="button"
-                  variant="outlined"
-                  color="default"
-                  size="small"
-                >
-                  Remove association
-                </Button>
-              </TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
             </TableRow>
           ))
         )
@@ -329,7 +361,7 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  openSuggestions, deleteQuestion, removeAnswer, removeAssociation,
+  deleteQuestion, removeAnswer, openRelatedQuestions,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
@@ -361,6 +393,8 @@ const CustomGrid = ({
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Updated at" field="updatedAt" />
                 <TableCell>&nbsp;</TableCell>
+                <TableCell>&nbsp;</TableCell>
+                <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -370,10 +404,9 @@ const CustomGrid = ({
                     key={id}
                     record={data[id]}
                     basePath={basePath}
-                    openSuggestions={openSuggestions}
                     deleteQuestion={deleteQuestion}
                     removeAnswer={removeAnswer}
-                    removeAssociation={removeAssociation}
+                    openRelatedQuestions={openRelatedQuestions}
                   />
                 ))
               }
@@ -389,19 +422,10 @@ const QuestionList = (props) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
-  const [suggestionsOpened, setSuggestionsOpened] = React.useState(false);
   const [record, setRecord] = React.useState(null);
   const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
-
-  const onOpen = (r) => {
-    setRecord(r);
-    setSuggestionsOpened(true);
-  };
-  const onClose = () => {
-    setRecord(null);
-    setSuggestionsOpened(false);
-  };
+  const [relatedQuestionsOpened, setRelatedQuestionsOpened] = React.useState(false);
 
   const onDeletedOpen = (r) => {
     setRecord(r);
@@ -451,25 +475,21 @@ const QuestionList = (props) => {
     onRemoveAnswerClose();
   };
 
-  const removeAssociation = async (resource, parentId) => {
-    try {
-      await dataProvider.deleteQuestionAssociation(null, {
-        id: resource.id,
-        parentId,
-      });
+  const onOpenRelatedQuestions = (r) => {
+    setRecord(r);
+    setRelatedQuestionsOpened(true);
+  };
 
-      notify('The association has been removed');
-      refresh();
-    } catch (err) {
-      notify(`Failed to remove question association: ${err.message}`, 'error');
-    }
+  const onCloseRelatedQuestions = () => {
+    setRecord(null);
+    setRelatedQuestionsOpened(false);
   };
 
   return (
     <>
-      <SuggestionsDialog
-        open={suggestionsOpened}
-        onClose={onClose}
+      <RelatedQuestionsDialog
+        open={relatedQuestionsOpened}
+        onClose={onCloseRelatedQuestions}
         record={record}
       />
       <Confirm
@@ -490,10 +510,9 @@ const QuestionList = (props) => {
       />
       <List {...props} filters={<Filters />}>
         <CustomGrid
-          openSuggestions={onOpen}
+          openRelatedQuestions={onOpenRelatedQuestions}
           deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}
-          removeAssociation={removeAssociation}
         />
       </List>
     </>

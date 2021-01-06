@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ReferenceInput, required, SelectInput, TextInput,
+  ReferenceInput, required, SelectInput,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';

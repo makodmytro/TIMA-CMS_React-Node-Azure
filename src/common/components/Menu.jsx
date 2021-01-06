@@ -5,7 +5,6 @@ import { useMediaQuery } from '@material-ui/core';
 import { MenuItemLink, getResources } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import DefaultIcon from '@material-ui/icons/ViewList';
-import LabelIcon from '@material-ui/icons/Label';
 import HomeIcon from '@material-ui/icons/Home';
 
 const Menu = ({ onMenuClick, logout }) => {

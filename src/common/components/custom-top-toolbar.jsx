@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory } from 'react-router-dom'; // eslint-disable-line
 
-const Toolbar = (props) => {
+const Toolbar = ({ children }) => {
   const history = useHistory();
 
   return (
@@ -20,7 +20,7 @@ const Toolbar = (props) => {
         <BackIcon size="small" /> BACK
       </Button>
       &nbsp;
-      {props.children}
+      {children}
     </TopToolbar>
   );
 };

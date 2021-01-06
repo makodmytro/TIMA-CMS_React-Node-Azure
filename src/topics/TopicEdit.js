@@ -9,7 +9,6 @@ import {
   Toolbar,
   SaveButton,
 } from 'react-admin';
-import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { ShowQuestions, Img } from './TopicList';

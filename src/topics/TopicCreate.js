@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput, NumberInput,
+  Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
 } from 'react-admin';
 
 const TopicCreate = (props) => (

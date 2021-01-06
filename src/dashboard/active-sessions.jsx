@@ -1,13 +1,18 @@
 import React from 'react';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
 import {
   useDataProvider,
   useNotify,
 } from 'react-admin';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import SessionCharts from './sessions-charts';
+
+const styles = makeStyles((theme) => ({
+  title: {
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    marginBottom: '20px',
+  },
+}));
 
 const time = () => {
   const d = new Date();
@@ -15,14 +20,15 @@ const time = () => {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
 };
 
-const ActiveSessions = (props) => {
+const ActiveSessions = () => {
+  const classes = styles();
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
   const [sessions, setSessions] = React.useState([]);
 
   const countRef = React.useRef(sessions);
   countRef.current = sessions;
-
-  const dataProvider = useDataProvider();
-  const notify = useNotify();
+  let timeout = null;
 
   const fetch = async () => {
     try {
@@ -34,14 +40,16 @@ const ActiveSessions = (props) => {
 
       setSessions(active);
 
-      setTimeout(fetch, 30 * 1000);
+      timeout = setTimeout(fetch, 30 * 1000);
     } catch (err) {
       notify(`Failed to get active sessions: ${err.message}`, 'error');
     }
   };
 
-  React.useState(() => {
+  React.useEffect(() => {
     fetch();
+
+    return () => clearTimeout(timeout);
   }, []);
 
   if (!sessions.length) {
@@ -49,7 +57,12 @@ const ActiveSessions = (props) => {
   }
 
   return (
-    <SessionCharts sessions={sessions} />
+    <>
+      <Typography variant="h5" className={classes.title}>
+        Active sessions ({sessions[sessions.length - 1].count})
+      </Typography>
+      <SessionCharts sessions={sessions} />
+    </>
   );
 };
 

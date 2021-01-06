@@ -129,7 +129,7 @@ const resDataProvider = {
     return { data: json };
   },
 
-  activeSessions: async (resource = null, params) => {
+  activeSessions: async (resource = null) => {
     const { json } = await httpClient(`${baseApi}/stats/sessions/active`);
 
     return { data: json };
