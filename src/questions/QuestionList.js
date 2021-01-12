@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
+  BooleanInput,
+  Confirm,
   DateField,
   List,
-  Filter,
-  TextInput,
   ReferenceInput,
   SelectInput,
-  useListContext,
-  useRedirect,
+  TextInput,
   useDataProvider,
-  useRefresh,
+  useListContext,
   useNotify,
-  Confirm,
-  BooleanInput,
+  useRedirect,
+  useRefresh,
 } from 'react-admin';
+import { Form } from 'react-final-form';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
@@ -75,22 +75,100 @@ const styles = makeStyles((theme) => ({
   badge: {
     right: '-5px',
   },
+  form: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: '16px',
+    minHeight: '80px',
+    alignItems: 'flex-end',
+    paddingTop: 0,
+
+    '& div': {
+      paddingRight: 16,
+    },
+  },
 }));
 
 const Filters = (props) => {
   const classes = styles();
+  const {
+    filterValues,
+    setFilters,
+  } = useListContext();
+  const dataProvider = useDataProvider();
+
+  if (props.context === 'button') {
+    return null;
+  }
+
+  const handleSetFilters = (filters) => {
+    setFilters(filters, {});
+  };
+
+  const handleLanguageChange = (event) => {
+    setFilters({ ...filterValues, fk_languageId: event.target.value }, {});
+  };
+
+  const handleTopicChange = (event) => {
+    if (event.target.value) {
+      dataProvider.getOne('topics', { id: event.target.value })
+        .then(({ data }) => {
+          setFilters({
+            ...filterValues,
+            fk_languageId: data.fk_languageId,
+            fk_topicId: event.target.value,
+          });
+        });
+    } else {
+      setFilters({ ...filterValues, fk_topicId: event.target.value }, {});
+    }
+  };
 
   return (
-    <Filter {...props} className={classes.padded}>
-      <TextInput label="Text" source="q" alwaysOn />
-      <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-      </ReferenceInput>
-      <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-      </ReferenceInput>
-      <BooleanInput label="Unanswered questions" source="unanswered" alwaysOn />
-    </Filter>
+
+    <Form onSubmit={handleSetFilters} initialValues={filterValues}>
+      {({ handleSubmit }) => (
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <ReferenceInput
+            onChange={handleLanguageChange}
+            label="Language"
+            source="fk_languageId"
+            reference="languages"
+            alwaysOn
+            allowEmpty
+          >
+            <SelectInput
+              disabled={Boolean(filterValues.fk_topicId)}
+              optionText="name"
+              className={classes.select}
+              allowEmpty
+              emptyText="None"
+            />
+          </ReferenceInput>
+          <ReferenceInput
+            label="Topic"
+            source="fk_topicId"
+            reference="topics"
+            alwaysOn
+            allowEmpty
+            perPage={100}
+            onChange={handleTopicChange}
+            filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
+              : null}
+          >
+            <SelectInput
+              optionText="name"
+              className={classes.select}
+              allowEmpty
+              emptyText="None"
+            />
+          </ReferenceInput>
+          <BooleanInput label="Unanswered questions" source="unanswered" alwaysOn onChange={() => handleSubmit()} />
+        </form>
+
+      )}
+    </Form>
   );
 };
 
@@ -145,7 +223,11 @@ const AnswerField = ({ record }) => {
   }
 
   return (
-    <PlayableText text={record.Answer.text} el={link} lang={record.Language ? record.Language.code : 'en-US'} />
+    <PlayableText
+      text={record.Answer.text}
+      el={link}
+      lang={record.Language ? record.Language.code : 'en-US'}
+    />
   );
 };
 
@@ -165,7 +247,8 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
       }}
     >
       {record.relatedQuestions.length}
-      { expanded ? <ExpandLessIcon size="small" /> : <AddIcon size="small" />} { /* eslint-disable-line */ }
+      {expanded ? <ExpandLessIcon size="small" />
+        : <AddIcon size="small"/>} { /* eslint-disable-line */}
     </span>
   );
 };
@@ -202,12 +285,22 @@ const CustomGridItem = ({
           <DateField source="updatedAt" showTime record={record} />
         </TableCell>
         <TableCell>
-          <Badge badgeContent={record.feedbackPositiveCount || 0} color="secondary" classes={{ badge: classes.badge }} showZero>
+          <Badge
+            badgeContent={record.feedbackPositiveCount || 0}
+            color="secondary"
+            classes={{ badge: classes.badge }}
+            showZero
+          >
             <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
           </Badge>
         </TableCell>
         <TableCell>
-          <Badge badgeContent={record.feedbackNegativeCount || 0} color="error" classes={{ badge: classes.badge }} showZero>
+          <Badge
+            badgeContent={record.feedbackNegativeCount || 0}
+            color="error"
+            classes={{ badge: classes.badge }}
+            showZero
+          >
             <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
           </Badge>
         </TableCell>
@@ -230,7 +323,10 @@ const CustomGridItem = ({
               onClick={link(related.id)}
             >
               <TableCell>
-                <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
+                <PlayableTextField
+                  source="text"
+                  record={{ ...related, Language: record.Language }}
+                />
               </TableCell>
               <TableCell>&nbsp;</TableCell>
               <TableCell>&nbsp;</TableCell>
@@ -259,7 +355,10 @@ const CustomGrid = ({
   const classes = styles();
 
   const Th = ({ label, field }) => (
-    <TableCell className={classes.thead} onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}>
+    <TableCell
+      className={classes.thead}
+      onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
+    >
       {label}&nbsp;
       {
         field === currentSort.field && currentSort.order === 'DESC' && (

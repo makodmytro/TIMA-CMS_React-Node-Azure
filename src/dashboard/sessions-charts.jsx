@@ -23,7 +23,7 @@ const getStacked = (sessions) => {
       return 0;
     }
 
-    return Math.ceil((session.avgUnanswered * 100) / session.avgQuestions);
+    return session.avgUnanswered;
   };
 
   const a = (session) => {
@@ -31,7 +31,7 @@ const getStacked = (sessions) => {
       return 0;
     }
 
-    return Math.floor((session.avgQuestions - session.avgUnanswered) * 100 / session.avgQuestions);
+    return session.avgQuestions - session.avgUnanswered;
   };
 
   return {
@@ -45,7 +45,7 @@ const getStacked = (sessions) => {
     yAxis: {
       min: 0,
       title: {
-        text: 'Percentage',
+        text: '# Questions',
       },
       stackLabels: {
         enabled: false,
@@ -73,7 +73,7 @@ const getStacked = (sessions) => {
       data: sessions.map((session) => u(session)),
       color: '#d32f2f',
     }, {
-      name: 'Questions each',
+      name: 'Questions answered',
       data: sessions.map((session) => a(session)),
       color: '#1861e8',
     }],
