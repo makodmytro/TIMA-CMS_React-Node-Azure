@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
 import { PlayableTextField } from '../common/components/playable-text';
 import ListActions from '../common/components/ListActions';
+import TopicSelectCell from '../common/components/TopicSelectCell';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -141,7 +142,7 @@ const AnswerList = (props) => {
     },
     {
       key: 'fk_topicId',
-      el: <PlayableTextField source="Topic.name" label="Topic" sortBy="fk_topicId" />,
+      el: <TopicSelectCell source="fk_topicId" label="Topic" sortBy="fk_topicId" />,
     },
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];

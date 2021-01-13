@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   BooleanInput,
@@ -37,6 +37,7 @@ import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
 import DropdownMenu from './list-dropdown-menu';
 import ListActions from '../common/components/ListActions';
+import TopicSelectCell from '../common/components/TopicSelectCell';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -165,7 +166,12 @@ const Filters = (props) => {
               emptyText="None"
             />
           </ReferenceInput>
-          <BooleanInput label="Unanswered questions" source="unanswered" alwaysOn onChange={() => handleSubmit()} />
+          <BooleanInput
+            label="Unanswered questions"
+            source="unanswered"
+            alwaysOn
+            onChange={() => handleSubmit()}
+          />
         </form>
 
       )}
@@ -278,15 +284,24 @@ const CustomGridItem = ({
           <TableCell>
             <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
             &nbsp;
-            <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-US'} />
+            <PlayableText
+              text={record.text}
+              lang={record.Language ? record.Language.code : 'en-US'}
+            />
           </TableCell>
         )}
 
         {visibleColumns.includes('fk_answerId')
         && (
-        <TableCell>
-          <AnswerField label="Answer" record={record} />
-        </TableCell>
+          <TableCell>
+            <AnswerField label="Answer" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('fk_topicId')
+        && (
+          <TableCell>
+            <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
+          </TableCell>
         )}
         {visibleColumns.includes('updatedAt') && (
           <TableCell>
@@ -394,6 +409,7 @@ const CustomGrid = ({
               <TableRow>
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
+                <Th label="Topic" field="fk_topicId" />
                 <Th label="Updated at" field="updatedAt" />
                 <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
                 <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
@@ -434,6 +450,7 @@ const QuestionList = (props) => {
   const columns = [
     { key: 'text' },
     { key: 'fk_answerId' },
+    { key: 'fk_topicId' },
     { key: 'updatedAt' },
     { key: 'feedbackPositiveCount' },
     { key: 'feedbackNegativeCount' },
@@ -534,7 +551,7 @@ const QuestionList = (props) => {
             onColumnsChange={setVisibleColumns}
             columns={columns}
           />
-            )}
+        )}
         filters={<Filters />}
       >
         <CustomGrid
