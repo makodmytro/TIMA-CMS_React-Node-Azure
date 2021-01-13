@@ -11,7 +11,6 @@ import topic from './topics';
 import language from './languages';
 import question from './questions';
 import answer from './answers';
-import source from './sources';
 import sessions from './sessions';
 import dashboard from './dashboard';
 

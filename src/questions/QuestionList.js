@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
+  BooleanInput,
+  Confirm,
   DateField,
   List,
-  Filter,
-  TextInput,
   ReferenceInput,
   SelectInput,
-  useListContext,
-  useRedirect,
+  TextInput,
   useDataProvider,
-  useRefresh,
+  useListContext,
   useNotify,
-  Confirm,
-  BooleanInput,
+  useRedirect,
+  useRefresh,
 } from 'react-admin';
+import { Form } from 'react-final-form';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
@@ -36,6 +36,8 @@ import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
 import DropdownMenu from './list-dropdown-menu';
+import ListActions from '../common/components/ListActions';
+import TopicSelectCell from '../common/components/TopicSelectCell';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -75,22 +77,105 @@ const styles = makeStyles((theme) => ({
   badge: {
     right: '-5px',
   },
+  form: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: '16px',
+    minHeight: '80px',
+    alignItems: 'flex-end',
+    paddingTop: 0,
+
+    '& div': {
+      paddingRight: 16,
+    },
+  },
 }));
 
 const Filters = (props) => {
   const classes = styles();
+  const {
+    filterValues,
+    setFilters,
+  } = useListContext();
+  const dataProvider = useDataProvider();
+
+  if (props.context === 'button') {
+    return null;
+  }
+
+  const handleSetFilters = (filters) => {
+    setFilters(filters, {});
+  };
+
+  const handleLanguageChange = (event) => {
+    setFilters({ ...filterValues, fk_languageId: event.target.value }, {});
+  };
+
+  const handleTopicChange = (event) => {
+    if (event.target.value) {
+      dataProvider.getOne('topics', { id: event.target.value })
+        .then(({ data }) => {
+          setFilters({
+            ...filterValues,
+            fk_languageId: data.fk_languageId,
+            fk_topicId: event.target.value,
+          });
+        });
+    } else {
+      setFilters({ ...filterValues, fk_topicId: event.target.value }, {});
+    }
+  };
 
   return (
-    <Filter {...props} className={classes.padded}>
-      <TextInput label="Text" source="q" alwaysOn />
-      <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
-        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-      </ReferenceInput>
-      <ReferenceInput label="Topic" source="fk_topicId" reference="topics" alwaysOn perPage={100}>
-        <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-      </ReferenceInput>
-      <BooleanInput label="Unanswered questions" source="unanswered" alwaysOn />
-    </Filter>
+
+    <Form onSubmit={handleSetFilters} initialValues={filterValues}>
+      {({ handleSubmit }) => (
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <ReferenceInput
+            onChange={handleLanguageChange}
+            label="Language"
+            source="fk_languageId"
+            reference="languages"
+            alwaysOn
+            allowEmpty
+          >
+            <SelectInput
+              disabled={Boolean(filterValues.fk_topicId)}
+              optionText="name"
+              className={classes.select}
+              allowEmpty
+              emptyText="None"
+            />
+          </ReferenceInput>
+          <ReferenceInput
+            label="Topic"
+            source="fk_topicId"
+            reference="topics"
+            alwaysOn
+            allowEmpty
+            perPage={100}
+            onChange={handleTopicChange}
+            filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
+              : null}
+          >
+            <SelectInput
+              optionText="name"
+              className={classes.select}
+              allowEmpty
+              emptyText="None"
+            />
+          </ReferenceInput>
+          <BooleanInput
+            label="Unanswered questions"
+            source="unanswered"
+            alwaysOn
+            onChange={() => handleSubmit()}
+          />
+        </form>
+
+      )}
+    </Form>
   );
 };
 
@@ -145,7 +230,11 @@ const AnswerField = ({ record }) => {
   }
 
   return (
-    <PlayableText text={record.Answer.text} el={link} lang={record.Language ? record.Language.code : 'en-US'} />
+    <PlayableText
+      text={record.Answer.text}
+      el={link}
+      lang={record.Language ? record.Language.code : 'en-US'}
+    />
   );
 };
 
@@ -165,14 +254,15 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
       }}
     >
       {record.relatedQuestions.length}
-      { expanded ? <ExpandLessIcon size="small" /> : <AddIcon size="small" />} { /* eslint-disable-line */ }
+      {expanded ? <ExpandLessIcon size="small" />
+        : <AddIcon size="small"/>} { /* eslint-disable-line */}
     </span>
   );
 };
 
 const CustomGridItem = ({
   record, deleteQuestion, removeAnswer,
-  openRelatedQuestions,
+  openRelatedQuestions, visibleColumns,
 }) => {
   const classes = styles();
   const redirect = useRedirect();
@@ -190,27 +280,60 @@ const CustomGridItem = ({
         style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}
         onClick={link(record.id)}
       >
-        <TableCell>
-          <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
-          &nbsp;
-          <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-US'} />
-        </TableCell>
-        <TableCell>
-          <AnswerField label="Answer" record={record} />
-        </TableCell>
-        <TableCell>
-          <DateField source="updatedAt" showTime record={record} />
-        </TableCell>
-        <TableCell>
-          <Badge badgeContent={record.feedbackPositiveCount || 0} color="secondary" classes={{ badge: classes.badge }} showZero>
-            <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
-          </Badge>
-        </TableCell>
-        <TableCell>
-          <Badge badgeContent={record.feedbackNegativeCount || 0} color="error" classes={{ badge: classes.badge }} showZero>
-            <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
-          </Badge>
-        </TableCell>
+        {visibleColumns.includes('text') && (
+          <TableCell>
+            <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
+            &nbsp;
+            <PlayableText
+              text={record.text}
+              lang={record.Language ? record.Language.code : 'en-US'}
+            />
+          </TableCell>
+        )}
+
+        {visibleColumns.includes('fk_answerId')
+        && (
+          <TableCell>
+            <AnswerField label="Answer" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('fk_topicId')
+        && (
+          <TableCell>
+            <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('updatedAt') && (
+          <TableCell>
+            <DateField source="updatedAt" showTime record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('feedbackPositiveCount') && (
+          <TableCell>
+            <Badge
+              badgeContent={record.feedbackPositiveCount || 0}
+              color="secondary"
+              classes={{ badge: classes.badge }}
+              showZero
+            >
+              <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+            </Badge>
+          </TableCell>
+        )}
+
+        {visibleColumns.includes('feedbackNegativeCount') && (
+          <TableCell>
+            <Badge
+              badgeContent={record.feedbackNegativeCount || 0}
+              color="error"
+              classes={{ badge: classes.badge }}
+              showZero
+            >
+              <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+            </Badge>
+          </TableCell>
+        )}
+
         <TableCell>
           <DropdownMenu
             record={record}
@@ -230,12 +353,12 @@ const CustomGridItem = ({
               onClick={link(related.id)}
             >
               <TableCell>
-                <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
+                <PlayableTextField
+                  source="text"
+                  record={{ ...related, Language: record.Language }}
+                />
               </TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
+              {visibleColumns.slice(1).map((colKey) => <TableCell key={colKey}>&nbsp;</TableCell>)}
               <TableCell>
                 <DropdownMenu
                   record={{ ...related, Language: record.Language }}
@@ -253,13 +376,16 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  deleteQuestion, removeAnswer, openRelatedQuestions,
+  deleteQuestion, removeAnswer, openRelatedQuestions, visibleColumns,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
 
-  const Th = ({ label, field }) => (
-    <TableCell className={classes.thead} onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}>
+  const Th = ({ label, field }) => (visibleColumns.includes(field) ? (
+    <TableCell
+      className={classes.thead}
+      onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
+    >
       {label}&nbsp;
       {
         field === currentSort.field && currentSort.order === 'DESC' && (
@@ -272,7 +398,7 @@ const CustomGrid = ({
         )
       }
     </TableCell>
-  );
+  ) : null);
 
   return (
     <Grid container spacing={2}>
@@ -283,6 +409,7 @@ const CustomGrid = ({
               <TableRow>
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
+                <Th label="Topic" field="fk_topicId" />
                 <Th label="Updated at" field="updatedAt" />
                 <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
                 <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
@@ -299,6 +426,7 @@ const CustomGrid = ({
                     deleteQuestion={deleteQuestion}
                     removeAnswer={removeAnswer}
                     openRelatedQuestions={openRelatedQuestions}
+                    visibleColumns={visibleColumns}
                   />
                 ))
               }
@@ -318,6 +446,19 @@ const QuestionList = (props) => {
   const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
   const [relatedQuestionsOpened, setRelatedQuestionsOpened] = React.useState(false);
+
+  const columns = [
+    { key: 'text' },
+    { key: 'fk_answerId' },
+    { key: 'fk_topicId' },
+    { key: 'updatedAt' },
+    { key: 'feedbackPositiveCount' },
+    { key: 'feedbackNegativeCount' },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
+  );
 
   const onDeletedOpen = (r) => {
     setRecord(r);
@@ -402,8 +543,19 @@ const QuestionList = (props) => {
         onConfirm={removeAnswer}
         onClose={onRemoveAnswerClose}
       />
-      <List {...props} filters={<Filters />}>
+      <List
+        {...props}
+        actions={(
+          <ListActions
+            visibleColumns={visibleColumns}
+            onColumnsChange={setVisibleColumns}
+            columns={columns}
+          />
+        )}
+        filters={<Filters />}
+      >
         <CustomGrid
+          visibleColumns={visibleColumns}
           openRelatedQuestions={onOpenRelatedQuestions}
           deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}

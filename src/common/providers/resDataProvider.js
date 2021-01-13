@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import simpleRestProvider from 'ra-data-simple-rest';
 import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
