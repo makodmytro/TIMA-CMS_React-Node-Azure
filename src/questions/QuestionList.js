@@ -126,6 +126,14 @@ const Filters = (props) => {
     }
   };
 
+  const getTopicsFilter = () => {
+    const filters = { globalTopic: [0, 1] };
+    if (filterValues.fk_languageId) {
+      filters.fk_languageId = filterValues.fk_languageId;
+    }
+    return filters;
+  };
+
   return (
 
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
@@ -156,8 +164,7 @@ const Filters = (props) => {
             allowEmpty
             perPage={100}
             onChange={handleTopicChange}
-            filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
-              : null}
+            filter={getTopicsFilter()}
           >
             <SelectInput
               optionText="name"
@@ -255,7 +262,7 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
     >
       {record.relatedQuestions.length}
       {expanded ? <ExpandLessIcon size="small" />
-        : <AddIcon size="small"/>} { /* eslint-disable-line */}
+        : <AddIcon size="small" />} { /* eslint-disable-line */}
     </span>
   );
 };
@@ -292,17 +299,17 @@ const CustomGridItem = ({
         )}
 
         {visibleColumns.includes('fk_answerId')
-        && (
-          <TableCell>
-            <AnswerField label="Answer" record={record} />
-          </TableCell>
-        )}
+          && (
+            <TableCell>
+              <AnswerField label="Answer" record={record} />
+            </TableCell>
+          )}
         {visibleColumns.includes('fk_topicId')
-        && (
-          <TableCell>
-            <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
-          </TableCell>
-        )}
+          && (
+            <TableCell>
+              <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
+            </TableCell>
+          )}
         {visibleColumns.includes('updatedAt') && (
           <TableCell>
             <DateField source="updatedAt" showTime record={record} />
