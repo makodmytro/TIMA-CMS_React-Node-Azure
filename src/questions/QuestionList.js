@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   BooleanInput,
@@ -36,6 +36,7 @@ import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
 import DropdownMenu from './list-dropdown-menu';
+import ListActions from '../common/components/ListActions';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -255,7 +256,7 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
 
 const CustomGridItem = ({
   record, deleteQuestion, removeAnswer,
-  openRelatedQuestions,
+  openRelatedQuestions, visibleColumns,
 }) => {
   const classes = styles();
   const redirect = useRedirect();
@@ -273,37 +274,51 @@ const CustomGridItem = ({
         style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}
         onClick={link(record.id)}
       >
-        <TableCell>
-          <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
-          &nbsp;
-          <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-US'} />
-        </TableCell>
+        {visibleColumns.includes('text') && (
+          <TableCell>
+            <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
+            &nbsp;
+            <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-US'} />
+          </TableCell>
+        )}
+
+        {visibleColumns.includes('fk_answerId')
+        && (
         <TableCell>
           <AnswerField label="Answer" record={record} />
         </TableCell>
-        <TableCell>
-          <DateField source="updatedAt" showTime record={record} />
-        </TableCell>
-        <TableCell>
-          <Badge
-            badgeContent={record.feedbackPositiveCount || 0}
-            color="secondary"
-            classes={{ badge: classes.badge }}
-            showZero
-          >
-            <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
-          </Badge>
-        </TableCell>
-        <TableCell>
-          <Badge
-            badgeContent={record.feedbackNegativeCount || 0}
-            color="error"
-            classes={{ badge: classes.badge }}
-            showZero
-          >
-            <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
-          </Badge>
-        </TableCell>
+        )}
+        {visibleColumns.includes('updatedAt') && (
+          <TableCell>
+            <DateField source="updatedAt" showTime record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('feedbackPositiveCount') && (
+          <TableCell>
+            <Badge
+              badgeContent={record.feedbackPositiveCount || 0}
+              color="secondary"
+              classes={{ badge: classes.badge }}
+              showZero
+            >
+              <img src={ThumbsUp} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+            </Badge>
+          </TableCell>
+        )}
+
+        {visibleColumns.includes('feedbackNegativeCount') && (
+          <TableCell>
+            <Badge
+              badgeContent={record.feedbackNegativeCount || 0}
+              color="error"
+              classes={{ badge: classes.badge }}
+              showZero
+            >
+              <img src={ThumbsDown} alt="thumbs-up" style={{ maxWidth: '30px' }} />
+            </Badge>
+          </TableCell>
+        )}
+
         <TableCell>
           <DropdownMenu
             record={record}
@@ -328,10 +343,7 @@ const CustomGridItem = ({
                   record={{ ...related, Language: record.Language }}
                 />
               </TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
+              {visibleColumns.slice(1).map((colKey) => <TableCell key={colKey}>&nbsp;</TableCell>)}
               <TableCell>
                 <DropdownMenu
                   record={{ ...related, Language: record.Language }}
@@ -349,12 +361,12 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  deleteQuestion, removeAnswer, openRelatedQuestions,
+  deleteQuestion, removeAnswer, openRelatedQuestions, visibleColumns,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
 
-  const Th = ({ label, field }) => (
+  const Th = ({ label, field }) => (visibleColumns.includes(field) ? (
     <TableCell
       className={classes.thead}
       onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
@@ -371,7 +383,7 @@ const CustomGrid = ({
         )
       }
     </TableCell>
-  );
+  ) : null);
 
   return (
     <Grid container spacing={2}>
@@ -398,6 +410,7 @@ const CustomGrid = ({
                     deleteQuestion={deleteQuestion}
                     removeAnswer={removeAnswer}
                     openRelatedQuestions={openRelatedQuestions}
+                    visibleColumns={visibleColumns}
                   />
                 ))
               }
@@ -417,6 +430,18 @@ const QuestionList = (props) => {
   const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
   const [relatedQuestionsOpened, setRelatedQuestionsOpened] = React.useState(false);
+
+  const columns = [
+    { key: 'text' },
+    { key: 'fk_answerId' },
+    { key: 'updatedAt' },
+    { key: 'feedbackPositiveCount' },
+    { key: 'feedbackNegativeCount' },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
+  );
 
   const onDeletedOpen = (r) => {
     setRecord(r);
@@ -501,8 +526,19 @@ const QuestionList = (props) => {
         onConfirm={removeAnswer}
         onClose={onRemoveAnswerClose}
       />
-      <List {...props} filters={<Filters />}>
+      <List
+        {...props}
+        actions={(
+          <ListActions
+            visibleColumns={visibleColumns}
+            onColumnsChange={setVisibleColumns}
+            columns={columns}
+          />
+            )}
+        filters={<Filters />}
+      >
         <CustomGrid
+          visibleColumns={visibleColumns}
           openRelatedQuestions={onOpenRelatedQuestions}
           deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}

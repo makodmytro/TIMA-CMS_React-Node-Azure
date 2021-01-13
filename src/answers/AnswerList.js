@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { cloneElement, useState } from 'react';
 import {
-  BooleanInput,
   Datagrid,
   DateField,
-  Filter,
   List,
   ReferenceInput,
   SelectInput,
@@ -15,6 +13,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
 import { PlayableTextField } from '../common/components/playable-text';
+import ListActions from '../common/components/ListActions';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -129,16 +128,46 @@ const Filters = (props) => {
   );
 };
 
-const AnswerList = (props) => (
-  <List {...props} filters={<Filters />} bulkActionButtons={false}>
-    <Datagrid rowClick="edit">
-      <PlayableTextField source="text" />
-      <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />
-      <PlayableTextField source="Topic.name" label="Topic" sortBy="fk_topicId" />
-      <DateField source="updatedAt" showTime />
-    </Datagrid>
-  </List>
-);
+const AnswerList = (props) => {
+  const columns = [
+    { key: 'text', el: <PlayableTextField source="text" /> },
+    {
+      key: 'fk_languageId',
+      el: <TextField source="Language.name" label="Language" sortBy="fk_languageId" />,
+    },
+    {
+      key: 'fk_editorId',
+      el: <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />,
+    },
+    {
+      key: 'fk_topicId',
+      el: <PlayableTextField source="Topic.name" label="Topic" sortBy="fk_topicId" />,
+    },
+    { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = useState(
+    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
+  );
+  return (
+    <List
+      {...props}
+      actions={(
+        <ListActions
+          visibleColumns={visibleColumns}
+          onColumnsChange={setVisibleColumns}
+          columns={columns}
+        />
+          )}
+      filters={<Filters />}
+      bulkActionButtons={false}
+    >
+      <Datagrid rowClick="edit">
+        {columns.filter((col) => visibleColumns.includes(col.key))
+          .map((col) => cloneElement(col.el, { key: col.key }))}
+      </Datagrid>
+    </List>
+  );
+};
 
 export default AnswerList;
