@@ -9562,7 +9562,7 @@ react-final-form-arrays@^3.1.1:
   dependencies:
     "@babel/runtime" "^7.12.1"
 
-react-final-form@^6.3.3:
+react-final-form@^6.3.3, react-final-form@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-6.5.2.tgz#d04d1eb7d92eabc6f6c35206bb0eebfc4bfd924b"
   integrity sha512-c5l45FYOoxtfpvsvMFh3w2WW8KNxbuebBUrM16rUrooQkewTs0Zahmv0TuKFX5jsC9BKn5Fo84j3ZVXQdURS4w==

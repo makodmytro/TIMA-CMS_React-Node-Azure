@@ -11,6 +11,9 @@ const english = {
     topics: {
       name: 'Topic |||| Topics',
       fields: {
+        name: 'Name',
+        topicKey: 'Topic Key',
+        image: 'Image',
         fallbackTopicLevel: 'Fallback Topic Level',
         updatedAt: 'Updated',
         language: 'Language',
@@ -37,6 +40,8 @@ const english = {
         fk_answerId: 'Answer',
         fk_parentQuestionId: 'Parent Question',
         fk_questionId: 'Related Question',
+        feedbackPositiveCount: 'Pos. Feedback',
+        feedbackNegativeCount: 'Neg. Feedback',
         updatedAt: 'Updated',
       },
     },

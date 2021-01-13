@@ -19,19 +19,19 @@ const secondsToTime = (seconds) => {
 
 const getStacked = (sessions) => {
   const u = (session) => {
-    if (!session.avgUnanswered) {
+    if (!session.totalUnanswered) {
       return 0;
     }
 
-    return Math.ceil((session.avgUnanswered * 100) / session.avgQuestions);
+    return session.totalUnanswered;
   };
 
   const a = (session) => {
-    if (!session.avgQuestions) {
+    if (!session.totalQuestions) {
       return 0;
     }
 
-    return Math.floor((session.avgQuestions - session.avgUnanswered) * 100 / session.avgQuestions);
+    return session.totalQuestions - session.totalUnanswered;
   };
 
   return {
@@ -45,7 +45,7 @@ const getStacked = (sessions) => {
     yAxis: {
       min: 0,
       title: {
-        text: 'Percentage',
+        text: '# Questions',
       },
       stackLabels: {
         enabled: false,
@@ -73,53 +73,51 @@ const getStacked = (sessions) => {
       data: sessions.map((session) => u(session)),
       color: '#d32f2f',
     }, {
-      name: 'Questions each',
+      name: 'Questions answered',
       data: sessions.map((session) => a(session)),
       color: '#1861e8',
     }],
   };
 };
 
-const getBars = (sessions) => {
-  return {
-    chart: { type: 'column' },
-    title: { text: 'Session average duration' },
-    yAxis: {
-      title: {
-        text: 'Duration',
-      },
-      labels: {
-        formatter: (e) => secondsToTime(e.value),
-      },
+const getBars = (sessions) => ({
+  chart: { type: 'column' },
+  title: { text: 'Session average duration' },
+  yAxis: {
+    title: {
+      text: 'Duration',
     },
-    xAxis: {
-      categories: sessions.map((session) => session.date),
+    labels: {
+      formatter: (e) => secondsToTime(e.value),
     },
-    legend: {
-      enabled: false,
-    },
-    plotOptions: {
-      series: {
-        borderWidth: 0,
-        dataLabels: {
-          enabled: false,
-        },
+  },
+  xAxis: {
+    categories: sessions.map((session) => session.date),
+  },
+  legend: {
+    enabled: false,
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: false,
       },
     },
-    tooltip: {
+  },
+  tooltip: {
       formatter: function () { // eslint-disable-line
-        return `<b>Duration: </b> ${secondsToTime(this.y)}`;
-      },
+      return `<b>Duration: </b> ${secondsToTime(this.y)}`;
     },
-    series: [{
-      name: 'Duration',
-      data: sessions.map((session) => ({
-        colorByPoint: true,
-        y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
-      })),
-    }],
-  };
-};
+  },
+  series: [{
+    name: 'Duration',
+    data: sessions.map((session) => ({
+      colorByPoint: true,
+      y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
+    })),
+  }],
+});
 
 const SessionGraphs = ({ sessions }) => {
   const stacked = getStacked(sessions);
