@@ -9,12 +9,15 @@ import {
   TextField,
   TextInput,
 } from 'react-admin';
-import { Link } from 'react-router-dom'; // eslint-disable-line
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import QrDialog from './qr-dialog';
-import ListActions from '../common/components/ListActions';
+import ListActions, {
+  getVisibleColumns,
+  handleColumnsChange,
+} from '../common/components/ListActions';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -111,24 +114,24 @@ const TopicList = (props) => {
       el: (<DateField source="updatedAt" showTime />),
     },
   ];
-  const [visibleColumns, setVisibleColumns] = useState(
-    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
-  );
+
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics'));
+
   return (
     <>
       <List
         {...props}
         filters={(
           <Filters />
-        )}
+      )}
         bulkActionButtons={false}
         actions={(
           <ListActions
             visibleColumns={visibleColumns}
-            onColumnsChange={setVisibleColumns}
+            onColumnsChange={handleColumnsChange('topics', setVisibleColumns)}
             columns={columns}
           />
-        )}
+      )}
         sort={{ field: 'fk_languageId', order: 'DESC' }}
       >
         <Datagrid rowClick="edit">
@@ -140,6 +143,5 @@ const TopicList = (props) => {
     </>
   );
 };
-
 export { ShowQuestions, Img };
 export default TopicList;
