@@ -75,7 +75,7 @@ const Buttons = ({ record }) => (
       <ShowQuestions record={record} fullWidth />
     </Box>
     <div>
-      <QrDialog record={record} fullWidth />
+      {record.globalTopic ? null : <QrDialog record={record} fullWidth /> }
     </div>
   </div>
 );

@@ -25,7 +25,7 @@ const CustomToolbar = (props) => (
     />
     &nbsp;
     <ShowQuestions size="medium" ml={1} />
-    <QrDialog ml={1} />
+    {props.record.globalTopic ? null : <QrDialog ml={1} />}
   </Toolbar>
 );
 
