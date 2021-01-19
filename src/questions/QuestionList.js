@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import {
   BooleanInput,
@@ -36,7 +36,10 @@ import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
 import DropdownMenu from './list-dropdown-menu';
-import ListActions from '../common/components/ListActions';
+import ListActions, {
+  getVisibleColumns,
+  handleColumnsChange,
+} from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 
 const styles = makeStyles((theme) => ({
@@ -463,9 +466,7 @@ const QuestionList = (props) => {
     { key: 'feedbackNegativeCount' },
   ];
 
-  const [visibleColumns, setVisibleColumns] = React.useState(
-    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
-  );
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'questions'));
 
   const onDeletedOpen = (r) => {
     setRecord(r);
@@ -555,7 +556,7 @@ const QuestionList = (props) => {
         actions={(
           <ListActions
             visibleColumns={visibleColumns}
-            onColumnsChange={setVisibleColumns}
+            onColumnsChange={handleColumnsChange('questions', setVisibleColumns)}
             columns={columns}
           />
         )}

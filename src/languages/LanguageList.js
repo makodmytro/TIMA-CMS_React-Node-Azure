@@ -3,7 +3,10 @@ import {
   Datagrid, DateField, List, TextField,
 } from 'react-admin';
 import { PlayableTextField } from '../common/components/playable-text';
-import ListActions from '../common/components/ListActions';
+import ListActions, {
+  getVisibleColumns,
+  handleColumnsChange,
+} from '../common/components/ListActions';
 
 const LanguageList = (props) => {
   const columns = [
@@ -32,9 +35,7 @@ const LanguageList = (props) => {
     },
   ];
 
-  const [visibleColumns, setVisibleColumns] = useState(
-    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
-  );
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'languages'));
 
   return (
     <List
@@ -42,7 +43,7 @@ const LanguageList = (props) => {
       actions={(
         <ListActions
           visibleColumns={visibleColumns}
-          onColumnsChange={setVisibleColumns}
+          onColumnsChange={handleColumnsChange('languages', setVisibleColumns)}
           columns={columns}
         />
 )}

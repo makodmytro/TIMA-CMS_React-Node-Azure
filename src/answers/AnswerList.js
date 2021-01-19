@@ -13,7 +13,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
 import { PlayableTextField } from '../common/components/playable-text';
-import ListActions from '../common/components/ListActions';
+import ListActions, {
+  getVisibleColumns,
+  handleColumnsChange,
+} from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 
 const styles = makeStyles(() => ({
@@ -147,16 +150,15 @@ const AnswerList = (props) => {
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];
 
-  const [visibleColumns, setVisibleColumns] = useState(
-    columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key),
-  );
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
+
   return (
     <List
       {...props}
       actions={(
         <ListActions
           visibleColumns={visibleColumns}
-          onColumnsChange={setVisibleColumns}
+          onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
           columns={columns}
         />
           )}

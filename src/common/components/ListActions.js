@@ -5,6 +5,21 @@ import {
 } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
 
+export const getVisibleColumns = (columns, resource) => {
+  const savedConfig = localStorage.getItem(`columns-${resource}`);
+
+  if (savedConfig) {
+    return JSON.parse(savedConfig);
+  }
+
+  return columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key);
+};
+
+export const handleColumnsChange = (resource, callback) => (columns) => {
+  localStorage.setItem(`columns-${resource}`, JSON.stringify(columns));
+  callback(columns);
+};
+
 const ListActions = (props) => {
   const {
     className,
