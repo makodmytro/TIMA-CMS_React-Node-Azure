@@ -10,12 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
 import {
-  Edit,
-  SimpleForm,
-  useRefresh,
-  useNotify,
-  useDataProvider,
-  Confirm,
+  Confirm, Edit, SimpleForm, useDataProvider, useNotify, useRefresh,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
@@ -121,7 +116,7 @@ const AnswerEdit = (props) => {
     <>
       <Edit {...props} actions={<CustomTopToolbar />}>
         <SimpleForm>
-          <Form />
+          <Form {...props} />
           <RelatedQuestions onRemoveAnswer={onRemoveAnswerOpen} />
         </SimpleForm>
       </Edit>

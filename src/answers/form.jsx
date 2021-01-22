@@ -23,12 +23,14 @@ const Form = ({ languages }) => {
     <>
       <PlayableTextInput
         source="text"
+        label="resources.answers.fields.text"
         validate={required()}
         fullWidth
         lang={getLang}
       />
       <ReferenceInput
         source="fk_languageId"
+        label="resources.answers.fields.fk_languageId"
         reference="languages"
         validate={required()}
         fullWidth
@@ -39,9 +41,11 @@ const Form = ({ languages }) => {
       </ReferenceInput>
       <ReferenceInput
         source="fk_topicId"
+        label="resources.answers.fields.fk_topicId"
         reference="topics"
         validate={required()}
         fullWidth
+        filter={{ fk_languageId: value }}
       >
         <SelectInput
           optionText="name"

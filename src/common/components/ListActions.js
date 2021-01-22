@@ -1,15 +1,23 @@
 import * as React from 'react';
 import { cloneElement } from 'react';
 import {
-  CreateButton, sanitizeListRestProps, TopToolbar, useListContext, ExportButton,
+  CreateButton,
+  ExportButton,
+  sanitizeListRestProps,
+  TopToolbar,
+  useListContext,
 } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
 
-export const getVisibleColumns = (columns, resource) => {
+export const getVisibleColumns = (columns, resource, defaults = []) => {
   const savedConfig = localStorage.getItem(`columns-${resource}`);
 
   if (savedConfig) {
     return JSON.parse(savedConfig);
+  }
+
+  if (defaults.length > 0) {
+    return columns.filter((c) => defaults.includes(c.key)).map((c) => c.key);
   }
 
   return columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key);

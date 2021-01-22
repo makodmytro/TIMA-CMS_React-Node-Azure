@@ -6,37 +6,46 @@ import { MenuItemLink, getResources } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
+import { baseApi } from '../httpClient';
 
 const Menu = ({ onMenuClick, logout }) => {
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
   const resources = useSelector(getResources);
   return (
-    <Box py={2}>
-      <MenuItemLink
-        to="/"
-        primaryText="Dashboard"
-        leftIcon={<HomeIcon />}
-        onClick={onMenuClick}
-        sidebarIsOpen={open}
-      />
-      {resources.map((resource) => (
+    <>
+      <Box py={2}>
         <MenuItemLink
-          key={resource.name}
-          to={`/${resource.name}`}
-          primaryText={
-            (resource.options && resource.options.label)
-            || capitalize(resource.name)
-          }
-          leftIcon={
-            resource.icon ? <resource.icon /> : <DefaultIcon />
-          }
+          to="/"
+          primaryText="Dashboard"
+          leftIcon={<HomeIcon />}
           onClick={onMenuClick}
           sidebarIsOpen={open}
         />
-      ))}
-      {isXSmall && logout}
-    </Box>
+        {resources.map((resource) => (
+          <MenuItemLink
+            key={resource.name}
+            to={`/${resource.name}`}
+            primaryText={
+              (resource.options && resource.options.label)
+              || capitalize(resource.name)
+            }
+            leftIcon={
+              resource.icon ? <resource.icon /> : <DefaultIcon />
+            }
+            onClick={onMenuClick}
+            sidebarIsOpen={open}
+          />
+        ))}
+        {isXSmall && logout}
+      </Box>
+      <span style={{
+        position: 'fixed', bottom: 5, left: 5, fontSize: 10,
+      }}
+      >{baseApi}
+      </span>
+    </>
+
   );
 };
 
