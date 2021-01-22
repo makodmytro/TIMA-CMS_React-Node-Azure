@@ -6,8 +6,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { PlayableTextInput } from '../common/components/playable-text';
 
-const Form = ({ languages, rest }) => {
-  console.log(rest);
+const Form = ({ languages }) => {
   const {
     input: { value },
   } = useField('fk_languageId');
