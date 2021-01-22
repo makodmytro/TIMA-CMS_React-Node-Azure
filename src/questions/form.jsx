@@ -32,12 +32,14 @@ const FormFields = ({
         onSuccess={onAnswerCreated}
       />
       <PlayableTextInput
+        label="resources.questions.fields.text"
         source="text"
         validate={required()}
         lang={getLang}
         fullWidth
       />
       <ReferenceInput
+        label="resources.questions.fields.fk_languageId"
         source="fk_languageId"
         reference="languages"
         validate={required()}
@@ -48,6 +50,7 @@ const FormFields = ({
         />
       </ReferenceInput>
       <ReferenceInput
+        label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
         reference="topics"
         validate={required()}
@@ -59,7 +62,13 @@ const FormFields = ({
         />
       </ReferenceInput>
       <AutocompleteInput />
-      <ReferenceInput allowEmpty source="fk_parentQuestionId" reference="questions" fullWidth>
+      <ReferenceInput
+        allowEmpty
+        label="resources.questions.fields.fk_parentQuestionId"
+        source="fk_parentQuestionId"
+        reference="questions"
+        fullWidth
+      >
         <SelectInput
           allowEmpty
           resettable
@@ -68,7 +77,13 @@ const FormFields = ({
           fullWidth
         />
       </ReferenceInput>
-      <ReferenceInput allowEmpty source="fk_questionId" reference="questions" fullWidth>
+      <ReferenceInput
+        allowEmpty
+        label="resources.questions.fields.fk_questionId"
+        source="fk_questionId"
+        reference="questions"
+        fullWidth
+      >
         <SelectInput
           allowEmpty
           resettable
