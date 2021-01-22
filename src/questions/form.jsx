@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  ReferenceInput,
-  required,
-  SelectInput,
-} from 'react-admin';
+import { ReferenceInput, required, SelectInput } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import AutocompleteInput from './autocomplete-input';
@@ -56,6 +52,7 @@ const FormFields = ({
         reference="topics"
         validate={required()}
         fullWidth
+        filter={{ fk_languageId: value }}
       >
         <SelectInput
           optionText="name"

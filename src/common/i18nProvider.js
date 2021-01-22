@@ -13,6 +13,7 @@ const english = {
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
+        welcomeText: 'Welcome Text',
         image: 'Image',
         fallbackTopicLevel: 'Fallback Topic Level',
         updatedAt: 'Updated',

@@ -78,7 +78,7 @@ const Buttons = ({ record }) => (
       <ShowQuestions record={record} fullWidth />
     </Box>
     <div>
-      {record.globalTopic ? null : <QrDialog record={record} fullWidth /> }
+      {record.globalTopic ? null : <QrDialog record={record} fullWidth />}
     </div>
   </div>
 );
@@ -101,6 +101,7 @@ const TopicList = (props) => {
       key: 'name',
       el: (<TextField source="name" />),
     },
+    { key: 'welcomeText', el: (<TextField source="welcomeText" />) },
     {
       key: 'topicKey',
       el: (<TextField source="topicKey" />),
@@ -115,7 +116,8 @@ const TopicList = (props) => {
     },
   ];
 
-  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics'));
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics',
+    ['name', 'welcomeText', 'image']));
 
   return (
     <>
@@ -123,7 +125,7 @@ const TopicList = (props) => {
         {...props}
         filters={(
           <Filters />
-      )}
+        )}
         bulkActionButtons={false}
         actions={(
           <ListActions
@@ -131,7 +133,7 @@ const TopicList = (props) => {
             onColumnsChange={handleColumnsChange('topics', setVisibleColumns)}
             columns={columns}
           />
-      )}
+        )}
         sort={{ field: 'fk_languageId', order: 'DESC' }}
       >
         <Datagrid rowClick="edit">
