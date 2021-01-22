@@ -31,6 +31,8 @@ import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
+import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
 import PlayableText, { PlayableTextField } from '../common/components/playable-text';
 import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
@@ -41,6 +43,7 @@ import ListActions, {
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
+import BooleanField from '../common/components/BooleanField';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -182,6 +185,18 @@ const Filters = (props) => {
             alwaysOn
             onChange={() => handleSubmit()}
           />
+          <SelectInput
+            label="Approved"
+            source="approved"
+            allowEmpty
+            emptyText="Both"
+            onChange={() => handleSubmit()}
+            defaultValue=""
+            choices={[
+              { id: true, name: <DoneIcon color="primary" /> },
+              { id: false, name: <ClearIcon /> },
+            ]}
+          />
         </form>
 
       )}
@@ -265,7 +280,7 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
     >
       {record.relatedQuestions.length}
       {expanded ? <ExpandLessIcon size="small" />
-        : <AddIcon size="small" />} { /* eslint-disable-line */}
+        : <AddIcon size="small"/>} { /* eslint-disable-line */}
     </span>
   );
 };
@@ -302,17 +317,23 @@ const CustomGridItem = ({
         )}
 
         {visibleColumns.includes('fk_answerId')
-          && (
-            <TableCell>
-              <AnswerField label="Answer" record={record} />
-            </TableCell>
-          )}
+        && (
+          <TableCell>
+            <AnswerField label="Answer" record={record} />
+          </TableCell>
+        )}
         {visibleColumns.includes('fk_topicId')
-          && (
-            <TableCell>
-              <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
-            </TableCell>
-          )}
+        && (
+          <TableCell>
+            <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('approved')
+        && (
+          <TableCell>
+            <BooleanField label="Approved" source="approved" record={record} />
+          </TableCell>
+        )}
         {visibleColumns.includes('updatedAt') && (
           <TableCell>
             <DateField source="updatedAt" showTime record={record} />
@@ -420,6 +441,7 @@ const CustomGrid = ({
                 <Th label="Text" field="text" />
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Topic" field="fk_topicId" />
+                <Th label="Approved" field="approved" />
                 <Th label="Updated at" field="updatedAt" />
                 <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
                 <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
@@ -461,6 +483,7 @@ const QuestionList = (props) => {
     { key: 'text' },
     { key: 'fk_answerId' },
     { key: 'fk_topicId' },
+    { key: 'approved' },
     { key: 'updatedAt' },
     { key: 'feedbackPositiveCount' },
     { key: 'feedbackNegativeCount' },

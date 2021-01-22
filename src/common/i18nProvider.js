@@ -40,6 +40,7 @@ const english = {
         fk_answerId: 'Answer',
         fk_parentQuestionId: 'Parent Question',
         fk_questionId: 'Related Question',
+        approved: 'Approved',
         feedbackPositiveCount: 'Pos. Feedback',
         feedbackNegativeCount: 'Neg. Feedback',
         updatedAt: 'Updated',
