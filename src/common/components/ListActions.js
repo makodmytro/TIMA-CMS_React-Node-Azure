@@ -8,6 +8,7 @@ import {
   useListContext,
 } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
+import defaultColumns from '../../default-columns.json';
 
 export const getVisibleColumns = (columns, resource, defaults = []) => {
   const savedConfig = localStorage.getItem(`columns-${resource}`);
@@ -18,6 +19,10 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 
   if (defaults.length > 0) {
     return columns.filter((c) => defaults.includes(c.key)).map((c) => c.key);
+  }
+
+  if (defaultColumns && defaultColumns[resource] && defaultColumns[resource].length) {
+    return columns.filter((c) => defaultColumns[resource].includes(c.key)).map((c) => c.key);
   }
 
   return columns.filter((c) => c.key !== 'updatedAt').map((c) => c.key);

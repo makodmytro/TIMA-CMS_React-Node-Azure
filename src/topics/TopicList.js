@@ -38,15 +38,6 @@ const Filters = (props) => {
         <ReferenceInput label="Language" source="fk_languageId" reference="languages" alwaysOn>
           <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
         </ReferenceInput>
-        <ReferenceInput
-          label="Editor"
-          source="fk_editorId"
-          reference="editors"
-          alwaysOn
-          perPage={100}
-        >
-          <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
-        </ReferenceInput>
       </Filter>
       {props.children}
     </>
@@ -116,8 +107,7 @@ const TopicList = (props) => {
     },
   ];
 
-  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics',
-    ['name', 'welcomeText', 'image']));
+  const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics'));
 
   return (
     <>

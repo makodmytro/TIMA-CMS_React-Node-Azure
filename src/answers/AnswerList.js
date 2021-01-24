@@ -12,14 +12,14 @@ import {
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
-import { PlayableTextField } from '../common/components/playable-text';
+import PlayableText from '../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 
-const styles = makeStyles(() => ({
+const styles = makeStyles((theme) => ({
   padded: {
     paddingTop: '1rem',
   },
@@ -36,6 +36,22 @@ const styles = makeStyles(() => ({
 
     '& div': {
       paddingRight: 16,
+    },
+  },
+  related: {
+    color: theme.palette.primary.main,
+    cursor: 'pointer',
+    fontSize: '1rem',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+
+    '&:hover': {
+      backgroundColor: '#4ec2a826',
+    },
+
+    '& svg': {
+      verticalAlign: 'middle',
+      fontSize: '0.9rem',
     },
   },
 }));
@@ -132,9 +148,25 @@ const Filters = (props) => {
   );
 };
 
+const Text = ({ record }) => {
+  const classes = styles();
+
+  return (
+    <>
+      <span className={classes.related}>
+        {record.questionsCount || '  -  '}
+      </span>
+      <PlayableText text={record.text} lang={record.Language.code} />
+    </>
+  );
+};
+
 const AnswerList = (props) => {
   const columns = [
-    { key: 'text', el: <PlayableTextField source="text" /> },
+    {
+      key: 'text',
+      el: <Text />,
+    },
     {
       key: 'fk_languageId',
       el: <TextField source="Language.name" label="Language" sortBy="fk_languageId" />,

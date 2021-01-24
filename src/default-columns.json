@@ -1,0 +1,6 @@
+{
+  "topics": ["name", "welcomeText", "image"],
+  "answers": ["text", "fk_languageId", "fk_topicId"],
+  "questions": ["text", "fk_answerId", "fk_topicId", "approved", "feedbackPositiveCount", "feedbackNegativeCount"],
+  "languages": ["code", "name", "welcomeText", "welcomeButton"]
+}

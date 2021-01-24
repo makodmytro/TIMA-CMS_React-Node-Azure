@@ -10,6 +10,7 @@ import {
   SaveButton,
 } from 'react-admin';
 import { connect } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { ShowQuestions, Img } from './TopicList';
 import { PlayableTextInput } from '../common/components/playable-text';
@@ -27,6 +28,15 @@ const CustomToolbar = (props) => (
     <ShowQuestions size="medium" ml={1} />
     {props.record.globalTopic ? null : <QrDialog ml={1} />}
   </Toolbar>
+);
+
+const Advanced = (props) => (
+  <>
+    <Typography>
+      Advanced
+    </Typography>
+    <TextInput source="topicKey" record={props.record} fullWidth />
+  </>
 );
 
 const TopicEdit = ({ languages, dispatch, ...props }) => {
@@ -47,25 +57,26 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
           fullWidth
           lang={getLang}
         />
-        <TextInput source="topicKey" fullWidth />
-        <TextInput source="topicImageUrl" fullWidth />
-        <Img />
+        <PlayableTextInput
+          source="welcomeText"
+          fullWidth
+          lang={getLang}
+        />
         <ReferenceInput
           validate={required()}
           source="fk_languageId"
           reference="languages"
           label="resources.topics.fields.language"
           fullWidth
+          disabled
         >
           <SelectInput
             optionText="name"
           />
         </ReferenceInput>
-        <PlayableTextInput
-          source="welcomeText"
-          fullWidth
-          lang={getLang}
-        />
+        <TextInput source="topicImageUrl" fullWidth />
+        <Img />
+        <Advanced source="topicKey" />
       </SimpleForm>
     </Edit>
   );

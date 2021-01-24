@@ -25,7 +25,6 @@ import TableHead from '@material-ui/core/TableHead';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
@@ -44,6 +43,7 @@ import ListActions, {
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import BooleanField from '../common/components/BooleanField';
+import LinksDialog from './links-dialog';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -220,7 +220,7 @@ const AnswerField = ({ record }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <AddIcon />
-        &nbsp;Create answer
+        &nbsp;Link answer
       </Button>
     );
   }
@@ -263,7 +263,7 @@ const AnswerField = ({ record }) => {
   );
 };
 
-const RelatedQuestions = ({ record, expanded, setExpanded }) => {
+const RelatedQuestions = ({ record }) => {
   const classes = styles();
 
   if (!record || !record.relatedQuestions || !record.relatedQuestions.length) {
@@ -273,14 +273,8 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
   return (
     <span
       className={classes.related}
-      onClick={(e) => {
-        e.stopPropagation();
-        setExpanded(!expanded);
-      }}
     >
       {record.relatedQuestions.length}
-      {expanded ? <ExpandLessIcon size="small" />
-        : <AddIcon size="small"/>} { /* eslint-disable-line */}
     </span>
   );
 };
@@ -288,10 +282,10 @@ const RelatedQuestions = ({ record, expanded, setExpanded }) => {
 const CustomGridItem = ({
   record, deleteQuestion, removeAnswer,
   openRelatedQuestions, visibleColumns,
+  onOpenLinksDialog,
 }) => {
   const classes = styles();
   const redirect = useRedirect();
-  const [expanded, setExpanded] = React.useState(false);
 
   const link = (id) => (e) => {
     e.stopPropagation();
@@ -307,7 +301,7 @@ const CustomGridItem = ({
       >
         {visibleColumns.includes('text') && (
           <TableCell>
-            <RelatedQuestions record={record} expanded={expanded} setExpanded={setExpanded} />
+            <RelatedQuestions record={record} />
             &nbsp;
             <PlayableText
               text={record.text}
@@ -371,43 +365,17 @@ const CustomGridItem = ({
             deleteQuestion={deleteQuestion}
             removeAnswer={removeAnswer}
             openRelatedQuestions={openRelatedQuestions}
+            onOpenLinksDialog={onOpenLinksDialog}
           />
         </TableCell>
       </TableRow>
-      {
-        expanded && (
-          record.relatedQuestions.map((related, i) => (
-            <TableRow
-              className={classes.cursor}
-              key={i}
-              style={{ backgroundColor: '#fdfdd6' }}
-              onClick={link(related.id)}
-            >
-              <TableCell>
-                <PlayableTextField
-                  source="text"
-                  record={{ ...related, Language: record.Language }}
-                />
-              </TableCell>
-              {visibleColumns.slice(1).map((colKey) => <TableCell key={colKey}>&nbsp;</TableCell>)}
-              <TableCell>
-                <DropdownMenu
-                  record={{ ...related, Language: record.Language }}
-                  deleteQuestion={deleteQuestion}
-                  removeAnswer={removeAnswer}
-                  openRelatedQuestions={openRelatedQuestions}
-                />
-              </TableCell>
-            </TableRow>
-          ))
-        )
-      }
     </>
   );
 };
 
 const CustomGrid = ({
   deleteQuestion, removeAnswer, openRelatedQuestions, visibleColumns,
+  onOpenLinksDialog,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
@@ -459,6 +427,7 @@ const CustomGrid = ({
                     removeAnswer={removeAnswer}
                     openRelatedQuestions={openRelatedQuestions}
                     visibleColumns={visibleColumns}
+                    onOpenLinksDialog={onOpenLinksDialog}
                   />
                 ))
               }
@@ -478,6 +447,7 @@ const QuestionList = (props) => {
   const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
   const [relatedQuestionsOpened, setRelatedQuestionsOpened] = React.useState(false);
+  const [linksDialogOpened, setLinksDialogOpened] = React.useState(false);
 
   const columns = [
     { key: 'text' },
@@ -513,6 +483,16 @@ const QuestionList = (props) => {
       notify(`Failed to delete the question: ${err.message}`, 'error');
     }
     onDeleteClose();
+  };
+
+  const onOpenLinksDialog = (r) => {
+    setRecord(r);
+    setLinksDialogOpened(true);
+  };
+
+  const onCloseLinksDialog = () => {
+    setRecord(null);
+    setLinksDialogOpened(false);
   };
 
   const onRemoveAnswerOpen = (r) => {
@@ -558,6 +538,11 @@ const QuestionList = (props) => {
         deleteQuestion={onDeletedOpen}
         removeAnswer={onRemoveAnswerOpen}
       />
+      <LinksDialog
+        record={record}
+        open={linksDialogOpened}
+        onClose={onCloseLinksDialog}
+      />
       <Confirm
         isOpen={deleteConfirmOpened}
         loading={false}
@@ -590,6 +575,7 @@ const QuestionList = (props) => {
           openRelatedQuestions={onOpenRelatedQuestions}
           deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}
+          onOpenLinksDialog={onOpenLinksDialog}
         />
       </List>
     </>

@@ -69,7 +69,7 @@ const QuestionCreate = (props) => {
           return rest;
         }}
       >
-        <SimpleForm>
+        <SimpleForm redirect="list">
           <FormFields open={open} setOpen={setOpen} />
         </SimpleForm>
       </Create>
