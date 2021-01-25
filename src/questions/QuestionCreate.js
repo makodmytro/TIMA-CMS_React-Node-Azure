@@ -4,35 +4,99 @@ import {
   SimpleForm,
   useNotify,
   useDataProvider,
+  required,
+  ReferenceInput,
+  SelectInput,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
+import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import Form from './form';
+import { PlayableTextInput } from '../common/components/playable-text';
+import AutocompleteInput from './autocomplete-input';
 
-const FormFields = ({ open, setOpen }) => {
-  const notify = useNotify();
+const FormFields = (props) => {
   const {
-    input: { onChange },
-  } = useField('fk_answerId');
+    input: { value },
+  } = useField('fk_languageId');
 
-  const onAnswerCreated = (data) => {
-    if (data.id) {
-      notify(`Answer created with id: ${data.id}`);
-      onChange(data.id);
+  const getLang = () => {
+    if (!value || !props.languages[value]) {
+      return null;
     }
 
-    setOpen(false);
+    return props.languages[value].code;
   };
 
   return (
-    <Form open={open} setOpen={setOpen} onAnswerCreated={onAnswerCreated} />
+    <>
+      <PlayableTextInput
+        label="resources.questions.fields.text"
+        source="text"
+        validate={required()}
+        lang={getLang}
+        fullWidth
+      />
+      <ReferenceInput
+        label="resources.questions.fields.fk_languageId"
+        source="fk_languageId"
+        reference="languages"
+        validate={required()}
+        fullWidth
+      >
+        <SelectInput
+          optionText="name"
+        />
+      </ReferenceInput>
+
+      <ReferenceInput
+        label="resources.questions.fields.fk_topicId"
+        source="fk_topicId"
+        reference="topics"
+        validate={required()}
+        fullWidth
+        filter={{ fk_languageId: value }}
+      >
+        <SelectInput
+          optionText="name"
+        />
+      </ReferenceInput>
+      <AutocompleteInput />
+      <ReferenceInput
+        allowEmpty
+        label="resources.questions.fields.fk_parentQuestionId"
+        source="fk_parentQuestionId"
+        reference="questions"
+        fullWidth
+      >
+        <SelectInput
+          allowEmpty
+          resettable
+          emptyValue={null}
+          optionText="text"
+          fullWidth
+        />
+      </ReferenceInput>
+      <ReferenceInput
+        allowEmpty
+        label="resources.questions.fields.fk_questionId"
+        source="fk_questionId"
+        reference="questions"
+        fullWidth
+      >
+        <SelectInput
+          allowEmpty
+          resettable
+          emptyValue={null}
+          optionText="text"
+        />
+      </ReferenceInput>
+    </>
   );
 };
 
-const QuestionCreate = (props) => {
+const QuestionCreate = ({ dispatch, languages, ...props }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const [open, setOpen] = React.useState(false);
 
   const createAnswer = async (values) => {
     try {
@@ -70,11 +134,15 @@ const QuestionCreate = (props) => {
         }}
       >
         <SimpleForm redirect="list">
-          <FormFields open={open} setOpen={setOpen} />
+          <FormFields languages={languages} />
         </SimpleForm>
       </Create>
     </>
   );
 };
 
-export default QuestionCreate;
+const mapStateToProps = (state) => ({
+  languages: state.admin.resources.languages.data,
+});
+
+export default connect(mapStateToProps)(QuestionCreate);

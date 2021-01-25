@@ -274,7 +274,7 @@ const RelatedQuestions = ({ record }) => {
     <span
       className={classes.related}
     >
-      {record.relatedQuestions.length}
+      &nbsp;&nbsp;{record.relatedQuestions.length}&nbsp;
     </span>
   );
 };
@@ -542,6 +542,8 @@ const QuestionList = (props) => {
         record={record}
         open={linksDialogOpened}
         onClose={onCloseLinksDialog}
+        deleteQuestion={onDeletedOpen}
+        removeAnswer={onRemoveAnswerOpen}
       />
       <Confirm
         isOpen={deleteConfirmOpened}
