@@ -11,15 +11,17 @@ import {
   useListContext,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form';
-import { PlayableTextField } from '../common/components/playable-text';
+import PlayableText from '../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
+import LinksDialog from './links-dialog';
 
-const styles = makeStyles(() => ({
+const styles = makeStyles((theme) => ({
   padded: {
     paddingTop: '1rem',
   },
@@ -36,6 +38,22 @@ const styles = makeStyles(() => ({
 
     '& div': {
       paddingRight: 16,
+    },
+  },
+  related: {
+    color: theme.palette.primary.main,
+    cursor: 'pointer',
+    fontSize: '1rem',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+
+    '&:hover': {
+      backgroundColor: '#4ec2a826',
+    },
+
+    '& svg': {
+      verticalAlign: 'middle',
+      fontSize: '0.9rem',
     },
   },
 }));
@@ -132,9 +150,54 @@ const Filters = (props) => {
   );
 };
 
+const Text = ({ record }) => {
+  const classes = styles();
+
+  return (
+    <>
+      <span className={classes.related}>
+        {record.questionsCount || '  -  '}
+      </span>
+      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
+    </>
+  );
+};
+
+const LinksButton = ({ record, onOpen }) => (
+  <Button
+    variant="outlined"
+    size="small"
+    type="button"
+    color="primary"
+    onClick={(e) => {
+      e.stopPropagation();
+
+      onOpen(record);
+    }}
+  >
+    Links
+  </Button>
+);
+
 const AnswerList = (props) => {
+  const [opened, setOpened] = React.useState(false);
+  const [record, setRecord] = React.useState(null);
+
+  const onOpen = (r) => {
+    setRecord(r);
+    setOpened(true);
+  };
+
+  const onClose = () => {
+    setRecord(null);
+    setOpened(false);
+  };
+
   const columns = [
-    { key: 'text', el: <PlayableTextField source="text" /> },
+    {
+      key: 'text',
+      el: <Text />,
+    },
     {
       key: 'fk_languageId',
       el: <TextField source="Language.name" label="Language" sortBy="fk_languageId" />,
@@ -153,23 +216,31 @@ const AnswerList = (props) => {
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
 
   return (
-    <List
-      {...props}
-      actions={(
-        <ListActions
-          visibleColumns={visibleColumns}
-          onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
-          columns={columns}
-        />
-          )}
-      filters={<Filters />}
-      bulkActionButtons={false}
-    >
-      <Datagrid rowClick="edit">
-        {columns.filter((col) => visibleColumns.includes(col.key))
-          .map((col) => cloneElement(col.el, { key: col.key }))}
-      </Datagrid>
-    </List>
+    <>
+      <LinksDialog
+        record={record}
+        open={opened}
+        onClose={onClose}
+      />
+      <List
+        {...props}
+        actions={(
+          <ListActions
+            visibleColumns={visibleColumns}
+            onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
+            columns={columns}
+          />
+        )}
+        filters={<Filters />}
+        bulkActionButtons={false}
+      >
+        <Datagrid rowClick="edit">
+          {columns.filter((col) => visibleColumns.includes(col.key))
+            .map((col) => cloneElement(col.el, { key: col.key }))}
+          <LinksButton onOpen={onOpen} />
+        </Datagrid>
+      </List>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
-import RemoveIcon from '@material-ui/icons/HighlightOff';
+import LinksIcon from '@material-ui/icons/Link';
 import RelatedIcon from '@material-ui/icons/Cached';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -16,8 +16,8 @@ import EditIcon from '@material-ui/icons/Edit';
 const DropdownMenu = ({
   record,
   deleteQuestion,
-  removeAnswer,
   openRelatedQuestions,
+  onOpenLinksDialog,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -37,13 +37,6 @@ const DropdownMenu = ({
     e.stopPropagation();
 
     deleteQuestion(record);
-    setAnchorEl(null);
-  };
-
-  const onRemoveClicked = (e) => {
-    e.stopPropagation();
-
-    removeAnswer(record);
     setAnchorEl(null);
   };
 
@@ -100,7 +93,7 @@ const DropdownMenu = ({
               onClick={(e) => e.stopPropagation()}
             >
               <ListItemIcon><AddIcon /></ListItemIcon>
-              Create answer
+              Link answer
             </MenuItem>
           )
         }
@@ -120,14 +113,16 @@ const DropdownMenu = ({
           <ListItemIcon><DeleteIcon /></ListItemIcon>
           Delete question
         </MenuItem>
-        {
-          record.fk_answerId && (
-            <MenuItem onClick={onRemoveClicked}>
-              <ListItemIcon><RemoveIcon /></ListItemIcon>
-              Unlink answer
-            </MenuItem>
-          )
-        }
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+
+            onOpenLinksDialog(record);
+          }}
+        >
+          <ListItemIcon><LinksIcon /></ListItemIcon>
+          Links
+        </MenuItem>
       </Menu>
     </div>
   );
@@ -144,7 +139,6 @@ DropdownMenu.propTypes = {
     relatedQuestions: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   deleteQuestion: PropTypes.func.isRequired,
-  removeAnswer: PropTypes.func.isRequired,
   openRelatedQuestions: PropTypes.func,
 };
 
