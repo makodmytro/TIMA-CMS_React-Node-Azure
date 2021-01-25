@@ -8,30 +8,81 @@ import {
   ReferenceInput,
   SelectInput,
   BooleanInput,
+  useRefresh,
+  Confirm,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
-import LinksDialog from './links-dialog';
+import RelatedQuestionsTable from './related-questions-table';
+import SearchQuestionsAnswers from './search-questions-answers';
 
-const LinksButton = ({ onDialogOpen, record }) => (
-  <Button
-    type="button"
-    onClick={() => onDialogOpen(record)}
-    variant="outlined"
-    color="primary"
-    size="small"
-  >
-    Links
-  </Button>
-);
+const Answer = ({
+  record, answer, unlinkAnswer, scrollToSearch,
+}) => {
+  if (!record) {
+    return null;
+  }
 
-const FormFields = ({ languages, record, onDialogOpen }) => {
+  if (!answer) {
+    return (
+      <Button
+        color="primary"
+        variant="outlined"
+        type="button"
+        size="small"
+        onClick={scrollToSearch}
+      >
+        Link answer
+      </Button>
+    );
+  }
+
+  return (
+    <TextField
+      label="Answer"
+      variant="filled"
+      value={answer.text}
+      fullWidth
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <Button
+              style={{ borderColor: 'red', color: 'red', textTransform: 'none' }}
+              type="button"
+              variant="outlined"
+              size="small"
+              onClick={unlinkAnswer}
+            >
+              Unlink
+            </Button>
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+};
+
+const FormFields = ({
+  languages,
+  record,
+  setRecord,
+  answer,
+  setAnswer,
+  scrollToSearch,
+  unlinkAnswer,
+}) => {
+  const dataProvider = useDataProvider();
   const {
     input: { value },
   } = useField('fk_answerId');
+  let fetching = false;
 
   const getLang = () => {
     if (!value || !languages[value]) {
@@ -40,6 +91,30 @@ const FormFields = ({ languages, record, onDialogOpen }) => {
 
     return languages[value].code;
   };
+
+  const fetchAnswer = async () => {
+    fetching = true;
+    try {
+      const { data } = await dataProvider.getList('answers', {
+        filter: {
+          id: record.fk_answerId,
+        },
+        include: ['Questions'],
+      });
+
+      setAnswer(data[0] || null);
+    } catch (err) {
+      // console.error(err);
+    }
+    fetching = false;
+  };
+
+  React.useEffect(() => {
+    if (record && !fetching) {
+      fetchAnswer();
+      setRecord(record);
+    }
+  }, [record]);
 
   return (
     <>
@@ -64,9 +139,10 @@ const FormFields = ({ languages, record, onDialogOpen }) => {
         />
       </ReferenceInput>
       <BooleanInput source="approved" />
-      <LinksButton
-        record={record}
-        onDialogOpen={onDialogOpen}
+      <Answer
+        {...{
+          answer, unlinkAnswer, record, scrollToSearch,
+        }}
       />
     </>
   );
@@ -75,21 +151,53 @@ const FormFields = ({ languages, record, onDialogOpen }) => {
 const QuestionEdit = ({ dispatch, languages, ...props }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const [opened, setOpened] = React.useState(false);
+  const refresh = useRefresh();
+  const [answer, setAnswer] = React.useState(null);
   const [record, setRecord] = React.useState(null);
+  const ref = React.useRef(null);
 
-  const onDialogOpen = (r) => {
-    setRecord(r);
-    setOpened(true);
+  const [confirmations, setConfirmations] = React.useState({
+    unlink: false,
+  });
+
+  const top = () => window.scrollTo(0, 0);
+
+  const unlinkAnswerClicked = () => {
+    setConfirmations({
+      ...confirmations,
+      unlink: true,
+    });
   };
 
-  const createAnswer = async (values) => {
+  const unlinkAnswerClosed = () => {
+    setConfirmations({
+      ...confirmations,
+      unlink: false,
+    });
+  };
+
+  const unlinkAnswerConfirmed = async () => {
+    await dataProvider.update('questions', {
+      id: record.id,
+      data: { fk_answerId: null },
+    });
+
+    unlinkAnswerClosed();
+    notify('The answer has been unlinked');
+    refresh();
+    top();
+  };
+
+  const linkAnswer = async (fk_answerId) => {
     try {
-      const { data } = await dataProvider.create('answers', {
-        data: values,
+      await dataProvider.update('questions', {
+        id: record.id,
+        data: { fk_answerId },
       });
 
-      return data;
+      notify('The answer has been linked');
+      refresh();
+      top();
     } catch (err) {
       notify(`Failed to create new answer for the question: ${err.message}`);
 
@@ -97,40 +205,53 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     }
   };
 
+  const scrollToSearch = () => ref.current.scrollIntoView();
+
   return (
     <>
-      <LinksDialog
-        record={record}
-        open={opened}
-        onClose={() => {
-          setOpened(false);
-          setRecord(null);
-        }}
+      <Confirm
+        isOpen={confirmations.unlink}
+        loading={false}
+        title="Unlink answer"
+        content="Are you sure you want to unlink the answer from the question?"
+        onConfirm={unlinkAnswerConfirmed}
+        onClose={unlinkAnswerClosed}
       />
       <Edit
         {...props}
         actions={<CustomTopToolbar />}
         undoable={false}
-        transform={async (data) => {
-          const { answer_text: answerText, ...rest } = data;
-
-          if (answerText && !rest.fk_answerId) {
-            const answer = await createAnswer({
-              text: answerText,
-              fk_topicId: rest.fk_topicId,
-              fk_languageId: rest.fk_languageId,
-            });
-
-            rest.fk_answerId = answer.id;
-          }
-
-          return rest;
-        }}
       >
         <SimpleForm>
-          <FormFields languages={languages} onDialogOpen={onDialogOpen} />
+          <FormFields
+            {...{
+              languages,
+              setRecord,
+              answer,
+              setAnswer,
+              scrollToSearch,
+              unlinkAnswer: unlinkAnswerClicked,
+            }}
+          />
         </SimpleForm>
       </Edit>
+      <Box my={1} p={2} boxShadow={3}>
+        <Typography>Related questions</Typography>
+        <Box my={2}>
+          <RelatedQuestionsTable
+            record={record}
+            relatedQuestions={answer ? answer.Questions : []}
+          />
+        </Box>
+      </Box>
+      <Box my={1} p={2} boxShadow={3}>
+        <Typography>Search questions/answers to create link</Typography>
+        <SearchQuestionsAnswers
+          record={record}
+          onSelected={linkAnswer}
+        />
+        <div ref={ref} />
+      </Box>
     </>
   );
 };

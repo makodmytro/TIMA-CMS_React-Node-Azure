@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
+import ApprovedSwitchField from './approved-switch-field';
 
 const RelatedQuestionsTable = ({
   record,
@@ -22,7 +23,7 @@ const RelatedQuestionsTable = ({
     && (!relatedQuestions || !relatedQuestions.length)) {
     return (
       <Alert severity="info">
-        There are not related questions
+        There are no related questions
       </Alert>
     );
   }
@@ -33,6 +34,7 @@ const RelatedQuestionsTable = ({
         <TableHead>
           <TableRow>
             <TableCell>Text</TableCell>
+            <TableCell>Approved</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
         </TableHead>
@@ -42,6 +44,9 @@ const RelatedQuestionsTable = ({
               <TableRow key={i}>
                 <TableCell>
                   <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
+                </TableCell>
+                <TableCell>
+                  <ApprovedSwitchField record={related} />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu
