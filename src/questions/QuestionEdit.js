@@ -58,7 +58,7 @@ const Answer = ({
               type="button"
               variant="outlined"
               size="small"
-              onClick={unlinkAnswer}
+              onClick={() => unlinkAnswer(record.id)}
             >
               Unlink
             </Button>
@@ -157,15 +157,18 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
   const ref = React.useRef(null);
 
   const [confirmations, setConfirmations] = React.useState({
+    id: null,
     unlink: false,
+    delete: false,
   });
 
   const top = () => window.scrollTo(0, 0);
 
-  const unlinkAnswerClicked = () => {
+  const unlinkAnswerClicked = (id) => {
     setConfirmations({
       ...confirmations,
       unlink: true,
+      id,
     });
   };
 
@@ -173,12 +176,13 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     setConfirmations({
       ...confirmations,
       unlink: false,
+      id: null,
     });
   };
 
   const unlinkAnswerConfirmed = async () => {
     await dataProvider.update('questions', {
-      id: record.id,
+      id: confirmations.id,
       data: { fk_answerId: null },
     });
 
@@ -205,6 +209,33 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     }
   };
 
+  const deleteQuestionClosed = () => {
+    setConfirmations({
+      ...confirmations,
+      delete: false,
+      id: null,
+    });
+  };
+
+  const deleteQuestionConfirmed = async () => {
+    await dataProvider.delete('questions', {
+      id: confirmations.id,
+    });
+
+    notify('The related question has been deleted');
+    refresh();
+    top();
+    deleteQuestionClosed();
+  };
+
+  const deleteQuestionClicked = (r) => {
+    setConfirmations({
+      ...confirmations,
+      delete: true,
+      id: r.id,
+    });
+  };
+
   const scrollToSearch = () => ref.current.scrollIntoView();
 
   return (
@@ -216,6 +247,14 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
         content="Are you sure you want to unlink the answer from the question?"
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
+      />
+      <Confirm
+        isOpen={confirmations.delete}
+        loading={false}
+        title="Delete question"
+        content="Are you sure you want to delete the question?"
+        onConfirm={deleteQuestionConfirmed}
+        onClose={deleteQuestionClosed}
       />
       <Edit
         {...props}
@@ -241,6 +280,8 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
           <RelatedQuestionsTable
             record={record}
             relatedQuestions={answer ? answer.Questions : []}
+            unlinkAnswer={unlinkAnswerClicked}
+            deleteQuestion={deleteQuestionClicked}
           />
         </Box>
       </Box>

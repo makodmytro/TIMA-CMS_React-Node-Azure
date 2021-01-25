@@ -25,50 +25,56 @@ const Filters = ({ onSubmit, initialValues }) => {
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4} md={3}>
-              <TextInput label="Text" source="q" fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <SelectInput
-                label="Search for"
-                source="type"
-                choices={[
-                  { id: 'questions', name: 'Questions' },
-                  { id: 'answers', name: 'Answers' },
-                ]}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <SelectInput
-                label="Approved"
-                source="approved"
-                choices={[
-                  { id: '__none__', name: 'Both' },
-                  { id: true, name: 'Only approved questions' },
-                  { id: false, name: 'Only not-approved questions' },
-                ]}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <Box pt={2}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
+      render={({ handleSubmit, values }) => {
+        return (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4} md={3}>
+                <TextInput label="Text" source="q" fullWidth />
+              </Grid>
+              <Grid item xs={12} sm={4} md={3}>
+                <SelectInput
+                  label="Search for"
+                  source="type"
+                  choices={[
+                    { id: 'questions', name: 'Questions' },
+                    { id: 'answers', name: 'Answers' },
+                  ]}
                   fullWidth
-                >
-                  Search
-                </Button>
-              </Box>
+                />
+              </Grid>
+              {
+                values.type === 'questions' && (
+                  <Grid item xs={12} sm={4} md={3}>
+                    <SelectInput
+                      label="Approved"
+                      source="approved"
+                      choices={[
+                        { id: '__none__', name: 'Both' },
+                        { id: true, name: 'Only approved questions' },
+                        { id: false, name: 'Only not-approved questions' },
+                      ]}
+                      fullWidth
+                    />
+                  </Grid>
+                )
+              }
+              <Grid item xs={12} sm={4} md={3}>
+                <Box pt={2}>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                  >
+                    Search
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      )}
+          </form>
+        );
+      }}
     />
   );
 };
@@ -234,7 +240,6 @@ const LinksDialog = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Select</TableCell>
                   <TableCell>Text</TableCell>
                   {
                     form.type === 'questions' && (
@@ -268,7 +273,7 @@ const LinksDialog = ({
                             start();
                           }}
                         >
-                          Link to question
+                          Link to answer
                         </Button>
                       </TableCell>
                     </TableRow>
