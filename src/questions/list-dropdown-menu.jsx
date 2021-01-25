@@ -101,10 +101,14 @@ const DropdownMenu = ({
             </MenuItem>
           )
         }
-        <MenuItem onClick={onDeleteClicked}>
-          <ListItemIcon><DeleteIcon /></ListItemIcon>
-          Delete question
-        </MenuItem>
+        {
+          !!deleteQuestion && (
+            <MenuItem onClick={onDeleteClicked}>
+              <ListItemIcon><DeleteIcon /></ListItemIcon>
+              Delete question
+            </MenuItem>
+          )
+        }
         {
           !hideLinks && (
             <MenuItem
@@ -126,6 +130,7 @@ const DropdownMenu = ({
 
 DropdownMenu.defaultProps = {
   openRelatedQuestions: null,
+  deleteQuestion: null,
 };
 
 DropdownMenu.propTypes = {
@@ -134,7 +139,7 @@ DropdownMenu.propTypes = {
     id: PropTypes.string.isRequired,
     relatedQuestions: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  deleteQuestion: PropTypes.func.isRequired,
+  deleteQuestion: PropTypes.func,
   openRelatedQuestions: PropTypes.func,
 };
 
