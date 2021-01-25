@@ -109,20 +109,6 @@ const DropdownMenu = ({
             </MenuItem>
           )
         }
-        {
-          !hideLinks && (
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-
-                onOpenLinksDialog(record);
-              }}
-            >
-              <ListItemIcon><LinksIcon /></ListItemIcon>
-              Links
-            </MenuItem>
-          )
-        }
       </Menu>
     </div>
   );
