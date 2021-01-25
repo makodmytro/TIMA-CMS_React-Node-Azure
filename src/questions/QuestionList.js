@@ -32,7 +32,7 @@ import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
-import PlayableText, { PlayableTextField } from '../common/components/playable-text';
+import PlayableText from '../common/components/playable-text';
 import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
