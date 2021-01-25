@@ -11,6 +11,7 @@ import {
   useListContext,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form';
 import PlayableText from '../common/components/playable-text';
 import ListActions, {
@@ -18,6 +19,7 @@ import ListActions, {
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
+import LinksDialog from './links-dialog';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -156,12 +158,41 @@ const Text = ({ record }) => {
       <span className={classes.related}>
         {record.questionsCount || '  -  '}
       </span>
-      <PlayableText text={record.text} lang={record.Language.code} />
+      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
     </>
   );
 };
 
+const LinksButton = ({ record, onOpen }) => (
+  <Button
+    variant="outlined"
+    size="small"
+    type="button"
+    color="primary"
+    onClick={(e) => {
+      e.stopPropagation();
+
+      onOpen(record);
+    }}
+  >
+    Links
+  </Button>
+);
+
 const AnswerList = (props) => {
+  const [opened, setOpened] = React.useState(false);
+  const [record, setRecord] = React.useState(null);
+
+  const onOpen = (r) => {
+    setRecord(r);
+    setOpened(true);
+  };
+
+  const onClose = () => {
+    setRecord(null);
+    setOpened(false);
+  };
+
   const columns = [
     {
       key: 'text',
@@ -185,23 +216,31 @@ const AnswerList = (props) => {
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
 
   return (
-    <List
-      {...props}
-      actions={(
-        <ListActions
-          visibleColumns={visibleColumns}
-          onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
-          columns={columns}
-        />
-          )}
-      filters={<Filters />}
-      bulkActionButtons={false}
-    >
-      <Datagrid rowClick="edit">
-        {columns.filter((col) => visibleColumns.includes(col.key))
-          .map((col) => cloneElement(col.el, { key: col.key }))}
-      </Datagrid>
-    </List>
+    <>
+      <LinksDialog
+        record={record}
+        open={opened}
+        onClose={onClose}
+      />
+      <List
+        {...props}
+        actions={(
+          <ListActions
+            visibleColumns={visibleColumns}
+            onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
+            columns={columns}
+          />
+        )}
+        filters={<Filters />}
+        bulkActionButtons={false}
+      >
+        <Datagrid rowClick="edit">
+          {columns.filter((col) => visibleColumns.includes(col.key))
+            .map((col) => cloneElement(col.el, { key: col.key }))}
+          <LinksButton onOpen={onOpen} />
+        </Datagrid>
+      </List>
+    </>
   );
 };
 

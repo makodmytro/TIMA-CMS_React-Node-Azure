@@ -7,7 +7,6 @@ import {
   TextInput,
   required,
   useNotify,
-  TextField,
 } from 'react-admin';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Form } from 'react-final-form'; // eslint-disable-line
@@ -90,17 +89,6 @@ const Filters = ({ onSubmit, initialValues }) => {
             </Grid>
             <Grid item xs={12} sm={4} md={3}>
               <SelectInput
-                label="Search for"
-                source="type"
-                choices={[
-                  { id: 'questions', name: 'Questions' },
-                  { id: 'answers', name: 'Answers' },
-                ]}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3}>
-              <SelectInput
                 label="Approved"
                 source="approved"
                 choices={[
@@ -150,7 +138,7 @@ const CreateForm = ({ onSubmit }) => (
                 variant="contained"
                 fullWidth
               >
-                Create answer
+                Create question
               </Button>
             </Box>
           </Grid>
@@ -170,14 +158,13 @@ const LinksDialog = ({
   const notify = useNotify();
   const refresh = useRefresh();
   const [results, setResults] = React.useState(null);
-  const [selected, setSelected] = React.useState(null);
+  const [selected, setSelected] = React.useState([]);
   const [pagination, setPagination] = React.useState({
     perPage: 5,
     page: 1,
   });
   const [form, setForm] = React.useState({
     q: '',
-    type: 'questions',
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
@@ -186,14 +173,13 @@ const LinksDialog = ({
   React.useEffect(() => {
     if (open) {
       setResults(null);
-      setSelected(null);
+      setSelected([]);
       setPagination({
         perPage: 5,
         page: 1,
       });
       setForm({
         q: '',
-        type: 'questions',
         approved: '__none__',
       });
     }
@@ -204,49 +190,30 @@ const LinksDialog = ({
   }
 
   const onSubmit = async (values, paging = pagination) => {
-    setSelected(null);
     setForm(values);
 
-    const { type, approved, ...rest } = values;
+    const { approved, ...rest } = values;
 
-    const { data, total } = await dataProvider.getList(type, {
+    const { data, total } = await dataProvider.getList('questions', {
       filter: {
         ...rest,
-        ...(approved !== '__none__' && type === 'questions' ? { approved } : {}),
+        ...(approved !== '__none__' ? { approved } : {}),
         fk_topicId: record.fk_topicId,
+        fk_languageId: record.fk_languageId,
       },
       pagination: paging,
     });
 
-    const filtered = type === 'questions'
-      ? data.filter((r) => !!r.fk_answerId)
-      : data;
-
-    setResults(filtered);
+    setResults(data);
     setCount(total);
   };
 
-  const removeAnswer = async () => {
-    try {
-      await dataProvider.update('questions', {
-        id: record.id,
-        data: { fk_answerId: null },
-      });
-
-      notify('The answer was unlinked from the question');
-      refresh();
-      onClose();
-    } catch (err) {
-      notify(`Failed to remove the answer: ${err.message}`, 'error');
-    }
-  };
-
-  const isSelected = (result) => result.id === selected;
+  const isSelected = (result) => selected.includes(result.id);
   const selectResult = (result) => {
     if (isSelected(result)) {
-      setSelected(null);
+      setSelected(selected.filter((s) => s !== result.id));
     } else {
-      setSelected(result.id);
+      setSelected(selected.concat([result.id]));
     }
   };
 
@@ -272,37 +239,37 @@ const LinksDialog = ({
 
   const save = async () => {
     try {
-      const result = results.find((r) => r.id === selected);
+      await Promise.all(
+        selected.map((id) => {
+          return dataProvider.update('questions', {
+            id,
+            data: {
+              fk_answerId: record.id,
+            },
+          });
+        }),
+      );
 
-      await dataProvider.update('questions', {
-        id: record.id,
-        data: { fk_answerId: result.fk_answerId || result.id },
-      });
-
-      notify('The question was linked');
+      notify('The questions were linked');
       onClose();
       refresh();
     } catch (err) {
-      notify(`Failed to link question: ${err.message}`, 'error');
+      notify(`Failed to link questions: ${err.message}`, 'error');
     }
   };
 
-  const createAnswer = async (values) => {
+  const createQuestion = async (values) => {
     try {
-      const { data } = await dataProvider.create('answers', {
+      await dataProvider.create('questions', {
         data: {
           ...values,
           fk_languageId: record.fk_languageId,
           fk_topicId: record.fk_topicId,
+          fk_answerId: record.id,
         },
       });
 
-      await dataProvider.update('questions', {
-        id: record.id,
-        data: { fk_answerId: data.id },
-      });
-
-      notify('The answer was created and the question linked');
+      notify('The question was created and linked');
       onClose();
       refresh();
     } catch (err) {
@@ -322,39 +289,31 @@ const LinksDialog = ({
         <DialogContent dividers className={classes.content}>
           <AppBar position="static" color="default">
             <Tabs value={tab} onChange={(e, v) => onTabChange(v)} indicatorColor="primary" textColor="primary" variant="fullWidth">
-              <Tab label="Search questions/answers" />
-              <Tab label="Create new answer" />
+              <Tab label="Search questions" />
+              <Tab label="Create new question" />
             </Tabs>
           </AppBar>
           <TabPanel value={tab} index={0}>
-            {
-              record.fk_answerId && (
-                <Box textAlign="right">
-                  <Button
-                    onClick={removeAnswer}
-                    variant="outlined"
-                    size="small"
-                    type="button"
-                    className={classes.danger}
-                  >
-                    Unlink answer
-                  </Button>
-                  <hr />
-                </Box>
-              )
-            }
             <Filters
               onSubmit={(values) => {
+                setSelected([]);
                 setPage(0, false);
                 onSubmit(values, { perPage: pagination.perPage, page: 1 });
               }}
               initialValues={form}
             />
             {
+              !!selected.length && (
+                <Alert severity="info" onClose={() => setSelected([])}>
+                  {selected.length} selected
+                </Alert>
+              )
+            }
+            {
               !results && (
                 <Box py={2}>
                   <Alert severity="info">
-                    Use the filters to search for answers or questions
+                    Use the filters to search for questions
                   </Alert>
                 </Box>
               )
@@ -376,11 +335,7 @@ const LinksDialog = ({
                       <TableRow>
                         <TableCell>Select</TableCell>
                         <TableCell>Text</TableCell>
-                        {
-                          form.type === 'questions' && (
-                            <TableCell>Answer</TableCell>
-                          )
-                        }
+                        <TableCell>Answer</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -395,15 +350,18 @@ const LinksDialog = ({
                               />
                             </TableCell>
                             <TableCell>
-                              <PlayableTextField source="text" record={{ ...result, Language: record.Language }} />
+                              <PlayableTextField source="text" record={result} />
                             </TableCell>
-                            {
-                              form.type === 'questions' && (
-                                <TableCell>
-                                  <TextField source="Answer.text" record={result} />
-                                </TableCell>
-                              )
-                            }
+                            <TableCell>
+                              {
+                                result.fk_answerId && (
+                                  <PlayableTextField source="text" record={{ ...result.Answer, Language: result.Language }} />
+                                )
+                              }
+                              {
+                                !result.fk_answerId && ('-')
+                              }
+                            </TableCell>
                           </TableRow>
                         ))
                       }
@@ -431,7 +389,7 @@ const LinksDialog = ({
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <CreateForm
-              onSubmit={(v) => createAnswer(v)}
+              onSubmit={createQuestion}
             />
           </TabPanel>
         </DialogContent>
@@ -441,7 +399,7 @@ const LinksDialog = ({
             onClick={save}
             variant="outlined"
             color="primary"
-            disabled={!selected}
+            disabled={!selected.length}
           >
             Save
           </Button>
