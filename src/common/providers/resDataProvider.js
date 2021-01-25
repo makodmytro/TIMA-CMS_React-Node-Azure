@@ -63,7 +63,7 @@ const resDataProvider = {
         search: q || undefined,
         filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
         ...(resource === 'questions' ? { group: 1 } : {}),
-        ...getResourceAssociations(resource),
+        ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
       };
 
       url += `?${stringify(query)}`;

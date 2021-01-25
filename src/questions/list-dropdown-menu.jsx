@@ -8,7 +8,6 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LinksIcon from '@material-ui/icons/Link';
-import RelatedIcon from '@material-ui/icons/Cached';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,6 +17,7 @@ const DropdownMenu = ({
   deleteQuestion,
   openRelatedQuestions,
   onOpenLinksDialog,
+  hideLinks,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -78,14 +78,6 @@ const DropdownMenu = ({
           Edit question
         </MenuItem>
         {
-          record.relatedQuestions && !!record.relatedQuestions.length && openRelatedQuestions && (
-            <MenuItem onClick={onOpenRelatedQuestions}>
-              <ListItemIcon><RelatedIcon /></ListItemIcon>
-              Related questions
-            </MenuItem>
-          )
-        }
-        {
           !record.fk_answerId && (
             <MenuItem
               component={Link}
@@ -109,20 +101,28 @@ const DropdownMenu = ({
             </MenuItem>
           )
         }
-        <MenuItem onClick={onDeleteClicked}>
-          <ListItemIcon><DeleteIcon /></ListItemIcon>
-          Delete question
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
+        {
+          !!deleteQuestion && (
+            <MenuItem onClick={onDeleteClicked}>
+              <ListItemIcon><DeleteIcon /></ListItemIcon>
+              Delete question
+            </MenuItem>
+          )
+        }
+        {
+          !hideLinks && (
+            <MenuItem
+              onClick={(e) => {
+                e.stopPropagation();
 
-            onOpenLinksDialog(record);
-          }}
-        >
-          <ListItemIcon><LinksIcon /></ListItemIcon>
-          Links
-        </MenuItem>
+                onOpenLinksDialog(record);
+              }}
+            >
+              <ListItemIcon><LinksIcon /></ListItemIcon>
+              Links
+            </MenuItem>
+          )
+        }
       </Menu>
     </div>
   );
@@ -130,6 +130,7 @@ const DropdownMenu = ({
 
 DropdownMenu.defaultProps = {
   openRelatedQuestions: null,
+  deleteQuestion: null,
 };
 
 DropdownMenu.propTypes = {
@@ -138,7 +139,7 @@ DropdownMenu.propTypes = {
     id: PropTypes.string.isRequired,
     relatedQuestions: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  deleteQuestion: PropTypes.func.isRequired,
+  deleteQuestion: PropTypes.func,
   openRelatedQuestions: PropTypes.func,
 };
 

@@ -32,6 +32,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
+import RelatedQuestionsTable from './related-questions-table';
 
 function TabPanel(props) {
   const {
@@ -164,11 +165,14 @@ const LinksDialog = ({
   record,
   open,
   onClose,
+  deleteQuestion,
+  removeAnswer,
 }) => {
   const classes = styles();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
+  const [relatedQuestions, setRelatedQuestions] = React.useState([]);
   const [results, setResults] = React.useState(null);
   const [selected, setSelected] = React.useState(null);
   const [pagination, setPagination] = React.useState({
@@ -199,6 +203,31 @@ const LinksDialog = ({
     }
   }, [open]);
 
+  const fetchRelatedQuestions = async () => {
+    if (!record.fk_answerId) {
+      return;
+    }
+
+    const { data } = await dataProvider.getList('answers', {
+      filter: {
+        id: record.fk_answerId,
+      },
+      include: ['Questions'],
+    });
+
+    if (!data.length) {
+      return;
+    }
+
+    setRelatedQuestions(data[0].Questions);
+  };
+
+  React.useEffect(() => {
+    if (record) {
+      fetchRelatedQuestions();
+    }
+  }, [record]);
+
   if (!record) {
     return null;
   }
@@ -226,7 +255,7 @@ const LinksDialog = ({
     setCount(total);
   };
 
-  const removeAnswer = async () => {
+  const removeAnswerLocal = async () => {
     try {
       await dataProvider.update('questions', {
         id: record.id,
@@ -320,29 +349,30 @@ const LinksDialog = ({
           </IconButton>
         </DialogTitle>
         <DialogContent dividers className={classes.content}>
+          {
+            record.fk_answerId && (
+              <Box textAlign="right">
+                <Button
+                  onClick={removeAnswerLocal}
+                  variant="outlined"
+                  size="small"
+                  type="button"
+                  className={classes.danger}
+                >
+                  Unlink answer
+                </Button>
+                <hr />
+              </Box>
+            )
+          }
           <AppBar position="static" color="default">
             <Tabs value={tab} onChange={(e, v) => onTabChange(v)} indicatorColor="primary" textColor="primary" variant="fullWidth">
               <Tab label="Search questions/answers" />
               <Tab label="Create new answer" />
+              <Tab label="Related questions" />
             </Tabs>
           </AppBar>
           <TabPanel value={tab} index={0}>
-            {
-              record.fk_answerId && (
-                <Box textAlign="right">
-                  <Button
-                    onClick={removeAnswer}
-                    variant="outlined"
-                    size="small"
-                    type="button"
-                    className={classes.danger}
-                  >
-                    Unlink answer
-                  </Button>
-                  <hr />
-                </Box>
-              )
-            }
             <Filters
               onSubmit={(values) => {
                 setPage(0, false);
@@ -432,6 +462,14 @@ const LinksDialog = ({
           <TabPanel value={tab} index={1}>
             <CreateForm
               onSubmit={(v) => createAnswer(v)}
+            />
+          </TabPanel>
+          <TabPanel value={tab} index={2}>
+            <RelatedQuestionsTable
+              record={record}
+              relatedQuestions={relatedQuestions}
+              deleteQuestion={deleteQuestion}
+              removeAnswer={removeAnswer}
             />
           </TabPanel>
         </DialogContent>

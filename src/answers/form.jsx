@@ -6,7 +6,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { PlayableTextInput } from '../common/components/playable-text';
 
-const Form = ({ languages }) => {
+const Form = ({ languages, edit }) => {
   const {
     input: { value },
   } = useField('fk_languageId');
@@ -28,17 +28,22 @@ const Form = ({ languages }) => {
         fullWidth
         lang={getLang}
       />
-      <ReferenceInput
-        source="fk_languageId"
-        label="resources.answers.fields.fk_languageId"
-        reference="languages"
-        validate={required()}
-        fullWidth
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
+      {
+        !edit && (
+          <ReferenceInput
+            source="fk_languageId"
+            label="resources.answers.fields.fk_languageId"
+            reference="languages"
+            validate={required()}
+            fullWidth
+          >
+            <SelectInput
+              optionText="name"
+            />
+          </ReferenceInput>
+        )
+      }
+
       <ReferenceInput
         source="fk_topicId"
         label="resources.answers.fields.fk_topicId"
@@ -46,6 +51,7 @@ const Form = ({ languages }) => {
         validate={required()}
         fullWidth
         filter={{ fk_languageId: value }}
+        disabled={edit}
       >
         <SelectInput
           optionText="name"

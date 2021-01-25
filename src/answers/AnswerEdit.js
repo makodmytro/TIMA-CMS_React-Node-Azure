@@ -9,11 +9,20 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
 import {
-  Confirm, Edit, SimpleForm, useDataProvider, useNotify, useRefresh,
+  Confirm,
+  Edit,
+  SimpleForm,
+  useDataProvider,
+  useNotify,
+  useRefresh,
+  Toolbar,
+  SaveButton,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
+import LinksDialog from './links-dialog';
 
 const styles = makeStyles((theme) => ({
   heading: {
@@ -21,7 +30,30 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const RelatedQuestions = ({ record, onRemoveAnswer }) => {
+const LinksButton = ({ record, onDialogOpen }) => (
+  <Button
+    type="button"
+    onClick={() => onDialogOpen(record)}
+    variant="outlined"
+    size="medium"
+    style={{ marginLeft: '5px' }}
+  >
+    Links
+  </Button>
+);
+
+const CustomToolbar = ({ onDialogOpen, ...props }) => (
+  <Toolbar {...props}>
+    <SaveButton
+      label="Save"
+      redirect="list"
+      submitOnEnter
+    />
+    <LinksButton onDialogOpen={onDialogOpen} record={props.record} />
+  </Toolbar>
+);
+
+const RelatedQuestions = ({ record, onRemoveAnswer, onApproveChange }) => {
   const classes = styles();
   if (!record || !record.Questions || !record.Questions.length) {
     return null;
@@ -36,6 +68,7 @@ const RelatedQuestions = ({ record, onRemoveAnswer }) => {
         <TableHead>
           <TableRow>
             <TableCell>Text</TableCell>
+            <TableCell>Approved</TableCell>
             <TableCell>&nbsp;</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
@@ -46,6 +79,14 @@ const RelatedQuestions = ({ record, onRemoveAnswer }) => {
               <TableRow key={i}>
                 <TableCell>
                   {question.text}
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    onChange={(e) => {
+                      onApproveChange(question.id, e.target.checked);
+                    }}
+                    checked={question.approved}
+                  />
                 </TableCell>
                 <TableCell>
                   <Button
@@ -87,6 +128,12 @@ const AnswerEdit = (props) => {
   const refresh = useRefresh();
   const [record, setRecord] = React.useState(null);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
+  const [opened, setOpened] = React.useState(false);
+
+  const onDialogOpen = (r) => {
+    setRecord(r);
+    setOpened(true);
+  };
 
   const onRemoveAnswerOpen = (r) => {
     setRecord(r);
@@ -112,12 +159,26 @@ const AnswerEdit = (props) => {
     onRemoveAnswerClose();
   };
 
+  const updateApproved = async (id, approved) => {
+    try {
+      await dataProvider.update('questions', {
+        id,
+        data: { approved },
+      });
+
+      notify('The question was updated');
+      refresh();
+    } catch (err) {
+      notify('Failed to update the question');
+    }
+  };
+
   return (
     <>
       <Edit {...props} actions={<CustomTopToolbar />}>
-        <SimpleForm>
-          <Form {...props} />
-          <RelatedQuestions onRemoveAnswer={onRemoveAnswerOpen} />
+        <SimpleForm toolbar={<CustomToolbar onDialogOpen={onDialogOpen} />}>
+          <Form {...props} edit />
+          <RelatedQuestions onRemoveAnswer={onRemoveAnswerOpen} onApproveChange={updateApproved} />
         </SimpleForm>
       </Edit>
       <Confirm
@@ -127,6 +188,14 @@ const AnswerEdit = (props) => {
         content="Are you sure you want to unlink the answer from the question?"
         onConfirm={removeAnswer}
         onClose={onRemoveAnswerClose}
+      />
+      <LinksDialog
+        open={opened}
+        onClose={() => {
+          setRecord(null);
+          setOpened(false);
+        }}
+        record={record}
       />
     </>
   );
