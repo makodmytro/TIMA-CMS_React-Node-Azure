@@ -349,6 +349,22 @@ const LinksDialog = ({
           </IconButton>
         </DialogTitle>
         <DialogContent dividers className={classes.content}>
+          {
+            record.fk_answerId && (
+              <Box textAlign="right">
+                <Button
+                  onClick={removeAnswerLocal}
+                  variant="outlined"
+                  size="small"
+                  type="button"
+                  className={classes.danger}
+                >
+                  Unlink answer
+                </Button>
+                <hr />
+              </Box>
+            )
+          }
           <AppBar position="static" color="default">
             <Tabs value={tab} onChange={(e, v) => onTabChange(v)} indicatorColor="primary" textColor="primary" variant="fullWidth">
               <Tab label="Search questions/answers" />
@@ -357,22 +373,6 @@ const LinksDialog = ({
             </Tabs>
           </AppBar>
           <TabPanel value={tab} index={0}>
-            {
-              record.fk_answerId && (
-                <Box textAlign="right">
-                  <Button
-                    onClick={removeAnswerLocal}
-                    variant="outlined"
-                    size="small"
-                    type="button"
-                    className={classes.danger}
-                  >
-                    Unlink answer
-                  </Button>
-                  <hr />
-                </Box>
-              )
-            }
             <Filters
               onSubmit={(values) => {
                 setPage(0, false);
