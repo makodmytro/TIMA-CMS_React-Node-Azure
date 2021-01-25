@@ -42,7 +42,7 @@ import ListActions, {
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
-import BooleanField from '../common/components/BooleanField';
+import ApprovedSwitchField from './approved-switch-field';
 import LinksDialog from './links-dialog';
 
 const styles = makeStyles((theme) => ({
@@ -325,7 +325,7 @@ const CustomGridItem = ({
         {visibleColumns.includes('approved')
         && (
           <TableCell>
-            <BooleanField label="Approved" source="approved" record={record} />
+            <ApprovedSwitchField label="Approved" record={record} />
           </TableCell>
         )}
         {visibleColumns.includes('updatedAt') && (

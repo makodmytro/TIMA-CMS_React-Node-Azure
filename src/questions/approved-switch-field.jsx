@@ -31,10 +31,16 @@ const ApprovedSwitchField = ({ record }) => {
 
   return (
     <Switch
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
       onChange={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         updateApproved(e.target.checked);
       }}
-      checked={record.approved}
+      checked={!!record.approved}
     />
   );
 };
