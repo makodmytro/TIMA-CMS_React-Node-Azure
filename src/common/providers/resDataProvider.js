@@ -164,6 +164,28 @@ const resDataProvider = {
     return { data: json };
   },
 
+  getAnswerMedia: async (resource, params) => {
+    const { json } = await httpClient(`https://endpointone.free.beeceptor.com/answers/${params.id}/media`);
+
+    return { data: json };
+  },
+  uploadAnswerMedia: async (resource, params) => {
+    return httpClient(`https://endpointone.free.beeceptor.com/answers/${params.id}/media`, {
+      method: 'POST',
+      headers: {
+        'content-type': params.data.type,
+      },
+      body: params.data.binary,
+    });
+  },
+  deleteAnswerMedia: async (resource, params) => {
+    await httpClient(`https://endpointone.free.beeceptor.com/answers/${params.id}/media/${params.mediaId}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
+  },
+
 };
 
 export default resDataProvider;

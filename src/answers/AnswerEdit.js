@@ -23,6 +23,7 @@ import {
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
 import LinksDialog from './links-dialog';
+import AnswerMedia from './media';
 
 const styles = makeStyles((theme) => ({
   heading: {
@@ -197,6 +198,10 @@ const AnswerEdit = (props) => {
         }}
         record={record}
       />
+      <Box my={1} p={2} boxShadow={3}>
+        <Typography>Media</Typography>
+        <AnswerMedia answerId={props.match.params.id} />
+      </Box>
     </>
   );
 };

@@ -33,6 +33,7 @@
     "arrow-body-style": "warn",
     "no-mixed-operators": "off",
     "react/no-array-index-key": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "jsx-a11y/media-has-caption": "off"
   }
 }
