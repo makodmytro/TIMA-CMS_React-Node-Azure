@@ -179,12 +179,6 @@ const Filters = (props) => {
               emptyText="None"
             />
           </ReferenceInput>
-          <BooleanInput
-            label="Unanswered questions"
-            source="unanswered"
-            alwaysOn
-            onChange={() => handleSubmit()}
-          />
           <SelectInput
             label="Approved"
             source="approved"
@@ -196,6 +190,12 @@ const Filters = (props) => {
               { id: true, name: <DoneIcon color="primary" /> },
               { id: false, name: <ClearIcon /> },
             ]}
+          />
+          <BooleanInput
+            label="Unanswered questions"
+            source="unanswered"
+            alwaysOn
+            onChange={() => handleSubmit()}
           />
         </form>
 

@@ -81,7 +81,7 @@ const Img = ({ record }) => {
 
   return (
     <div>
-      <img style={{ maxWidth: '200px' }} src={record.topicImageUrl} alt="topic" />
+      <img style={{ maxWidth: '150px' }} src={record.topicImageUrl} alt="topic" />
     </div>
   );
 };
