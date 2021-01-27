@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput,
 } from 'react-admin';
+import { Advanced } from './TopicEdit';
 
 const TopicCreate = (props) => (
   <Create {...props}>
     <SimpleForm>
       <TextInput source="name" validate={required()} fullWidth />
-      <TextInput source="topicKey" fullWidth />
-      <TextInput source="topicImageUrl" fullWidth />
+      <TextInput source="welcomeText" multiline rows="5" fullWidth />
       <ReferenceInput
         validate={required()}
         source="fk_languageId"
@@ -20,7 +20,8 @@ const TopicCreate = (props) => (
           optionText="name"
         />
       </ReferenceInput>
-      <TextInput source="welcomeText" fullWidth />
+      <TextInput source="topicImageUrl" fullWidth />
+      <Advanced source="topicKey" />
     </SimpleForm>
   </Create>
 );

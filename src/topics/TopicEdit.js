@@ -30,7 +30,7 @@ const CustomToolbar = (props) => (
   </Toolbar>
 );
 
-const Advanced = (props) => (
+export const Advanced = (props) => (
   <>
     <Typography>
       Advanced
@@ -60,6 +60,8 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
         <PlayableTextInput
           source="welcomeText"
           fullWidth
+          rows="4"
+          multiline
           lang={getLang}
         />
         <ReferenceInput
