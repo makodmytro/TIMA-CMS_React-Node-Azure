@@ -50,6 +50,9 @@ const Answer = ({
       variant="filled"
       value={answer.text}
       fullWidth
+      disabled
+      multiline
+      rows="5"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

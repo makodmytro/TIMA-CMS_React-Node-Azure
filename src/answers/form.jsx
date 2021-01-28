@@ -27,6 +27,8 @@ const Form = ({ languages, edit }) => {
         validate={required()}
         fullWidth
         lang={getLang}
+        rows="5"
+        multiline
       />
       {
         !edit && (
