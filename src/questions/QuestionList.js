@@ -33,7 +33,6 @@ import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import PlayableText from '../common/components/playable-text';
-import RelatedQuestionsDialog from './related-questions-dialog';
 import ThumbsUp from '../assets/thumbs-up.png';
 import ThumbsDown from '../assets/thumbs-down.png';
 import DropdownMenu from './list-dropdown-menu';
@@ -43,7 +42,6 @@ import ListActions, {
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import ApprovedSwitchField from './approved-switch-field';
-import LinksDialog from './links-dialog';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -281,8 +279,7 @@ const RelatedQuestions = ({ record }) => {
 
 const CustomGridItem = ({
   record, deleteQuestion, removeAnswer,
-  openRelatedQuestions, visibleColumns,
-  onOpenLinksDialog,
+  visibleColumns,
 }) => {
   const classes = styles();
   const redirect = useRedirect();
@@ -364,8 +361,6 @@ const CustomGridItem = ({
             record={record}
             deleteQuestion={deleteQuestion}
             removeAnswer={removeAnswer}
-            openRelatedQuestions={openRelatedQuestions}
-            onOpenLinksDialog={onOpenLinksDialog}
           />
         </TableCell>
       </TableRow>
@@ -374,8 +369,7 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  deleteQuestion, removeAnswer, openRelatedQuestions, visibleColumns,
-  onOpenLinksDialog,
+  deleteQuestion, removeAnswer, visibleColumns,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
@@ -425,9 +419,7 @@ const CustomGrid = ({
                     basePath={basePath}
                     deleteQuestion={deleteQuestion}
                     removeAnswer={removeAnswer}
-                    openRelatedQuestions={openRelatedQuestions}
                     visibleColumns={visibleColumns}
-                    onOpenLinksDialog={onOpenLinksDialog}
                   />
                 ))
               }
@@ -446,8 +438,6 @@ const QuestionList = (props) => {
   const [record, setRecord] = React.useState(null);
   const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
-  const [relatedQuestionsOpened, setRelatedQuestionsOpened] = React.useState(false);
-  const [linksDialogOpened, setLinksDialogOpened] = React.useState(false);
 
   const columns = [
     { key: 'text' },
@@ -485,16 +475,6 @@ const QuestionList = (props) => {
     onDeleteClose();
   };
 
-  const onOpenLinksDialog = (r) => {
-    setRecord(r);
-    setLinksDialogOpened(true);
-  };
-
-  const onCloseLinksDialog = () => {
-    setRecord(null);
-    setLinksDialogOpened(false);
-  };
-
   const onRemoveAnswerOpen = (r) => {
     setRecord(r);
     setRemoveAnswerConfirmOpened(true);
@@ -519,32 +499,8 @@ const QuestionList = (props) => {
     onRemoveAnswerClose();
   };
 
-  const onOpenRelatedQuestions = (r) => {
-    setRecord(r);
-    setRelatedQuestionsOpened(true);
-  };
-
-  const onCloseRelatedQuestions = () => {
-    setRecord(null);
-    setRelatedQuestionsOpened(false);
-  };
-
   return (
     <>
-      <RelatedQuestionsDialog
-        open={relatedQuestionsOpened}
-        onClose={onCloseRelatedQuestions}
-        record={record}
-        deleteQuestion={onDeletedOpen}
-        removeAnswer={onRemoveAnswerOpen}
-      />
-      <LinksDialog
-        record={record}
-        open={linksDialogOpened}
-        onClose={onCloseLinksDialog}
-        deleteQuestion={onDeletedOpen}
-        removeAnswer={onRemoveAnswerOpen}
-      />
       <Confirm
         isOpen={deleteConfirmOpened}
         loading={false}
@@ -574,10 +530,8 @@ const QuestionList = (props) => {
       >
         <CustomGrid
           visibleColumns={visibleColumns}
-          openRelatedQuestions={onOpenRelatedQuestions}
           deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}
-          onOpenLinksDialog={onOpenLinksDialog}
         />
       </List>
     </>

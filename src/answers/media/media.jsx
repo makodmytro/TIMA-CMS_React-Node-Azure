@@ -2,11 +2,11 @@ import React from 'react';
 import {
   useDataProvider,
   useNotify,
+  useRefresh,
   Confirm,
   FileInput,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -17,141 +17,49 @@ import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import AudioIcon from '@material-ui/icons/PlayCircleFilled';
+import VideoIcon from '@material-ui/icons/Videocam';
+import ImageIcon from '@material-ui/icons/Image';
+import FilePreview from './file-preview';
+import PreviewDialog from './preview-dialog';
 
-const styles = makeStyles((theme) => ({
-  previewContainer: {
-    margin: '0 auto',
-
-    '& div': {
-      maxWidth: '50%',
-      border: '1px solid #bdbdbd',
-      padding: theme.spacing(1),
-      margin: '0 auto',
-    },
-
-    '& img': {
-      width: '100%',
-    },
-    '& audio': {
-      width: '100%',
-    },
-    '& video': {
-      width: '100%',
-    },
-  },
-}));
-
-const FilePreview = (props) => {
-  const classes = styles();
-  const [src, setSrc] = React.useState(null);
-  const [type, setType] = React.useState(null);
-
-  if (!props.record || !props.record.rawFile) {
-    return null;
-  }
-
-  const { rawFile } = props.record;
-
-  React.useEffect(() => {
-    if (props.record) {
-      if (rawFile.type.startsWith('image/')) {
-        setType('image');
-
-        const fr = new FileReader();
-        fr.onload = function (e) {
-          setSrc(fr.result);
-        };
-        fr.readAsDataURL(rawFile);
-      }
-
-      if (rawFile.type.startsWith('audio/')) {
-        setType('audio');
-        setSrc(URL.createObjectURL(rawFile));
-      }
-
-      if (rawFile.type.startsWith('video/')) {
-        setType('video');
-        setSrc(URL.createObjectURL(rawFile));
-      }
-    }
-  }, [props.record]);
-
-  if (type === 'image') {
+const Icon = ({ media }) => {
+  if (media.type.startsWith('image')) {
     return (
-      <div className={classes.previewContainer}>
-        <div>
-          <img
-            src={src}
-            alt="preview"
-          />
-        </div>
-      </div>
+      <ImageIcon />
     );
   }
 
-  if (type === 'audio') {
+  if (media.type.startsWith('audio')) {
     return (
-      <div className={classes.previewContainer}>
-        <div>
-          <audio controls>
-            <source src={src} />
-          </audio>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === 'video') {
-    return (
-      <div className={classes.previewContainer}>
-        <div>
-          <video controls>
-            <source src={src} />
-          </video>
-        </div>
-      </div>
+      <AudioIcon />
     );
   }
 
   return (
-    <div className={classes.previewContainer}>
-      123123
-    </div>
+    <VideoIcon />
   );
 };
 
-const MediaList = (props) => {
+const MediaList = ({ answer }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const { answerId } = props;
-  const [media, setMedia] = React.useState([]);
+  const refresh = useRefresh();
+  const [media, setMedia] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [confirmation, setConfirmation] = React.useState({
     id: null,
     delete: false,
   });
 
-  const fetch = async () => {
-    try {
-      const { data } = await dataProvider.getAnswerMedia(null, {
-        id: answerId,
-      });
+  const onOpen = (m) => {
+    setMedia(m);
+    setOpen(true);
+  };
 
-      setMedia(
-        [{
-          id: '123123',
-          url: 'bla@bla.com',
-          type: 'image/png',
-          position: 1,
-        }, {
-          id: '123123',
-          url: 'bla@bla.com',
-          type: 'image/png',
-          position: 1,
-        }],
-      );
-    } catch (err) {
-      notify(`Failed to fetch media: ${err.message}`, 'error');
-    }
+  const onClose = () => {
+    setMedia(null);
+    setOpen(false);
   };
 
   const deleteMediaClicked = (id) => {
@@ -171,40 +79,38 @@ const MediaList = (props) => {
   const destroy = async () => {
     try {
       await dataProvider.deleteAnswerMedia(null, {
-        id: answerId,
+        id: answer.id,
         mediaId: confirmation.id,
       });
 
-      fetch();
+      refresh();
       notify('The media was deleted');
       deleteMediaClosed();
     } catch (err) {
-      notify(`Failed to delete media: ${err.message}`, 'error');
+      notify('Failed to delete media', 'error');
     }
   };
 
-  const upload = (values) => new Promise((resolve) => { // eslint-disable-line
+  const upload = async (values) => { // eslint-disable-line
     try {
-      const fr = new FileReader();
-      fr.onload = function () {
-        console.log(fr.result);
-
-        return resolve();
-      };
-      fr.readAsBinaryString(values.file.rawFile);
-
+      await dataProvider.uploadAnswerMedia(null, {
+        id: answer.id,
+        data: {
+          binary: values.file.rawFile,
+        },
+      });
       notify('The file was uploaded');
-      fetch();
+      refresh();
+
+      return Promise.resolve();
     } catch (err) {
       notify(`Failed to upload: ${err.message}`, 'error');
-
-      return resolve();
     }
-  });
+  };
 
-  React.useEffect(() => {
-    fetch();
-  }, []);
+  if (!answer || !answer.AnswerMedia) {
+    return null;
+  }
 
   return (
     <Box>
@@ -216,29 +122,43 @@ const MediaList = (props) => {
         onConfirm={destroy}
         onClose={deleteMediaClosed}
       />
+      <PreviewDialog
+        open={open}
+        onClose={onClose}
+        media={media}
+      />
       {
-        !media.length && (
+        !answer.AnswerMedia.length && (
           <Alert severity="info" elevation={3}>
             There is no media for this answer
           </Alert>
         )
       }
       {
-        !!media.length && (
+        !!answer.AnswerMedia.length && (
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>URL</TableCell>
                 <TableCell>Type</TableCell>
+                <TableCell>&nbsp;</TableCell>
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {
-                media.map((m, i) => (
+                answer.AnswerMedia.map((m, i) => (
                   <TableRow key={i}>
-                    <TableCell>{m.url}</TableCell>
                     <TableCell>{m.type}</TableCell>
+                    <TableCell>
+                      <Button
+                        type="button"
+                        onClick={() => onOpen(m)}
+                        size="small"
+                        variant="outlined"
+                      >
+                        <Icon media={m} /> view
+                      </Button>
+                    </TableCell>
                     <TableCell>
                       <Button
                         style={{ borderColor: 'red', color: 'red' }}
@@ -265,17 +185,11 @@ const MediaList = (props) => {
           initialValues={{
             file: null,
           }}
-          render={({ handleSubmit, values, reset }) => {
+          render={({
+            handleSubmit, values, form, submitting,
+          }) => {
             return (
-              <form
-                onSubmit={(e) => {
-                  handleSubmit.then(() => {
-                    console.log('then');
-
-                    reset();
-                  });
-                }}
-              >
+              <form onSubmit={(e) => handleSubmit(e).then(form.reset)}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <FileInput source="file" label={null} accept=".mp3,.wav.ogg,.mp4,.mpeg,.mpeg4,.avi,.mov,.wmv,.png,.jpg,.jpeg,.bmp,.gif">
@@ -290,9 +204,13 @@ const MediaList = (props) => {
                           color="primary"
                           variant="contained"
                           fullWidth
-                          disabled={!values.file}
+                          disabled={!values.file || submitting}
                         >
-                          Upload
+                          {
+                            submitting
+                              ? 'Uploading'
+                              : 'Upload'
+                          }
                         </Button>
                       </Box>
                     </Grid>

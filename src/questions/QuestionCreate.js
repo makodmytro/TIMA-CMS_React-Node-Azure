@@ -61,35 +61,6 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
       <AutocompleteInput />
-      <ReferenceInput
-        allowEmpty
-        label="resources.questions.fields.fk_parentQuestionId"
-        source="fk_parentQuestionId"
-        reference="questions"
-        fullWidth
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-          fullWidth
-        />
-      </ReferenceInput>
-      <ReferenceInput
-        allowEmpty
-        label="resources.questions.fields.fk_questionId"
-        source="fk_questionId"
-        reference="questions"
-        fullWidth
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
     </>
   );
 };
