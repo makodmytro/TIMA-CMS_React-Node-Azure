@@ -23,6 +23,7 @@ import {
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
 import LinksDialog from './links-dialog';
+import AnswerMedia from './media/media';
 
 const styles = makeStyles((theme) => ({
   heading: {
@@ -53,8 +54,18 @@ const CustomToolbar = ({ onDialogOpen, ...props }) => (
   </Toolbar>
 );
 
-const RelatedQuestions = ({ record, onRemoveAnswer, onApproveChange }) => {
+const RelatedQuestions = ({
+  record, onRemoveAnswer, onApproveChange,
+  setAnswer,
+}) => {
   const classes = styles();
+
+  React.useEffect(() => {
+    if (record) {
+      setAnswer(record);
+    }
+  }, [record]);
+
   if (!record || !record.Questions || !record.Questions.length) {
     return null;
   }
@@ -126,6 +137,7 @@ const AnswerEdit = (props) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
+  const [answer, setAnswer] = React.useState(null);
   const [record, setRecord] = React.useState(null);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
   const [opened, setOpened] = React.useState(false);
@@ -178,7 +190,11 @@ const AnswerEdit = (props) => {
       <Edit {...props} actions={<CustomTopToolbar />}>
         <SimpleForm toolbar={<CustomToolbar onDialogOpen={onDialogOpen} />}>
           <Form {...props} edit />
-          <RelatedQuestions onRemoveAnswer={onRemoveAnswerOpen} onApproveChange={updateApproved} />
+          <RelatedQuestions
+            onRemoveAnswer={onRemoveAnswerOpen}
+            onApproveChange={updateApproved}
+            setAnswer={setAnswer}
+          />
         </SimpleForm>
       </Edit>
       <Confirm
@@ -197,6 +213,14 @@ const AnswerEdit = (props) => {
         }}
         record={record}
       />
+      {
+        props.permissions && props.permissions.allowMediaFiles && (
+          <Box my={1} p={2} boxShadow={3}>
+            <Typography>Media</Typography>
+            <AnswerMedia answer={answer} />
+          </Box>
+        )
+      }
     </>
   );
 };

@@ -164,6 +164,42 @@ const resDataProvider = {
     return { data: json };
   },
 
+  getAnswerMedia: async (resource, params) => {
+    const token = localStorage.getItem('token');
+    const headers = new Headers({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const res = await fetch(`${baseApi}/answers/${params.id}/media/${params.mediaId}/download`, {
+      headers,
+    });
+    const blob = await res.blob();
+    console.log(blob);
+
+    return { data: blob };
+  },
+  uploadAnswerMedia: async (resource, params) => {
+    const fd = new FormData();
+    fd.append('file', params.data.binary);
+
+    await httpClient(`${baseApi}/answers/${params.id}/media`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: fd,
+    });
+
+    return { data: true };
+  },
+  deleteAnswerMedia: async (resource, params) => {
+    await httpClient(`${baseApi}/answers/${params.id}/media/${params.mediaId}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
+  },
+
 };
 
 export default resDataProvider;
