@@ -12,6 +12,8 @@ import {
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
+import Badge from '@material-ui/core/Badge';
+import ReactMarkdown from 'react-markdown';
 import PlayableText from '../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
@@ -19,6 +21,7 @@ import ListActions, {
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import { Language } from '../common/components/fields-values-by-fk';
+import DropDownMenu from './list-dropdown-menu';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -39,20 +42,23 @@ const styles = makeStyles((theme) => ({
       paddingRight: 16,
     },
   },
+  markdown: {
+    display: 'flex',
+
+    '& .second': {
+      flex: 1,
+    },
+  },
   related: {
     color: theme.palette.primary.main,
     cursor: 'pointer',
     fontSize: '1rem',
-    paddingTop: '5px',
-    paddingBottom: '5px',
-    marginRight: '5px',
-    '&:hover': {
-      backgroundColor: '#4ec2a826',
-    },
+    marginRight: '10px',
 
-    '& svg': {
-      verticalAlign: 'middle',
-      fontSize: '0.9rem',
+    '& span': {
+      color: 'white',
+      marginLeft: '5px',
+      marginRight: '5px',
     },
   },
 }));
@@ -120,6 +126,7 @@ const Filters = (props) => {
             source="fk_editorId"
             reference="editors"
             alwaysOn
+            allowEmpty
             perPage={100}
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
@@ -149,27 +156,35 @@ const Filters = (props) => {
   );
 };
 
-const Text = ({ record }) => {
+export const Text = ({ record }) => {
   const classes = styles();
+  const badgeContent = record.relatedQuestions
+    ? `+${record.relatedQuestions}`
+    : '-';
 
   return (
-    <>
-      <span className={classes.related}>
-        {
-          record.relatedQuestions && (
-            <>
-              (+{record.relatedQuestions})
-            </>
-          )
-        }
-        {
-          !record.relatedQuestions && (
-            <>&nbsp;-&nbsp;</>
-          )
-        }
-      </span>
-      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
-    </>
+    <div className={classes.markdown}>
+      <div className={classes.related}>
+        <Badge
+          badgeContent={badgeContent}
+          color="primary"
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          &nbsp;
+        </Badge>
+      </div>
+      <div className="second">
+        <ReactMarkdown source={record.text} />
+      </div>
+      <PlayableText
+        hideText
+        text={record.text}
+        lang={record.Language ? record.Language.code : 'en-GB'}
+      />
+    </div>
   );
 };
 
@@ -213,6 +228,7 @@ const AnswerList = (props) => {
         <Datagrid rowClick="edit">
           {columns.filter((col) => visibleColumns.includes(col.key))
             .map((col) => cloneElement(col.el, { key: col.key }))}
+          <DropDownMenu />
         </Datagrid>
       </List>
     </>

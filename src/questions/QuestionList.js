@@ -42,6 +42,7 @@ import ListActions, {
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import ApprovedSwitchField from './approved-switch-field';
+import { Text } from '../answers/AnswerList';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -53,11 +54,9 @@ const styles = makeStyles((theme) => ({
   related: {
     color: theme.palette.primary.main,
     fontSize: '0.7rem',
-    paddingTop: '5px',
-    paddingBottom: '5px',
 
-    '&:hover': {
-      backgroundColor: '#4ec2a826',
+    '& span': {
+      color: 'white',
     },
   },
   cursor: {
@@ -160,6 +159,7 @@ const Filters = (props) => {
             source="fk_editorId"
             reference="editors"
             alwaysOn
+            allowEmpty
             perPage={100}
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
@@ -242,13 +242,6 @@ const AnswerField = ({ record }) => {
       onClick={(e) => e.stopPropagation()}
     >
       {
-        record.Answer && (
-          <>
-            {record.Answer.text.substr(0, 40)}...
-          </>
-        )
-      }
-      {
         !record.Answer && (
           <>
             View related answer
@@ -263,27 +256,13 @@ const AnswerField = ({ record }) => {
   }
 
   return (
-    <PlayableText
-      text={record.Answer.text}
-      el={link}
-      lang={record.Language ? record.Language.code : 'en-US'}
+    <Text
+      record={{
+        ...record.Answer,
+        Language: record.Language ? record.Language : { code: 'en-GB' },
+        relatedQuestions: record.relatedQuestions ? record.relatedQuestions.length : 0,
+      }}
     />
-  );
-};
-
-const RelatedQuestions = ({ record }) => {
-  const classes = styles();
-
-  if (!record || !record.relatedQuestions || !record.relatedQuestions.length) {
-    return (<>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</>);
-  }
-
-  return (
-    <span
-      className={classes.related}
-    >
-      (+{record.relatedQuestions.length})
-    </span>
   );
 };
 
@@ -310,7 +289,7 @@ const CustomGridItem = ({
           <TableCell>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : 'en-US'}
+              lang={record.Language ? record.Language.code : 'en-GB'}
             />
           </TableCell>
         )}
@@ -318,7 +297,6 @@ const CustomGridItem = ({
         {visibleColumns.includes('fk_answerId')
         && (
           <TableCell>
-            <RelatedQuestions record={record} />
             <AnswerField label="Answer" record={record} />
           </TableCell>
         )}

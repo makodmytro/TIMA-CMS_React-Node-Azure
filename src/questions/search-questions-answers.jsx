@@ -19,6 +19,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
+import { MarkdownInput } from '../answers/form';
 
 const Filters = ({ onSubmit, initialValues }) => {
   return (
@@ -85,19 +86,32 @@ const CreateForm = ({ onSubmit }) => (
     initialValues={{
       text: '',
     }}
-    render={({ handleSubmit }) => (
+    validate={(values) => {
+      const errors = {};
+
+      if (!values.text) {
+        errors.text = 'Required';
+      }
+
+      return errors;
+    }}
+    render={({ handleSubmit, valid }) => (
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={9}>
-            <TextInput label="Text" source="text" fullWidth validate={required()} />
+          <Grid item xs={12}>
+            <MarkdownInput
+              label="Text"
+              source="text"
+            />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12}>
             <Box pt={2}>
               <Button
                 type="submit"
                 color="primary"
                 variant="contained"
                 fullWidth
+                disabled={!valid}
               >
                 Create answer
               </Button>
@@ -203,7 +217,7 @@ const LinksDialog = ({
       onSelected(data.id);
       start();
     } catch (err) {
-      notify('Failed to create the question');
+      notify('Failed to create the answer');
     }
   };
 
@@ -300,7 +314,7 @@ const LinksDialog = ({
           </>
         )
       }
-
+      <hr />
       <CreateForm
         onSubmit={(v) => createAnswer(v)}
       />

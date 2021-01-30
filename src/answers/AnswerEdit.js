@@ -33,14 +33,6 @@ const AnswerEdit = (props) => {
           />
         </SimpleForm>
       </Edit>
-      {
-        props.permissions && props.permissions.allowMediaFiles && (
-          <Box my={1} p={2} boxShadow={3}>
-            <Typography>Media</Typography>
-            <AnswerMedia answer={answer} />
-          </Box>
-        )
-      }
       <Box my={1} p={2} boxShadow={3}>
         <Typography>Related questions</Typography>
         <Box my={2}>
@@ -57,6 +49,14 @@ const AnswerEdit = (props) => {
           record={answer}
         />
       </Box>
+      {
+        props.permissions && props.permissions.allowMediaFiles && (
+          <Box my={1} p={2} boxShadow={3}>
+            <Typography>Media</Typography>
+            <AnswerMedia answer={answer} />
+          </Box>
+        )
+      }
     </>
   );
 };

@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import ReactMarkdown from 'react-markdown';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import RelatedQuestionsTable from './related-questions-table';
@@ -45,30 +46,21 @@ const Answer = ({
   }
 
   return (
-    <TextField
-      label="Answer"
-      variant="filled"
-      value={answer.text}
-      fullWidth
-      disabled
-      multiline
-      rows="5"
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <Button
-              style={{ borderColor: 'red', color: 'red', textTransform: 'none' }}
-              type="button"
-              variant="outlined"
-              size="small"
-              onClick={() => unlinkAnswer(record.id)}
-            >
-              Unlink
-            </Button>
-          </InputAdornment>
-        ),
-      }}
-    />
+    <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
+      <Typography variant="body2">Answer</Typography>
+      <ReactMarkdown source={answer.text} />
+      <Box textAlign="right">
+        <Button
+          style={{ borderColor: 'red', color: 'red', textTransform: 'none' }}
+          type="button"
+          variant="outlined"
+          size="small"
+          onClick={() => unlinkAnswer(record.id)}
+        >
+          Unlink
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
