@@ -53,7 +53,7 @@ const styles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     cursor: 'pointer',
     fontSize: '1rem',
-    marginRight: '10px',
+    marginRight: '15px',
 
     '& span': {
       color: 'white',
