@@ -44,7 +44,7 @@ export const ImagePreview = ({ file }) => {
 
   React.useEffect(() => {
     const fr = new FileReader();
-    fr.onload = function (e) {
+    fr.onload = function Loaded() {
       setSrc(fr.result);
     };
     fr.readAsDataURL(file);

@@ -8,8 +8,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Box from '@material-ui/core/Box';
-
 import SettingsIcon from '@material-ui/icons/Settings';
+
+// because the sessions resource
+// is named stats/session to make the api url resolution easier,
+// we need this hack
+const cleanResourceName = (resource) => {
+  return resource === 'stats/sessions' ? 'sessions' : resource;
+};
 
 const ColumnConfig = ({
   columns, visible, onChange, resource,
@@ -52,7 +58,7 @@ const ColumnConfig = ({
                     name={col.key}
                   />
                 )}
-                label={translate(`resources.${resource}.fields.${col.key}`)}
+                label={translate(`resources.${cleanResourceName(resource)}.fields.${col.key}`)}
               />
             ))}
           </Box>

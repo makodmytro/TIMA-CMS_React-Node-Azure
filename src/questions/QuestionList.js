@@ -52,18 +52,12 @@ const styles = makeStyles((theme) => ({
   },
   related: {
     color: theme.palette.primary.main,
-    cursor: 'pointer',
-    fontSize: '1rem',
+    fontSize: '0.7rem',
     paddingTop: '5px',
     paddingBottom: '5px',
 
     '&:hover': {
       backgroundColor: '#4ec2a826',
-    },
-
-    '& svg': {
-      verticalAlign: 'middle',
-      fontSize: '0.9rem',
     },
   },
   cursor: {
@@ -161,6 +155,16 @@ const Filters = (props) => {
             />
           </ReferenceInput>
           <ReferenceInput
+            onChange={() => handleSubmit()}
+            label="Editor"
+            source="fk_editorId"
+            reference="editors"
+            alwaysOn
+            perPage={100}
+          >
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+          </ReferenceInput>
+          <ReferenceInput
             label="Topic"
             source="fk_topicId"
             reference="topics"
@@ -192,6 +196,12 @@ const Filters = (props) => {
           <BooleanInput
             label="Unanswered questions"
             source="unanswered"
+            alwaysOn
+            onChange={() => handleSubmit()}
+          />
+          <BooleanInput
+            label="Group related"
+            source="groupRelated"
             alwaysOn
             onChange={() => handleSubmit()}
           />
@@ -272,7 +282,7 @@ const RelatedQuestions = ({ record }) => {
     <span
       className={classes.related}
     >
-      &nbsp;&nbsp;{record.relatedQuestions.length}&nbsp;
+      (+{record.relatedQuestions.length})
     </span>
   );
 };
@@ -298,8 +308,6 @@ const CustomGridItem = ({
       >
         {visibleColumns.includes('text') && (
           <TableCell>
-            <RelatedQuestions record={record} />
-            &nbsp;
             <PlayableText
               text={record.text}
               lang={record.Language ? record.Language.code : 'en-US'}
@@ -310,6 +318,7 @@ const CustomGridItem = ({
         {visibleColumns.includes('fk_answerId')
         && (
           <TableCell>
+            <RelatedQuestions record={record} />
             <AnswerField label="Answer" record={record} />
           </TableCell>
         )}

@@ -22,21 +22,25 @@ const Menu = ({ onMenuClick, logout }) => {
           onClick={onMenuClick}
           sidebarIsOpen={open}
         />
-        {resources.map((resource) => (
-          <MenuItemLink
-            key={resource.name}
-            to={`/${resource.name}`}
-            primaryText={
-              (resource.options && resource.options.label)
-              || capitalize(resource.name)
-            }
-            leftIcon={
-              resource.icon ? <resource.icon /> : <DefaultIcon />
-            }
-            onClick={onMenuClick}
-            sidebarIsOpen={open}
-          />
-        ))}
+        {
+          resources
+            .filter((r) => r.name !== 'editors')
+            .map((resource) => (
+              <MenuItemLink
+                key={resource.name}
+                to={`/${resource.name}`}
+                primaryText={
+                  (resource.options && resource.options.label)
+                  || capitalize(resource.name)
+                }
+                leftIcon={
+                  resource.icon ? <resource.icon /> : <DefaultIcon />
+                }
+                onClick={onMenuClick}
+                sidebarIsOpen={open}
+              />
+            ))
+        }
         {isXSmall && logout}
       </Box>
       <span style={{

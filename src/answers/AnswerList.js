@@ -11,7 +11,6 @@ import {
   useListContext,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form';
 import PlayableText from '../common/components/playable-text';
 import ListActions, {
@@ -19,7 +18,7 @@ import ListActions, {
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
-import LinksDialog from './links-dialog';
+import { Language } from '../common/components/fields-values-by-fk';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -46,7 +45,7 @@ const styles = makeStyles((theme) => ({
     fontSize: '1rem',
     paddingTop: '5px',
     paddingBottom: '5px',
-
+    marginRight: '5px',
     '&:hover': {
       backgroundColor: '#4ec2a826',
     },
@@ -156,43 +155,25 @@ const Text = ({ record }) => {
   return (
     <>
       <span className={classes.related}>
-        {record.questionsCount || '  -  '}
+        {
+          record.relatedQuestions && (
+            <>
+              (+{record.relatedQuestions})
+            </>
+          )
+        }
+        {
+          !record.relatedQuestions && (
+            <>&nbsp;-&nbsp;</>
+          )
+        }
       </span>
       <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
     </>
   );
 };
 
-const LinksButton = ({ record, onOpen }) => (
-  <Button
-    variant="outlined"
-    size="small"
-    type="button"
-    color="primary"
-    onClick={(e) => {
-      e.stopPropagation();
-
-      onOpen(record);
-    }}
-  >
-    Links
-  </Button>
-);
-
 const AnswerList = (props) => {
-  const [opened, setOpened] = React.useState(false);
-  const [record, setRecord] = React.useState(null);
-
-  const onOpen = (r) => {
-    setRecord(r);
-    setOpened(true);
-  };
-
-  const onClose = () => {
-    setRecord(null);
-    setOpened(false);
-  };
-
   const columns = [
     {
       key: 'text',
@@ -200,7 +181,7 @@ const AnswerList = (props) => {
     },
     {
       key: 'fk_languageId',
-      el: <TextField source="Language.name" label="Language" sortBy="fk_languageId" />,
+      el: <Language label="Language" sortBy="fk_languageId" />,
     },
     {
       key: 'fk_editorId',
@@ -217,11 +198,6 @@ const AnswerList = (props) => {
 
   return (
     <>
-      <LinksDialog
-        record={record}
-        open={opened}
-        onClose={onClose}
-      />
       <List
         {...props}
         actions={(
@@ -237,7 +213,6 @@ const AnswerList = (props) => {
         <Datagrid rowClick="edit">
           {columns.filter((col) => visibleColumns.includes(col.key))
             .map((col) => cloneElement(col.el, { key: col.key }))}
-          <LinksButton onOpen={onOpen} />
         </Datagrid>
       </List>
     </>

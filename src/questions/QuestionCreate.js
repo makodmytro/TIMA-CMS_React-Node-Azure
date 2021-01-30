@@ -104,7 +104,7 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
           return rest;
         }}
       >
-        <SimpleForm redirect="list">
+        <SimpleForm>
           <FormFields languages={languages} />
         </SimpleForm>
       </Create>
@@ -112,8 +112,14 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  languages: state.admin.resources.languages.data,
-});
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  return {
+    languages,
+  };
+};
 
 export default connect(mapStateToProps)(QuestionCreate);

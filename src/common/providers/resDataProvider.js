@@ -48,10 +48,16 @@ const resDataProvider = {
     if (params) {
       const { field, order } = params.sort || {};
 
-      const { q, unanswered, ...filter } = params.filter || {};
+      const {
+        q, unanswered, groupRelated, ...filter
+      } = params.filter || {};
 
       if (unanswered) {
         filter.fk_answerId = null;
+      }
+
+      if (groupRelated) {
+        filter.groupRelated = 1;
       }
 
       const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
@@ -174,7 +180,6 @@ const resDataProvider = {
       headers,
     });
     const blob = await res.blob();
-    console.log(blob);
 
     return { data: blob };
   },

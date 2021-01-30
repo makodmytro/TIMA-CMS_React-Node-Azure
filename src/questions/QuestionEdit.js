@@ -98,14 +98,11 @@ const FormFields = ({
   const fetchAnswer = async () => {
     fetching = true;
     try {
-      const { data } = await dataProvider.getList('answers', {
-        filter: {
-          id: record.fk_answerId,
-        },
-        include: ['Questions'],
+      const { data } = await dataProvider.getOne('answers', {
+        id: record.fk_answerId,
       });
 
-      setAnswer(data[0] || null);
+      setAnswer(data);
     } catch (err) {
       // console.error(err);
     }
@@ -113,9 +110,13 @@ const FormFields = ({
   };
 
   React.useEffect(() => {
-    if (record && !fetching) {
-      fetchAnswer();
+    if (record) {
       setRecord(record);
+
+      if (!fetching && record.fk_answerId) {
+        fetchAnswer();
+        setRecord(record);
+      }
     }
   }, [record]);
 
@@ -162,7 +163,6 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
   const [confirmations, setConfirmations] = React.useState({
     id: null,
     unlink: false,
-    delete: false,
   });
 
   const top = () => window.scrollTo(0, 0);
@@ -193,6 +193,7 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     notify('The answer has been unlinked');
     refresh();
     top();
+    setAnswer(null);
   };
 
   const linkAnswer = async (fk_answerId) => {
@@ -212,33 +213,6 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     }
   };
 
-  const deleteQuestionClosed = () => {
-    setConfirmations({
-      ...confirmations,
-      delete: false,
-      id: null,
-    });
-  };
-
-  const deleteQuestionConfirmed = async () => {
-    await dataProvider.delete('questions', {
-      id: confirmations.id,
-    });
-
-    notify('The related question has been deleted');
-    refresh();
-    top();
-    deleteQuestionClosed();
-  };
-
-  const deleteQuestionClicked = (r) => {
-    setConfirmations({
-      ...confirmations,
-      delete: true,
-      id: r.id,
-    });
-  };
-
   const scrollToSearch = () => ref.current.scrollIntoView();
 
   return (
@@ -250,14 +224,6 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
         content="Are you sure you want to unlink the answer from the question?"
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
-      />
-      <Confirm
-        isOpen={confirmations.delete}
-        loading={false}
-        title="Delete question"
-        content="Are you sure you want to delete the question?"
-        onConfirm={deleteQuestionConfirmed}
-        onClose={deleteQuestionClosed}
       />
       <Edit
         {...props}
@@ -283,12 +249,10 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
           <RelatedQuestionsTable
             record={record}
             relatedQuestions={answer ? answer.Questions : []}
-            unlinkAnswer={unlinkAnswerClicked}
-            deleteQuestion={deleteQuestionClicked}
           />
         </Box>
       </Box>
-      <Box my={1} p={2} boxShadow={3}>
+      <Box my={1} mb={6} p={2} boxShadow={3}>
         <Typography>Search questions/answers to create link</Typography>
         <SearchQuestionsAnswers
           record={record}
@@ -300,8 +264,14 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  languages: state.admin.resources.languages.data,
-});
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  return {
+    languages,
+  };
+};
 
 export default connect(mapStateToProps)(QuestionEdit);

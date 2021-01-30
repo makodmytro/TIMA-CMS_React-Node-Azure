@@ -34,6 +34,7 @@
     "no-mixed-operators": "off",
     "react/no-array-index-key": "off",
     "camelcase": "off",
-    "jsx-a11y/media-has-caption": "off"
+    "jsx-a11y/media-has-caption": "off",
+    "arrow-body-style": "off"
   }
 }

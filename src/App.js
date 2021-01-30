@@ -56,6 +56,9 @@ function App() {
         name="stats/sessions"
         {...sessions}
       />
+      <Resource
+        name="editors"
+      />
     </Admin>
   );
 }
