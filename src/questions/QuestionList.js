@@ -266,7 +266,7 @@ const AnswerField = ({ record }) => {
     <PlayableText
       text={record.Answer.text}
       el={link}
-      lang={record.Language ? record.Language.code : 'en-US'}
+      lang={record.Language ? record.Language.code : 'en-Gb'}
     />
   );
 };
@@ -310,7 +310,7 @@ const CustomGridItem = ({
           <TableCell>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : 'en-US'}
+              lang={record.Language ? record.Language.code : 'en-GB'}
             />
           </TableCell>
         )}

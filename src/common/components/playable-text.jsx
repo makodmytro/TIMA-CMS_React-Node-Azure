@@ -49,7 +49,7 @@ const PlayableTextInput = ({ lang, ...props }) => {
 };
 
 const PlayableTextField = ({ record, source }) => (
-  <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-US'} />
+  <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-GB'} />
 );
 
 const PlayableText = ({

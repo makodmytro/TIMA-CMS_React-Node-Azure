@@ -168,7 +168,7 @@ const Text = ({ record }) => {
           )
         }
       </span>
-      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
+      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-GB'} />
     </>
   );
 };
