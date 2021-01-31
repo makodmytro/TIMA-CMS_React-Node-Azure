@@ -11,15 +11,17 @@ import {
   useListContext,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form';
+import Badge from '@material-ui/core/Badge';
+import ReactMarkdown from 'react-markdown';
 import PlayableText from '../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
-import LinksDialog from './links-dialog';
+import { Language } from '../common/components/fields-values-by-fk';
+import DropDownMenu from './list-dropdown-menu';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -40,20 +42,23 @@ const styles = makeStyles((theme) => ({
       paddingRight: 16,
     },
   },
+  markdown: {
+    display: 'flex',
+
+    '& .second': {
+      flex: 1,
+    },
+  },
   related: {
     color: theme.palette.primary.main,
     cursor: 'pointer',
     fontSize: '1rem',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    marginRight: '15px',
 
-    '&:hover': {
-      backgroundColor: '#4ec2a826',
-    },
-
-    '& svg': {
-      verticalAlign: 'middle',
-      fontSize: '0.9rem',
+    '& span': {
+      color: 'white',
+      marginLeft: '5px',
+      marginRight: '5px',
     },
   },
 }));
@@ -121,6 +126,7 @@ const Filters = (props) => {
             source="fk_editorId"
             reference="editors"
             alwaysOn
+            allowEmpty
             perPage={100}
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
@@ -150,49 +156,39 @@ const Filters = (props) => {
   );
 };
 
-const Text = ({ record }) => {
+export const Text = ({ record }) => {
   const classes = styles();
+  const badgeContent = record.relatedQuestions
+    ? `+${record.relatedQuestions}`
+    : '-';
 
   return (
-    <>
-      <span className={classes.related}>
-        {record.questionsCount || '  -  '}
-      </span>
-      <PlayableText text={record.text} lang={record.Language ? record.Language.code : 'en-us'} />
-    </>
+    <div className={classes.markdown}>
+      <div className={classes.related}>
+        <Badge
+          badgeContent={badgeContent}
+          color="primary"
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          &nbsp;
+        </Badge>
+      </div>
+      <div className="second">
+        <ReactMarkdown source={record.text} />
+      </div>
+      <PlayableText
+        hideText
+        text={record.text}
+        lang={record.Language ? record.Language.code : 'en-GB'}
+      />
+    </div>
   );
 };
 
-const LinksButton = ({ record, onOpen }) => (
-  <Button
-    variant="outlined"
-    size="small"
-    type="button"
-    color="primary"
-    onClick={(e) => {
-      e.stopPropagation();
-
-      onOpen(record);
-    }}
-  >
-    Links
-  </Button>
-);
-
 const AnswerList = (props) => {
-  const [opened, setOpened] = React.useState(false);
-  const [record, setRecord] = React.useState(null);
-
-  const onOpen = (r) => {
-    setRecord(r);
-    setOpened(true);
-  };
-
-  const onClose = () => {
-    setRecord(null);
-    setOpened(false);
-  };
-
   const columns = [
     {
       key: 'text',
@@ -200,7 +196,7 @@ const AnswerList = (props) => {
     },
     {
       key: 'fk_languageId',
-      el: <TextField source="Language.name" label="Language" sortBy="fk_languageId" />,
+      el: <Language label="Language" sortBy="fk_languageId" />,
     },
     {
       key: 'fk_editorId',
@@ -217,11 +213,6 @@ const AnswerList = (props) => {
 
   return (
     <>
-      <LinksDialog
-        record={record}
-        open={opened}
-        onClose={onClose}
-      />
       <List
         {...props}
         actions={(
@@ -237,7 +228,7 @@ const AnswerList = (props) => {
         <Datagrid rowClick="edit">
           {columns.filter((col) => visibleColumns.includes(col.key))
             .map((col) => cloneElement(col.el, { key: col.key }))}
-          <LinksButton onOpen={onOpen} />
+          <DropDownMenu />
         </Datagrid>
       </List>
     </>

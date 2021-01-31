@@ -54,8 +54,6 @@ const PreviewDialog = ({
 
       setSrc(URL.createObjectURL(data));
     } catch (err) {
-      console.log(err);
-
       notify('Failed to fetch the media', 'error');
     }
 

@@ -46,23 +46,30 @@ const Filters = (props) => {
 
 const ShowQuestions = ({
   record, size, fullWidth, ml,
-}) => (
-  <Box ml={ml}>
-    <Button
-      component={Link}
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-      size={size || 'small'}
-      color="primary"
-      variant="outlined"
-      to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
-      fullWidth={!!fullWidth}
-    >
-      Show questions
-    </Button>
-  </Box>
-);
+}) => {
+  if (!record) {
+    return null;
+  }
+
+  return (
+    <Box ml={ml}>
+      <Button
+        component={Link}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        size={size || 'small'}
+        color="primary"
+        variant="outlined"
+        to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
+        fullWidth={!!fullWidth}
+      >
+        Show questions
+      </Button>
+    </Box>
+  );
+};
+
 const Buttons = ({ record }) => (
   <div>
     <Box mb={1}>

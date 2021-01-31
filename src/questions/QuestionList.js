@@ -42,6 +42,7 @@ import ListActions, {
 } from '../common/components/ListActions';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import ApprovedSwitchField from './approved-switch-field';
+import { Text } from '../answers/AnswerList';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -52,18 +53,10 @@ const styles = makeStyles((theme) => ({
   },
   related: {
     color: theme.palette.primary.main,
-    cursor: 'pointer',
-    fontSize: '1rem',
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    fontSize: '0.7rem',
 
-    '&:hover': {
-      backgroundColor: '#4ec2a826',
-    },
-
-    '& svg': {
-      verticalAlign: 'middle',
-      fontSize: '0.9rem',
+    '& span': {
+      color: 'white',
     },
   },
   cursor: {
@@ -161,6 +154,17 @@ const Filters = (props) => {
             />
           </ReferenceInput>
           <ReferenceInput
+            onChange={() => handleSubmit()}
+            label="Editor"
+            source="fk_editorId"
+            reference="editors"
+            alwaysOn
+            allowEmpty
+            perPage={100}
+          >
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+          </ReferenceInput>
+          <ReferenceInput
             label="Topic"
             source="fk_topicId"
             reference="topics"
@@ -192,6 +196,12 @@ const Filters = (props) => {
           <BooleanInput
             label="Unanswered questions"
             source="unanswered"
+            alwaysOn
+            onChange={() => handleSubmit()}
+          />
+          <BooleanInput
+            label="Group related"
+            source="groupRelated"
             alwaysOn
             onChange={() => handleSubmit()}
           />
@@ -232,13 +242,6 @@ const AnswerField = ({ record }) => {
       onClick={(e) => e.stopPropagation()}
     >
       {
-        record.Answer && (
-          <>
-            {record.Answer.text.substr(0, 40)}...
-          </>
-        )
-      }
-      {
         !record.Answer && (
           <>
             View related answer
@@ -253,27 +256,13 @@ const AnswerField = ({ record }) => {
   }
 
   return (
-    <PlayableText
-      text={record.Answer.text}
-      el={link}
-      lang={record.Language ? record.Language.code : 'en-US'}
+    <Text
+      record={{
+        ...record.Answer,
+        Language: record.Language ? record.Language : { code: 'en-GB' },
+        relatedQuestions: record.relatedQuestions ? record.relatedQuestions.length : 0,
+      }}
     />
-  );
-};
-
-const RelatedQuestions = ({ record }) => {
-  const classes = styles();
-
-  if (!record || !record.relatedQuestions || !record.relatedQuestions.length) {
-    return (<>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</>);
-  }
-
-  return (
-    <span
-      className={classes.related}
-    >
-      &nbsp;&nbsp;{record.relatedQuestions.length}&nbsp;
-    </span>
   );
 };
 
@@ -298,11 +287,9 @@ const CustomGridItem = ({
       >
         {visibleColumns.includes('text') && (
           <TableCell>
-            <RelatedQuestions record={record} />
-            &nbsp;
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : 'en-US'}
+              lang={record.Language ? record.Language.code : 'en-GB'}
             />
           </TableCell>
         )}

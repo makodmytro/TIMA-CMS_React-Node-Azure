@@ -8,6 +8,7 @@ import {
   TextInput,
   Toolbar,
   SaveButton,
+  DeleteButton,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
@@ -18,15 +19,15 @@ import QrDialog from './qr-dialog';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const CustomToolbar = (props) => (
-  <Toolbar {...props}>
+  <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
     <SaveButton
       label="Save"
       redirect="list"
       submitOnEnter
     />
-    &nbsp;
     <ShowQuestions size="medium" ml={1} />
     {props.record.globalTopic ? null : <QrDialog ml={1} />}
+    <DeleteButton basePath={props.basePath} record={props.record} undoable={false} />
   </Toolbar>
 );
 
@@ -84,8 +85,14 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  languages: state.admin.resources.languages.data,
-});
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  return {
+    languages,
+  };
+};
 
 export default connect(mapStateToProps)(TopicEdit);

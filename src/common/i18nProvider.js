@@ -65,6 +65,17 @@ const english = {
         updatedAt: 'Updated',
       },
     },
+    sessions: {
+      name: 'Session |||| Sessions',
+      fields: {
+        fk_languageId: 'Language',
+        fk_topicId: 'Topic',
+        duration: 'Duration',
+        questionsCount: '# of questions',
+        answersCount: '# of answers',
+        updatedAt: 'Updated',
+      },
+    },
   },
 };
 

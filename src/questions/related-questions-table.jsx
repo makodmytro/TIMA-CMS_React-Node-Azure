@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  useDataProvider,
+  useRefresh,
+  useNotify,
+  Confirm,
+} from 'react-admin';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
@@ -13,16 +19,80 @@ import ApprovedSwitchField from './approved-switch-field';
 const RelatedQuestionsTable = ({
   record,
   relatedQuestions,
-  deleteQuestion,
-  unlinkAnswer,
-  removeAnswer,
+  answerView,
 }) => {
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
+  const refresh = useRefresh();
+  const [confirmations, setConfirmations] = React.useState({
+    id: null,
+    unlink: false,
+    delete: false,
+  });
+
+  const top = () => window.scrollTo(0, 0);
+
+  const unlinkAnswerClicked = (id) => {
+    setConfirmations({
+      ...confirmations,
+      unlink: true,
+      id,
+    });
+  };
+
+  const unlinkAnswerClosed = () => {
+    setConfirmations({
+      ...confirmations,
+      unlink: false,
+      id: null,
+    });
+  };
+
+  const unlinkAnswerConfirmed = async () => {
+    await dataProvider.update('questions', {
+      id: confirmations.id,
+      data: { fk_answerId: null },
+    });
+
+    unlinkAnswerClosed();
+    notify('The answer has been unlinked');
+    refresh();
+    top();
+  };
+
+  const deleteQuestionClosed = () => {
+    setConfirmations({
+      ...confirmations,
+      delete: false,
+      id: null,
+    });
+  };
+
+  const deleteQuestionConfirmed = async () => {
+    await dataProvider.delete('questions', {
+      id: confirmations.id,
+    });
+
+    notify('The related question has been deleted');
+    refresh();
+    top();
+    deleteQuestionClosed();
+  };
+
+  const deleteQuestionClicked = (r) => {
+    setConfirmations({
+      ...confirmations,
+      delete: true,
+      id: r.id,
+    });
+  };
+
   if (!record) {
     return null;
   }
 
-  if ((!record.relatedQuestions || !record.relatedQuestions.length)
-    && (!relatedQuestions || relatedQuestions.length - 1 === 0)) {
+  if (!relatedQuestions || (!answerView && relatedQuestions.length - 1 === 0)
+    || !relatedQuestions.length) {
     return (
       <Alert severity="info">
         There are no related questions
@@ -32,6 +102,22 @@ const RelatedQuestionsTable = ({
 
   return (
     <>
+      <Confirm
+        isOpen={confirmations.unlink}
+        loading={false}
+        title="Unlink answer"
+        content="Are you sure you want to unlink the answer from the question?"
+        onConfirm={unlinkAnswerConfirmed}
+        onClose={unlinkAnswerClosed}
+      />
+      <Confirm
+        isOpen={confirmations.delete}
+        loading={false}
+        title="Delete question"
+        content="Are you sure you want to delete the question?"
+        onConfirm={deleteQuestionConfirmed}
+        onClose={deleteQuestionClosed}
+      />
       <Table>
         <TableHead>
           <TableRow>
@@ -43,8 +129,14 @@ const RelatedQuestionsTable = ({
         </TableHead>
         <TableBody>
           {
-            (relatedQuestions || record.relatedQuestions)
-              .filter((r) => r.id !== record.id)
+            relatedQuestions
+              .filter((r) => {
+                if (record.fk_answerId) {
+                  return r.id !== record.id;
+                }
+
+                return true;
+              })
               .map((related, i) => (
                 <TableRow key={i}>
                   <TableCell>
@@ -59,7 +151,7 @@ const RelatedQuestionsTable = ({
                       size="small"
                       type="button"
                       variant="outlined"
-                      onClick={() => unlinkAnswer(related.id)}
+                      onClick={() => unlinkAnswerClicked(related.id)}
                     >
                       Unlink answer
                     </Button>
@@ -67,8 +159,7 @@ const RelatedQuestionsTable = ({
                   <TableCell>
                     <DropdownMenu
                       record={{ ...related, Language: record.Language }}
-                      deleteQuestion={deleteQuestion}
-                      removeAnswer={removeAnswer}
+                      deleteQuestion={deleteQuestionClicked}
                       hideLinks
                     />
                   </TableCell>
