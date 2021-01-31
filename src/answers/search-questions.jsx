@@ -1,15 +1,16 @@
 import React from 'react';
 import {
   useDataProvider,
+  useNotify,
+  useRefresh,
   SelectInput,
   TextInput,
   required,
-  useNotify,
-  TextField,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
 import Grid from '@material-ui/core/Grid';
+import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -19,7 +20,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
-import { MarkdownInput } from '../answers/form';
 
 const Filters = ({ onSubmit, initialValues }) => {
   return (
@@ -32,17 +32,6 @@ const Filters = ({ onSubmit, initialValues }) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4} md={3}>
                 <TextInput label="Text" source="q" fullWidth />
-              </Grid>
-              <Grid item xs={12} sm={4} md={3}>
-                <SelectInput
-                  label="Search for"
-                  source="type"
-                  choices={[
-                    { id: 'questions', name: 'Questions' },
-                    { id: 'answers', name: 'Answers' },
-                  ]}
-                  fullWidth
-                />
               </Grid>
               {
                 values.type === 'questions' && (
@@ -86,34 +75,21 @@ const CreateForm = ({ onSubmit }) => (
     initialValues={{
       text: '',
     }}
-    validate={(values) => {
-      const errors = {};
-
-      if (!values.text) {
-        errors.text = 'Required';
-      }
-
-      return errors;
-    }}
-    render={({ handleSubmit, valid }) => (
-      <form onSubmit={handleSubmit}>
+    render={({ handleSubmit, form }) => (
+      <form onSubmit={(e) => handleSubmit(e).then(form.restart)}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <MarkdownInput
-              label="Text"
-              source="text"
-            />
+          <Grid item xs={12} sm={9}>
+            <TextInput label="Text" source="text" fullWidth validate={required()} />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={3}>
             <Box pt={2}>
               <Button
                 type="submit"
                 color="primary"
                 variant="contained"
                 fullWidth
-                disabled={!valid}
               >
-                Create answer
+                Create question
               </Button>
             </Box>
           </Grid>
@@ -125,10 +101,11 @@ const CreateForm = ({ onSubmit }) => (
 
 const LinksDialog = ({
   record,
-  onSelected,
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const refresh = useRefresh();
+  const [selected, setSelected] = React.useState([]);
   const [results, setResults] = React.useState(null);
   const [pagination, setPagination] = React.useState({
     perPage: 5,
@@ -143,6 +120,7 @@ const LinksDialog = ({
 
   const start = () => {
     setResults(null);
+    setSelected([]);
     setPagination({
       perPage: 5,
       page: 1,
@@ -162,25 +140,31 @@ const LinksDialog = ({
     return null;
   }
 
+  const isSelected = (result) => selected.includes(result.id);
+  const selectResult = (result) => {
+    if (isSelected(result)) {
+      setSelected(selected.filter((s) => s !== result.id));
+    } else {
+      setSelected(selected.concat([result.id]));
+    }
+  };
+
   const onSubmit = async (values, paging = pagination) => {
     setForm(values);
+    setSelected([]);
 
     const { type, approved, ...rest } = values;
 
     const { data, total } = await dataProvider.getList(type, {
       filter: {
         ...rest,
-        ...(approved !== '__none__' && type === 'questions' ? { approved } : {}),
+        ...(approved !== '__none__' ? { approved } : {}),
         fk_topicId: record.fk_topicId,
       },
       pagination: paging,
     });
 
-    const filtered = type === 'questions'
-      ? data.filter((r) => !!r.fk_answerId)
-      : data;
-
-    setResults(filtered);
+    setResults(data);
     setCount(total);
   };
 
@@ -204,20 +188,43 @@ const LinksDialog = ({
     onSubmit(form, { perPage: val, page: 1 });
   };
 
-  const createAnswer = async (values) => {
+  const createQuestion = async (values) => {
     try {
-      const { data } = await dataProvider.create('answers', {
+      await dataProvider.create('questions', {
         data: {
           ...values,
+          fk_answerId: record.id,
           fk_languageId: record.fk_languageId,
           fk_topicId: record.fk_topicId,
         },
       });
 
-      onSelected(data.id);
+      notify('The question was created and linked');
       start();
+      refresh();
     } catch (err) {
-      notify('Failed to create the answer');
+      notify('Failed to create the question');
+    }
+  };
+
+  const save = async () => {
+    try {
+      await Promise.all(
+        selected.map((id) => {
+          return dataProvider.update('questions', {
+            id,
+            data: {
+              fk_answerId: record.id,
+            },
+          });
+        }),
+      );
+
+      notify('The answer was linked');
+      start();
+      refresh();
+    } catch (err) {
+      notify(`Failed to link questions: ${err.message}`, 'error');
     }
   };
 
@@ -234,7 +241,7 @@ const LinksDialog = ({
         !results && (
           <Box py={2}>
             <Alert severity="info">
-              Use the filters to search for answers or questions
+              Use the filters to search for questions
             </Alert>
           </Box>
         )
@@ -254,13 +261,9 @@ const LinksDialog = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Text</TableCell>
-                  {
-                    form.type === 'questions' && (
-                      <TableCell>Answer</TableCell>
-                    )
-                  }
                   <TableCell>&nbsp;</TableCell>
+                  <TableCell>Text</TableCell>
+                  <TableCell>Answer</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -268,27 +271,24 @@ const LinksDialog = ({
                   results.map((result, i) => (
                     <TableRow key={i}>
                       <TableCell>
-                        <PlayableTextField source="text" record={{ ...result, Language: record.Language }} />
+                        <Checkbox
+                          checked={isSelected(result)}
+                          value={isSelected(result)}
+                          onClick={() => selectResult(result)}
+                        />
                       </TableCell>
-                      {
-                        form.type === 'questions' && (
-                          <TableCell>
-                            <TextField source="Answer.text" record={result} />
-                          </TableCell>
-                        )
-                      }
                       <TableCell>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          type="button"
-                          onClick={() => {
-                            onSelected(result.fk_answerId || result.id);
-                            start();
-                          }}
-                        >
-                          Link to answer
-                        </Button>
+                        <PlayableTextField source="text" record={{ ...result }} />
+                      </TableCell>
+                      <TableCell>
+                        {
+                          result.fk_answerId && (
+                            <PlayableTextField source="text" record={{ ...result.Answer, Language: result.Language }} />
+                          )
+                        }
+                        {
+                          !result.fk_answerId && ('-')
+                        }
                       </TableCell>
                     </TableRow>
                   ))
@@ -311,12 +311,27 @@ const LinksDialog = ({
                 }}
               />
             </Box>
+            <Box textAlign="right" py={2}>
+              {
+                !!selected.length && (
+                  <Button
+                    type="button"
+                    onClick={save}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                  >
+                    Link answer for {selected.length} questions
+                  </Button>
+                )
+              }
+            </Box>
           </>
         )
       }
       <hr />
       <CreateForm
-        onSubmit={(v) => createAnswer(v)}
+        onSubmit={(v) => createQuestion(v)}
       />
     </>
   );

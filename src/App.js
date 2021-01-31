@@ -6,16 +6,15 @@ import theme from './common/theme';
 import authProvider from './common/providers/authProvider';
 import i18nProvider from './common/i18nProvider';
 import resDataProvider from './common/providers/resDataProvider';
-
 import topic from './topics';
 import language from './languages';
 import question from './questions';
 import answer from './answers';
 import sessions from './sessions';
 import dashboard from './dashboard';
-
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
+import 'react-markdown-editor-lite/lib/index.css';
 
 function App() {
   return (
@@ -55,6 +54,9 @@ function App() {
       <Resource
         name="stats/sessions"
         {...sessions}
+      />
+      <Resource
+        name="editors"
       />
     </Admin>
   );

@@ -7,17 +7,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
-import LinksIcon from '@material-ui/icons/Link';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 
 const DropdownMenu = ({
   record,
   deleteQuestion,
-  openRelatedQuestions,
-  onOpenLinksDialog,
-  hideLinks,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -37,13 +32,6 @@ const DropdownMenu = ({
     e.stopPropagation();
 
     deleteQuestion(record);
-    setAnchorEl(null);
-  };
-
-  const onOpenRelatedQuestions = (e) => {
-    e.stopPropagation();
-    openRelatedQuestions(record);
-
     setAnchorEl(null);
   };
 
@@ -78,18 +66,6 @@ const DropdownMenu = ({
           Edit question
         </MenuItem>
         {
-          !record.fk_answerId && (
-            <MenuItem
-              component={Link}
-              to={`/questions/${record.id}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ListItemIcon><AddIcon /></ListItemIcon>
-              Link answer
-            </MenuItem>
-          )
-        }
-        {
           !!record.fk_answerId && (
             <MenuItem
               component={Link}
@@ -115,7 +91,6 @@ const DropdownMenu = ({
 };
 
 DropdownMenu.defaultProps = {
-  openRelatedQuestions: null,
   deleteQuestion: null,
 };
 
@@ -126,7 +101,6 @@ DropdownMenu.propTypes = {
     relatedQuestions: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   deleteQuestion: PropTypes.func,
-  openRelatedQuestions: PropTypes.func,
 };
 
 export default DropdownMenu;

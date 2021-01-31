@@ -74,7 +74,7 @@ const PastSessions = () => {
       setTopics(data);
       setCount(total);
     } catch (err) {
-      notify(`Failed to fetch past sessions: ${err.message}`, 'error');
+      console.error(`Failed to fetch past sessions: ${err.message}`);
     }
   };
 

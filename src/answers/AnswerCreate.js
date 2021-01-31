@@ -8,7 +8,7 @@ import Form from './form';
 
 const AnswerCreate = (props) => (
   <Create {...props} actions={<CustomTopToolbar />}>
-    <SimpleForm redirect="list">
+    <SimpleForm>
       <Form />
     </SimpleForm>
   </Create>

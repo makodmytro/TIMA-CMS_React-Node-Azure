@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   useDataProvider,
-  useNotify,
 } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,7 +22,6 @@ const time = () => {
 const ActiveSessions = () => {
   const classes = styles();
   const dataProvider = useDataProvider();
-  const notify = useNotify();
   const [sessions, setSessions] = React.useState([]);
 
   const countRef = React.useRef(sessions);
@@ -47,7 +45,7 @@ const ActiveSessions = () => {
 
       timeout = setTimeout(fetch, 30 * 1000);
     } catch (err) {
-      notify(`Failed to get active sessions: ${err.message}`, 'error');
+      console.error(`Failed to get active sessions: ${err.message}`);
     }
   };
 

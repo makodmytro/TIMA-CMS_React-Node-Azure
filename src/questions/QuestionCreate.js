@@ -61,35 +61,6 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
       <AutocompleteInput />
-      <ReferenceInput
-        allowEmpty
-        label="resources.questions.fields.fk_parentQuestionId"
-        source="fk_parentQuestionId"
-        reference="questions"
-        fullWidth
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-          fullWidth
-        />
-      </ReferenceInput>
-      <ReferenceInput
-        allowEmpty
-        label="resources.questions.fields.fk_questionId"
-        source="fk_questionId"
-        reference="questions"
-        fullWidth
-      >
-        <SelectInput
-          allowEmpty
-          resettable
-          emptyValue={null}
-          optionText="text"
-        />
-      </ReferenceInput>
     </>
   );
 };
@@ -133,7 +104,7 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
           return rest;
         }}
       >
-        <SimpleForm redirect="list">
+        <SimpleForm>
           <FormFields languages={languages} />
         </SimpleForm>
       </Create>
@@ -141,8 +112,14 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  languages: state.admin.resources.languages.data,
-});
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  return {
+    languages,
+  };
+};
 
 export default connect(mapStateToProps)(QuestionCreate);

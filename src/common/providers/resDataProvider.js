@@ -48,10 +48,16 @@ const resDataProvider = {
     if (params) {
       const { field, order } = params.sort || {};
 
-      const { q, unanswered, ...filter } = params.filter || {};
+      const {
+        q, unanswered, groupRelated, ...filter
+      } = params.filter || {};
 
       if (unanswered) {
         filter.fk_answerId = null;
+      }
+
+      if (groupRelated) {
+        filter.groupRelated = 1;
       }
 
       const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
@@ -162,6 +168,41 @@ const resDataProvider = {
     const { json } = await httpClient(`${baseApi}/stats/topics?${stringify(query)}`);
 
     return { data: json };
+  },
+
+  getAnswerMedia: async (resource, params) => {
+    const token = localStorage.getItem('token');
+    const headers = new Headers({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const res = await fetch(`${baseApi}/answers/${params.id}/media/${params.mediaId}/download`, {
+      headers,
+    });
+    const blob = await res.blob();
+
+    return { data: blob };
+  },
+  uploadAnswerMedia: async (resource, params) => {
+    const fd = new FormData();
+    fd.append('file', params.data.binary);
+
+    await httpClient(`${baseApi}/answers/${params.id}/media`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: fd,
+    });
+
+    return { data: true };
+  },
+  deleteAnswerMedia: async (resource, params) => {
+    await httpClient(`${baseApi}/answers/${params.id}/media/${params.mediaId}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
   },
 
 };

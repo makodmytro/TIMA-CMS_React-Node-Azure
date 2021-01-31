@@ -92,7 +92,7 @@ const PastSessions = () => {
 
       setSessions(data);
     } catch (err) {
-      notify(`Failed to fetch past sessions: ${err.message}`, 'error');
+      console.error(`Failed to fetch past sessions: ${err.message}`);
     }
   };
 

@@ -10,6 +10,11 @@ import {
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
+import { Language, Topic } from '../common/components/fields-values-by-fk';
+import ListActions, {
+  getVisibleColumns,
+  handleColumnsChange,
+} from '../common/components/ListActions';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -116,16 +121,39 @@ const Filters = (props) => {
   );
 };
 
-const QuestionList = (props) => (
-  <List {...props} filters={<Filters />} bulkActionButtons={false}>
-    <Datagrid rowClick="show">
-      <TextField source="Language.name" label="Language" sortBy="fk_languageId" />
-      <TextField source="duration" label="duration" />
-      <TextField source="questionsCount" label="# of questions" />
-      <TextField source="answersCount" label="# of answers" />
-      <DateField source="updatedAt" showTime />
-    </Datagrid>
-  </List>
-);
+const QuestionList = (props) => {
+  const columns = [
+    { key: 'fk_languageId', el: <Language label="Language" sortBy="fk_languageId" /> },
+    { key: 'fk_topicId', el: <Topic label="Topic" sortBy="fk_topicId" /> },
+    { key: 'duration', el: <TextField source="duration" label="Duration" /> },
+    { key: 'questionsCount', el: <TextField source="questionsCount" label="# of questions" /> },
+    { key: 'answersCount', el: <TextField source="answersCount" label="# of answers" /> },
+    { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
+  ];
+  const [visibleColumns, setVisibleColumns] = React.useState(getVisibleColumns(columns, 'sessions'));
+
+  return (
+    <List
+      {...props}
+      filters={<Filters />}
+      bulkActionButtons={false}
+      actions={(
+        <ListActions
+          visibleColumns={visibleColumns}
+          onColumnsChange={handleColumnsChange('sessions', setVisibleColumns)}
+          columns={columns}
+        />
+      )}
+    >
+      <Datagrid rowClick="show">
+        {
+          columns
+            .filter((col) => visibleColumns.includes(col.key))
+            .map((col) => React.cloneElement(col.el, { key: col.key }))
+        }
+      </Datagrid>
+    </List>
+  );
+};
 
 export default QuestionList;

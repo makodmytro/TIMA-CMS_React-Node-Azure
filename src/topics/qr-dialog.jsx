@@ -65,6 +65,10 @@ const QrDialog = ({ record, fullWidth, ml }) => {
     setOpen(false);
   };
 
+  if (!record) {
+    return null;
+  }
+
   return (
     <>
       <Box ml={ml}>
