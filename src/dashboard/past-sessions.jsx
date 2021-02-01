@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
-  useNotify,
   SelectInput,
   DateInput,
   required,
@@ -72,7 +71,6 @@ const Filters = ({ onSubmit, initialValues }) => (
 const PastSessions = () => {
   const [sessions, setSessions] = React.useState([]);
   const dataProvider = useDataProvider();
-  const notify = useNotify();
 
   const initialValues = {
     period: 'days',

@@ -5,6 +5,7 @@ import {
   useRefresh,
   SelectInput,
   TextInput,
+  BooleanInput,
   required,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
@@ -20,35 +21,38 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
+import { Text } from './AnswerList';
 
 const Filters = ({ onSubmit, initialValues }) => {
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      render={({ handleSubmit, values }) => {
+      render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4} md={3}>
                 <TextInput label="Text" source="q" fullWidth />
               </Grid>
-              {
-                values.type === 'questions' && (
-                  <Grid item xs={12} sm={4} md={3}>
-                    <SelectInput
-                      label="Approved"
-                      source="approved"
-                      choices={[
-                        { id: '__none__', name: 'Both' },
-                        { id: true, name: 'Only approved questions' },
-                        { id: false, name: 'Only not-approved questions' },
-                      ]}
-                      fullWidth
-                    />
-                  </Grid>
-                )
-              }
+              <Grid item xs={12} sm={4} md={3}>
+                <SelectInput
+                  label="Approved"
+                  source="approved"
+                  choices={[
+                    { id: '__none__', name: 'Both' },
+                    { id: true, name: 'Only approved questions' },
+                    { id: false, name: 'Only not-approved questions' },
+                  ]}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm={4} md={3}>
+                <BooleanInput
+                  label="All topics"
+                  source="all_topics"
+                />
+              </Grid>
               <Grid item xs={12} sm={4} md={3}>
                 <Box pt={2}>
                   <Button
@@ -113,7 +117,7 @@ const LinksDialog = ({
   });
   const [form, setForm] = React.useState({
     q: '',
-    type: 'questions',
+    all_topics: false,
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
@@ -127,7 +131,7 @@ const LinksDialog = ({
     });
     setForm({
       q: '',
-      type: 'questions',
+      all_topics: false,
       approved: '__none__',
     });
   };
@@ -153,13 +157,13 @@ const LinksDialog = ({
     setForm(values);
     setSelected([]);
 
-    const { type, approved, ...rest } = values;
+    const { approved, all_topics, ...rest } = values;
 
-    const { data, total } = await dataProvider.getList(type, {
+    const { data, total } = await dataProvider.getList('questions', {
       filter: {
         ...rest,
         ...(approved !== '__none__' ? { approved } : {}),
-        fk_topicId: record.fk_topicId,
+        ...(all_topics ? {} : { fk_topicId: record.fk_topicId }),
       },
       pagination: paging,
     });
@@ -215,6 +219,7 @@ const LinksDialog = ({
             id,
             data: {
               fk_answerId: record.id,
+              fk_topicId: record.fk_topicId,
             },
           });
         }),
@@ -280,10 +285,10 @@ const LinksDialog = ({
                       <TableCell>
                         <PlayableTextField source="text" record={{ ...result }} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{ width: '50%' }}>
                         {
                           result.fk_answerId && (
-                            <PlayableTextField source="text" record={{ ...result.Answer, Language: result.Language }} />
+                            <Text record={{ ...result.Answer, Language: result.Language }} />
                           )
                         }
                         {

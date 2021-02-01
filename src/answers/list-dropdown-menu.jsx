@@ -7,6 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+import BatchApproveButton from './batch-approve-button';
 
 const DropdownMenu = ({
   record,
@@ -57,6 +58,11 @@ const DropdownMenu = ({
           onClick={(e) => e.stopPropagation()}
         >
           <DeleteButton basePath={basePath} record={record} undoable={false} />
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => e.stopPropagation()}
+        >
+          <BatchApproveButton answerId={record.id} />
         </MenuItem>
       </Menu>
     </div>

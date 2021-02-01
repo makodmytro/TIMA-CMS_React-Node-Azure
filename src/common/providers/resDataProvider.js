@@ -60,6 +60,10 @@ const resDataProvider = {
         filter.groupRelated = 1;
       }
 
+      if (filter.approved === false || filter.approved === 0) {
+        filter.approved = [false, null];
+      }
+
       const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
 
       const query = {
@@ -203,6 +207,12 @@ const resDataProvider = {
     });
 
     return { data: true };
+  },
+  batchApproveQuestions: async (resource, params) => {
+    await httpClient(`${baseApi}/answers/${params.id}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify({ approved: true }),
+    });
   },
 
 };

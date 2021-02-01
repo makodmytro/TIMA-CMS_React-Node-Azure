@@ -8,7 +8,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
-  useNotify,
   SelectInput,
   ReferenceInput,
 } from 'react-admin';
@@ -55,7 +54,6 @@ const PastSessions = () => {
   const [count, setCount] = React.useState(0);
   const [topics, setTopics] = React.useState([]);
   const dataProvider = useDataProvider();
-  const notify = useNotify();
 
   const fetch = async (params, paging = pagination) => {
     try {
