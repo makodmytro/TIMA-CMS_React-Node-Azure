@@ -123,7 +123,7 @@ const Filters = (props) => {
 
 const QuestionList = (props) => {
   const columns = [
-    { key: 'clientCountry', el: <TextField label="Country" sortBy="clientCountry" /> },
+    { key: 'clientCountry', el: <TextField label="Country" source="clientCountry" /> },
     { key: 'fk_languageId', el: <Language label="Language" sortBy="fk_languageId" /> },
     { key: 'fk_topicId', el: <Topic label="Topic" sortBy="fk_topicId" /> },
     { key: 'duration', el: <TextField source="duration" label="Duration" /> },
