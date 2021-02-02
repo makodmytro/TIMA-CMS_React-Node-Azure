@@ -16,8 +16,6 @@ import { connect } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import ReactMarkdown from 'react-markdown';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
@@ -188,11 +186,14 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     setAnswer(null);
   };
 
-  const linkAnswer = async (fk_answerId) => {
+  const linkAnswer = async (fk_answerId, fk_topicId) => {
     try {
       await dataProvider.update('questions', {
         id: record.id,
-        data: { fk_answerId },
+        data: {
+          fk_answerId,
+          fk_topicId,
+        },
       });
 
       notify('The answer has been linked');

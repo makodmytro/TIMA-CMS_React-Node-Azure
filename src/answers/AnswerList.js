@@ -156,7 +156,7 @@ const Filters = (props) => {
   );
 };
 
-export const Text = ({ record }) => {
+export const Text = ({ record, hideRelatedQuestions }) => {
   const classes = styles();
   const badgeContent = record.relatedQuestions
     ? `+${record.relatedQuestions}`
@@ -164,18 +164,22 @@ export const Text = ({ record }) => {
 
   return (
     <div className={classes.markdown}>
-      <div className={classes.related}>
-        <Badge
-          badgeContent={badgeContent}
-          color="primary"
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          &nbsp;
-        </Badge>
-      </div>
+      {
+        !hideRelatedQuestions && (
+          <div className={classes.related}>
+            <Badge
+              badgeContent={badgeContent}
+              color="primary"
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              &nbsp;
+            </Badge>
+          </div>
+        )
+      }
       <div className="second">
         <ReactMarkdown source={record.text} />
       </div>

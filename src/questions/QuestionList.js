@@ -260,7 +260,7 @@ const AnswerField = ({ record }) => {
       record={{
         ...record.Answer,
         Language: record.Language ? record.Language : { code: 'en-GB' },
-        relatedQuestions: record.relatedQuestions ? record.relatedQuestions.length : 0,
+        relatedQuestions: record.relatedQuestionsForAnswerCount || 0,
       }}
     />
   );
@@ -296,7 +296,7 @@ const CustomGridItem = ({
 
         {visibleColumns.includes('fk_answerId')
         && (
-          <TableCell>
+          <TableCell style={{ width: '25%' }}>
             <AnswerField label="Answer" record={record} />
           </TableCell>
         )}

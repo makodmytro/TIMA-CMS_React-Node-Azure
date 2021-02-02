@@ -1,0 +1,67 @@
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import {
+  Confirm,
+  useDataProvider,
+  useRefresh,
+  useNotify,
+} from 'react-admin';
+import TickIcon from '@material-ui/icons/DoneAll';
+
+const BatchApproveButton = ({ answerId, variant }) => {
+  const [open, setOpen] = React.useState(false);
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
+  const refresh = useRefresh();
+
+  const onOpen = (e) => {
+    e.stopPropagation();
+
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const onConfirm = async () => {
+    try {
+      await dataProvider.batchApproveQuestions(null, {
+        id: answerId,
+      });
+
+      notify('The related questions were approved');
+      refresh();
+    } catch (err) {
+      notify(`Failed to batch approve: ${err.message}`, 'error');
+    }
+  };
+
+  return (
+    <>
+      {
+        open && (
+          <Confirm
+            isOpen={open}
+            loading={false}
+            title="Batch approve"
+            content="Are you sure you want to approve this answer's related questions?"
+            onConfirm={onConfirm}
+            onClose={onClose}
+          />
+        )
+      }
+      <Button
+        type="button"
+        color="secondary"
+        onClick={onOpen}
+        size="small"
+        variant={variant || 'text'}
+      >
+        <TickIcon /> Approve questions
+      </Button>
+    </>
+  );
+};
+
+export default BatchApproveButton;

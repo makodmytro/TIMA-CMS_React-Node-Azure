@@ -10,6 +10,7 @@ import Form from './form';
 import AnswerMedia from './media/media';
 import RelatedQuestionsTable from '../questions/related-questions-table';
 import SearchQuestions from './search-questions';
+import BatchApproveButton from './batch-approve-button';
 
 const Fields = ({ setRecord, ...props }) => {
   React.useEffect(() => {
@@ -35,6 +36,13 @@ const AnswerEdit = (props) => {
       </Edit>
       <Box my={1} p={2} boxShadow={3}>
         <Typography>Related questions</Typography>
+        {
+          answer && answer.id && (
+            <Box textAlign="right">
+              <BatchApproveButton answerId={answer.id} variant="outlined" />
+            </Box>
+          )
+        }
         <Box my={2}>
           <RelatedQuestionsTable
             record={answer}

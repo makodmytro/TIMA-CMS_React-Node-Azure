@@ -21,8 +21,6 @@ export const MarkdownInput = ({ source, label, lang }) => {
 
   const invalid = !!error && (touched || dirty || submitFailed);
 
-  console.log(invalid);
-
   return (
     <>
       <InputLabel error={invalid}>{label}</InputLabel>

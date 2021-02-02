@@ -3,7 +3,7 @@ import {
   useDataProvider,
   SelectInput,
   TextInput,
-  required,
+  BooleanInput,
   useNotify,
   TextField,
 } from 'react-admin';
@@ -20,6 +20,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
 import { MarkdownInput } from '../answers/form';
+import { Text } from '../answers/AnswerList';
 
 const Filters = ({ onSubmit, initialValues }) => {
   return (
@@ -46,18 +47,26 @@ const Filters = ({ onSubmit, initialValues }) => {
               </Grid>
               {
                 values.type === 'questions' && (
-                  <Grid item xs={12} sm={4} md={3}>
-                    <SelectInput
-                      label="Approved"
-                      source="approved"
-                      choices={[
-                        { id: '__none__', name: 'Both' },
-                        { id: true, name: 'Only approved questions' },
-                        { id: false, name: 'Only not-approved questions' },
-                      ]}
-                      fullWidth
-                    />
-                  </Grid>
+                  <>
+                    <Grid item xs={12} sm={4} md={3}>
+                      <SelectInput
+                        label="Approved"
+                        source="approved"
+                        choices={[
+                          { id: '__none__', name: 'Both' },
+                          { id: true, name: 'Only approved questions' },
+                          { id: false, name: 'Only not-approved questions' },
+                        ]}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3}>
+                      <BooleanInput
+                        label="All topics"
+                        source="all_topics"
+                      />
+                    </Grid>
+                  </>
                 )
               }
               <Grid item xs={12} sm={4} md={3}>
@@ -137,6 +146,7 @@ const LinksDialog = ({
   const [form, setForm] = React.useState({
     q: '',
     type: 'questions',
+    all_topics: false,
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
@@ -150,6 +160,7 @@ const LinksDialog = ({
     setForm({
       q: '',
       type: 'questions',
+      all_topics: false,
       approved: '__none__',
     });
   };
@@ -165,13 +176,17 @@ const LinksDialog = ({
   const onSubmit = async (values, paging = pagination) => {
     setForm(values);
 
-    const { type, approved, ...rest } = values;
+    const {
+      type, approved, all_topics, ...rest
+    } = values;
 
     const { data, total } = await dataProvider.getList(type, {
       filter: {
         ...rest,
         ...(approved !== '__none__' && type === 'questions' ? { approved } : {}),
-        fk_topicId: record.fk_topicId,
+        ...(
+          type === 'questions' && all_topics ? {} : { fk_topicId: record.fk_topicId }
+        ),
       },
       pagination: paging,
     });
@@ -268,12 +283,34 @@ const LinksDialog = ({
                   results.map((result, i) => (
                     <TableRow key={i}>
                       <TableCell>
-                        <PlayableTextField source="text" record={{ ...result, Language: record.Language }} />
+                        {
+                          form.type === 'questions' && (
+                            <PlayableTextField
+                              source="text"
+                              record={{ ...result, Language: record.Language }}
+                            />
+                          )
+                        }
+                        {
+                          form.type === 'answers' && (
+                            <Text
+                              record={{ ...result, Language: record.Language }}
+                              hideRelatedQuestions
+                            />
+                          )
+                        }
                       </TableCell>
                       {
                         form.type === 'questions' && (
                           <TableCell>
-                            <TextField source="Answer.text" record={result} />
+                            {
+                              result.fk_answerId && (
+                                <Text
+                                  record={{ ...result.Answer, Language: result.Language }}
+                                  hideRelatedQuestions
+                                />
+                              )
+                            }
                           </TableCell>
                         )
                       }
@@ -283,7 +320,7 @@ const LinksDialog = ({
                           size="small"
                           type="button"
                           onClick={() => {
-                            onSelected(result.fk_answerId || result.id);
+                            onSelected(result.fk_answerId || result.id, result.fk_topicId);
                             start();
                           }}
                         >
