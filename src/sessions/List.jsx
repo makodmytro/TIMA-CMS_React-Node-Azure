@@ -112,8 +112,8 @@ const Filters = (props) => {
             />
           </ReferenceInput>
 
-          <DateTimeInput source="from" alwaysOn onChange={() => handleSubmit()} />
-          <DateTimeInput source="until" alwaysOn onChange={() => handleSubmit()} />
+          <DateTimeInput source="startDate" alwaysOn onChange={() => handleSubmit()} />
+          <DateTimeInput source="endDate" alwaysOn onChange={() => handleSubmit()} />
         </form>
 
       )}
