@@ -215,14 +215,6 @@ const resDataProvider = {
       body: JSON.stringify({ approved: true }),
     });
   },
-  createAnswerWithQuestions: async (resource, params) => {
-    const { json } = await httpClient(`${baseApi}/answers`, {
-      method: 'POST',
-      body: JSON.stringify(params.data),
-    });
-
-    return { data: json };
-  },
 };
 
 export default resDataProvider;
