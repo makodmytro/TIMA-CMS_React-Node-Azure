@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line
-import { Link } from 'react-router-dom'; // eslint-disable-line
+import { useLocation } from 'react-router-dom'; // eslint-disable-line
+import {
+  DeleteButton,
+  EditButton,
+  useRefresh,
+  ResourceContextProvider,
+} from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ViewIcon from '@material-ui/icons/Visibility';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
-import EditIcon from '@material-ui/icons/Edit';
 
 const DropdownMenu = ({
   record,
-  deleteQuestion,
 }) => {
+  const refresh = useRefresh();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -25,13 +27,6 @@ const DropdownMenu = ({
 
   const handleClose = (e) => {
     e.stopPropagation();
-    setAnchorEl(null);
-  };
-
-  const onDeleteClicked = (e) => {
-    e.stopPropagation();
-
-    deleteQuestion(record);
     setAnchorEl(null);
   };
 
@@ -58,49 +53,59 @@ const DropdownMenu = ({
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <MenuItem
-          component={Link}
-          to={`/questions/${record.id}`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleClose}
         >
-          <ListItemIcon><EditIcon /></ListItemIcon>
-          Edit question
+          <EditButton
+            basePath="/questions"
+            record={record}
+            label="Edit question"
+            color="secondary"
+            fullWidth
+            style={{ justifyContent: 'flex-start' }}
+          />
         </MenuItem>
         {
           !!record.fk_answerId && (
             <MenuItem
-              component={Link}
-              to={`/answers/${record.fk_answerId}`}
-              onClick={(e) => e.stopPropagation()}
+              onClick={handleClose}
             >
-              <ListItemIcon><ViewIcon /></ListItemIcon>
-              View answer
+              <EditButton
+                basePath="/answers"
+                record={{
+                  id: record.fk_answerId,
+                }}
+                label="Edit answer"
+                color="default"
+                fullWidth
+                style={{ justifyContent: 'flex-start' }}
+              />
             </MenuItem>
           )
         }
-        {
-          !!deleteQuestion && (
-            <MenuItem onClick={onDeleteClicked}>
-              <ListItemIcon><DeleteIcon /></ListItemIcon>
-              Delete question
-            </MenuItem>
-          )
-        }
+        <MenuItem onClick={handleClose}>
+          <ResourceContextProvider value="questions">
+            <DeleteButton
+              basePath="/questions"
+              record={record}
+              undoable={false}
+              onClick={handleClose}
+              resource="questions"
+              onSuccess={() => refresh()}
+              fullWidth
+              style={{ justifyContent: 'flex-start' }}
+            />
+          </ResourceContextProvider>
+        </MenuItem>
       </Menu>
     </div>
   );
-};
-
-DropdownMenu.defaultProps = {
-  deleteQuestion: null,
 };
 
 DropdownMenu.propTypes = {
   record: PropTypes.shape({
     fk_answerId: PropTypes.string,
     id: PropTypes.string.isRequired,
-    relatedQuestions: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  deleteQuestion: PropTypes.func,
 };
 
 export default DropdownMenu;

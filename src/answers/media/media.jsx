@@ -87,7 +87,9 @@ const MediaList = ({ answer }) => {
       notify('The media was deleted');
       deleteMediaClosed();
     } catch (err) {
-      notify('Failed to delete media', 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 
@@ -104,7 +106,9 @@ const MediaList = ({ answer }) => {
 
       return Promise.resolve();
     } catch (err) {
-      notify(`Failed to upload: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

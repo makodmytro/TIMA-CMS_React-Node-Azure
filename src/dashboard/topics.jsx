@@ -10,6 +10,7 @@ import {
   useDataProvider,
   SelectInput,
   ReferenceInput,
+  useNotify,
 } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
@@ -54,6 +55,7 @@ const PastSessions = () => {
   const [count, setCount] = React.useState(0);
   const [topics, setTopics] = React.useState([]);
   const dataProvider = useDataProvider();
+  const notify = useNotify();
 
   const fetch = async (params, paging = pagination) => {
     try {
@@ -72,7 +74,9 @@ const PastSessions = () => {
       setTopics(data);
       setCount(total);
     } catch (err) {
-      console.error(`Failed to fetch past sessions: ${err.message}`);
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

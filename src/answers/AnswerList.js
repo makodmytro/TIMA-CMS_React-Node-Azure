@@ -1,4 +1,5 @@
 import React, { cloneElement, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Datagrid,
   DateField,
@@ -7,7 +8,6 @@ import {
   SelectInput,
   TextField,
   TextInput,
-  useDataProvider,
   useListContext,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
@@ -63,13 +63,12 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const Filters = (props) => {
+const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const {
     filterValues,
     setFilters,
   } = useListContext();
-  const dataProvider = useDataProvider();
 
   if (props.context === 'button') {
     return null;
@@ -79,22 +78,25 @@ const Filters = (props) => {
     setFilters(filters, {});
   };
 
-  const handleLanguageChange = (event) => {
-    setFilters({ ...filterValues, fk_languageId: event.target.value }, {});
-  };
-
   const handleTopicChange = (event) => {
+    setFilters({
+      ...filterValues,
+      fk_topicId: event.target.value,
+    });
+
     if (event.target.value) {
-      dataProvider.getOne('topics', { id: event.target.value })
-        .then(({ data }) => {
+      const topic = topics[event.target.value];
+      if (topic) {
+        const language = languages[topic.fk_languageId];
+
+        if (language) {
           setFilters({
             ...filterValues,
-            fk_languageId: data.fk_languageId,
+            fk_languageId: language.id,
             fk_topicId: event.target.value,
           });
-        });
-    } else {
-      setFilters({ ...filterValues, fk_topicId: event.target.value }, {});
+        }
+      }
     }
   };
 
@@ -105,7 +107,7 @@ const Filters = (props) => {
         <form onSubmit={handleSubmit} className={classes.form}>
           <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
           <ReferenceInput
-            onChange={handleLanguageChange}
+            onChange={() => handleSubmit()}
             label="Language"
             source="fk_languageId"
             reference="languages"
@@ -192,7 +194,9 @@ export const Text = ({ record, hideRelatedQuestions }) => {
   );
 };
 
-const AnswerList = (props) => {
+const AnswerList = ({
+  languages, topics, dispatch, ...props
+}) => {
   const columns = [
     {
       key: 'text',
@@ -226,7 +230,7 @@ const AnswerList = (props) => {
             columns={columns}
           />
         )}
-        filters={<Filters />}
+        filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}
       >
         <Datagrid rowClick="edit">
@@ -239,4 +243,16 @@ const AnswerList = (props) => {
   );
 };
 
-export default AnswerList;
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : [];
+
+  return { topics, languages };
+};
+
+export default connect(mapStateToProps)(AnswerList);

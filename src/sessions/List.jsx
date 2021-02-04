@@ -144,6 +144,10 @@ const QuestionList = (props) => {
           columns={columns}
         />
       )}
+      sort={{
+        field: 'updatedAt',
+        order: 'DESC',
+      }}
     >
       <Datagrid rowClick="show">
         {
