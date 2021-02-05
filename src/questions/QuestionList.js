@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
+import { connect } from 'react-redux';
 import {
   BooleanInput,
   Confirm,
@@ -88,13 +89,12 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const Filters = (props) => {
+const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const {
     filterValues,
     setFilters,
   } = useListContext();
-  const dataProvider = useDataProvider();
 
   if (props.context === 'button') {
     return null;
@@ -104,22 +104,25 @@ const Filters = (props) => {
     setFilters(filters, {});
   };
 
-  const handleLanguageChange = (event) => {
-    setFilters({ ...filterValues, fk_languageId: event.target.value }, {});
-  };
-
   const handleTopicChange = (event) => {
+    setFilters({
+      ...filterValues,
+      fk_topicId: event.target.value,
+    });
+
     if (event.target.value) {
-      dataProvider.getOne('topics', { id: event.target.value })
-        .then(({ data }) => {
+      const topic = topics[event.target.value];
+      if (topic) {
+        const language = languages[topic.fk_languageId];
+
+        if (language) {
           setFilters({
             ...filterValues,
-            fk_languageId: data.fk_languageId,
+            fk_languageId: language.id,
             fk_topicId: event.target.value,
           });
-        });
-    } else {
-      setFilters({ ...filterValues, fk_topicId: event.target.value }, {});
+        }
+      }
     }
   };
 
@@ -138,7 +141,7 @@ const Filters = (props) => {
         <form onSubmit={handleSubmit} className={classes.form}>
           <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
           <ReferenceInput
-            onChange={handleLanguageChange}
+            onChange={() => handleSubmit()}
             label="Language"
             source="fk_languageId"
             reference="languages"
@@ -267,7 +270,7 @@ const AnswerField = ({ record }) => {
 };
 
 const CustomGridItem = ({
-  record, deleteQuestion, removeAnswer,
+  record, removeAnswer,
   visibleColumns,
 }) => {
   const classes = styles();
@@ -346,7 +349,6 @@ const CustomGridItem = ({
         <TableCell>
           <DropdownMenu
             record={record}
-            deleteQuestion={deleteQuestion}
             removeAnswer={removeAnswer}
           />
         </TableCell>
@@ -356,7 +358,7 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  deleteQuestion, removeAnswer, visibleColumns,
+  removeAnswer, visibleColumns,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
@@ -404,7 +406,6 @@ const CustomGrid = ({
                     key={id}
                     record={data[id]}
                     basePath={basePath}
-                    deleteQuestion={deleteQuestion}
                     removeAnswer={removeAnswer}
                     visibleColumns={visibleColumns}
                   />
@@ -418,12 +419,13 @@ const CustomGrid = ({
   );
 };
 
-const QuestionList = (props) => {
+const QuestionList = ({
+  languages, topics, dispatch, ...props
+}) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
   const [record, setRecord] = React.useState(null);
-  const [deleteConfirmOpened, setDeleteConfirmedOpened] = React.useState(false);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
 
   const columns = [
@@ -437,30 +439,6 @@ const QuestionList = (props) => {
   ];
 
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'questions'));
-
-  const onDeletedOpen = (r) => {
-    setRecord(r);
-    setDeleteConfirmedOpened(true);
-  };
-
-  const onDeleteClose = () => {
-    setRecord(null);
-    setDeleteConfirmedOpened(false);
-  };
-
-  const deleteQuestion = async () => {
-    try {
-      await dataProvider.delete('questions', {
-        id: record.id,
-      });
-
-      notify('The record has been deleted');
-      refresh();
-    } catch (err) {
-      notify(`Failed to delete the question: ${err.message}`, 'error');
-    }
-    onDeleteClose();
-  };
 
   const onRemoveAnswerOpen = (r) => {
     setRecord(r);
@@ -481,21 +459,15 @@ const QuestionList = (props) => {
 
       refresh();
     } catch (err) {
-      notify(`Failed to remove the answer: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
     onRemoveAnswerClose();
   };
 
   return (
     <>
-      <Confirm
-        isOpen={deleteConfirmOpened}
-        loading={false}
-        title="Delete question"
-        content="Are you sure you want to delete the question?"
-        onConfirm={deleteQuestion}
-        onClose={onDeleteClose}
-      />
       <Confirm
         isOpen={removeAnswerConfirmOpened}
         loading={false}
@@ -513,11 +485,10 @@ const QuestionList = (props) => {
             columns={columns}
           />
         )}
-        filters={<Filters />}
+        filters={<Filters languages={languages} topics={topics} />}
       >
         <CustomGrid
           visibleColumns={visibleColumns}
-          deleteQuestion={onDeletedOpen}
           removeAnswer={onRemoveAnswerOpen}
         />
       </List>
@@ -525,4 +496,16 @@ const QuestionList = (props) => {
   );
 };
 
-export default QuestionList;
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : [];
+
+  return { topics, languages };
+};
+
+export default connect(mapStateToProps)(QuestionList);

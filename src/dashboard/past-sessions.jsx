@@ -8,6 +8,7 @@ import {
   SelectInput,
   DateInput,
   required,
+  useNotify,
 } from 'react-admin';
 import { format, sub } from 'date-fns';
 import Alert from '@material-ui/lab/Alert';
@@ -71,6 +72,7 @@ const Filters = ({ onSubmit, initialValues }) => (
 const PastSessions = () => {
   const [sessions, setSessions] = React.useState([]);
   const dataProvider = useDataProvider();
+  const notify = useNotify();
 
   const initialValues = {
     period: 'days',
@@ -90,7 +92,9 @@ const PastSessions = () => {
 
       setSessions(data);
     } catch (err) {
-      console.error(`Failed to fetch past sessions: ${err.message}`);
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

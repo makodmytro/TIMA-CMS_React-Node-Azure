@@ -94,7 +94,9 @@ const PlayableText = ({
         });
       }
     } catch (err) {
-      notify(`Failed to play audio: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

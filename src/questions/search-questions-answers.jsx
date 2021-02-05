@@ -232,7 +232,9 @@ const LinksDialog = ({
       onSelected(data.id);
       start();
     } catch (err) {
-      notify('Failed to create the answer');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

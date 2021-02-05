@@ -108,7 +108,9 @@ const SessionShow = () => {
 
       setRecords(data);
     } catch (err) {
-      notify(err.message);
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
   const setSort = (field) => {

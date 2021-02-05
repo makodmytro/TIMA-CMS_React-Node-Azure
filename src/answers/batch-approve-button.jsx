@@ -33,7 +33,9 @@ const BatchApproveButton = ({ answerId, variant }) => {
       notify('The related questions were approved');
       refresh();
     } catch (err) {
-      notify(`Failed to batch approve: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

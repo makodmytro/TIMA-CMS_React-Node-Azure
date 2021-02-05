@@ -21,7 +21,9 @@ const ApprovedSwitchField = ({ record }) => {
       notify('The question was updated');
       refresh();
     } catch (err) {
-      notify('Failed to update the question');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

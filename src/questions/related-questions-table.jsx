@@ -27,7 +27,6 @@ const RelatedQuestionsTable = ({
   const [confirmations, setConfirmations] = React.useState({
     id: null,
     unlink: false,
-    delete: false,
   });
 
   const top = () => window.scrollTo(0, 0);
@@ -60,33 +59,6 @@ const RelatedQuestionsTable = ({
     top();
   };
 
-  const deleteQuestionClosed = () => {
-    setConfirmations({
-      ...confirmations,
-      delete: false,
-      id: null,
-    });
-  };
-
-  const deleteQuestionConfirmed = async () => {
-    await dataProvider.delete('questions', {
-      id: confirmations.id,
-    });
-
-    notify('The related question has been deleted');
-    refresh();
-    top();
-    deleteQuestionClosed();
-  };
-
-  const deleteQuestionClicked = (r) => {
-    setConfirmations({
-      ...confirmations,
-      delete: true,
-      id: r.id,
-    });
-  };
-
   if (!record) {
     return null;
   }
@@ -109,14 +81,6 @@ const RelatedQuestionsTable = ({
         content="Are you sure you want to unlink the answer from the question?"
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
-      />
-      <Confirm
-        isOpen={confirmations.delete}
-        loading={false}
-        title="Delete question"
-        content="Are you sure you want to delete the question?"
-        onConfirm={deleteQuestionConfirmed}
-        onClose={deleteQuestionClosed}
       />
       <Table>
         <TableHead>
@@ -159,8 +123,6 @@ const RelatedQuestionsTable = ({
                   <TableCell>
                     <DropdownMenu
                       record={{ ...related, Language: record.Language }}
-                      deleteQuestion={deleteQuestionClicked}
-                      hideLinks
                     />
                   </TableCell>
                 </TableRow>

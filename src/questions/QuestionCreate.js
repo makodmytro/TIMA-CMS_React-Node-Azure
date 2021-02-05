@@ -2,8 +2,6 @@ import React from 'react';
 import {
   Create,
   SimpleForm,
-  useNotify,
-  useDataProvider,
   required,
   ReferenceInput,
   SelectInput,
@@ -66,39 +64,26 @@ const FormFields = (props) => {
 };
 
 const QuestionCreate = ({ dispatch, languages, ...props }) => {
-  const dataProvider = useDataProvider();
-  const notify = useNotify();
-
-  const createAnswer = async (values) => {
-    try {
-      const { data } = await dataProvider.create('answers', {
-        data: values,
-      });
-
-      return data;
-    } catch (err) {
-      notify(`Failed to create new answer for the question: ${err.message}`);
-
-      throw err;
-    }
-  };
-
   return (
     <>
       <Create
         {...props}
         actions={<CustomTopToolbar />}
         transform={async (data) => {
-          const { answer_text: answerText, ...rest } = data;
+          const { answer_text: answerText, fk_answerId, ...rest } = data;
 
-          if (answerText && !rest.fk_answerId) {
-            const answer = await createAnswer({
-              text: answerText,
-              fk_topicId: rest.fk_topicId,
-              fk_languageId: rest.fk_languageId,
-            });
+          if (fk_answerId) {
+            return {
+              ...rest,
+              fk_answerId,
+            };
+          }
 
-            rest.fk_answerId = answer.id;
+          if (answerText) {
+            return {
+              ...rest,
+              answerText,
+            };
           }
 
           return rest;

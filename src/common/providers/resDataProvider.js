@@ -45,6 +45,7 @@ const resDataProvider = {
   },
   getList: async (resource, params) => {
     let url = `${baseApi}/${resource}`;
+
     if (params) {
       const { field, order } = params.sort || {};
 
@@ -214,7 +215,6 @@ const resDataProvider = {
       body: JSON.stringify({ approved: true }),
     });
   },
-
 };
 
 export default resDataProvider;

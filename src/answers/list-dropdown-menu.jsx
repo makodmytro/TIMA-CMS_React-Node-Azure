@@ -52,12 +52,23 @@ const DropdownMenu = ({
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
-          <EditButton basePath={basePath} record={record} />
+          <EditButton
+            basePath={basePath}
+            record={record}
+            fullWidth
+            style={{ justifyContent: 'flex-start' }}
+          />
         </MenuItem>
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
-          <DeleteButton basePath={basePath} record={record} undoable={false} />
+          <DeleteButton
+            basePath={basePath}
+            record={record}
+            undoable={false}
+            fullWidth
+            style={{ justifyContent: 'flex-start' }}
+          />
         </MenuItem>
         <MenuItem
           onClick={(e) => e.stopPropagation()}

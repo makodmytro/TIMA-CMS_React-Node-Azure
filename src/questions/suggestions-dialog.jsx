@@ -68,7 +68,9 @@ const SuggestionDialog = ({ record, open, onClose }) => {
       setAssociations(associations.concat([id]));
       notify('The question was associated successfully');
     } catch (err) {
-      notify(`Failed to associate: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 

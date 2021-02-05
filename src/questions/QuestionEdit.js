@@ -72,6 +72,7 @@ const FormFields = ({
   unlinkAnswer,
 }) => {
   const dataProvider = useDataProvider();
+  const notify = useNotify();
   const {
     input: { value },
   } = useField('fk_answerId');
@@ -94,7 +95,9 @@ const FormFields = ({
 
       setAnswer(data);
     } catch (err) {
-      // console.error(err);
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
     fetching = false;
   };
@@ -200,7 +203,9 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
       refresh();
       top();
     } catch (err) {
-      notify(`Failed to create new answer for the question: ${err.message}`);
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
 
       throw err;
     }

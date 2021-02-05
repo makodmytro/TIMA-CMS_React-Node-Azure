@@ -45,7 +45,9 @@ const AutocompleteInput = () => {
 
         return callback(data);
       } catch (err) {
-        notify(`Failed to fetch answers: ${err.message}`, 'error');
+        if (err.body && err.body.message) {
+          notify(err.body.message, 'error');
+        }
 
         return callback(null);
       }
@@ -62,7 +64,9 @@ const AutocompleteInput = () => {
         setValue(data);
       }
     } catch (err) {
-      notify(`Failed to fetch related answer: ${err.message}`, 'error');
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
     }
   };
 
