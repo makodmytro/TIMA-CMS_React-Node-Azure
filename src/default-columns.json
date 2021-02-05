@@ -3,5 +3,5 @@
   "answers": ["text", "fk_languageId", "fk_topicId"],
   "questions": ["text", "fk_answerId", "fk_topicId", "approved", "feedbackPositiveCount", "feedbackNegativeCount"],
   "languages": ["code", "name", "welcomeText", "welcomeButton"],
-  "sessions": ["fk_languageId", "fk_topicId", "duration", "questionsCount", "answersCount", "updatedAt"]
+  "sessions": ["fk_languageId", "fk_topicId", "duration", "questionsCount", "answersCount", "updatedAt", "clientCountry"]
 }
