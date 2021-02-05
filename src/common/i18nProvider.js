@@ -74,6 +74,7 @@ const english = {
         questionsCount: '# of questions',
         answersCount: '# of answers',
         updatedAt: 'Updated',
+        clientCountry: 'Country',
       },
     },
   },
