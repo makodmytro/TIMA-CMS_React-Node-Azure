@@ -112,8 +112,8 @@ const Filters = (props) => {
             />
           </ReferenceInput>
 
-          <DateTimeInput source="from" alwaysOn onChange={() => handleSubmit()} />
-          <DateTimeInput source="until" alwaysOn onChange={() => handleSubmit()} />
+          <DateTimeInput source="startDate" alwaysOn onChange={() => handleSubmit()} />
+          <DateTimeInput source="endDate" alwaysOn onChange={() => handleSubmit()} />
         </form>
 
       )}
@@ -123,6 +123,7 @@ const Filters = (props) => {
 
 const QuestionList = (props) => {
   const columns = [
+    { key: 'clientCountry', el: <TextField label="Country" source="clientCountry" /> },
     { key: 'fk_languageId', el: <Language label="Language" sortBy="fk_languageId" /> },
     { key: 'fk_topicId', el: <Topic label="Topic" sortBy="fk_topicId" /> },
     { key: 'duration', el: <TextField source="duration" label="Duration" /> },
