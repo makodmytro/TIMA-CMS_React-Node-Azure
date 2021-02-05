@@ -95,8 +95,8 @@ const SessionShow = () => {
   const params = useParams();
   const notify = useNotify();
   const [records, setRecords] = React.useState(null);
-  const [sortBy, setSortBy] = React.useState(null);
-  const [sortDir, setSortDir] = React.useState(true);
+  const [sortBy, setSortBy] = React.useState('timestamp');
+  const [sortDir, setSortDir] = React.useState(false);
 
   const fetch = async () => {
     try {
@@ -106,7 +106,12 @@ const SessionShow = () => {
         redirect('/stats/sessions');
       }
 
-      setRecords(data);
+      const extended = data.map((d) => ({
+        ...d,
+        timestamp: +new Date(d.createdAt),
+      }));
+
+      setRecords(orderBy(extended, [sortBy], [sortDir ? 'asc' : 'desc']));
     } catch (err) {
       if (err.body && err.body.message) {
         notify(err.body.message, 'error');
@@ -163,7 +168,7 @@ const SessionShow = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <SortableHeader label="Created" field="createdAt" />
+              <SortableHeader label="Created" field="timestamp" />
               <SortableHeader label="Topic" field="topicName" />
               <SortableHeader label="Question" field="questionText" />
               <SortableHeader label="Answer" field="answerText" />

@@ -50,8 +50,9 @@ const resDataProvider = {
       const { field, order } = params.sort || {};
 
       const {
-        q, unanswered, groupRelated, ...filter
+        q, unanswered, groupRelated, ...restFilter
       } = params.filter || {};
+      const { from, to, ...filter } = params.filter;
 
       if (unanswered) {
         filter.fk_answerId = null;
@@ -76,6 +77,14 @@ const resDataProvider = {
         ...(resource === 'questions' ? { group: 1 } : {}),
         ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
       };
+
+      if (from) {
+        query.from = from;
+      }
+
+      if (to) {
+        query.to = to;
+      }
 
       url += `?${stringify(query)}`;
     }
@@ -171,6 +180,11 @@ const resDataProvider = {
     };
 
     const { json } = await httpClient(`${baseApi}/stats/topics?${stringify(query)}`);
+
+    return { data: json };
+  },
+  sessionsMap: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/stats/sessions/countries`);
 
     return { data: json };
   },
