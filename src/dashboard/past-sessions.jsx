@@ -52,6 +52,7 @@ const Filters = ({ onSubmit, initialValues }) => (
               clearable={false}
               inputVariant="filled"
               label="From"
+              disableFuture
             />
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
@@ -61,6 +62,7 @@ const Filters = ({ onSubmit, initialValues }) => (
               clearable={false}
               inputVariant="filled"
               label="To"
+              disableFuture
             />
           </Grid>
           <Grid item xs={12} sm={4} md={3}>

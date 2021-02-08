@@ -15,8 +15,7 @@ import OlOverlay from 'ol/Overlay';
 import * as OlGeom from 'ol/geom';
 import * as OlStyle from 'ol/style';
 import CountryCodeToCoodrinates from '../country-code-to-coordinates.json';
-
-const clamp = (n) => Math.min(Math.max(n, 100000), 10000000);
+import MarkerRed from '../assets/marker-red.png';
 
 const Map = () => {
   const dataProvider = useDataProvider();
@@ -41,40 +40,40 @@ const Map = () => {
           }
 
           const { latitude, longitude } = match;
-          const radius = clamp(
-            cur.sessionsCount
-              ? cur.sessionsCount * 10000
-              : 10000,
-          );
 
           if (!acc[match.alpha2]) {
             acc[match.alpha2] = {
               latitude,
               longitude,
-              radius,
               country: cur.clientCountry,
               sessionsCount: cur.sessionsCount,
             };
+          } else {
+            acc[match.alpha2].sessionsCount += cur.sessionsCount;
           }
-
-          acc[match.alpha2].radius += radius;
 
           return acc;
         }, {});
 
+      let max = 0;
+      let maxLocation = [0, 0];
+
       const features = Object.keys(mapped).map((key) => {
         const {
-          latitude, longitude, radius, country, sessionsCount,
+          latitude, longitude, country, sessionsCount,
         } = mapped[key];
 
-        const circle = new OlGeom.Circle(OlProj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'), radius);
-
-        const feature = new Ol.Feature({
-          geometry: circle,
+        const icon = new Ol.Feature({
+          geometry: new OlGeom.Point(OlProj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')),
           name: `${country}: ${sessionsCount}`,
         });
 
-        return feature;
+        if (sessionsCount > max) {
+          max = sessionsCount;
+          maxLocation = OlProj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
+        }
+
+        return icon;
       });
 
       const vectorSource = new OlSourceVector({
@@ -82,12 +81,11 @@ const Map = () => {
       });
 
       const style = new OlStyle.Style({
-        fill: new OlStyle.Fill({
-          color: 'rgba(191, 38, 38, 0.3)',
-        }),
-        stroke: new OlStyle.Stroke({
-          width: 3,
-          color: 'rgba(191, 38, 38, 0.8)',
+        image: new OlStyle.Icon({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: MarkerRed,
         }),
       });
 
@@ -106,12 +104,13 @@ const Map = () => {
           duration: 250,
         },
         positioning: 'top-center',
+        offset: [0, -30],
       });
 
       const options = {
         view: new Ol.View({
-          zoom: 2,
-          center: [0, 0],
+          zoom: max > 0 ? 4 : 2,
+          center: max > 0 ? maxLocation : [0, 0],
         }),
         layers: [
           new OLTileLayer({
@@ -127,18 +126,23 @@ const Map = () => {
       mapObject.setTarget(mapRef.current);
 
       const displayFeatureInfo = async (pixel) => {
-        const [feat] = await vectorLayer.getFeatures(pixel);
+        try {
+          const [feat] = await vectorLayer.getFeatures(pixel);
 
-        if (!feat) {
-          overlay.setPosition(null);
+          if (!feat) {
+            overlay.setPosition(null);
 
-          return;
+            return;
+          }
+
+          // const coordinates = feat.getGeometry().getCenter();
+          const coordinates = feat.getGeometry().getCoordinates();
+          el.innerHTML = feat.getProperties().name;
+
+          overlay.setPosition(coordinates);
+        } catch (err) {
+          console.err(err);
         }
-
-        const coordinates = feat.getGeometry().getCenter();
-        el.innerHTML = feat.getProperties().name;
-
-        overlay.setPosition(coordinates);
       };
 
       mapObject.on('pointermove', function (evt) { // eslint-disable-line

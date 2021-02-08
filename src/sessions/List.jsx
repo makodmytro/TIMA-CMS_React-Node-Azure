@@ -123,6 +123,7 @@ const Filters = ({
             source="from"
             size="small"
             onChange={() => handleSubmit()}
+            disableFuture
           />
           <DateTimeInput
             label="To"
@@ -130,6 +131,7 @@ const Filters = ({
             source="to"
             size="small"
             onChange={() => handleSubmit()}
+            disableFuture
           />
           <SelectInput
             optionText="clientCountry"
