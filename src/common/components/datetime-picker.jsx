@@ -12,7 +12,6 @@ export const DateTimeInput = ({
 }) => {
   const {
     input: { onChange: onValueChange, value },
-    meta: { touched, error },
   } = useField(source);
 
   return (
@@ -47,7 +46,6 @@ export const DateInput = ({
 }) => {
   const {
     input: { onChange: onValueChange, value },
-    meta: { touched, error },
   } = useField(source);
 
   return (

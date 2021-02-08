@@ -21,12 +21,6 @@ const Dashboard = () => {
   return (
     <Box py={2}>
       <Title title="Dashboard" />
-      <Box>
-        <Typography variant="h5" className={classes.title}>
-          Sessions map
-        </Typography>
-        <Map />
-      </Box>
 
       <Box>
         <ActiveSessions />
@@ -43,6 +37,12 @@ const Dashboard = () => {
           Topics
         </Typography>
         <Topics />
+      </Box>
+      <Box>
+        <Typography variant="h5" className={classes.title}>
+          Sessions map
+        </Typography>
+        <Map />
       </Box>
     </Box>
   );
