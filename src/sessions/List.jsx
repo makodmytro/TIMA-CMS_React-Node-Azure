@@ -6,8 +6,10 @@ import {
   TextField,
   ReferenceInput,
   SelectInput,
-  DateTimeInput, useListContext, useDataProvider,
+  useListContext,
+  useDataProvider,
 } from 'react-admin';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
 import { Language, Topic } from '../common/components/fields-values-by-fk';
@@ -15,6 +17,7 @@ import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
+import { DateTimeInput } from '../common/components/datetime-picker';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -37,13 +40,14 @@ const styles = makeStyles(() => ({
   },
 }));
 
-const Filters = (props) => {
+const Filters = ({
+  languages, topics, countries, ...props
+}) => {
   const classes = styles();
   const {
     filterValues,
     setFilters,
   } = useListContext();
-  const dataProvider = useDataProvider();
 
   if (props.context === 'button') {
     return null;
@@ -53,32 +57,34 @@ const Filters = (props) => {
     setFilters(filters, {});
   };
 
-  const handleLanguageChange = (event) => {
-    setFilters({ ...filterValues, fk_languageId: event.target.value }, {});
-  };
-
   const handleTopicChange = (event) => {
+    setFilters({
+      ...filterValues,
+      fk_topicId: event.target.value,
+    });
+
     if (event.target.value) {
-      dataProvider.getOne('topics', { id: event.target.value })
-        .then(({ data }) => {
+      const topic = topics[event.target.value];
+      if (topic) {
+        const language = languages[topic.fk_languageId];
+
+        if (language) {
           setFilters({
             ...filterValues,
-            fk_languageId: data.fk_languageId,
+            fk_languageId: language.id,
             fk_topicId: event.target.value,
           });
-        });
-    } else {
-      setFilters({ ...filterValues, fk_topicId: event.target.value }, {});
+        }
+      }
     }
   };
 
   return (
-
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>
           <ReferenceInput
-            onChange={handleLanguageChange}
+            onChange={() => handleSubmit()}
             label="Language"
             source="fk_languageId"
             reference="languages"
@@ -111,9 +117,32 @@ const Filters = (props) => {
               emptyText="None"
             />
           </ReferenceInput>
-
-          <DateTimeInput source="startDate" alwaysOn onChange={() => handleSubmit()} />
-          <DateTimeInput source="endDate" alwaysOn onChange={() => handleSubmit()} />
+          <DateTimeInput
+            label="From"
+            inputVariant="filled"
+            source="from"
+            size="small"
+            onChange={() => handleSubmit()}
+          />
+          <DateTimeInput
+            label="To"
+            inputVariant="filled"
+            source="to"
+            size="small"
+            onChange={() => handleSubmit()}
+          />
+          <SelectInput
+            optionText="clientCountry"
+            optionValue="clientCountry"
+            className={classes.select}
+            allowEmpty
+            emptyText="None"
+            source="clientCountry"
+            label="Country"
+            alwaysOn
+            choices={countries}
+            onChange={() => handleSubmit()}
+          />
         </form>
 
       )}
@@ -121,7 +150,12 @@ const Filters = (props) => {
   );
 };
 
-const QuestionList = (props) => {
+const QuestionList = ({
+  languages, topics, dispatch, ...props
+}) => {
+  const [countries, setCountries] = React.useState([]);
+  const dataProvider = useDataProvider();
+
   const columns = [
     { key: 'clientCountry', el: <TextField label="Country" source="clientCountry" /> },
     { key: 'fk_languageId', el: <Language label="Language" sortBy="fk_languageId" /> },
@@ -133,10 +167,20 @@ const QuestionList = (props) => {
   ];
   const [visibleColumns, setVisibleColumns] = React.useState(getVisibleColumns(columns, 'sessions'));
 
+  const fetchCountries = async () => {
+    const { data } = await dataProvider.sessionsMap();
+
+    setCountries(data.data);
+  };
+
+  React.useEffect(() => {
+    fetchCountries();
+  }, []);
+
   return (
     <List
       {...props}
-      filters={<Filters />}
+      filters={<Filters languages={languages} topics={topics} countries={countries} />}
       bulkActionButtons={false}
       actions={(
         <ListActions
@@ -161,4 +205,16 @@ const QuestionList = (props) => {
   );
 };
 
-export default QuestionList;
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : [];
+
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : [];
+
+  return { topics, languages };
+};
+
+export default connect(mapStateToProps)(QuestionList);

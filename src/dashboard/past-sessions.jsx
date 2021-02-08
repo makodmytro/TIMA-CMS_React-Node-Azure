@@ -6,13 +6,13 @@ import { Form } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
   SelectInput,
-  DateInput,
   required,
   useNotify,
 } from 'react-admin';
 import { format, sub } from 'date-fns';
 import Alert from '@material-ui/lab/Alert';
 import SessionCharts from './sessions-charts';
+import { DateInput } from '../common/components/datetime-picker';
 
 const Filters = ({ onSubmit, initialValues }) => (
   <Form
@@ -46,10 +46,22 @@ const Filters = ({ onSubmit, initialValues }) => (
             />
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <DateInput source="from" validate={required()} fullWidth />
+            <DateInput
+              source="from"
+              fullWidth
+              clearable={false}
+              inputVariant="filled"
+              label="From"
+            />
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <DateInput source="until" validate={required()} fullWidth />
+            <DateInput
+              source="until"
+              fullWidth
+              clearable={false}
+              inputVariant="filled"
+              label="To"
+            />
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
             <Box pt={2}>
@@ -82,7 +94,11 @@ const PastSessions = () => {
 
   const fetch = async (params) => {
     try {
-      const res = await dataProvider.pastSessions(null, params);
+      const res = await dataProvider.pastSessions(null, {
+        ...params,
+        from: format(new Date(params.from), 'yyyy-MM-dd'),
+        until: format(new Date(params.until), 'yyyy-MM-dd'),
+      });
 
       if (!res) {
         throw new Error('Unauthenticated');

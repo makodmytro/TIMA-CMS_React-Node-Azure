@@ -5,7 +5,6 @@ import {
   TextInput,
   BooleanInput,
   useNotify,
-  TextField,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
