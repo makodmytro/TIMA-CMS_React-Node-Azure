@@ -186,15 +186,16 @@ const LinksDialog = ({
         ...(
           type === 'questions' && all_topics ? {} : { fk_topicId: record.fk_topicId }
         ),
+        ...(
+          type === 'questions'
+            ? { fk_answerId: '!NULL' }
+            : {}
+        ),
       },
       pagination: paging,
     });
 
-    const filtered = type === 'questions'
-      ? data.filter((r) => !!r.fk_answerId)
-      : data;
-
-    setResults(filtered);
+    setResults(data);
     setCount(total);
   };
 
