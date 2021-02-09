@@ -71,6 +71,18 @@ const styles = makeStyles((theme) => ({
     borderRadius: '15px',
     padding: theme.spacing(2),
     maxWidth: '45%',
+    marginBottom: theme.spacing(1),
+
+    '& a': {
+      color: 'white !important',
+    },
+  },
+  resourceLink: {
+    fontSize: '0.7rem',
+
+    '& a': {
+      color: 'white !important',
+    },
   },
 }));
 
@@ -193,6 +205,15 @@ const ChatView = ({ records }) => {
                 <Typography component="span">
                   {record.inputText}
                 </Typography>
+                {
+                  record.fk_questionId && (
+                    <Typography align="right" className={classes.resourceLink}>
+                      <Link to={`/questions/${record.fk_questionId}`} target="_blank">
+                        [view]
+                      </Link>
+                    </Typography>
+                  )
+                }
               </div>
             </Box>
             <Box className={classes.inputContainer}>
@@ -206,7 +227,36 @@ const ChatView = ({ records }) => {
                 <Typography component="span">
                   {record.outputText}
                 </Typography>
+                {
+                  record.fk_answerId && (
+                    <Typography className={classes.resourceLink}>
+                      <Link to={`/answers/${record.fk_answerId}`} target="_blank">
+                        [view]
+                      </Link>
+                    </Typography>
+                  )
+                }
               </div>
+              {
+                record.suggestedQuestions && !!record.suggestedQuestions.length && (
+                  <>
+                    <div className={classes.output}>
+                      <Typography component="span">
+                        {
+                          record.suggestedQuestions.map((sq, ii) => (
+                            <span key={ii}>
+                              <Link to={`/questions/${sq.id}`} target="_blank">
+                                {ii + 1}. {sq.text}
+                              </Link>
+                              <br />
+                            </span>
+                          ))
+                        }
+                      </Typography>
+                    </div>
+                  </>
+                )
+              }
             </Box>
           </Box>
         ))
