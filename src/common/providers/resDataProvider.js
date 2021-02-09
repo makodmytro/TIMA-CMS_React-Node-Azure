@@ -52,14 +52,10 @@ const resDataProvider = {
       const {
         q, unanswered, groupRelated, ...restFilter
       } = params.filter || {};
-      const { from, to, ...filter } = params.filter;
+      const { from, to, ...filter } = restFilter;
 
       if (unanswered) {
         filter.fk_answerId = null;
-      }
-
-      if (groupRelated) {
-        filter.groupRelated = 1;
       }
 
       if (filter.approved === false || filter.approved === 0) {
@@ -84,6 +80,10 @@ const resDataProvider = {
 
       if (to) {
         query.to = to;
+      }
+
+      if (groupRelated) {
+        query.groupRelated = 1;
       }
 
       url += `?${stringify(query)}`;
