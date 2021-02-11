@@ -37,7 +37,7 @@ const AnswerEdit = (props) => {
       <Box my={1} p={2} boxShadow={3}>
         <Typography>Related questions</Typography>
         {
-          answer && answer.id && !!answer.Questions.length && (
+          answer && answer.id && answer.Questions && !!answer.Questions.length && (
             <Box textAlign="right">
               <BatchApproveButton answerId={answer.id} variant="outlined" />
             </Box>
