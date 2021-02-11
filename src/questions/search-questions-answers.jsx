@@ -5,6 +5,7 @@ import {
   TextInput,
   BooleanInput,
   useNotify,
+  Confirm,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
@@ -59,15 +60,15 @@ const Filters = ({ onSubmit, initialValues }) => {
                         fullWidth
                       />
                     </Grid>
-                    <Grid item xs={12} sm={4} md={3}>
-                      <BooleanInput
-                        label="All topics"
-                        source="all_topics"
-                      />
-                    </Grid>
                   </>
                 )
               }
+              <Grid item xs={12} sm={4} md={3}>
+                <BooleanInput
+                  label="All topics"
+                  source="all_topics"
+                />
+              </Grid>
               <Grid item xs={12} sm={4} md={3}>
                 <Box pt={2}>
                   <Button
@@ -149,6 +150,8 @@ const LinksDialog = ({
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
+  const [selected, setSelected] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const start = () => {
     setResults(null);
@@ -162,6 +165,8 @@ const LinksDialog = ({
       all_topics: false,
       approved: '__none__',
     });
+    setSelected(null);
+    setOpen(false);
   };
 
   React.useEffect(() => {
@@ -184,7 +189,7 @@ const LinksDialog = ({
         ...rest,
         ...(approved !== '__none__' && type === 'questions' ? { approved } : {}),
         ...(
-          type === 'questions' && all_topics ? {} : { fk_topicId: record.fk_topicId }
+          all_topics ? {} : { fk_topicId: record.fk_topicId }
         ),
         ...(
           type === 'questions'
@@ -238,8 +243,38 @@ const LinksDialog = ({
     }
   };
 
+  const selectToLink = (result) => {
+    if (result.fk_topicId !== record.fk_topicId) {
+      setOpen(true);
+      setSelected(result);
+
+      return;
+    }
+
+    onSelected(result.fk_answerId || result.id, result.fk_topicId);
+    start();
+  };
+
+  const onConfirm = () => {
+    onSelected(selected.fk_answerId || selected.id, selected.fk_topicId);
+    start();
+  };
+
+  const onClose = () => {
+    setSelected(null);
+    setOpen(false);
+  };
+
   return (
     <>
+      <Confirm
+        isOpen={open}
+        loading={false}
+        title="Link"
+        content="The selected record is linked to a different topic. Linking will change the question's topic. Proceed?"
+        onConfirm={onConfirm}
+        onClose={onClose}
+      />
       <Filters
         onSubmit={(values) => {
           setPage(0, false);
@@ -322,8 +357,7 @@ const LinksDialog = ({
                           size="small"
                           type="button"
                           onClick={() => {
-                            onSelected(result.fk_answerId || result.id, result.fk_topicId);
-                            start();
+                            selectToLink(result);
                           }}
                         >
                           Link to answer
