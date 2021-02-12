@@ -18,6 +18,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
+import WarningIcon from '@material-ui/icons/Warning';
 import { PlayableTextField } from '../common/components/playable-text';
 import { MarkdownInput } from '../answers/form';
 import { Text } from '../answers/AnswerList';
@@ -138,6 +139,7 @@ const LinksDialog = ({
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const [topics, setTopics] = React.useState({});
   const [results, setResults] = React.useState(null);
   const [pagination, setPagination] = React.useState({
     perPage: 5,
@@ -169,8 +171,23 @@ const LinksDialog = ({
     setOpen(false);
   };
 
+  const fetchTopics = async () => {
+    const { data } = await dataProvider.getList('topics', {
+      pagination: { perPage: 100, page: 1 },
+    });
+
+    setTopics(
+      data.reduce((acc, cur) => {
+        acc[cur.id] = cur;
+
+        return acc;
+      }, {}),
+    );
+  };
+
   React.useEffect(() => {
     start();
+    fetchTopics();
   }, []);
 
   if (!record) {
@@ -271,7 +288,11 @@ const LinksDialog = ({
         isOpen={open}
         loading={false}
         title="Link"
-        content="The selected record is linked to a different topic. Linking will change the question's topic. Proceed?"
+        content={
+          selected
+            ? `The selected record is linked to topic "${topics[selected.fk_topicId].name}". Linking will change the question's topic. Proceed?`
+            : 'Confirm'
+        }
         onConfirm={onConfirm}
         onClose={onClose}
       />
@@ -307,6 +328,7 @@ const LinksDialog = ({
               <TableHead>
                 <TableRow>
                   <TableCell>Text</TableCell>
+                  <TableCell>Topic</TableCell>
                   {
                     form.type === 'questions' && (
                       <TableCell>Answer</TableCell>
@@ -319,7 +341,7 @@ const LinksDialog = ({
                 {
                   results.map((result, i) => (
                     <TableRow key={i}>
-                      <TableCell>
+                      <TableCell style={{ width: '25%' }}>
                         {
                           form.type === 'questions' && (
                             <PlayableTextField
@@ -337,9 +359,24 @@ const LinksDialog = ({
                           )
                         }
                       </TableCell>
+                      <TableCell>
+                        {
+                          !!result.fk_topicId && result.fk_topicId !== record.fk_topicId && (
+                            <WarningIcon
+                              color="error"
+                              style={{ verticalAlign: 'middle' }}
+                            />
+                          )
+                        }
+                        {
+                          topics[result.fk_topicId]
+                            ? topics[result.fk_topicId].name
+                            : result.fk_topicId
+                        }
+                      </TableCell>
                       {
                         form.type === 'questions' && (
-                          <TableCell>
+                          <TableCell style={{ width: '25%' }}>
                             {
                               result.fk_answerId && (
                                 <Text
