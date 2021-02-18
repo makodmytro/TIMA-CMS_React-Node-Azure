@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Route } from 'react-router-dom'; // eslint-disable-line
+import { Route, useLocation } from 'react-router-dom'; // eslint-disable-line
 import {
   Resource,
   AdminContext,
@@ -32,7 +32,9 @@ const delay = (ms) => new Promise((r) => { // eslint-disable-line
 
 const AsyncResources = () => {
   const dataProvider = useDataProvider();
+  const location = useLocation();
   const [ready, setReady] = React.useState(false);
+  const timeout = React.useRef(null);
 
   const check = async () => {
     try {
@@ -46,9 +48,31 @@ const AsyncResources = () => {
     setReady(true);
   };
 
+  const refreshSession = async () => {
+    clearTimeout(timeout.current);
+    timeout.current = null;
+
+    await dataProvider.refreshSession();
+  };
+
+  const shouldRefreshSession = () => !timeout || !timeout.current;
+
   React.useEffect(() => {
     check();
   }, []);
+
+  React.useEffect(() => {
+    if (shouldRefreshSession() && location.pathname !== '/login') {
+      timeout.current = setTimeout(() => {
+        refreshSession();
+      }, 1000 * 60 * 10);
+    }
+
+    if (location.pathname === '/login') {
+      clearTimeout(timeout.current);
+      timeout.current = null;
+    }
+  }, [location.pathname, timeout]);
 
   if (!ready) {
     return (
