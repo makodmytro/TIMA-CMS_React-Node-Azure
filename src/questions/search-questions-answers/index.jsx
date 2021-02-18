@@ -1,15 +1,11 @@
 import React from 'react';
 import {
   useDataProvider,
-  SelectInput,
-  TextInput,
-  BooleanInput,
   useNotify,
+  useRefresh,
   Confirm,
 } from 'react-admin';
-import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -19,126 +15,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import WarningIcon from '@material-ui/icons/Warning';
-import { PlayableTextField } from '../common/components/playable-text';
-import { MarkdownInput } from '../answers/form';
-import { Text } from '../answers/AnswerList';
-
-const Filters = ({ onSubmit, initialValues }) => {
-  return (
-    <Form
-      onSubmit={onSubmit}
-      initialValues={initialValues}
-      render={({ handleSubmit, values }) => {
-        return (
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4} md={3}>
-                <TextInput label="Text" source="q" fullWidth />
-              </Grid>
-              <Grid item xs={12} sm={4} md={3}>
-                <SelectInput
-                  label="Search for"
-                  source="type"
-                  choices={[
-                    { id: 'questions', name: 'Questions' },
-                    { id: 'answers', name: 'Answers' },
-                  ]}
-                  fullWidth
-                />
-              </Grid>
-              {
-                values.type === 'questions' && (
-                  <>
-                    <Grid item xs={12} sm={4} md={3}>
-                      <SelectInput
-                        label="Approved"
-                        source="approved"
-                        choices={[
-                          { id: '__none__', name: 'Both' },
-                          { id: true, name: 'Only approved questions' },
-                          { id: false, name: 'Only not-approved questions' },
-                        ]}
-                        fullWidth
-                      />
-                    </Grid>
-                  </>
-                )
-              }
-              <Grid item xs={12} sm={4} md={3}>
-                <BooleanInput
-                  label="All topics"
-                  source="all_topics"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} md={3}>
-                <Box pt={2}>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                  >
-                    Search
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </form>
-        );
-      }}
-    />
-  );
-};
-
-const CreateForm = ({ onSubmit }) => (
-  <Form
-    onSubmit={onSubmit}
-    initialValues={{
-      text: '',
-    }}
-    validate={(values) => {
-      const errors = {};
-
-      if (!values.text) {
-        errors.text = 'Required';
-      }
-
-      return errors;
-    }}
-    render={({ handleSubmit, valid }) => (
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <MarkdownInput
-              label="Text"
-              source="text"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Box pt={2}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                fullWidth
-                disabled={!valid}
-              >
-                Create answer
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </form>
-    )}
-  />
-);
+import { PlayableTextField } from '../../common/components/playable-text';
+import { Text } from '../../answers/AnswerList';
+import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
+import Filters from './filters-form';
+import CreateForm from './answer-create-form';
 
 const LinksDialog = ({
   record,
-  onSelected,
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const refresh = useRefresh();
   const [topics, setTopics] = React.useState({});
   const [results, setResults] = React.useState(null);
   const [pagination, setPagination] = React.useState({
@@ -153,7 +41,10 @@ const LinksDialog = ({
   });
   const [count, setCount] = React.useState(0);
   const [selected, setSelected] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
+  const [dialogs, setDialogs] = React.useState({
+    confirmation: false,
+    answers: false,
+  });
 
   const start = () => {
     setResults(null);
@@ -168,7 +59,32 @@ const LinksDialog = ({
       approved: '__none__',
     });
     setSelected(null);
-    setOpen(false);
+    setDialogs({
+      confirmation: false,
+      answers: false,
+    });
+  };
+
+  const linkAnswer = async (fk_answerId, fk_topicId) => {
+    try {
+      await dataProvider.update('questions', {
+        id: record.id,
+        data: {
+          fk_answerId,
+          fk_topicId,
+        },
+      });
+
+      notify('The answer has been linked');
+      refresh();
+      window.scroll(0, 0);
+    } catch (err) {
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
+
+      throw err;
+    }
   };
 
   const fetchTopics = async () => {
@@ -251,7 +167,7 @@ const LinksDialog = ({
         },
       });
 
-      onSelected(data.id);
+      linkAnswer(data.id, data.fk_topicId);
       start();
     } catch (err) {
       if (err.body && err.body.message) {
@@ -262,30 +178,64 @@ const LinksDialog = ({
 
   const selectToLink = (result) => {
     if (result.fk_topicId !== record.fk_topicId) {
-      setOpen(true);
+      if (form.type === 'questions') {
+        setDialogs({
+          confirmation: true,
+          answers: false,
+        });
+      } else if (form.type === 'answers') {
+        setDialogs({
+          confirmation: false,
+          answers: true,
+        });
+      }
+
       setSelected(result);
 
       return;
     }
 
-    onSelected(result.fk_answerId || result.id, result.fk_topicId);
+    linkAnswer(result.fk_answerId || result.id, result.fk_topicId);
     start();
   };
 
   const onConfirm = () => {
-    onSelected(selected.fk_answerId || selected.id, selected.fk_topicId);
+    linkAnswer(selected.fk_answerId || selected.id, selected.fk_topicId);
     start();
   };
 
   const onClose = () => {
     setSelected(null);
-    setOpen(false);
+    setDialogs({
+      confirmation: false,
+      answers: false,
+    });
   };
 
   return (
     <>
+      {
+        dialogs.answers && (
+          <AnswerDiffTopicDialog
+            open={dialogs.answers}
+            onUpdate={onConfirm}
+            onDuplicate={() => {
+              createAnswer({
+                text: selected.text,
+              });
+              onClose();
+            }}
+            {...{
+              topics,
+              selected,
+              onClose,
+              record,
+            }}
+          />
+        )
+      }
       <Confirm
-        isOpen={open}
+        isOpen={dialogs.confirmation}
         loading={false}
         title="Link"
         content={

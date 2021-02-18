@@ -11,6 +11,7 @@ import {
   useRefresh,
   Confirm,
 } from 'react-admin';
+import { Link } from 'react-router-dom'; // eslint-disable-line
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import Box from '@material-ui/core/Box';
@@ -45,7 +46,10 @@ const Answer = ({
 
   return (
     <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
-      <Typography variant="body2">Answer</Typography>
+      <Typography variant="body2">
+        Answer&nbsp;
+        <small><Link to={`/answers/${answer.id}`} target="_blank">View</Link></small>
+      </Typography>
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">
         <Button
@@ -189,28 +193,6 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
     setAnswer(null);
   };
 
-  const linkAnswer = async (fk_answerId, fk_topicId) => {
-    try {
-      await dataProvider.update('questions', {
-        id: record.id,
-        data: {
-          fk_answerId,
-          fk_topicId,
-        },
-      });
-
-      notify('The answer has been linked');
-      refresh();
-      top();
-    } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
-
-      throw err;
-    }
-  };
-
   const scrollToSearch = () => ref.current.scrollIntoView();
 
   return (
@@ -254,7 +236,6 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
         <Typography>Search questions/answers to create link</Typography>
         <SearchQuestionsAnswers
           record={record}
-          onSelected={linkAnswer}
         />
         <div ref={ref} />
       </Box>
