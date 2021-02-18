@@ -229,6 +229,18 @@ const resDataProvider = {
       body: JSON.stringify({ approved: true }),
     });
   },
+  refreshSession: async (resource) => {
+    const { json } = await httpClient(`${baseApi}/editors/refresh`, {
+      method: 'POST',
+    });
+
+    const { accessToken, data } = json;
+
+    localStorage.setItem('token', accessToken);
+    localStorage.setItem('user', JSON.stringify(data));
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;
