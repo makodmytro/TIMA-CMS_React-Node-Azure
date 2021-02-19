@@ -5,6 +5,7 @@ import {
   useNotify,
   Confirm,
 } from 'react-admin';
+import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
@@ -20,6 +21,7 @@ const RelatedQuestionsTable = ({
   record,
   relatedQuestions,
   answerView,
+  languages,
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -104,7 +106,13 @@ const RelatedQuestionsTable = ({
               .map((related, i) => (
                 <TableRow key={i}>
                   <TableCell>
-                    <PlayableTextField source="text" record={{ ...related, Language: record.Language }} />
+                    <PlayableTextField
+                      source="text"
+                      getLanguageFromRecord={(r) => {
+                        return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
+                      }}
+                      record={{ ...related }}
+                    />
                   </TableCell>
                   <TableCell>
                     <ApprovedSwitchField record={related} />
@@ -122,7 +130,7 @@ const RelatedQuestionsTable = ({
                   </TableCell>
                   <TableCell>
                     <DropdownMenu
-                      record={{ ...related, Language: record.Language }}
+                      record={{ ...related }}
                     />
                   </TableCell>
                 </TableRow>
@@ -134,4 +142,12 @@ const RelatedQuestionsTable = ({
   );
 };
 
-export default RelatedQuestionsTable;
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : {};
+
+  return { languages };
+};
+
+export default connect(mapStateToProps)(RelatedQuestionsTable);

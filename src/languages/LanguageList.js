@@ -20,7 +20,7 @@ const LanguageList = (props) => {
     },
     {
       key: 'welcomeText',
-      el: <PlayableTextField source="welcomeText" />,
+      el: <PlayableTextField source="welcomeText" getLanguageFromRecord={(r) => r.code} />,
 
     },
     {
