@@ -5,6 +5,7 @@ import {
   useRefresh,
   Confirm,
 } from 'react-admin';
+import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -23,6 +24,7 @@ import CreateForm from './answer-create-form';
 
 const LinksDialog = ({
   record,
+  languages,
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -296,14 +298,19 @@ const LinksDialog = ({
                           form.type === 'questions' && (
                             <PlayableTextField
                               source="text"
-                              record={{ ...result, Language: record.Language }}
+                              record={result}
+                              getLanguageFromRecord={(r) => {
+                                return languages[r.fk_languageId]
+                                  ? languages[r.fk_languageId].code
+                                  : null;
+                              }}
                             />
                           )
                         }
                         {
                           form.type === 'answers' && (
                             <Text
-                              record={{ ...result, Language: record.Language }}
+                              record={result}
                               hideRelatedQuestions
                             />
                           )
@@ -330,7 +337,7 @@ const LinksDialog = ({
                             {
                               result.fk_answerId && (
                                 <Text
-                                  record={{ ...result.Answer, Language: result.Language }}
+                                  record={result}
                                   hideRelatedQuestions
                                 />
                               )
@@ -382,4 +389,14 @@ const LinksDialog = ({
   );
 };
 
-export default LinksDialog;
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : {};
+
+  return {
+    languages,
+  };
+};
+
+export default connect(mapStateToProps)(LinksDialog);
