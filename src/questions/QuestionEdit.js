@@ -270,6 +270,10 @@ const QuestionEdit = ({
         {...props}
         actions={<CustomTopToolbar />}
         undoable={false}
+        onSuccess={() => {
+          notify('The record has been updated');
+          refresh();
+        }}
       >
         <SimpleForm>
           <FormFields
