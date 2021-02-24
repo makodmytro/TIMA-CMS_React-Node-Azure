@@ -63,6 +63,18 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
+const mapStateToProps = (state) => {
+  const languages = state.admin.resources.languages
+    ? state.admin.resources.languages.data
+    : {};
+
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : {};
+
+  return { topics, languages };
+};
+
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const {
@@ -158,7 +170,7 @@ const Filters = ({ languages, topics, ...props }) => {
   );
 };
 
-export const Text = ({ record, hideRelatedQuestions }) => {
+export const Text = connect(mapStateToProps)(({ record, hideRelatedQuestions, languages }) => {
   const classes = styles();
   const badgeContent = record.relatedQuestions
     ? `+${record.relatedQuestions}`
@@ -188,11 +200,11 @@ export const Text = ({ record, hideRelatedQuestions }) => {
       <PlayableText
         hideText
         text={record.text}
-        lang={record.Language ? record.Language.code : 'en-GB'}
+        lang={languages[record.fk_languageId] ? languages[record.fk_languageId].code : null}
       />
     </div>
   );
-};
+});
 
 const AnswerList = ({
   languages, topics, dispatch, ...props
@@ -241,18 +253,6 @@ const AnswerList = ({
       </List>
     </>
   );
-};
-
-const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : [];
-
-  const topics = state.admin.resources.topics
-    ? state.admin.resources.topics.data
-    : [];
-
-  return { topics, languages };
 };
 
 export default connect(mapStateToProps)(AnswerList);

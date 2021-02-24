@@ -79,7 +79,7 @@ const FormFields = ({
   const notify = useNotify();
   const {
     input: { value },
-  } = useField('fk_answerId');
+  } = useField('fk_languageId');
   let fetching = false;
 
   const getLang = () => {
@@ -246,7 +246,7 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
     ? state.admin.resources.languages.data
-    : [];
+    : {};
 
   return {
     languages,

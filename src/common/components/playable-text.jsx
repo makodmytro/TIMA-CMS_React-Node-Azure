@@ -48,9 +48,20 @@ const PlayableTextInput = ({ lang, ...props }) => {
   );
 };
 
-const PlayableTextField = ({ record, source }) => (
-  <PlayableText text={get(record, source)} lang={record.Language ? record.Language.code : 'en-GB'} />
-);
+const PlayableTextField = ({ record, source, getLanguageFromRecord }) => {
+  let lang = record.Language ? record.Language.code : null;
+
+  if (getLanguageFromRecord) {
+    lang = getLanguageFromRecord(record);
+  }
+
+  return (
+    <PlayableText
+      text={get(record, source)}
+      lang={lang}
+    />
+  );
+};
 
 const PlayableText = ({
   el,
@@ -119,12 +130,22 @@ const PlayableText = ({
       &nbsp;
       {
         playing && (
-          <StopIcon size="small" className={classes.play} onClick={stop} color="secondary" />
+          <StopIcon
+            size="small"
+            className={classes.play}
+            onClick={stop}
+            color={lang ? 'secondary' : 'disabled'}
+          />
         )
       }
       {
         !playing && (
-          <PlayArrow size="small" className={classes.play} onClick={getAudio} color="secondary" />
+          <PlayArrow
+            size="small"
+            className={classes.play}
+            onClick={getAudio}
+            color={lang ? 'secondary' : 'disabled'}
+          />
         )
       }
     </>
