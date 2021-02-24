@@ -36,6 +36,7 @@
     "jsx-a11y/media-has-caption": "off",
     "arrow-body-style": "off",
     "import/no-named-as-default": "warn",
-    "import/no-named-as-default-member": "warn"
+    "import/no-named-as-default-member": "warn",
+    "react/no-unescaped-entities": "off"
   }
 }
