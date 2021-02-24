@@ -83,7 +83,7 @@ const FormFields = ({
     input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
   const {
-    input: { onChange: changeTopic },
+    input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
 
   let fetching = false;
@@ -91,7 +91,14 @@ const FormFields = ({
   const onLanguageChangeConfirm = () => {
     changeLanguage(tmpLanguageValue);
 
-    const first = Object.values(topics).find((t) => t.fk_languageId === tmpLanguageValue);
+    const current = topics[fkTopicId];
+    let first = Object.values(topics).find((t) => {
+      return t.fk_languageId === tmpLanguageValue && t.topicKey === current.topicKey;
+    });
+
+    if (!first) {
+      first = Object.values(topics).find((t) => t.fk_languageId === tmpLanguageValue);
+    }
 
     if (first) {
       changeTopic(first.id);
