@@ -132,7 +132,6 @@ const Form = ({
         validate={required()}
         fullWidth
         filter={{ fk_languageId: fkLanguageId }}
-        disabled={edit}
       >
         <SelectInput
           optionText="name"
