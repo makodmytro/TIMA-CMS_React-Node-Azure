@@ -38,12 +38,12 @@ const AnswerEdit = (props) => {
     }
   }, [answer]);
 
-  const updateRelatedQuestions = async ({ fk_languageId, fk_topicId }) => {
+  const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
     let i = 0;
 
-    while (i < answer.Questions.length) {
+    while (i < questions.length) {
       await dataProvider.update('questions', { // eslint-disable-line
-        id: answer.Questions[i].id,
+        id: questions[i].id,
         data: {
           fk_languageId,
           fk_topicId,
@@ -59,7 +59,7 @@ const AnswerEdit = (props) => {
 
   const onSucces = ({ data }) => {
     if (data.fk_languageId !== ref.current.fk_languageId) {
-      return updateRelatedQuestions(data);
+      return updateRelatedQuestions(data.Questions, data);
     }
 
     notify('The answer was updated');
