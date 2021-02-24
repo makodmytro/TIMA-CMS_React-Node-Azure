@@ -1,10 +1,11 @@
 import React from 'react';
+import omit from 'lodash/omit';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import {
   Edit,
   SimpleForm,
-  useRedirect,
+  useRefresh,
   useNotify,
   useDataProvider,
 } from 'react-admin';
@@ -27,13 +28,13 @@ const Fields = ({ setRecord, ...props }) => {
 
 const AnswerEdit = (props) => {
   const notify = useNotify();
-  const redirect = useRedirect();
+  const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const [answer, setAnswer] = React.useState(null);
   const ref = React.useRef();
 
   React.useEffect(() => {
-    if (!ref.current) {
+    if (!ref.current && answer) {
       ref.current = answer;
     }
   }, [answer]);
@@ -53,8 +54,9 @@ const AnswerEdit = (props) => {
       i += 1;
     }
 
+    ref.current = null;
     notify('The answer and its related questions were updated');
-    redirect('/answers');
+    refresh();
   };
 
   const onSucces = ({ data }) => {
@@ -62,8 +64,9 @@ const AnswerEdit = (props) => {
       return updateRelatedQuestions(data.Questions, data);
     }
 
+    ref.current = null;
     notify('The answer was updated');
-    return redirect('/answers');
+    return refresh();
   };
 
   return (
@@ -74,6 +77,9 @@ const AnswerEdit = (props) => {
         undoable={false}
         onSuccess={onSucces}
         mutationMode="pessimistic"
+        transform={(data) => {
+          return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
+        }}
       >
         <SimpleForm>
           <Fields
