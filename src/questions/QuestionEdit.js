@@ -122,7 +122,17 @@ const FormFields = ({
         lang={getLang}
         fullWidth
       />
-
+      <ReferenceInput
+        label="resources.questions.fields.fk_languageId"
+        source="fk_languageId"
+        reference="languages"
+        validate={required()}
+        fullWidth
+      >
+        <SelectInput
+          optionText="name"
+        />
+      </ReferenceInput>
       <ReferenceInput
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
