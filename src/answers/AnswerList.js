@@ -212,7 +212,7 @@ const AnswerList = ({
   const columns = [
     {
       key: 'text',
-      el: <Text />,
+      el: <Text label="Text" sortBy="text" />,
     },
     {
       key: 'fk_languageId',
