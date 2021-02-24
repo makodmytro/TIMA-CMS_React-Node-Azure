@@ -18,7 +18,7 @@ const getResourceAssociations = (resource) => {
     }
     case 'answers': {
       return {
-        include: ['Editor', 'Topic', 'Language'],
+        include: ['Topic', 'Language'],
       };
     }
     case 'stats/sessions': {

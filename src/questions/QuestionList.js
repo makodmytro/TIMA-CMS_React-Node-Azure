@@ -262,7 +262,7 @@ const AnswerField = ({ record }) => {
     <Text
       record={{
         ...record.Answer,
-        Language: record.Language ? record.Language : { code: 'en-GB' },
+        Language: record.Language,
         relatedQuestions: record.relatedQuestionsForAnswerCount || 0,
       }}
     />
@@ -292,7 +292,7 @@ const CustomGridItem = ({
           <TableCell>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : 'en-GB'}
+              lang={record.Language ? record.Language.code : null}
             />
           </TableCell>
         )}
@@ -499,11 +499,11 @@ const QuestionList = ({
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
     ? state.admin.resources.languages.data
-    : [];
+    : {};
 
   const topics = state.admin.resources.topics
     ? state.admin.resources.topics.data
-    : [];
+    : {};
 
   return { topics, languages };
 };
