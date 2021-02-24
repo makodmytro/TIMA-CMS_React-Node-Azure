@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import {
   Edit,
   SimpleForm,
+  useRedirect,
+  useNotify,
+  useDataProvider,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
@@ -23,11 +26,55 @@ const Fields = ({ setRecord, ...props }) => {
 };
 
 const AnswerEdit = (props) => {
+  const notify = useNotify();
+  const redirect = useRedirect();
+  const dataProvider = useDataProvider();
   const [answer, setAnswer] = React.useState(null);
+  const ref = React.useRef();
+
+  React.useEffect(() => {
+    if (!ref.current) {
+      ref.current = answer;
+    }
+  }, [answer]);
+
+  const updateRelatedQuestions = async ({ fk_languageId, fk_topicId }) => {
+    let i = 0;
+
+    while (i < answer.Questions.length) {
+      await dataProvider.update('questions', { // eslint-disable-line
+        id: answer.Questions[i].id,
+        data: {
+          fk_languageId,
+          fk_topicId,
+        },
+      });
+
+      i += 1;
+    }
+
+    notify('The answer and its related questions were updated');
+    redirect('/answers');
+  };
+
+  const onSucces = ({ data }) => {
+    if (data.fk_languageId !== ref.current.fk_languageId) {
+      return updateRelatedQuestions(data);
+    }
+
+    notify('The answer was updated');
+    return redirect('/answers');
+  };
 
   return (
     <>
-      <Edit {...props} actions={<CustomTopToolbar />} undoable={false}>
+      <Edit
+        {...props}
+        actions={<CustomTopToolbar />}
+        undoable={false}
+        onSuccess={onSucces}
+        mutationMode="pessimistic"
+      >
         <SimpleForm>
           <Fields
             setRecord={setAnswer}

@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  ReferenceInput, required, SelectInput,
+  ReferenceInput,
+  required,
+  SelectInput,
+  Confirm,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
@@ -41,41 +44,86 @@ export const MarkdownInput = ({ source, label, lang }) => {
   );
 };
 
-const Form = ({ languages, edit }) => {
+const Form = ({
+  languages, topics, edit, record,
+}) => {
+  const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const {
-    input: { value },
+    input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
+  const {
+    input: { onChange: changeTopic },
+  } = useField('fk_topicId');
 
   const getLang = () => {
-    if (!value || !languages[value]) {
+    if (!fkLanguageId || !languages[fkLanguageId]) {
       return null;
     }
 
-    return languages[value].code;
+    return languages[fkLanguageId].code;
   };
+
+  const onLanguageChangeConfirm = () => {
+    changeLanguage(tmpLanguageValue);
+
+    const first = Object.values(topics).find((t) => t.fk_languageId === tmpLanguageValue);
+
+    if (first) {
+      changeTopic(first.id);
+    }
+
+    setTmpLanguageValue(null);
+  };
+
+  const onLanguageChangeCancel = () => {
+    setTmpLanguageValue(null);
+    changeLanguage(record.fk_languageId);
+  };
+
+  const inputProps = !edit
+    ? {}
+    : {
+      onChange: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setTmpLanguageValue(e.target.value);
+      },
+    };
 
   return (
     <>
+      {
+        edit && (
+          <Confirm
+            isOpen={!!tmpLanguageValue}
+            loading={false}
+            title="Change language"
+            content="Changing an answers's language will also have an effect its topic and the related question's topics"
+            onConfirm={onLanguageChangeConfirm}
+            onClose={onLanguageChangeCancel}
+            confirm="Proceed"
+            cancel="Undo change"
+          />
+        )
+      }
       <MarkdownInput
         label="Text"
         source="text"
         lang={getLang()}
       />
-      {
-        !edit && (
-          <ReferenceInput
-            source="fk_languageId"
-            label="resources.answers.fields.fk_languageId"
-            reference="languages"
-            validate={required()}
-            fullWidth
-          >
-            <SelectInput
-              optionText="name"
-            />
-          </ReferenceInput>
-        )
-      }
+      <ReferenceInput
+        source="fk_languageId"
+        label="resources.answers.fields.fk_languageId"
+        reference="languages"
+        validate={required()}
+        fullWidth
+        inputProps={inputProps}
+      >
+        <SelectInput
+          optionText="name"
+        />
+      </ReferenceInput>
 
       <ReferenceInput
         source="fk_topicId"
@@ -83,7 +131,7 @@ const Form = ({ languages, edit }) => {
         reference="topics"
         validate={required()}
         fullWidth
-        filter={{ fk_languageId: value }}
+        filter={{ fk_languageId: fkLanguageId }}
         disabled={edit}
       >
         <SelectInput
@@ -99,8 +147,13 @@ const mapStateToProps = (state) => {
     ? state.admin.resources.languages.data
     : [];
 
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : [];
+
   return {
     languages,
+    topics,
   };
 };
 

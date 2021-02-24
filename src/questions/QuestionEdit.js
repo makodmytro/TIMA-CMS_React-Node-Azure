@@ -68,6 +68,7 @@ const Answer = ({
 
 const FormFields = ({
   languages,
+  topics,
   record,
   setRecord,
   answer,
@@ -75,19 +76,41 @@ const FormFields = ({
   scrollToSearch,
   unlinkAnswer,
 }) => {
+  const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const {
-    input: { value },
+    input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
+  const {
+    input: { onChange: changeTopic },
+  } = useField('fk_topicId');
+
   let fetching = false;
 
+  const onLanguageChangeConfirm = () => {
+    changeLanguage(tmpLanguageValue);
+
+    const first = Object.values(topics).find((t) => t.fk_languageId === tmpLanguageValue);
+
+    if (first) {
+      changeTopic(first.id);
+    }
+
+    setTmpLanguageValue(null);
+  };
+
+  const onLanguageChangeCancel = () => {
+    setTmpLanguageValue(null);
+    changeLanguage(record.fk_languageId);
+  };
+
   const getLang = () => {
-    if (!value || !languages[value]) {
+    if (!fkLanguageId || !languages[fkLanguageId]) {
       return null;
     }
 
-    return languages[value].code;
+    return languages[fkLanguageId].code;
   };
 
   const fetchAnswer = async () => {
@@ -119,6 +142,16 @@ const FormFields = ({
 
   return (
     <>
+      <Confirm
+        isOpen={!!tmpLanguageValue}
+        loading={false}
+        title="Change language"
+        content="Changing a question's language will also have an effect in the topic"
+        onConfirm={onLanguageChangeConfirm}
+        onClose={onLanguageChangeCancel}
+        confirm="Proceed"
+        cancel="Undo change"
+      />
       <PlayableTextInput
         label="resources.questions.fields.text"
         source="text"
@@ -126,14 +159,32 @@ const FormFields = ({
         lang={getLang}
         fullWidth
       />
+      <ReferenceInput
+        label="resources.questions.fields.fk_languageId"
+        source="fk_languageId"
+        reference="languages"
+        validate={required()}
+        fullWidth
+        inputProps={{
+          onChange: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
+            setTmpLanguageValue(e.target.value);
+          },
+        }}
+      >
+        <SelectInput
+          optionText="name"
+        />
+      </ReferenceInput>
       <ReferenceInput
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
         reference="topics"
         validate={required()}
         fullWidth
-        filter={{ fk_languageId: value }}
+        filter={{ fk_languageId: fkLanguageId }}
       >
         <SelectInput
           optionText="name"
@@ -149,7 +200,10 @@ const FormFields = ({
   );
 };
 
-const QuestionEdit = ({ dispatch, languages, ...props }) => {
+const QuestionEdit = ({
+  dispatch, languages, topics,
+  ...props
+}) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -214,6 +268,7 @@ const QuestionEdit = ({ dispatch, languages, ...props }) => {
           <FormFields
             {...{
               languages,
+              topics,
               setRecord,
               answer,
               setAnswer,
@@ -248,8 +303,13 @@ const mapStateToProps = (state) => {
     ? state.admin.resources.languages.data
     : {};
 
+  const topics = state.admin.resources.topics
+    ? state.admin.resources.topics.data
+    : {};
+
   return {
     languages,
+    topics,
   };
 };
 
