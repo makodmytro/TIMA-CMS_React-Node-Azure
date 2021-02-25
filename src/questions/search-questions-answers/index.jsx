@@ -337,7 +337,7 @@ const LinksDialog = ({
                             {
                               result.fk_answerId && (
                                 <Text
-                                  record={result}
+                                  record={result.Answer}
                                   hideRelatedQuestions
                                 />
                               )
