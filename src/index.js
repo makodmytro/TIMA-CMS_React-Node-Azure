@@ -2,14 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import * as Sentry from '@sentry/react';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_DSN,
+});
+
 ReactDOM.render(
-  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <App />
-  </MuiPickersUtilsProvider>,
+  <Sentry.ErrorBoundary fallback="An error has occurred">
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <App />
+    </MuiPickersUtilsProvider>
+  </Sentry.ErrorBoundary>,
   document.getElementById('root'),
 );
 
