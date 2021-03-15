@@ -2,16 +2,18 @@ import * as React from 'react';
 import capitalize from 'lodash/capitalize';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
-import { MenuItemLink, getResources } from 'react-admin';
+import { MenuItemLink, getResources, usePermissions } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 import { baseApi } from '../httpClient';
 
 const Menu = ({ onMenuClick, logout }) => {
+  const { permissions } = usePermissions();
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
   const resources = useSelector(getResources);
+
   return (
     <>
       <Box py={2}>
@@ -43,11 +45,25 @@ const Menu = ({ onMenuClick, logout }) => {
         }
         {isXSmall && logout}
       </Box>
-      <span style={{
-        position: 'fixed', bottom: 5, left: 5, fontSize: 10,
-      }}
-      >{baseApi}
-      </span>
+      <div
+        style={{
+          position: 'fixed', bottom: 5, left: 5, fontSize: 10,
+        }}
+      >
+        <div>
+          Allow edit
+          <span style={{ float: 'right' }}>
+            {permissions && permissions.allowEdit ? 'Yes' : 'No'}
+          </span>
+        </div>
+        <div>
+          Allow delete
+          <span style={{ float: 'right' }}>
+            {permissions && permissions.allowEdit ? 'Yes' : 'No'}
+          </span>
+        </div>
+        {baseApi}
+      </div>
     </>
 
   );

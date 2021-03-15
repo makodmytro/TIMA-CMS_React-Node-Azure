@@ -2,6 +2,7 @@ import React from 'react';
 import {
   EditButton,
   DeleteButton,
+  usePermissions,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -13,6 +14,7 @@ const DropdownMenu = ({
   record,
   basePath,
 }) => {
+  const { permissions } = usePermissions();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -62,18 +64,19 @@ const DropdownMenu = ({
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
+          <BatchApproveButton answerId={record.id} />
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => e.stopPropagation()}
+        >
           <DeleteButton
             basePath={basePath}
             record={record}
             undoable={false}
             fullWidth
             style={{ justifyContent: 'flex-start' }}
+            disabled={permissions && !permissions.allowDelete}
           />
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
-          <BatchApproveButton answerId={record.id} />
         </MenuItem>
       </Menu>
     </div>

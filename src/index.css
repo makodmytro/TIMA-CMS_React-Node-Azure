@@ -49,3 +49,13 @@ code {
   left: 48px;
   margin-left: -11px;
 }
+
+.error-btn {
+  border-color: red !important;
+  color: red !important;
+}
+
+.error-btn:disabled {
+  border-color: gray !important;
+  color: gray !important;
+}

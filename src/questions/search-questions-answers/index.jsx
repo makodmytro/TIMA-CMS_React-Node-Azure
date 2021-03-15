@@ -4,6 +4,7 @@ import {
   useNotify,
   useRefresh,
   Confirm,
+  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -26,6 +27,7 @@ const LinksDialog = ({
   record,
   languages,
 }) => {
+  const { permissions } = usePermissions();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -353,6 +355,7 @@ const LinksDialog = ({
                           onClick={() => {
                             selectToLink(result);
                           }}
+                          disabled={permissions && !permissions.allowEdit}
                         >
                           Link to answer
                         </Button>

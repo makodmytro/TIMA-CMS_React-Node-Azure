@@ -8,6 +8,10 @@ import {
   useRefresh,
   useNotify,
   useDataProvider,
+  usePermissions,
+  Toolbar,
+  SaveButton,
+  DeleteButton,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './form';
@@ -15,6 +19,24 @@ import AnswerMedia from './media/media';
 import RelatedQuestionsTable from '../questions/related-questions-table';
 import SearchQuestions from './search-questions';
 import BatchApproveButton from './batch-approve-button';
+
+const CustomToolbar = (props) => {
+  return (
+    <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <SaveButton
+        label="Save"
+        submitOnEnter
+        disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
+      />
+      <DeleteButton
+        basePath={props.basePath}
+        record={props.record}
+        undoable={false}
+        disabled={props.permissions && !props.permissions.allowDelete}
+      />
+    </Toolbar>
+  );
+};
 
 const Fields = ({ setRecord, ...props }) => {
   React.useEffect(() => {
@@ -27,6 +49,7 @@ const Fields = ({ setRecord, ...props }) => {
 };
 
 const AnswerEdit = (props) => {
+  const { permissions } = usePermissions();
   const notify = useNotify();
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
@@ -81,7 +104,7 @@ const AnswerEdit = (props) => {
           return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
         }}
       >
-        <SimpleForm>
+        <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
           <Fields
             setRecord={setAnswer}
           />
@@ -111,7 +134,7 @@ const AnswerEdit = (props) => {
         />
       </Box>
       {
-        props.permissions && props.permissions.allowMediaFiles && (
+        permissions && permissions.allowMediaFiles && (
           <Box my={1} p={2} boxShadow={3}>
             <Typography>Media</Typography>
             <AnswerMedia answer={answer} />

@@ -9,6 +9,7 @@ import {
   Toolbar,
   SaveButton,
   DeleteButton,
+  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
@@ -24,10 +25,16 @@ const CustomToolbar = (props) => (
       label="Save"
       redirect="list"
       submitOnEnter
+      disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
     />
     <ShowQuestions size="medium" ml={1} />
     {props.record.globalTopic ? null : <QrDialog ml={1} />}
-    <DeleteButton basePath={props.basePath} record={props.record} undoable={false} />
+    <DeleteButton
+      basePath={props.basePath}
+      record={props.record}
+      undoable={false}
+      disabled={props.permissions && !props.permissions.allowDelete}
+    />
   </Toolbar>
 );
 
@@ -41,6 +48,8 @@ export const Advanced = (props) => (
 );
 
 const TopicEdit = ({ languages, dispatch, ...props }) => {
+  const { permissions } = usePermissions();
+
   const getLang = (r) => {
     if (!r || !languages[r.fk_languageId]) {
       return null;
@@ -51,7 +60,7 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
 
   return (
     <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />}>
-      <SimpleForm toolbar={<CustomToolbar />}>
+      <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
         <PlayableTextInput
           source="name"
           validate={required()}

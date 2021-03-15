@@ -5,10 +5,12 @@ import {
   useDataProvider,
   useRefresh,
   useNotify,
+  usePermissions,
 } from 'react-admin';
 import TickIcon from '@material-ui/icons/DoneAll';
 
 const BatchApproveButton = ({ answerId, variant }) => {
+  const { permissions } = usePermissions();
   const [open, setOpen] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -59,6 +61,7 @@ const BatchApproveButton = ({ answerId, variant }) => {
         onClick={onOpen}
         size="small"
         variant={variant || 'text'}
+        disabled={permissions && !permissions.allowEdit}
       >
         <TickIcon /> Approve questions
       </Button>
