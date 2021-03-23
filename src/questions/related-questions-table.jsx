@@ -4,6 +4,7 @@ import {
   useRefresh,
   useNotify,
   Confirm,
+  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
@@ -23,6 +24,9 @@ const RelatedQuestionsTable = ({
   answerView,
   languages,
 }) => {
+  const { permissions } = usePermissions();
+  const disabled = permissions && !permissions.allowEdit;
+
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -115,15 +119,16 @@ const RelatedQuestionsTable = ({
                     />
                   </TableCell>
                   <TableCell>
-                    <ApprovedSwitchField record={related} />
+                    <ApprovedSwitchField record={related} disabled={disabled} />
                   </TableCell>
                   <TableCell>
                     <Button
-                      style={{ borderColor: 'red', color: 'red ' }}
+                      className="error-btn"
                       size="small"
                       type="button"
                       variant="outlined"
                       onClick={() => unlinkAnswerClicked(related.id)}
+                      disabled={disabled}
                     >
                       Unlink answer
                     </Button>

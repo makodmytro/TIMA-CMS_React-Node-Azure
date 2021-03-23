@@ -12,6 +12,7 @@ import {
   useDataProvider,
   useListContext,
   useNotify,
+  usePermissions,
   useRedirect,
   useRefresh,
 } from 'react-admin';
@@ -273,6 +274,7 @@ const CustomGridItem = ({
   record, removeAnswer,
   visibleColumns,
 }) => {
+  const { permissions } = usePermissions();
   const classes = styles();
   const redirect = useRedirect();
 
@@ -312,7 +314,7 @@ const CustomGridItem = ({
         {visibleColumns.includes('approved')
         && (
           <TableCell>
-            <ApprovedSwitchField label="Approved" record={record} />
+            <ApprovedSwitchField label="Approved" record={record} disabled={permissions && !permissions.allowEdit} />
           </TableCell>
         )}
         {visibleColumns.includes('updatedAt') && (

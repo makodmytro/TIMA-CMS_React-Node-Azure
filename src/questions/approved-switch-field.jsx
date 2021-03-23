@@ -6,7 +6,7 @@ import {
   useRefresh,
 } from 'react-admin';
 
-const ApprovedSwitchField = ({ record }) => {
+const ApprovedSwitchField = ({ record, disabled }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -43,6 +43,7 @@ const ApprovedSwitchField = ({ record }) => {
         updateApproved(e.target.checked);
       }}
       checked={!!record.approved}
+      disabled={disabled === true}
     />
   );
 };

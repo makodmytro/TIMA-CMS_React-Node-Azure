@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line
-import { useLocation } from 'react-router-dom'; // eslint-disable-line
 import {
   DeleteButton,
   EditButton,
   useRefresh,
   ResourceContextProvider,
+  usePermissions,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 const DropdownMenu = ({
   record,
 }) => {
+  const { permissions } = usePermissions();
   const refresh = useRefresh();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -93,6 +94,7 @@ const DropdownMenu = ({
               onSuccess={() => refresh()}
               fullWidth
               style={{ justifyContent: 'flex-start' }}
+              disabled={permissions && !permissions.allowDelete}
             />
           </ResourceContextProvider>
         </MenuItem>

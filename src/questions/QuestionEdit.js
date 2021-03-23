@@ -10,6 +10,10 @@ import {
   BooleanInput,
   useRefresh,
   Confirm,
+  usePermissions,
+  Toolbar,
+  SaveButton,
+  DeleteButton,
 } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import { useField } from 'react-final-form'; // eslint-disable-line
@@ -23,9 +27,30 @@ import { PlayableTextInput } from '../common/components/playable-text';
 import RelatedQuestionsTable from './related-questions-table';
 import SearchQuestionsAnswers from './search-questions-answers';
 
+const CustomToolbar = (props) => {
+  return (
+    <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <SaveButton
+        label="Save"
+        submitOnEnter
+        disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
+      />
+      <DeleteButton
+        basePath={props.basePath}
+        record={props.record}
+        undoable={false}
+        disabled={props.permissions && !props.permissions.allowDelete}
+      />
+    </Toolbar>
+  );
+};
+
 const Answer = ({
   record, answer, unlinkAnswer, scrollToSearch,
 }) => {
+  const { permissions } = usePermissions();
+  const disabled = permissions && !permissions.allowEdit;
+
   if (!record) {
     return null;
   }
@@ -38,6 +63,7 @@ const Answer = ({
         type="button"
         size="small"
         onClick={scrollToSearch}
+        disabled={disabled}
       >
         Link answer
       </Button>
@@ -53,11 +79,15 @@ const Answer = ({
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">
         <Button
-          style={{ borderColor: 'red', color: 'red', textTransform: 'none' }}
+          className="error-btn"
+          style={{
+            textTransform: 'none',
+          }}
           type="button"
           variant="outlined"
           size="small"
           onClick={() => unlinkAnswer(record.id)}
+          disabled={disabled}
         >
           Unlink
         </Button>
@@ -211,6 +241,7 @@ const QuestionEdit = ({
   dispatch, languages, topics,
   ...props
 }) => {
+  const { permissions } = usePermissions();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -275,7 +306,7 @@ const QuestionEdit = ({
           refresh();
         }}
       >
-        <SimpleForm>
+        <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
           <FormFields
             {...{
               languages,

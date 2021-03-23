@@ -7,6 +7,7 @@ import {
   TextInput,
   BooleanInput,
   required,
+  usePermissions,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
@@ -73,39 +74,45 @@ const Filters = ({ onSubmit, initialValues }) => {
   );
 };
 
-const CreateForm = ({ onSubmit }) => (
-  <Form
-    onSubmit={onSubmit}
-    initialValues={{
-      text: '',
-    }}
-    render={({ handleSubmit, form }) => (
-      <form onSubmit={(e) => handleSubmit(e).then(form.restart)}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={9}>
-            <TextInput label="Text" source="text" fullWidth validate={required()} />
+const CreateForm = ({ onSubmit }) => {
+  const { permissions } = usePermissions();
+
+  return (
+    <Form
+      onSubmit={onSubmit}
+      initialValues={{
+        text: '',
+      }}
+      render={({ handleSubmit, form }) => (
+        <form onSubmit={(e) => handleSubmit(e).then(form.restart)}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={9}>
+              <TextInput label="Text" source="text" fullWidth validate={required()} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Box pt={2}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                  disabled={permissions && !permissions.allowEdit}
+                >
+                  Create question
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={3}>
-            <Box pt={2}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                fullWidth
-              >
-                Create question
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </form>
-    )}
-  />
-);
+        </form>
+      )}
+    />
+  );
+};
 
 const LinksDialog = ({
   record,
 }) => {
+  const { permissions } = usePermissions();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -280,6 +287,7 @@ const LinksDialog = ({
                           checked={isSelected(result)}
                           value={isSelected(result)}
                           onClick={() => selectResult(result)}
+                          disabled={permissions && !permissions.allowEdit}
                         />
                       </TableCell>
                       <TableCell>
@@ -325,6 +333,7 @@ const LinksDialog = ({
                     variant="contained"
                     color="primary"
                     size="small"
+                    disabled={permissions && !permissions.allowEdit}
                   >
                     Link answer for {selected.length} questions
                   </Button>
