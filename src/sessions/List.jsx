@@ -165,6 +165,7 @@ const QuestionList = ({
     { key: 'duration', el: <TextField source="duration" label="Duration" /> },
     { key: 'questionsCount', el: <TextField source="questionsCount" label="# of questions" /> },
     { key: 'answersCount', el: <TextField source="answersCount" label="# of answers" /> },
+    { key: 'demoCode', el: <TextField source="demoCode" label="Code" /> },
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];
   const [visibleColumns, setVisibleColumns] = React.useState(getVisibleColumns(columns, 'sessions'));

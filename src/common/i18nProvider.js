@@ -75,6 +75,7 @@ const english = {
         answersCount: '# of answers',
         updatedAt: 'Updated',
         clientCountry: 'Country',
+        demoCode: 'Demo code',
       },
     },
   },
