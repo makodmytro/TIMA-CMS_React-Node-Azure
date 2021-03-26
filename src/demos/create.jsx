@@ -12,7 +12,7 @@ const CreateDemo = (props) => (
     <SimpleForm initialValues={{ baseDemoUrl: 'https://demo1.tima-online.com' }}>
       <TextInput source="contact" fullWidth validate={required()} />
       <TextInput source="link" fullWidth validate={required()} />
-      <DateInput source="expiryDate" label="Expiricy date" validate={required()} fullWidth />
+      <DateInput source="expiryDate" label="Expiry date" validate={required()} fullWidth />
       <TextInput source="baseDemoUrl" fullWidth validate={required()} />
     </SimpleForm>
   </Create>
