@@ -18,6 +18,7 @@ import question from './questions';
 import answer from './answers';
 import sessions from './sessions';
 import dashboard from './dashboard';
+import demos from './demos';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -135,6 +136,7 @@ const AsyncResources = () => {
         name="stats/sessions"
         {...sessions}
       />
+      <Resource name="demos" {...demos} />
       <Resource
         name="editors"
       />
