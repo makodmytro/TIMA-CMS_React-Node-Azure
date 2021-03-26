@@ -11,9 +11,10 @@ const EditDemo = (props) => (
   <Edit {...props} undoable={false}>
     <SimpleForm>
       <TextInput source="contact" fullWidth validate={required()} />
+      <TextInput source="code" fullWidth disabled />
       <TextInput source="link" fullWidth validate={required()} />
-      <DateInput source="expiryDate" label="Expiricy date" validate={required()} fullWidth />
-      <TextInput source="demoUrl" fullWidth validate={required()} />
+      <DateInput source="expiryDate" label="Expiry date" validate={required()} fullWidth />
+      <TextInput source="demoUrl" fullWidth validate={required()} disabled />
     </SimpleForm>
   </Edit>
 );
