@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   List,
   Datagrid,
-  TextField,
+  TextInput,
+  Filter,
   DateField,
   EditButton,
   DeleteButton,
@@ -78,8 +79,26 @@ const Code = ({ record }) => (
   </div>
 );
 
+const DemosFilters = (props) => {
+  return (
+    <Filter {...props}>
+      <TextInput
+        source="code"
+        label="Code"
+        alwaysOn
+      />
+    </Filter>
+  );
+};
+
 const DemosList = (props) => (
-  <List {...props} bulkActionButtons={false}>
+  <List
+    {...props}
+    bulkActionButtons={false}
+    filters={(
+      <DemosFilters />
+    )}
+  >
     <Datagrid rowClick="edit">
       <LinkField label="Link" />
       <DemoUrl label="Demo URL" />

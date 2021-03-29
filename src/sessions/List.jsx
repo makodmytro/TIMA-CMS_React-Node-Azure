@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Datagrid,
   DateField,
@@ -12,6 +13,7 @@ import {
 } from 'react-admin';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form';
 import { Language, Topic } from '../common/components/fields-values-by-fk';
 import ListActions, {
@@ -162,6 +164,18 @@ const Filters = ({
   );
 };
 
+const DemoLink = ({ record }) => (
+  <Button
+    component={Link}
+    to={`/demos?filter=${encodeURIComponent(JSON.stringify({ code: record.demoCode }))}`}
+    onClick={(e) => e.stopPropagation()}
+    size="small"
+    color="primary"
+  >
+    {record.demoCode}
+  </Button>
+);
+
 const QuestionList = ({
   permissions, languages, topics, dispatch, ...props
 }) => {
@@ -178,7 +192,7 @@ const QuestionList = ({
   ];
 
   if (permissions && permissions.allowDemo === true) {
-    columns.push({ key: 'demoCode', el: <TextField source="demoCode" label="Code" /> });
+    columns.push({ key: 'demoCode', el: <DemoLink source="demoCode" label="Code" /> });
   }
 
   columns.push({ key: 'updatedAt', el: <DateField source="updatedAt" showTime /> });
