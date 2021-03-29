@@ -116,30 +116,53 @@ const AsyncResources = () => {
         />,
       ]}
     >
-      <Resource
-        name="topics"
-        {...topic}
-      />
-      <Resource
-        name="languages"
-        {...language}
-      />
-      <Resource
-        name="questions"
-        {...question}
-      />
-      <Resource
-        name="answers"
-        {...answer}
-      />
-      <Resource
-        name="stats/sessions"
-        {...sessions}
-      />
-      <Resource name="demos" {...demos} />
-      <Resource
-        name="editors"
-      />
+      {
+        (permissions) => {
+          const demo = permissions && permissions.allowDemo === false
+            ? null
+            : (
+              <Resource
+                name="demos"
+                key="demos"
+                {...demos}
+              />
+            );
+
+          return ([
+            <Resource
+              key="topics"
+              name="topics"
+              {...topic}
+            />,
+            <Resource
+              key="languages"
+              name="languages"
+              {...language}
+            />,
+            <Resource
+              key="questions"
+              name="questions"
+              {...question}
+            />,
+            <Resource
+              key="answers"
+              name="answers"
+              {...answer}
+            />,
+            <Resource
+              key="stats/sessions"
+              name="stats/sessions"
+              {...sessions}
+            />,
+            <Resource
+              key="editors"
+              name="editors"
+            />,
+            demo,
+          ]);
+        }
+      }
+
     </AdminUI>
   );
 };

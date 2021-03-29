@@ -6,6 +6,7 @@ import {
   TextField,
   ReferenceInput,
   SelectInput,
+  TextInput,
   useListContext,
   useDataProvider,
 } from 'react-admin';
@@ -41,7 +42,7 @@ const styles = makeStyles(() => ({
 }));
 
 const Filters = ({
-  languages, topics, countries, ...props
+  languages, topics, countries, permissions, ...props
 }) => {
   const classes = styles();
   const {
@@ -145,6 +146,15 @@ const Filters = ({
             choices={countries}
             onChange={() => handleSubmit()}
           />
+          {
+            permissions && permissions.allowDemo !== false && (
+              <TextInput
+                source="demoCode"
+                label="Code"
+                onChange={() => handleSubmit()}
+              />
+            )
+          }
         </form>
 
       )}
@@ -153,7 +163,7 @@ const Filters = ({
 };
 
 const QuestionList = ({
-  languages, topics, dispatch, ...props
+  permissions, languages, topics, dispatch, ...props
 }) => {
   const [countries, setCountries] = React.useState([]);
   const dataProvider = useDataProvider();
@@ -165,10 +175,19 @@ const QuestionList = ({
     { key: 'duration', el: <TextField source="duration" label="Duration" /> },
     { key: 'questionsCount', el: <TextField source="questionsCount" label="# of questions" /> },
     { key: 'answersCount', el: <TextField source="answersCount" label="# of answers" /> },
-    { key: 'demoCode', el: <TextField source="demoCode" label="Code" /> },
-    { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];
+
+  if (permissions && permissions.allowDemo !== false) {
+    columns.push({ key: 'demoCode', el: <TextField source="demoCode" label="Code" /> });
+  }
+
+  columns.push({ key: 'updatedAt', el: <DateField source="updatedAt" showTime /> });
+
   const [visibleColumns, setVisibleColumns] = React.useState(getVisibleColumns(columns, 'sessions'));
+
+  React.useEffect(() => {
+    setVisibleColumns(getVisibleColumns(columns, 'sessions'));
+  }, [permissions]);
 
   const fetchCountries = async () => {
     const { data } = await dataProvider.sessionsMap();
@@ -183,7 +202,14 @@ const QuestionList = ({
   return (
     <List
       {...props}
-      filters={<Filters languages={languages} topics={topics} countries={countries} />}
+      filters={(
+        <Filters
+          languages={languages}
+          topics={topics}
+          countries={countries}
+          permissions={permissions}
+        />
+      )}
       bulkActionButtons={false}
       actions={(
         <ListActions
