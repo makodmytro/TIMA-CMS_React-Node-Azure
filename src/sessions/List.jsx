@@ -147,7 +147,7 @@ const Filters = ({
             onChange={() => handleSubmit()}
           />
           {
-            permissions && permissions.allowDemo !== false && (
+            permissions && permissions.allowDemo === true && (
               <TextInput
                 source="demoCode"
                 label="Code"
@@ -177,7 +177,7 @@ const QuestionList = ({
     { key: 'answersCount', el: <TextField source="answersCount" label="# of answers" /> },
   ];
 
-  if (permissions && permissions.allowDemo !== false) {
+  if (permissions && permissions.allowDemo === true) {
     columns.push({ key: 'demoCode', el: <TextField source="demoCode" label="Code" /> });
   }
 

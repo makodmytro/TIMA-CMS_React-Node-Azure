@@ -118,7 +118,7 @@ const AsyncResources = () => {
     >
       {
         (permissions) => {
-          const demo = permissions && permissions.allowDemo === false
+          const demo = permissions && permissions.allowDemo !== true
             ? null
             : (
               <Resource
