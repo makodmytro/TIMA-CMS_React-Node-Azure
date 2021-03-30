@@ -13,7 +13,8 @@ const authProvider = {
     });
   },
   logout: () => {
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     return Promise.resolve();
   },
   reset: ({ username }) => {
@@ -27,7 +28,8 @@ const authProvider = {
   checkError: (error) => {
     const { status } = error;
     if (status === 401 || status === 403) {
-      localStorage.clear();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       return Promise.reject({ message: false });
     }
     return Promise.resolve();

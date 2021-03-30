@@ -1,13 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   List,
   Datagrid,
-  TextField,
+  TextInput,
+  Filter,
   DateField,
   EditButton,
   DeleteButton,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import CopyIcon from '@material-ui/icons/FileCopy';
+import SearchIcon from '@material-ui/icons/Search';
 
 const LinkField = ({ record }) => (
   <div>
@@ -26,12 +32,77 @@ const LinkField = ({ record }) => (
   </div>
 );
 
+const DemoUrl = ({ record }) => {
+  const [open, setOpen] = React.useState(false);
+
+  if (!record.demoUrl) {
+    return null;
+  }
+
+  const onClick = (e) => {
+    e.stopPropagation();
+
+    navigator.clipboard.writeText(record.demoUrl);
+
+    setOpen(true);
+
+    setTimeout(() => setOpen(false), 1000);
+  };
+
+  return (
+    <div>
+      {record.demoUrl}&nbsp;
+      <Tooltip title="Copied to clipboard" open={open} placement="bottom">
+        <IconButton
+          type="button"
+          color="primary"
+          onClick={onClick}
+        >
+          <CopyIcon />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
+};
+
+const Code = ({ record }) => (
+  <div>
+    {record.code}
+    <IconButton
+      component={Link}
+      to={`/stats/sessions?filter=${encodeURIComponent(JSON.stringify({ demoCode: record.code }))}`}
+      color="secondary"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <SearchIcon />
+    </IconButton>
+  </div>
+);
+
+const DemosFilters = (props) => {
+  return (
+    <Filter {...props}>
+      <TextInput
+        source="code"
+        label="Code"
+        alwaysOn
+      />
+    </Filter>
+  );
+};
+
 const DemosList = (props) => (
-  <List {...props} bulkActionButtons={false}>
+  <List
+    {...props}
+    bulkActionButtons={false}
+    filters={(
+      <DemosFilters />
+    )}
+  >
     <Datagrid rowClick="edit">
       <LinkField label="Link" />
-      <TextField source="demoUrl" label="Demo URL" />
-      <TextField source="code" />
+      <DemoUrl label="Demo URL" />
+      <Code source="code" />
       <DateField source="expiryDate" />
       <EditButton />
       <DeleteButton undoable={false} />
