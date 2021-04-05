@@ -50,7 +50,7 @@ const CreateDemo = ({ dispatch, topics, ...props }) => (
         source="defaultTopicKey"
         optionValue="topicKey"
         optionText="name"
-        choices={Object.values(topics).filter((t) => t.topicKey)}
+        choices={topics.filter((t) => t.topicKey)}
         allowEmpty
         emptyText="None"
         fullWidth
