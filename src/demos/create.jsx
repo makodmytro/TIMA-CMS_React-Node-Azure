@@ -60,9 +60,9 @@ const CreateDemo = ({ dispatch, topics, ...props }) => (
 );
 
 const mapStateToProps = (state) => {
-  const topics = state.admin.resources.topics
-    ? state.admin.resources.topics.data
-    : {};
+  const topics = state.custom.topics
+    ? state.custom.topics
+    : [];
 
   return { topics };
 };
