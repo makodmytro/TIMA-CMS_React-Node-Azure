@@ -8,6 +8,7 @@ import {
   DateField,
   EditButton,
   DeleteButton,
+  TextField,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -104,6 +105,7 @@ const DemosList = (props) => (
       <DemoUrl label="Demo URL" />
       <Code source="code" />
       <DateField source="expiryDate" />
+      <TextField source="defaultTopicKey" label="Defaul topic k." />
       <EditButton />
       <DeleteButton undoable={false} />
     </Datagrid>

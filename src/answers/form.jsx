@@ -4,6 +4,8 @@ import {
   required,
   SelectInput,
   Confirm,
+  BooleanInput,
+  usePermissions,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
@@ -41,6 +43,31 @@ export const MarkdownInput = ({ source, label, lang }) => {
         </Box>
       </FormControl>
     </>
+  );
+};
+
+const Approved = (props) => {
+  const { permissions } = usePermissions();
+
+  const { input: { onChange: changeApprovedAt } } = useField('approvedAt');
+  const { input: { onChange: changeApprovedBy } } = useField('approvedBy_editorId');
+
+  const afterChange = (checked) => {
+    if (checked) {
+      changeApprovedAt((new Date()).toISOString());
+      changeApprovedBy(permissions.editorId);
+    } else {
+      changeApprovedAt(null);
+      changeApprovedBy(null);
+    }
+  };
+
+  return (
+    <BooleanInput
+      source={props.source}
+      label={props.label}
+      onChange={afterChange}
+    />
   );
 };
 
@@ -144,6 +171,7 @@ const Form = ({
           optionText="name"
         />
       </ReferenceInput>
+      <Approved source="approved" label="Approved" />
     </>
   );
 };

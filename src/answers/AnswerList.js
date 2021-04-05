@@ -13,12 +13,15 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Form } from 'react-final-form';
 import Badge from '@material-ui/core/Badge';
+import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
 import ReactMarkdown from 'react-markdown';
 import PlayableText from '../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
+import ApprovedSwitchField from './approved-swtich-field';
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import { Language } from '../common/components/fields-values-by-fk';
 import DropDownMenu from './list-dropdown-menu';
@@ -163,6 +166,18 @@ const Filters = ({ languages, topics, ...props }) => {
               emptyText="None"
             />
           </ReferenceInput>
+          <SelectInput
+            label="Approved"
+            source="approved"
+            allowEmpty
+            emptyText="Both"
+            onChange={() => handleSubmit()}
+            defaultValue=""
+            choices={[
+              { id: true, name: <DoneIcon color="primary" /> },
+              { id: false, name: <ClearIcon /> },
+            ]}
+          />
         </form>
 
       )}
@@ -225,6 +240,10 @@ const AnswerList = ({
     {
       key: 'fk_topicId',
       el: <TopicSelectCell source="fk_topicId" label="Topic" sortBy="fk_topicId" />,
+    },
+    {
+      key: 'approved',
+      el: <ApprovedSwitchField label="Approved" disabled={props.permissions && !props.permissions.allowEdit} />,
     },
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];
