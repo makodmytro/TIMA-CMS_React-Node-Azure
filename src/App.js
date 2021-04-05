@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { useStore } from 'react-redux';
 import { Route, useLocation } from 'react-router-dom'; // eslint-disable-line
 import {
   Resource,
@@ -21,6 +22,7 @@ import dashboard from './dashboard';
 import demos from './demos';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
+import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
@@ -32,6 +34,7 @@ const delay = (ms) => new Promise((r) => { // eslint-disable-line
 });
 
 const AsyncResources = () => {
+  const store = useStore();
   const dataProvider = useDataProvider();
   const location = useLocation();
   const [ready, setReady] = React.useState(false);
@@ -50,9 +53,11 @@ const AsyncResources = () => {
     await dataProvider.getList('languages', {
       pagination: { perPage: 100, page: 1 },
     });
-    await dataProvider.getList('topics', {
+    const topics = await dataProvider.getList('topics', {
       pagination: { perPage: 100, page: 1 },
     });
+
+    store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
   };
 
   const refreshSession = async () => {
@@ -176,7 +181,7 @@ function App() {
       i18nProvider={i18nProvider}
       authProvider={authProvider}
       dataProvider={resDataProvider}
-      customReducers={{ lng: lngReducer }}
+      customReducers={{ lng: lngReducer, custom: customReducer }}
     >
       <AsyncResources />
     </AdminContext>
