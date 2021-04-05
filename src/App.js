@@ -50,6 +50,9 @@ const AsyncResources = () => {
     await dataProvider.getList('languages', {
       pagination: { perPage: 100, page: 1 },
     });
+    await dataProvider.getList('topics', {
+      pagination: { perPage: 100, page: 1 },
+    });
   };
 
   const refreshSession = async () => {
