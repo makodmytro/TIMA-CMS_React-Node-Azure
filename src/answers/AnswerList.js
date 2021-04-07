@@ -4,6 +4,7 @@ import {
   Datagrid,
   DateField,
   List,
+  ReferenceField,
   ReferenceInput,
   SelectInput,
   TextField,
@@ -235,7 +236,11 @@ const AnswerList = ({
     },
     {
       key: 'fk_editorId',
-      el: <TextField source="Editor.name" label="Editor" sortBy="fk_editorId" />,
+      el: (
+        <ReferenceField source="fk_editorId" label="Editor" sortBy="fk_editorId" reference="editors" link={false}>
+          <TextField source="name" />
+        </ReferenceField>
+      ),
     },
     {
       key: 'fk_topicId',

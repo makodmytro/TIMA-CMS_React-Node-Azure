@@ -47,3 +47,6 @@
   }
 }
 
+.rc-md-editor .button-type-underline {
+  display: none !important;
+}
