@@ -5,6 +5,7 @@ import {
   SelectInput,
   Confirm,
   BooleanInput,
+  TextInput,
   usePermissions,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
@@ -16,7 +17,10 @@ import ReactMarkdown from 'react-markdown';
 import MdEditor from 'react-markdown-editor-lite';
 import PlayableText from '../common/components/playable-text';
 
-export const MarkdownInput = ({ source, label, lang }) => {
+export const MarkdownInput = ({
+  source, label, lang,
+}) => {
+  const { input: { value: spokenText } } = useField('spokenText');
   const {
     input: { onChange, value },
     meta: {
@@ -39,7 +43,8 @@ export const MarkdownInput = ({ source, label, lang }) => {
           value={value}
         />
         <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
-          <PlayableText text={value} lang={lang} hideText />
+          <TextInput source="spokenText" label="Spoken text" fullWidth multiline rows={2} />
+          <PlayableText text={spokenText || value} lang={lang} hideText />
         </Box>
       </FormControl>
     </>

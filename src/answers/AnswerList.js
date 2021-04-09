@@ -215,7 +215,7 @@ export const Text = connect(mapStateToProps)(({ record, hideRelatedQuestions, la
       </div>
       <PlayableText
         hideText
-        text={record.text}
+        text={record.spokenText || record.text}
         lang={languages[record.fk_languageId] ? languages[record.fk_languageId].code : null}
       />
     </div>
@@ -229,6 +229,10 @@ const AnswerList = ({
     {
       key: 'text',
       el: <Text label="Text" sortBy="text" />,
+    },
+    {
+      key: 'spokenText',
+      el: <TextField source="spokenText" label="Spoken text" sortBy="spokenText" />,
     },
     {
       key: 'fk_languageId',
