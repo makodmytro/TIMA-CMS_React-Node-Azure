@@ -51,6 +51,7 @@ const english = {
       name: 'Answer |||| Answers',
       fields: {
         text: 'Text',
+        spokenText: 'Spoken txt',
         fk_editorId: 'Editor',
         fk_languageId: 'Language',
         fk_topicId: 'Topic',
