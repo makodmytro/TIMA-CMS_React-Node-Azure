@@ -52,7 +52,9 @@ const resDataProvider = {
       const {
         q, unanswered, groupRelated, ...restFilter
       } = params.filter || {};
-      const { from, to, ...filter } = restFilter;
+      const {
+        from, to, active, search, ...filter
+      } = restFilter;
 
       if (unanswered) {
         filter.fk_answerId = null;
@@ -71,6 +73,8 @@ const resDataProvider = {
         search: q || undefined,
         filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
         ...(resource === 'questions' ? { group: 1 } : {}),
+        ...(resource === 'demos' && active ? { active: true } : {}),
+        ...(resource === 'demos' && search ? { search } : {}),
         ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
       };
 

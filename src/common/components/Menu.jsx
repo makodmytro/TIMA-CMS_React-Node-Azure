@@ -1,6 +1,6 @@
 import * as React from 'react';
 import capitalize from 'lodash/capitalize';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
 import { MenuItemLink, getResources, usePermissions } from 'react-admin';
 import Box from '@material-ui/core/Box';
@@ -13,6 +13,18 @@ const Menu = ({ onMenuClick, logout }) => {
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
   const resources = useSelector(getResources);
+  const dispatch = useDispatch();
+
+  const onClick = (resource) => (e) => {
+    dispatch({
+      type: 'RA/CRUD_CHANGE_LIST_PARAMS',
+      payload: {
+        filter: {},
+      },
+      meta: { resource },
+    });
+    return onMenuClick(e);
+  };
 
   return (
     <>
@@ -38,7 +50,7 @@ const Menu = ({ onMenuClick, logout }) => {
                 leftIcon={
                   resource.icon ? <resource.icon /> : <DefaultIcon />
                 }
-                onClick={onMenuClick}
+                onClick={onClick(resource.name)}
                 sidebarIsOpen={open}
               />
             ))
