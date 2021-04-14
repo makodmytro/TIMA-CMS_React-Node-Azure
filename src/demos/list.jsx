@@ -9,6 +9,7 @@ import {
   EditButton,
   DeleteButton,
   TextField,
+  BooleanInput,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -84,10 +85,16 @@ const DemosFilters = (props) => {
   return (
     <Filter {...props}>
       <TextInput
+        source="search"
+        label="Text"
+        alwaysOn
+      />
+      <TextInput
         source="code"
         label="Code"
         alwaysOn
       />
+      <BooleanInput source="active" label="Active" alwaysOn />
     </Filter>
   );
 };
