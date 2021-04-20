@@ -47,7 +47,7 @@ const IgnoreButton = ({ record, ...props }) => {
       size="small"
       fullWidth
       onClick={handleClick}
-      style={{ justifyContent: 'flex-start' }}
+      style={{ justifyContent: props.justifyContent || 'flex-start' }}
     >
       <BlockIcon fontSize="small" />&nbsp;
       {
