@@ -197,6 +197,18 @@ const Filters = ({ languages, topics, ...props }) => {
               { id: false, name: <ClearIcon /> },
             ]}
           />
+          <SelectInput
+            label="Ignored"
+            source="ignored"
+            allowEmpty
+            emptyText="Irrelevant"
+            onChange={() => handleSubmit()}
+            defaultValue={false}
+            choices={[
+              { id: true, name: 'Only ignored' },
+              { id: false, name: 'Only not-ignored' },
+            ]}
+          />
           <BooleanInput
             label="Unanswered questions"
             source="unanswered"
