@@ -48,13 +48,27 @@ const Filters = ({ onSubmit, initialValues }) => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={4} md={3}>
+              <Grid item xs={12} sm={4} md={2}>
+                <SelectInput
+                  label="Ignored"
+                  source="ignored"
+                  allowEmpty
+                  emptyText="Irrelevant"
+                  defaultValue={false}
+                  choices={[
+                    { id: true, name: 'Only ignored' },
+                    { id: false, name: 'Only not-ignored' },
+                  ]}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm={4} md={2}>
                 <BooleanInput
                   label="All topics"
                   source="all_topics"
                 />
               </Grid>
-              <Grid item xs={12} sm={4} md={3}>
+              <Grid item xs={12} sm={4} md={2}>
                 <Box pt={2}>
                   <Button
                     type="submit"
@@ -125,6 +139,7 @@ const LinksDialog = ({
   const [form, setForm] = React.useState({
     q: '',
     all_topics: false,
+    ignored: false,
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
@@ -139,6 +154,7 @@ const LinksDialog = ({
     setForm({
       q: '',
       all_topics: false,
+      ignored: false,
       approved: '__none__',
     });
   };

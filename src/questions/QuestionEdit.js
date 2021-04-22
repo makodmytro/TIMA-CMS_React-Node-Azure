@@ -26,6 +26,7 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import RelatedQuestionsTable from './related-questions-table';
 import SearchQuestionsAnswers from './search-questions-answers';
+import IgnoreButton from './ignore-button';
 
 const CustomToolbar = (props) => {
   return (
@@ -35,6 +36,9 @@ const CustomToolbar = (props) => {
         submitOnEnter
         disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
       />
+      <Box flex={1}>
+        <IgnoreButton record={props.record} justifyContent="flex-end" />
+      </Box>
       <DeleteButton
         basePath={props.basePath}
         record={props.record}

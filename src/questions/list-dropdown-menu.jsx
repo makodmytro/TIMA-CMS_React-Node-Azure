@@ -11,6 +11,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+import IgnoreButton from './ignore-button';
 
 const DropdownMenu = ({
   record,
@@ -97,6 +98,9 @@ const DropdownMenu = ({
               disabled={permissions && !permissions.allowDelete}
             />
           </ResourceContextProvider>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <IgnoreButton record={record} onClick={handleClose} />
         </MenuItem>
       </Menu>
     </div>

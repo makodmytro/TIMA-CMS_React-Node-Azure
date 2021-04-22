@@ -41,6 +41,7 @@ const LinksDialog = ({
     q: '',
     type: 'questions',
     all_topics: false,
+    ignored: false,
     approved: '__none__',
   });
   const [count, setCount] = React.useState(0);
@@ -60,6 +61,7 @@ const LinksDialog = ({
       q: '',
       type: 'questions',
       all_topics: false,
+      ignored: false,
       approved: '__none__',
     });
     setSelected(null);
@@ -118,7 +120,7 @@ const LinksDialog = ({
     setForm(values);
 
     const {
-      type, approved, all_topics, ...rest
+      type, approved, all_topics, ignored, ...rest
     } = values;
 
     const { data, total } = await dataProvider.getList(type, {
@@ -133,6 +135,7 @@ const LinksDialog = ({
             ? { fk_answerId: '!NULL' }
             : {}
         ),
+        ...(type === 'questions' ? { ignored } : {}),
       },
       pagination: paging,
     });
