@@ -7,7 +7,9 @@ import {
   useRefresh,
 } from 'react-admin';
 
-const IgnoreButton = ({ record, ...props }) => {
+const IgnoreButton = ({
+  record, justifyContent, onClick,
+}) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -31,8 +33,8 @@ const IgnoreButton = ({ record, ...props }) => {
   const handleClick = (e) => {
     updateIgnored(!record.ignored);
 
-    if (props.onClick) {
-      props.onClick(e);
+    if (onClick) {
+      onClick(e);
     }
   };
 
@@ -42,12 +44,11 @@ const IgnoreButton = ({ record, ...props }) => {
 
   return (
     <Button
-      {...props}
       type="button"
       size="small"
       fullWidth
       onClick={handleClick}
-      style={{ justifyContent: props.justifyContent || 'flex-start' }}
+      style={{ justifyContent: justifyContent || 'flex-start' }}
     >
       <BlockIcon fontSize="small" />&nbsp;
       {
