@@ -16,13 +16,20 @@ const Menu = ({ onMenuClick, logout }) => {
   const dispatch = useDispatch();
 
   const onClick = (resource) => (e) => {
+    const filter = {};
+
+    if (resource === 'questions') {
+      filter.ignored = false;
+    }
+
     dispatch({
       type: 'RA/CRUD_CHANGE_LIST_PARAMS',
       payload: {
-        filter: {},
+        filter,
       },
       meta: { resource },
     });
+
     return onMenuClick(e);
   };
 

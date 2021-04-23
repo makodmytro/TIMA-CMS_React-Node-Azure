@@ -53,7 +53,7 @@ const resDataProvider = {
         q, unanswered, groupRelated, ...restFilter
       } = params.filter || {};
       const {
-        from, to, active, ignored, search, ...filter
+        from, to, active, search, ...filter
       } = restFilter;
 
       if (unanswered) {
@@ -75,7 +75,6 @@ const resDataProvider = {
         ...(resource === 'questions' ? { group: 1 } : {}),
         ...(resource === 'demos' && active ? { active: true } : {}),
         ...(resource === 'demos' && search ? { search } : {}),
-        ...(resource === 'questions' ? { ignored } : {}),
         ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
       };
 

@@ -49,17 +49,11 @@ const Filters = ({ onSubmit, initialValues }) => {
                 />
               </Grid>
               <Grid item xs={12} sm={4} md={2}>
-                <SelectInput
+                <BooleanInput
                   label="Ignored"
                   source="ignored"
-                  allowEmpty
-                  emptyText="Irrelevant"
-                  defaultValue={false}
-                  choices={[
-                    { id: true, name: 'Only ignored' },
-                    { id: false, name: 'Only not-ignored' },
-                  ]}
-                  fullWidth
+                  alwaysOn
+                  onChange={() => handleSubmit()}
                 />
               </Grid>
               <Grid item xs={12} sm={4} md={2}>
