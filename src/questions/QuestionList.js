@@ -494,7 +494,7 @@ const QuestionList = ({
           />
         )}
         filters={<Filters languages={languages} topics={topics} />}
-        filterDefaultValues={{ ignored: false }}
+        filterDefaultValues={{ ignored: [false,null] }}
       >
         <CustomGrid
           visibleColumns={visibleColumns}
