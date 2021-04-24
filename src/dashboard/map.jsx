@@ -27,7 +27,7 @@ const Map = () => {
     try {
       const mapped = data
         .reduce((acc, cur) => {
-          const code = cur.clientCountry.toLowerCase().trim();
+          const code = (cur.clientCountry || '').toLowerCase().trim();
           const match = CountryCodeToCoodrinates.find((country) => {
             return (
               country.alpha2.toLowerCase() === code || country.alpha3.toLowerCase() === code
