@@ -254,6 +254,10 @@ const AnswerList = ({
       key: 'approved',
       el: <ApprovedSwitchField label="Approved" disabled={props.permissions && !props.permissions.allowEdit} />,
     },
+    {
+      key: 'tags',
+      el: <TextField source="tags" label="Tags" sortable={false} />,
+    },
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];
 
