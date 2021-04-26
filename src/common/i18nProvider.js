@@ -57,6 +57,7 @@ const english = {
         fk_topicId: 'Topic',
         updatedAt: 'Updated',
         approved: 'Approved',
+        tags: 'Tags',
       },
     },
     sources: {

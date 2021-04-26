@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import ReactMarkdown from 'react-markdown';
 import MdEditor from 'react-markdown-editor-lite';
 import PlayableText from '../common/components/playable-text';
+import TagsInput from './tags-input';
 
 export const MarkdownInput = ({
   source, label, lang,
@@ -177,6 +178,7 @@ const Form = ({
         />
       </ReferenceInput>
       <Approved source="approved" label="Approved" />
+      <TagsInput source="tags" label="Tags" />
     </>
   );
 };
