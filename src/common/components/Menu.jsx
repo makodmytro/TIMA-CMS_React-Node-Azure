@@ -6,6 +6,7 @@ import { MenuItemLink, getResources, usePermissions } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
+import DemoIcon from '@material-ui/icons/AddToQueue';
 import { baseApi } from '../httpClient';
 
 const Menu = ({ onMenuClick, logout }) => {
@@ -62,6 +63,18 @@ const Menu = ({ onMenuClick, logout }) => {
               />
             ))
         }
+        {
+          permissions && permissions.allowDemo && (
+            <MenuItemLink
+              to="/test-ask"
+              primaryText="Test"
+              leftIcon={<DemoIcon />}
+              onClick={onMenuClick}
+              sidebarIsOpen={open}
+            />
+          )
+        }
+
         {isXSmall && logout}
       </Box>
       <div
