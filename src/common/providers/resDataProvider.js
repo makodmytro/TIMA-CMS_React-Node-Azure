@@ -245,6 +245,26 @@ const resDataProvider = {
 
     return { data: json };
   },
+  startSession: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/sessions`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
+  ask: async (resource, params) => {
+    console.log('arams', params);
+    const { token, ...rest } = params.data;
+
+    const { json } = await httpClient(`${baseApi}/questions/ask`, {
+      method: 'POST',
+      body: JSON.stringify(rest),
+      headers: new Headers({ Authorization: `Bearer ${token}` }),
+    }, true);
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;

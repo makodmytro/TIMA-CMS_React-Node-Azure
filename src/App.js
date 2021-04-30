@@ -19,6 +19,7 @@ import question from './questions';
 import answer from './answers';
 import sessions from './sessions';
 import dashboard from './dashboard';
+import TestAsk from './answers/test';
 import demos from './demos';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
@@ -50,13 +51,14 @@ const AsyncResources = () => {
     }
 
     setReady(true);
-    await dataProvider.getList('languages', {
+    const languages = await dataProvider.getList('languages', {
       pagination: { perPage: 100, page: 1 },
     });
     const topics = await dataProvider.getList('topics', {
-      pagination: { perPage: 100, page: 1 },
+      pagination: { perPage: 200, page: 1 },
     });
 
+    store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
   };
 
@@ -121,6 +123,12 @@ const AsyncResources = () => {
           key={0}
           path="/"
           component={dashboard}
+        />,
+        <Route
+          exact
+          key={1}
+          path="/test-ask"
+          component={TestAsk}
         />,
       ]}
     >
