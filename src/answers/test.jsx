@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   TextInput,
@@ -150,14 +151,35 @@ const TestAsk = ({ topics, languages }) => {
         {
           !loading && (!!response) && (
             <Box>
-              <Row label="Answer ID" value={response.answerId || '-'} />
+              <Row
+                label="Answer ID"
+                value={
+                  !response.answerId
+                    ? '-'
+                    : <Link to={`/answers/${response.answerId}`} target="_blank">{response.answerId}</Link>
+                }
+              />
               <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
-              <Row label="Question ID" value={response.questionId || '-'} />
+              <Row
+                label="Question ID"
+                value={
+                  !response.questionId
+                    ? '-'
+                    : <Link to={`/questions/${response.questionId}`} target="_blank">{response.questionId}</Link>
+                }
+              />
               <Row label="Request time (ms)" value={response.requestTimeMs} />
               <Row label="Request time TTS (ms)" value={response.requestTimeTTSMs} />
               <Row label="Spoken text" value={response.spokenText} />
               <Row label="Text" value={response.text} />
-              <Row label="Topic ID" value={response.topicId || '-'} />
+              <Row
+                label="Topic ID"
+                value={
+                  !response.topicId
+                    ? '-'
+                    : <Link to={`/topics/${response.topicId}`} target="_blank">{response.topicId}</Link>
+                }
+              />
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
@@ -166,10 +188,24 @@ const TestAsk = ({ topics, languages }) => {
                       response.suggestions.map((s, i) => (
                         <Box key={i} boxShadow={3} p={2} mb={2}>
                           <Row label="Answer" value={s.answer} />
-                          <Row label="ID" value={s.id} />
+                          <Row
+                            label="ID"
+                            value={
+                              !s.id || s.id === 'NO_SUGGESTION'
+                                ? '-'
+                                : <Link to={`/questions/${s.id}`} target="_blank">{s.id}</Link>
+                            }
+                          />
                           <Row label="Score" value={s.score} />
                           <Row label="Text" value={s.text} />
-                          <Row label="Topic ID" value={s.topicId || '-'} />
+                          <Row
+                            label="Topic ID"
+                            value={
+                              !s.topicId
+                                ? '-'
+                                : <Link to={`/topics/${s.topicId}`} target="_blank">{s.topicId}</Link>
+                            }
+                          />
                         </Box>
                       ))
                     }

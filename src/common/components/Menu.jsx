@@ -63,17 +63,13 @@ const Menu = ({ onMenuClick, logout }) => {
               />
             ))
         }
-        {
-          permissions && permissions.allowDemo && (
-            <MenuItemLink
-              to="/test-ask"
-              primaryText="Test"
-              leftIcon={<DemoIcon />}
-              onClick={onMenuClick}
-              sidebarIsOpen={open}
-            />
-          )
-        }
+        <MenuItemLink
+          to="/test-ask"
+          primaryText="Test"
+          leftIcon={<DemoIcon />}
+          onClick={onMenuClick}
+          sidebarIsOpen={open}
+        />
 
         {isXSmall && logout}
       </Box>
