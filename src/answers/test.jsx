@@ -46,6 +46,7 @@ const TestAsk = ({ topics, languages }) => {
           topicId: values.topicId,
           language: lang.code,
           isTest: true,
+          silentMode: true
         },
       });
 
@@ -151,6 +152,8 @@ const TestAsk = ({ topics, languages }) => {
         {
           !loading && (!!response) && (
             <Box>
+              <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
+              <Row label="Score" value={response.score} />
               <Row
                 label="Answer ID"
                 value={
@@ -159,7 +162,6 @@ const TestAsk = ({ topics, languages }) => {
                     : <Link to={`/answers/${response.answerId}`} target="_blank">{response.answerId}</Link>
                 }
               />
-              <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
               <Row
                 label="Question ID"
                 value={
@@ -168,10 +170,6 @@ const TestAsk = ({ topics, languages }) => {
                     : <Link to={`/questions/${response.questionId}`} target="_blank">{response.questionId}</Link>
                 }
               />
-              <Row label="Request time (ms)" value={response.requestTimeMs} />
-              <Row label="Request time TTS (ms)" value={response.requestTimeTTSMs} />
-              <Row label="Spoken text" value={response.spokenText} />
-              <Row label="Text" value={response.text} />
               <Row
                 label="Topic ID"
                 value={
@@ -180,6 +178,8 @@ const TestAsk = ({ topics, languages }) => {
                     : <Link to={`/topics/${response.topicId}`} target="_blank">{response.topicId}</Link>
                 }
               />
+              <Row label="Request time (seconds)" value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
+              <Row label="Text" value={response.text} />
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
