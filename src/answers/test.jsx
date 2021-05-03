@@ -46,7 +46,7 @@ const TestAsk = ({ topics, languages }) => {
           topicId: values.topicId,
           language: lang.code,
           isTest: true,
-          silentMode: true
+          silentMode: true,
         },
       });
 
