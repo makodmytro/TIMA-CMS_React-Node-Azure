@@ -18,7 +18,7 @@ const EditDemo = ({ dispatch, topics, ...props }) => (
       <DateInput source="expiryDate" label="Expiry date" validate={required()} fullWidth />
       <TextInput source="demoUrl" fullWidth validate={required()} disabled />
       <SelectInput
-        source="defaultTopicKey"
+        source="defaultTopic"
         optionValue="topicKey"
         optionText="name"
         choices={topics.filter((t) => t.topicKey)}

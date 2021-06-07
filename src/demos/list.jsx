@@ -112,7 +112,7 @@ const DemosList = (props) => (
       <DemoUrl label="Demo URL" />
       <Code source="code" />
       <DateField source="expiryDate" />
-      <TextField source="defaultTopicKey" label="Defaul topic k." />
+      <TextField source="defaultTopicKey" label="Default Topic" />
       <EditButton />
       <DeleteButton undoable={false} />
     </Datagrid>
