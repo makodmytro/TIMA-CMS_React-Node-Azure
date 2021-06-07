@@ -156,14 +156,14 @@ const AsyncResources = () => {
               {...language}
             />,
             <Resource
-              key="questions"
-              name="questions"
-              {...question}
-            />,
-            <Resource
               key="answers"
               name="answers"
               {...answer}
+            />,
+            <Resource
+              key="questions"
+              name="questions"
+              {...question}
             />,
             <Resource
               key="stats/sessions"
