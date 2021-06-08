@@ -210,7 +210,7 @@ const Filters = ({ languages, topics, ...props }) => {
             onChange={() => handleSubmit()}
           />
           <BooleanInput
-            label="Group related"
+            label="Hide related"
             source="groupRelated"
             alwaysOn
             onChange={() => handleSubmit()}
