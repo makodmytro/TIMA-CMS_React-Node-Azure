@@ -160,8 +160,7 @@ const AsyncResources = () => {
               name="topics"
               {...topic}
             />,
-            languages
-            ,
+            languages,
             <Resource
               key="answers"
               name="answers"
