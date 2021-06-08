@@ -144,17 +144,24 @@ const AsyncResources = () => {
               />
             );
 
+          const languages = permissions && permissions.allowDemo !== true
+            ? null
+            : (
+              <Resource
+                key="languages"
+                name="languages"
+                {...language}
+              />
+            );
+
           return ([
             <Resource
               key="topics"
               name="topics"
               {...topic}
             />,
-            <Resource
-              key="languages"
-              name="languages"
-              {...language}
-            />,
+            languages
+            ,
             <Resource
               key="answers"
               name="answers"
