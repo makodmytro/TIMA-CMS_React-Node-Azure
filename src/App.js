@@ -145,12 +145,12 @@ const AsyncResources = () => {
             );
 
           const languages = (
-              <Resource
-                key="languages"
-                name="languages"
-                {...language}
-              />
-            );
+            <Resource
+              key="languages"
+              name="languages"
+              {...language}
+            />
+          );
 
           return ([
             <Resource
