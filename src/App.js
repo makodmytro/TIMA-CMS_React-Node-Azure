@@ -144,9 +144,7 @@ const AsyncResources = () => {
               />
             );
 
-          const languages = permissions && permissions.allowDemo !== true
-            ? null
-            : (
+          const languages = (
               <Resource
                 key="languages"
                 name="languages"
