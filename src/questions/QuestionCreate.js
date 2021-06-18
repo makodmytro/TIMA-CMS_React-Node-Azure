@@ -5,6 +5,7 @@ import {
   required,
   ReferenceInput,
   SelectInput,
+  BooleanInput,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
@@ -59,6 +60,7 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
       <AutocompleteInput />
+      <BooleanInput source="useAsSuggestion" />
     </>
   );
 };

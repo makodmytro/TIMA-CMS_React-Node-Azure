@@ -232,6 +232,7 @@ const FormFields = ({
         />
       </ReferenceInput>
       <BooleanInput source="approved" />
+      <BooleanInput source="useAsSuggestion" />
       <Answer
         {...{
           answer, unlinkAnswer, record, scrollToSearch,
