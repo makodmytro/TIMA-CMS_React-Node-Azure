@@ -45,7 +45,7 @@ const english = {
         feedbackPositiveCount: 'Pos. Feedback',
         feedbackNegativeCount: 'Neg. Feedback',
         updatedAt: 'Updated',
-        useAsSuggestion: "Suggestion"
+        useAsSuggestion: 'Suggestion',
       },
     },
     answers: {
