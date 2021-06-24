@@ -45,6 +45,7 @@ import ListActions, {
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import ApprovedSwitchField from './approved-switch-field';
 import { Text } from '../answers/AnswerList';
+import UseAsSuggestionSwitchField from './useAsSuggestion-switch-field';
 
 const styles = makeStyles((theme) => ({
   padded: {
@@ -306,23 +307,29 @@ const CustomGridItem = ({
         )}
 
         {visibleColumns.includes('fk_answerId')
-        && (
-          <TableCell style={{ width: '25%' }}>
-            <AnswerField label="Answer" record={record} />
-          </TableCell>
-        )}
+          && (
+            <TableCell style={{ width: '25%' }}>
+              <AnswerField label="Answer" record={record} />
+            </TableCell>
+          )}
         {visibleColumns.includes('fk_topicId')
-        && (
-          <TableCell>
-            <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
-          </TableCell>
-        )}
+          && (
+            <TableCell>
+              <TopicSelectCell label="Topic" source="fk_topicId" record={record} />
+            </TableCell>
+          )}
         {visibleColumns.includes('approved')
-        && (
-          <TableCell>
-            <ApprovedSwitchField label="Approved" record={record} disabled={permissions && !permissions.allowEdit} />
-          </TableCell>
-        )}
+          && (
+            <TableCell>
+              <ApprovedSwitchField label="Approved" record={record} disabled={permissions && !permissions.allowEdit} />
+            </TableCell>
+          )}
+        {visibleColumns.includes('useAsSuggestion')
+          && (
+            <TableCell>
+              <UseAsSuggestionSwitchField label="useAsSuggestion" record={record} disabled={permissions && !permissions.allowEdit} />
+            </TableCell>
+          )}
         {visibleColumns.includes('updatedAt') && (
           <TableCell>
             <DateField source="updatedAt" showTime record={record} />
@@ -441,6 +448,7 @@ const QuestionList = ({
     { key: 'fk_answerId' },
     { key: 'fk_topicId' },
     { key: 'approved' },
+    { key: 'useAsSuggestion' },
     { key: 'updatedAt' },
     { key: 'feedbackPositiveCount' },
     { key: 'feedbackNegativeCount' },
