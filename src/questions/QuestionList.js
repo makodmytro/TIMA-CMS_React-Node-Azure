@@ -408,6 +408,7 @@ const CustomGrid = ({
                 <Th label="Answer" field="fk_answerId" />
                 <Th label="Topic" field="fk_topicId" />
                 <Th label="Approved" field="approved" />
+                <Th label="Suggestion" field="useAsSuggestion" />
                 <Th label="Updated at" field="updatedAt" />
                 <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
                 <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
