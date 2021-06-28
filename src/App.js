@@ -107,7 +107,7 @@ const AsyncResources = () => {
           <img src={Logo} alt="logo" width="135" />
         </Box>
         <Box py={2}>
-          <img src={`${baseApi}/api/resources/logo`} alt="logoBackend" height="92" />
+          <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="92" />
         </Box>
         <Typography variant="body2" component="div" style={{ color: 'white' }}>
           LOADING
