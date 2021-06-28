@@ -45,7 +45,7 @@ import ListActions, {
 import TopicSelectCell from '../common/components/TopicSelectCell';
 import ApprovedSwitchField from './approved-switch-field';
 import { Text } from '../answers/AnswerList';
-import UseAsSuggestionSwitchField from './useAsSuggestion-switch-field';
+import UseAsSuggestionSwitchField from './use-as-suggestion-switch-field';
 
 const styles = makeStyles((theme) => ({
   padded: {
