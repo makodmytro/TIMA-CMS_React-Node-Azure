@@ -3,6 +3,7 @@ import { AppBar } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Logo from '../../assets/TIMA_logo.png';
+import { baseApi } from '../httpClient';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -42,6 +43,9 @@ const MyAppBar = (props) => {
       />
       <div className={classes.logo}>
         <img src={Logo} alt="logo" />
+      </div>
+      <div className={classes.logo}>
+        <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="92" />
       </div>
     </AppBar>
   );

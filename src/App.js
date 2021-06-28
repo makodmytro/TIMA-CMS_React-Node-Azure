@@ -27,7 +27,6 @@ import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
-import { baseApi } from './common/httpClient';
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -105,9 +104,6 @@ const AsyncResources = () => {
       >
         <Box py={2}>
           <img src={Logo} alt="logo" width="135" />
-        </Box>
-        <Box py={2}>
-          <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="92" />
         </Box>
         <Typography variant="body2" component="div" style={{ color: 'white' }}>
           LOADING
