@@ -17,6 +17,7 @@ import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
 import ApprovedSwitchField from './approved-switch-field';
+import UseAsSuggestionSwitchField from './use-as-suggestion-switch-field';
 
 const RelatedQuestionsTable = ({
   record,
@@ -93,6 +94,7 @@ const RelatedQuestionsTable = ({
           <TableRow>
             <TableCell>Text</TableCell>
             <TableCell>Approved</TableCell>
+            <TableCell>Use as suggestion</TableCell>
             <TableCell>&nbsp;</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
@@ -120,6 +122,9 @@ const RelatedQuestionsTable = ({
                   </TableCell>
                   <TableCell>
                     <ApprovedSwitchField record={related} disabled={disabled} />
+                  </TableCell>
+                  <TableCell>
+                    <UseAsSuggestionSwitchField record={related} disabled={disabled} />
                   </TableCell>
                   <TableCell>
                     <Button
