@@ -9,35 +9,6 @@ import {
   DateInput,
   SelectInput,
 } from 'react-admin';
-/*
-  import InputLabel from '@material-ui/core/InputLabel';
-  import MenuItem from '@material-ui/core/MenuItem';
-  import FormControl from '@material-ui/core/FormControl';
-  import Select from '@material-ui/core/Select';
-
-  const TopicKeySelect = ({ topics, ...props }) => {
-    const { input: { value, onChange } } = useField(props.source);
-
-    return (
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">{props.label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={value}
-          onChange={onChange}
-        >
-          <MenuItem value="">None</MenuItem>
-          {
-            Object.values(topics).map((topic, i) => (
-              <MenuItem value={topic.topicKey} key={i}>{topic.name}</MenuItem>
-            ))
-          }
-        </Select>
-      </FormControl>
-    );
-  };
-*/
 
 const CreateDemo = ({ dispatch, topics, ...props }) => (
   <Create {...props}>
@@ -55,6 +26,7 @@ const CreateDemo = ({ dispatch, topics, ...props }) => (
         emptyText="None"
         fullWidth
       />
+      <TextInput source="totalSessionsCount" label="Total sessions count" fullWidth type="number" />
     </SimpleForm>
   </Create>
 );

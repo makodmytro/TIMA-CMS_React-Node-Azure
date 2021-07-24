@@ -10,6 +10,7 @@ import {
   DeleteButton,
   TextField,
   BooleanInput,
+  FunctionField,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -106,6 +107,7 @@ const DemosList = (props) => (
     filters={(
       <DemosFilters />
     )}
+    filterDefaultValues={{ active: true }}
   >
     <Datagrid rowClick="edit">
       <LinkField label="Link" />
@@ -113,6 +115,7 @@ const DemosList = (props) => (
       <Code source="code" />
       <DateField source="expiryDate" />
       <TextField source="defaultTopicKey" label="Default Topic" />
+      <FunctionField label="Total session count" render={(r) => r.totalSessionsCount || '0'} />
       <EditButton />
       <DeleteButton undoable={false} />
     </Datagrid>
