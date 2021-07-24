@@ -45,7 +45,7 @@ const MyAppBar = (props) => {
         <img src={Logo} alt="logo" />
       </div>
       <div className={classes.logo}>
-        <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="92" />
+        <img src={`${baseApi}/resources/logo`} alt="logoBackend" width="98" />
       </div>
     </AppBar>
   );
