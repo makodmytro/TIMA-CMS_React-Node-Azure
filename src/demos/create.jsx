@@ -26,7 +26,6 @@ const CreateDemo = ({ dispatch, topics, ...props }) => (
         emptyText="None"
         fullWidth
       />
-      <TextInput source="totalSessionsCount" label="Total sessions count" fullWidth type="number" />
     </SimpleForm>
   </Create>
 );
