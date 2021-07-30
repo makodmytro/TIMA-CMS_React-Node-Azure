@@ -20,7 +20,7 @@ const EditDemo = ({ dispatch, topics, ...props }) => (
       <SelectInput
         source="defaultTopic"
         optionValue="topicKey"
-        optionText="name"
+        optionText="topicKey"
         choices={topics.filter((t) => t.topicKey)}
         allowEmpty
         emptyText="None"
