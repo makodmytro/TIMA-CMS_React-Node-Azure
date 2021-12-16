@@ -277,7 +277,7 @@ const SessionShow = () => {
 
   const fetch = async () => {
     try {
-      const { data } = await dataProvider.getList(`stats/sessions/${params.id}`);
+      const { data } = await dataProvider.getList(`stats/sessions/${params.id}?limit=500`);
 
       const extended = data.map((d) => ({
         ...d,
