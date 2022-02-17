@@ -174,6 +174,7 @@ const Filters = ({ languages, topics, ...props }) => {
             source="fk_topicId"
             reference="topics"
             alwaysOn
+            disabled={props.permissions && !props.permissions.allowEdit}
             allowEmpty
             perPage={100}
             onChange={handleTopicChange}
@@ -210,12 +211,13 @@ const Filters = ({ languages, topics, ...props }) => {
             alwaysOn
             onChange={() => handleSubmit()}
           />
+          {/*
           <BooleanInput
             label="Hide related"
             source="groupRelated"
             alwaysOn
             onChange={() => handleSubmit()}
-          />
+          />*/}
         </form>
 
       )}
