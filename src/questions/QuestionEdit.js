@@ -37,7 +37,7 @@ const CustomToolbar = (props) => {
         disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
       />
       <Box flex={1}>
-        <IgnoreButton record={props.record} justifyContent="flex-end" disabled={props.permissions && !props.permissions.allowEdit}/>
+        <IgnoreButton record={props.record} justifyContent="flex-end" disabled={props.permissions && !props.permissions.allowEdit} />
       </Box>
       <DeleteButton
         basePath={props.basePath}
