@@ -8,7 +8,7 @@ import {
 } from 'react-admin';
 
 const IgnoreButton = ({
-  record, justifyContent, onClick,
+  record, justifyContent, onClick, disabled
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -48,6 +48,7 @@ const IgnoreButton = ({
       size="small"
       fullWidth
       onClick={handleClick}
+      disabled={disabled}
       style={{ justifyContent: justifyContent || 'flex-start' }}
     >
       <BlockIcon fontSize="small" />&nbsp;
