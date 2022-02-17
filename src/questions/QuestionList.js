@@ -174,7 +174,6 @@ const Filters = ({ languages, topics, ...props }) => {
             source="fk_topicId"
             reference="topics"
             alwaysOn
-            disabled={props.permissions && !props.permissions.allowEdit}
             allowEmpty
             perPage={100}
             onChange={handleTopicChange}
@@ -185,6 +184,7 @@ const Filters = ({ languages, topics, ...props }) => {
               className={classes.select}
               allowEmpty
               emptyText="None"
+              disabled={props.permissions && !props.permissions.allowEdit}
             />
           </ReferenceInput>
           <SelectInput

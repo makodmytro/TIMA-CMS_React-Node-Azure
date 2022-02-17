@@ -156,7 +156,6 @@ const Filters = ({ languages, topics, ...props }) => {
             alwaysOn
             allowEmpty
             perPage={100}
-            disabled={props.permissions && !props.permissions.allowEdit}
             onChange={handleTopicChange}
             filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
               : null}
@@ -166,6 +165,7 @@ const Filters = ({ languages, topics, ...props }) => {
               className={classes.select}
               allowEmpty
               emptyText="None"
+              disabled={props.permissions && !props.permissions.allowEdit}
             />
           </ReferenceInput>
           <SelectInput
