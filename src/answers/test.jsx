@@ -7,7 +7,6 @@ import {
   SelectInput,
   useDataProvider,
   useNotify,
-  useRefresh,
   Title,
 } from 'react-admin';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -30,7 +29,6 @@ const Row = ({ label, value }) => (
 const TestAsk = ({ topics, languages }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const refresh = useRefresh();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
@@ -65,7 +63,7 @@ const TestAsk = ({ topics, languages }) => {
         notify(err.body.message, 'error');
       }
 
-      console.log(err);
+      console.log(err); // eslint-disable-line
     }
 
     setLoading(false);

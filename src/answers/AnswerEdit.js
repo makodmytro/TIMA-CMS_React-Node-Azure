@@ -8,31 +8,34 @@ import {
   useRefresh,
   useNotify,
   useDataProvider,
-  usePermissions,
   Toolbar,
   SaveButton,
   DeleteButton,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import Form from './form';
+import Form from './components/form';
 import AnswerMedia from './media/media';
-import RelatedQuestionsTable from '../questions/related-questions-table';
-import SearchQuestions from './search-questions';
-import BatchApproveButton from './batch-approve-button';
+import RelatedQuestionsTable from '../questions/components/related-questions-table';
+import SearchQuestions from './components/search-questions';
+import BatchApproveButton from './components/batch-approve-button';
+import { useDisabledDelete, useDisabledEdit } from '../hooks';
 
 const CustomToolbar = (props) => {
+  const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
+  const disableDelete = useDisabledDelete(props?.record?.fk_topicId);
+
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
         label="Save"
         submitOnEnter
-        disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
+        disabled={props.pristine || disableEdit}
       />
       <DeleteButton
         basePath={props.basePath}
         record={props.record}
         undoable={false}
-        disabled={props.permissions && !props.permissions.allowDelete}
+        disabled={disableDelete}
       />
     </Toolbar>
   );
@@ -49,11 +52,11 @@ const Fields = ({ setRecord, ...props }) => {
 };
 
 const AnswerEdit = (props) => {
-  const { permissions } = usePermissions();
   const notify = useNotify();
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const [answer, setAnswer] = React.useState(null);
+  const disableEdit = useDisabledEdit(answer?.fk_topicId);
   const ref = React.useRef();
 
   React.useEffect(() => {
@@ -104,7 +107,7 @@ const AnswerEdit = (props) => {
           return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
         }}
       >
-        <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
+        <SimpleForm toolbar={<CustomToolbar />}>
           <Fields
             setRecord={setAnswer}
           />
@@ -134,7 +137,7 @@ const AnswerEdit = (props) => {
         />
       </Box>
       {
-        permissions && permissions.allowMediaFiles && (
+        !disableEdit && (
           <Box my={1} p={2} boxShadow={3}>
             <Typography>Media</Typography>
             <AnswerMedia answer={answer} />

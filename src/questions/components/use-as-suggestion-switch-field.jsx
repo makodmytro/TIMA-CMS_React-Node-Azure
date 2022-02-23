@@ -30,7 +30,7 @@ const UseAsSuggestionSwitchField = ({ record, disabled }) => {
   if (!record) {
     return null;
   }
-  console.log(record);
+
   return (
     <Switch
       onClick={(e) => {

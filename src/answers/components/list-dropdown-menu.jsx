@@ -2,19 +2,20 @@ import React from 'react';
 import {
   EditButton,
   DeleteButton,
-  usePermissions,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import BatchApproveButton from './batch-approve-button';
+import { useDisabledDelete, useDisabledEdit } from '../../hooks';
 
 const DropdownMenu = ({
   record,
   basePath,
 }) => {
-  const { permissions } = usePermissions();
+  const disableEdit = useDisabledEdit(record?.fk_topicId);
+  const disableDelete = useDisabledDelete(record?.fk_topicId);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -38,6 +39,7 @@ const DropdownMenu = ({
         variant="contained"
         color="secondary"
         size="small"
+        disabled={disableEdit && disableDelete}
       >
         Actions <ExpandIcon />
       </Button>
@@ -59,12 +61,13 @@ const DropdownMenu = ({
             record={record}
             fullWidth
             style={{ justifyContent: 'flex-start' }}
+            disabled={disableEdit}
           />
         </MenuItem>
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
-          <BatchApproveButton answerId={record.id} />
+          <BatchApproveButton answerId={record.id} disabled={disableEdit} />
         </MenuItem>
         <MenuItem
           onClick={(e) => e.stopPropagation()}
@@ -75,7 +78,7 @@ const DropdownMenu = ({
             undoable={false}
             fullWidth
             style={{ justifyContent: 'flex-start' }}
-            disabled={permissions && !permissions.allowDelete}
+            disabled={disableDelete}
           />
         </MenuItem>
       </Menu>

@@ -175,8 +175,8 @@ const AsyncResources = () => {
               {...sessions}
             />,
             <Resource
-              key="editors"
-              name="editors"
+              key="users"
+              name="users"
             />,
             demo,
           ]);

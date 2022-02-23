@@ -9,6 +9,7 @@ import {
 
 const ApprovedSwitchField = ({ record, disabled }) => {
   const { permissions } = usePermissions();
+
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -17,7 +18,7 @@ const ApprovedSwitchField = ({ record, disabled }) => {
     const data = {
       approved,
       approvedAt: approved ? (new Date()).toISOString() : null,
-      approvedBy_editorId: approved ? permissions.editorId : null,
+      approvedBy_editorId: approved ? permissions.userId : null,
     };
     try {
       await dataProvider.update('answers', {

@@ -9,6 +9,7 @@ import {
 } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
 import defaultColumns from '../../default-columns.json';
+import { useDisabledCreate, useIsAdmin } from '../../hooks';
 
 export const getVisibleColumns = (columns, resource, defaults = []) => {
   const savedConfig = localStorage.getItem(`columns-${resource}`);
@@ -53,6 +54,14 @@ const ListActions = (props) => {
     showFilter,
     total,
   } = useListContext();
+  let disabled = false;
+
+  if (resource === 'questions' || resource === 'answers') {
+    disabled = useDisabledCreate();
+  } else if (['topics', 'languages', 'users', 'groups'].includes(resource)) {
+    disabled = !useIsAdmin();
+  }
+
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
       {filters && cloneElement(filters, {
@@ -62,9 +71,12 @@ const ListActions = (props) => {
         filterValues,
         context: 'button',
       })}
-      <CreateButton basePath={basePath} />
+      { /* some rendering bug probably */ }
+      { disabled && <CreateButton basePath={basePath} disabled />}
+      { !disabled && <CreateButton basePath={basePath} />}
+
       <ExportButton
-        disabled={total === 0}
+        disabled={total === 0 || disabled}
         resource={resource}
         sort={currentSort}
         filterValues={filterValues}

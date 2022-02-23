@@ -37,6 +37,10 @@
     "arrow-body-style": "off",
     "import/no-named-as-default": "warn",
     "import/no-named-as-default-member": "warn",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "import/prefer-default-export": "off",
+    "react/display-name": "off",
+    "max-len": "off",
+    "prefer-const": "warn"
   }
 }

@@ -21,8 +21,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
-import { PlayableTextField } from '../common/components/playable-text';
-import { Text } from './AnswerList';
+import { PlayableTextField } from '../../common/components/playable-text';
+import { Text } from '../AnswerList';
+import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
 
 const Filters = ({ onSubmit, initialValues }) => {
   return (
@@ -83,7 +84,7 @@ const Filters = ({ onSubmit, initialValues }) => {
 };
 
 const CreateForm = ({ onSubmit }) => {
-  const { permissions } = usePermissions();
+  const disabled = useDisabledCreate();
 
   return (
     <Form
@@ -104,7 +105,7 @@ const CreateForm = ({ onSubmit }) => {
                   color="primary"
                   variant="contained"
                   fullWidth
-                  disabled={permissions && !permissions.allowEdit}
+                  disabled={disabled}
                 >
                   Create question
                 </Button>
@@ -297,7 +298,7 @@ const LinksDialog = ({
                           checked={isSelected(result)}
                           value={isSelected(result)}
                           onClick={() => selectResult(result)}
-                          disabled={permissions && !permissions.allowEdit}
+                          disabled={boolDisabledEdit(permissions, result?.fk_topicId)}
                         />
                       </TableCell>
                       <TableCell>
@@ -343,7 +344,6 @@ const LinksDialog = ({
                     variant="contained"
                     color="primary"
                     size="small"
-                    disabled={permissions && !permissions.allowEdit}
                   >
                     Link answer for {selected.length} questions
                   </Button>

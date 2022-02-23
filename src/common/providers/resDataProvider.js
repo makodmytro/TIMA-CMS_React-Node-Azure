@@ -234,7 +234,7 @@ const resDataProvider = {
     });
   },
   refreshSession: async (resource) => {
-    const { json } = await httpClient(`${baseApi}/editors/refresh`, {
+    const { json } = await httpClient(`${baseApi}/users/refresh`, {
       method: 'POST',
     });
 
@@ -254,7 +254,6 @@ const resDataProvider = {
     return { data: json };
   },
   ask: async (resource, params) => {
-    console.log('arams', params);
     const { token, ...rest } = params.data;
 
     const { json } = await httpClient(`${baseApi}/questions/ask`, {

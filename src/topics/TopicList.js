@@ -9,15 +9,15 @@ import {
   TextField,
   TextInput,
 } from 'react-admin';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import QrDialog from './qr-dialog';
+import QrDialog from './components/qr-dialog';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
 } from '../common/components/ListActions';
+import ShowQuestionsButton from './components/ShowQuestionsButton';
+import TopicImage from './components/Image';
 
 const styles = makeStyles(() => ({
   padded: {
@@ -44,54 +44,16 @@ const Filters = (props) => {
   );
 };
 
-const ShowQuestions = ({
-  record, size, fullWidth, ml,
-}) => {
-  if (!record) {
-    return null;
-  }
-
-  return (
-    <Box ml={ml}>
-      <Button
-        component={Link}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        size={size || 'small'}
-        color="primary"
-        variant="outlined"
-        to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
-        fullWidth={!!fullWidth}
-      >
-        Show questions
-      </Button>
-    </Box>
-  );
-};
-
 const Buttons = ({ record }) => (
   <div>
     <Box mb={1}>
-      <ShowQuestions record={record} fullWidth />
+      <ShowQuestionsButton record={record} fullWidth />
     </Box>
     <div>
       {record.globalTopic ? null : <QrDialog record={record} fullWidth />}
     </div>
   </div>
 );
-
-const Img = ({ record }) => {
-  if (!record.topicImageUrl) {
-    return null;
-  }
-
-  return (
-    <div>
-      <img style={{ maxWidth: '150px' }} src={record.topicImageUrl} alt="topic" />
-    </div>
-  );
-};
 
 const TopicList = (props) => {
   const columns = [
@@ -106,7 +68,7 @@ const TopicList = (props) => {
     },
     {
       key: 'image',
-      el: (<Img label="Image" />),
+      el: (<TopicImage label="Image" />),
     },
     {
       key: 'updatedAt',
@@ -142,5 +104,5 @@ const TopicList = (props) => {
     </>
   );
 };
-export { ShowQuestions, Img };
+
 export default TopicList;
