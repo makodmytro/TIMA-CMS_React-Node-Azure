@@ -37,12 +37,12 @@ const authProvider = {
   getPermissions: () => {
     const user = JSON.parse(localStorage.getItem('user'));
 
-    /*user.permissions = [{
-      fk_topicId: '882284d1-563d-4b88-9c20-1015b2f10e05',
-      edit: false,
-      delete: true,
-    }];
-    user.isAdmin = false;*/
+    // user.permissions = [{
+      // fk_topicId: '882284d1-563d-4b88-9c20-1015b2f10e05',
+      // edit: false,
+      // delete: true,
+    // }];
+    // user.isAdmin = false;
 
     return Promise.resolve({
       ...user,
