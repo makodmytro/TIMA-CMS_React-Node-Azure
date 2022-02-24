@@ -42,6 +42,7 @@
     "react/display-name": "off",
     "max-len": "off",
     "prefer-const": "warn",
-    "indent": "warn"
+    "indent": "warn",
+    "no-unreachable": "warn"
   }
 }

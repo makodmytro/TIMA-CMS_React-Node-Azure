@@ -35,7 +35,7 @@ const FormFields = (props) => {
   const admin = useIsAdmin();
 
   const getLang = (r) => {
-    if (!r || !props.languages[r.fk_languageId]) {
+    if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
       return null;
     }
 

@@ -24,6 +24,7 @@ const english = {
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         fk_parentTopicId: 'Parent topic',
         syncScheduled: 'Sync scheduled',
+        lastSyncAt: 'Last sync at',
       },
     },
     languages: {
