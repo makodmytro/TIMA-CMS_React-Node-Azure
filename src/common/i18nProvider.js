@@ -24,6 +24,7 @@ const english = {
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         fk_parentTopicId: 'Parent topic',
         syncScheduled: 'Sync scheduled',
+        lastSyncAt: 'Last sync at',
       },
     },
     languages: {
@@ -96,8 +97,8 @@ const english = {
         last_login: 'Last login',
         createdAt: 'Created at',
         created_by: 'Created by',
-        isAdmin: 'Is admin',
-        isActive: 'Is active',
+        isAdmin: 'Admin',
+        isActive: 'Active',
         related_groups: 'Related groups',
       },
     },

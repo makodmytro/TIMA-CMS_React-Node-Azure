@@ -48,6 +48,59 @@ const cleanBody = (body, resource) => {
   }
 };
 
+const getListUrl = (initialUrl, resource, params) => {
+  let url = initialUrl;
+
+  if (params) {
+    const { field, order } = params.sort || {};
+
+    const {
+      q, unanswered, groupRelated, ...restFilter
+    } = params.filter || {};
+    const {
+      from, to, active, search, ...filter
+    } = restFilter;
+
+    if (unanswered) {
+      filter.fk_answerId = null;
+    }
+
+    if (filter.approved === false || filter.approved === 0) {
+      filter.approved = [false, null];
+    }
+
+    const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
+
+    const query = {
+      limit: perPage,
+      offset: (page - 1) * perPage,
+      orderBy: field && order ? `${field} ${order}` : null,
+      search: q || undefined,
+      filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
+      ...(resource === 'questions' ? { group: 1 } : {}),
+      ...(resource === 'demos' && active ? { active: true } : {}),
+      ...(resource === 'demos' && search ? { search } : {}),
+      ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
+    };
+
+    if (from) {
+      query.from = from;
+    }
+
+    if (to) {
+      query.to = to;
+    }
+
+    if (groupRelated) {
+      query.groupRelated = 1;
+    }
+
+    url += `?${stringify(query)}`;
+  }
+
+  return url;
+};
+
 const resDataProvider = {
   ...dataProvider,
   getOne: async (resource, params) => {
@@ -64,54 +117,7 @@ const resDataProvider = {
     return { data: json };
   },
   getList: async (resource, params) => {
-    let url = `${baseApi}/${resource}`;
-
-    if (params) {
-      const { field, order } = params.sort || {};
-
-      const {
-        q, unanswered, groupRelated, ...restFilter
-      } = params.filter || {};
-      const {
-        from, to, active, search, ...filter
-      } = restFilter;
-
-      if (unanswered) {
-        filter.fk_answerId = null;
-      }
-
-      if (filter.approved === false || filter.approved === 0) {
-        filter.approved = [false, null];
-      }
-
-      const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
-
-      const query = {
-        limit: perPage,
-        offset: (page - 1) * perPage,
-        orderBy: field && order ? `${field} ${order}` : null,
-        search: q || undefined,
-        filter: params.filter && Object.values(filter).length > 0 ? JSON.stringify(filter) : null,
-        ...(resource === 'questions' ? { group: 1 } : {}),
-        ...(resource === 'demos' && active ? { active: true } : {}),
-        ...(resource === 'demos' && search ? { search } : {}),
-        ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
-      };
-
-      if (from) {
-        query.from = from;
-      }
-
-      if (to) {
-        query.to = to;
-      }
-
-      if (groupRelated) {
-        query.groupRelated = 1;
-      }
-
-      url += `?${stringify(query)}`;
-    }
+    let url = getListUrl(`${baseApi}/${resource}`, resource, params);
 
     let { json } = await httpClient(url);
 
@@ -199,6 +205,20 @@ const resDataProvider = {
     const { json } = await httpClient(`${baseApi}/stats/sessions/past?${stringify(params)}`);
 
     return { data: json };
+  },
+  topicTree: async (resource = null, params) => {
+    let url = getListUrl(`${baseApi}/${resource}/tree`, resource, params);
+
+    let { json } = await httpClient(url);
+
+    if (Array.isArray(json)) {
+      return {
+        data: json,
+        total: json.length,
+      };
+    }
+
+    return json;
   },
   topicCreatePermission: async (resource = null, params) => {
     await httpClient(`${baseApi}/topics/${params.topic_id}/permissions/${params.group_id}`, {

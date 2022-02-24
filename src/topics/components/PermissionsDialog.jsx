@@ -181,10 +181,10 @@ const PermissionsDialog = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick>
       <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
-        <Box flex="2" px={2}>
-          <Typography>Manage permissions</Typography>
+        <Box flex="2">
+          <Typography>Manage permissions: <b>{topic?.name}</b></Typography>
         </Box>
-        <Box flex="1" textAlign="right" px={2}>
+        <Box flex="1" textAlign="right">
           <IconButton onClick={onClose} size="small">
             <CloseIcon fontSize="small" />
           </IconButton>
@@ -206,11 +206,15 @@ const PermissionsDialog = ({
           )
         }
         {
-          !topic && (<Box textAlign="text-center">Loading...</Box>)
+          !topic && (<Box textAlign="text-center"><Typography variant="body2">Loading...</Typography></Box>)
         }
-
         {
-          !!topic && topic?.PermissionSets?.length && (
+          !!topic && !topic?.PermissionSets?.length && (
+            <Box py={2}><Typography variant="body2">This topic has no permissions yet</Typography></Box>
+          )
+        }
+        {
+          !!topic && !!topic?.PermissionSets?.length && (
             <Box pt={2} pb={4} mb={2} boxShadow={3} px={2}>
               <Box display="flex" mb={2} borderBottom="1px solid #D5D5D5" pb={1}>
                 <Box flex="1">Group</Box>
@@ -263,22 +267,29 @@ const PermissionsDialog = ({
             </Box>
           )
         }
-        <Box borderBottom="1px solid #D5D5D5" mb={2}>
-          <Typography>Create new permission</Typography>
-        </Box>
-        <Box boxShadow={3}>
-          <PermissionForm
-            initialValues={{
-              group_id: null,
-              edit: false,
-              delete: false,
-              view: false,
-              manage: false,
-            }}
-            onSubmit={onSubmit}
-            groups={groups}
-          />
-        </Box>
+        {
+          !!groups.length && (
+            <>
+              <Box borderBottom="1px solid #D5D5D5" mb={2}>
+                <Typography>Create new permission</Typography>
+              </Box>
+              <Box boxShadow={3}>
+                <PermissionForm
+                  initialValues={{
+                    group_id: null,
+                    edit: false,
+                    delete: false,
+                    view: false,
+                    manage: false,
+                  }}
+                  onSubmit={onSubmit}
+                  groups={groups}
+                />
+              </Box>
+            </>
+          )
+        }
+
       </Box>
     </Dialog>
   );

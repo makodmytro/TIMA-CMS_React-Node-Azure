@@ -33,9 +33,9 @@ const UsersCreate = (props) => {
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
         <TextInput source="email" validate={required()} fullWidth disabled={disabled} />
-        <TextInput source="password" validate={required()} fullWidth disabled={disabled} inputProps={{ helperText: 'as' }} helperText="asd" />
-        <BooleanInput source="is_users_manager" label="Is users manager" disabled={disabled} />
-        <BooleanInput source="is_topics_manager" label="Is topics manager" disabled={disabled} />
+        <TextInput source="password" validate={required()} fullWidth disabled={disabled} helperText="Must be changed after first login" />
+        <BooleanInput source="isActive" label="Active" disabled={disabled} />
+        <BooleanInput source="isAdmin" label="Admin" disabled={disabled} />
         <TagsInputs source="related_groups" label="Groups" disabled={disabled} />
       </SimpleForm>
     </Create>

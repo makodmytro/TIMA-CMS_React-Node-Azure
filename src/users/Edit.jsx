@@ -44,8 +44,8 @@ const UsersEdit = (props) => {
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled />
         <TextInput source="email" validate={required()} fullWidth disabled />
-        <BooleanInput source="isActive" label="Is active" disabled={disabled} />
-        <BooleanInput source="isAdmin" label="Is admin" disabled={disabled} />
+        <BooleanInput source="isActive" label="Active" disabled={disabled} />
+        <BooleanInput source="isAdmin" label="Admin" disabled={disabled} />
         <ReferenceArrayInput source="groups" reference="groups" fullWidth>
           <SelectArrayInput source="name" />
         </ReferenceArrayInput>
