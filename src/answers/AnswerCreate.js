@@ -4,7 +4,7 @@ import {
   SimpleForm,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import Form from './form';
+import Form from './components/form';
 
 const AnswerCreate = (props) => (
   <Create {...props} actions={<CustomTopToolbar />}>

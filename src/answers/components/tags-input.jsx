@@ -22,6 +22,7 @@ const TagsInput = (props) => {
       margin="normal"
       blurBehavior="add"
       label={props.label}
+      disabled={props?.disabled === true}
       fullWidth
     />
   );

@@ -5,20 +5,21 @@ import {
   EditButton,
   useRefresh,
   ResourceContextProvider,
-  usePermissions,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import IgnoreButton from './ignore-button';
+import { useDisabledEdit, useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
 }) => {
-  const { permissions } = usePermissions();
   const refresh = useRefresh();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const disableEdit = useDisabledEdit(record?.fk_topicId);
+  const disableDelete = useDisabledDelete(record?.fk_topicId);
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -41,6 +42,7 @@ const DropdownMenu = ({
         variant="contained"
         color="secondary"
         size="small"
+        disabled={disableEdit && disableDelete}
       >
         Actions <ExpandIcon />
       </Button>
@@ -64,6 +66,7 @@ const DropdownMenu = ({
             color="secondary"
             fullWidth
             style={{ justifyContent: 'flex-start' }}
+            disabled={disableEdit}
           />
         </MenuItem>
         {
@@ -80,6 +83,7 @@ const DropdownMenu = ({
                 color="default"
                 fullWidth
                 style={{ justifyContent: 'flex-start' }}
+                disabled={disableEdit}
               />
             </MenuItem>
           )
@@ -95,12 +99,12 @@ const DropdownMenu = ({
               onSuccess={() => refresh()}
               fullWidth
               style={{ justifyContent: 'flex-start' }}
-              disabled={permissions && !permissions.allowDelete}
+              disabled={disableDelete}
             />
           </ResourceContextProvider>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <IgnoreButton record={record} onClick={handleClose} />
+          <IgnoreButton record={record} onClick={handleClose} disabled={disableEdit} />
         </MenuItem>
       </Menu>
     </div>

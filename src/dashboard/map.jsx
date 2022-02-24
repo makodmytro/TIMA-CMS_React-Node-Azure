@@ -141,7 +141,7 @@ const Map = () => {
 
           overlay.setPosition(coordinates);
         } catch (err) {
-          console.err(err);
+          console.err(err); // eslint-disable-line
         }
       };
 
@@ -157,7 +157,7 @@ const Map = () => {
 
       setMap(mapObject);
     } catch (err) { // eslint-disable-line
-      console.log(err);
+      console.log(err); // eslint-disable-line
     }
   };
 

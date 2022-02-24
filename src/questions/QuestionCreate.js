@@ -11,7 +11,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
-import AutocompleteInput from './autocomplete-input';
+import AutocompleteInput from './components/autocomplete-input';
 
 const FormFields = (props) => {
   const {
@@ -102,7 +102,7 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
     ? state.admin.resources.languages.data
-    : [];
+    : {};
 
   return {
     languages,

@@ -5,52 +5,13 @@ import {
   SelectInput,
   Confirm,
   BooleanInput,
-  TextInput,
   usePermissions,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
-import FormControl from '@material-ui/core/FormControl';
-import Box from '@material-ui/core/Box';
-import InputLabel from '@material-ui/core/InputLabel';
-import ReactMarkdown from 'react-markdown';
-import MdEditor from 'react-markdown-editor-lite';
-import PlayableText from '../common/components/playable-text';
 import TagsInput from './tags-input';
-
-export const MarkdownInput = ({
-  source, label, lang,
-}) => {
-  const { input: { value: spokenText } } = useField('spokenText');
-  const {
-    input: { onChange, value },
-    meta: {
-      touched, dirty, error, submitFailed,
-    },
-  } = useField(source);
-
-  const invalid = !!error && (touched || dirty || submitFailed);
-
-  return (
-    <>
-      <InputLabel error={invalid}>{label}</InputLabel>
-      <FormControl fullWidth error={invalid}>
-        <MdEditor
-          style={{ height: '40vh', borderColor: !invalid ? 'rgba(224, 224, 224, 1)' : 'red' }}
-          renderHTML={(text) => <ReactMarkdown source={text} />}
-          onChange={({ text }) => {
-            onChange(text);
-          }}
-          value={value}
-        />
-        <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
-          <TextInput source="spokenText" label="Spoken text" fullWidth multiline rows={2} />
-          <PlayableText text={spokenText || value} lang={lang} hideText />
-        </Box>
-      </FormControl>
-    </>
-  );
-};
+import MarkdownInput from './MarkdownInput';
+import { useDisabledEdit, useDisabledCreate } from '../../hooks';
 
 const Approved = (props) => {
   const { permissions } = usePermissions();
@@ -73,6 +34,7 @@ const Approved = (props) => {
       source={props.source}
       label={props.label}
       onChange={afterChange}
+      disabled={props.disabled === true}
     />
   );
 };
@@ -87,6 +49,7 @@ const Form = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
+  const disableEdit = edit ? useDisabledEdit(fkTopicId) : useDisabledCreate();
 
   const getLang = () => {
     if (!fkLanguageId || !languages[fkLanguageId]) {
@@ -151,6 +114,7 @@ const Form = ({
         label="Text"
         source="text"
         lang={getLang()}
+        disabled={disableEdit}
       />
       <ReferenceInput
         source="fk_languageId"
@@ -159,9 +123,11 @@ const Form = ({
         validate={required()}
         fullWidth
         inputProps={inputProps}
+        disabled={disableEdit}
       >
         <SelectInput
           optionText="name"
+          disabled={disableEdit}
         />
       </ReferenceInput>
 
@@ -172,13 +138,15 @@ const Form = ({
         validate={required()}
         fullWidth
         filter={{ fk_languageId: fkLanguageId }}
+        disabled={disableEdit}
       >
         <SelectInput
           optionText="name"
+          disabled={disableEdit}
         />
       </ReferenceInput>
-      <Approved source="approved" label="Approved" />
-      <TagsInput source="tags" label="Tags" />
+      <Approved source="approved" label="Approved" disabled={disableEdit} />
+      <TagsInput source="tags" label="Tags" disabled={disableEdit} />
     </>
   );
 };
@@ -186,11 +154,11 @@ const Form = ({
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
     ? state.admin.resources.languages.data
-    : [];
+    : {};
 
   const topics = state.admin.resources.topics
     ? state.admin.resources.topics.data
-    : [];
+    : {};
 
   return {
     languages,

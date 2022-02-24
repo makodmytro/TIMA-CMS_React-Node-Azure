@@ -6,7 +6,9 @@ import { useDataProvider, useListContext, useRefresh } from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const TopicSelectCell = ({ record, source, label }) => {
+const TopicSelectCell = ({
+  record, source, label, disabled,
+}) => {
   const topics = useSelector((state) => state.admin.resources.topics.data);
   const { resource } = useListContext();
   const dataProvider = useDataProvider();
@@ -35,6 +37,7 @@ const TopicSelectCell = ({ record, source, label }) => {
         value={get(record, source)}
         onChange={handleChange}
         style={{ minWidth: 100 }}
+        disabled={disabled === true}
       >
         <MenuItem value={null}>
           <em>None</em>

@@ -4,7 +4,6 @@ import {
   useRefresh,
   useNotify,
   Confirm,
-  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
@@ -14,10 +13,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
-import { PlayableTextField } from '../common/components/playable-text';
+import { PlayableTextField } from '../../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
 import ApprovedSwitchField from './approved-switch-field';
 import UseAsSuggestionSwitchField from './use-as-suggestion-switch-field';
+import { useDisabledEdit } from '../../hooks';
 
 const RelatedQuestionsTable = ({
   record,
@@ -25,8 +25,7 @@ const RelatedQuestionsTable = ({
   answerView,
   languages,
 }) => {
-  const { permissions } = usePermissions();
-  const disabled = permissions && !permissions.allowEdit;
+  const disabled = useDisabledEdit(record?.fk_topicId);
 
   const dataProvider = useDataProvider();
   const notify = useNotify();

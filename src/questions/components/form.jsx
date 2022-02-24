@@ -3,7 +3,7 @@ import { ReferenceInput, required, SelectInput } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import AutocompleteInput from './autocomplete-input';
-import { PlayableTextInput } from '../common/components/playable-text';
+import { PlayableTextInput } from '../../common/components/playable-text';
 
 const FormFields = ({
   languages,

@@ -4,7 +4,6 @@ import {
   useNotify,
   useRefresh,
   Confirm,
-  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -22,12 +21,13 @@ import { Text } from '../../answers/AnswerList';
 import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
 import Filters from './filters-form';
 import CreateForm from './answer-create-form';
+import { useDisabledEdit } from '../../hooks';
 
 const LinksDialog = ({
   record,
   languages,
 }) => {
-  const { permissions } = usePermissions();
+  const disabled = useDisabledEdit(record?.fk_topicId);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -358,7 +358,7 @@ const LinksDialog = ({
                           onClick={() => {
                             selectToLink(result);
                           }}
-                          disabled={permissions && !permissions.allowEdit}
+                          disabled={disabled}
                         >
                           Link to answer
                         </Button>
@@ -390,6 +390,7 @@ const LinksDialog = ({
       <hr />
       <CreateForm
         onSubmit={(v) => createAnswer(v)}
+        disabled={disabled}
       />
     </>
   );
