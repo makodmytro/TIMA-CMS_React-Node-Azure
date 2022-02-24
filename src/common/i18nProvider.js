@@ -93,7 +93,7 @@ const english = {
         id: 'ID',
         name: 'Name',
         email: 'Email',
-        last_login: 'Last login',
+        lastLogin: 'Last login',
         createdAt: 'Created at',
         created_by: 'Created by',
         isAdmin: 'Is admin',
