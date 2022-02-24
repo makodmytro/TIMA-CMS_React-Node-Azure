@@ -59,3 +59,7 @@ code {
   border-color: gray !important;
   color: gray !important;
 }
+
+.MuiFormHelperText-contained {
+  margin-left: 0px !important;
+}
