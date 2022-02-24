@@ -24,6 +24,8 @@ import ListActions, {
 } from '../common/components/ListActions';
 import ShowQuestionsButton from './components/ShowQuestionsButton';
 import TopicImage from './components/Image';
+import PermissionsDialog from './components/PermissionsDialog';
+import ListDropdownMenu from './components/list-dropdown-menu';
 import { useRecursiveTimeout, useIsAdmin } from '../hooks';
 
 const styles = makeStyles(() => ({
@@ -51,7 +53,7 @@ const Filters = (props) => {
   );
 };
 
-const Buttons = ({ record, onSync }) => {
+const Buttons = ({ record, onSync, onPermissionsClick }) => {
   const admin = useIsAdmin();
 
   return (
@@ -78,11 +80,28 @@ const Buttons = ({ record, onSync }) => {
           </Box>
         )
       }
+      {
+        admin && (
+          <Box mt={1}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.stopPropagation();
+
+                return onPermissionsClick(record?.id);
+              }}
+            >
+              Manage permissions
+            </Button>
+          </Box>
+        )
+      }
     </div>
   );
 };
 
 const TopicList = (props) => {
+  const [open, setOpen] = React.useState(null);
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -149,6 +168,11 @@ const TopicList = (props) => {
 
   return (
     <>
+      <PermissionsDialog
+        open={!!open}
+        onClose={() => setOpen(null)}
+        id={open}
+      />
       <List
         {...props}
         filters={(
@@ -167,7 +191,7 @@ const TopicList = (props) => {
         <Datagrid rowClick="edit">
           {columns.filter((col) => visibleColumns.includes(col.key))
             .map((col) => cloneElement(col.el, { key: col.key }))}
-          <Buttons onSync={onSync} />
+          <ListDropdownMenu onSync={onSync} onPermissionsClick={(id) => setOpen(id)} />
         </Datagrid>
       </List>
     </>

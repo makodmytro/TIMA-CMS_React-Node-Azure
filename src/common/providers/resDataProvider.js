@@ -200,6 +200,21 @@ const resDataProvider = {
 
     return { data: json };
   },
+  topicCreatePermission: async (resource = null, params) => {
+    await httpClient(`${baseApi}/topics/${params.topic_id}/permissions/${params.group_id}`, {
+      method: 'PUT',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: true };
+  },
+  topicDeletePermission: async (resource = null, params) => {
+    await httpClient(`${baseApi}/topics/${params.topic_id}/permissions/${params.group_id}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
+  },
   topicSync: async (resource = null, params) => {
     await httpClient(`${baseApi}/topics/${params.id}/sync`, {
       method: 'POST',

@@ -11,7 +11,7 @@ const ShowQuestions = ({
   }
 
   return (
-    <Box ml={ml}>
+    <Box ml={ml} width={fullWidth ? '100%' : 'initial'}>
       <Button
         component={Link}
         onClick={(e) => {
