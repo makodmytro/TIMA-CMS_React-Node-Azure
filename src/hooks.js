@@ -47,3 +47,32 @@ export const useIsAdmin = () => {
 
   return !!permissions?.isAdmin;
 };
+
+export const useRecursiveTimeout = (callback, delay) => {
+  const savedCallback = React.useRef(callback);
+
+  React.useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  React.useEffect(() => { // eslint-disable-line
+    let id;
+    function tick() {
+      const ret = savedCallback.current();
+
+      if (ret instanceof Promise) {
+        ret.then(() => {
+          if (delay !== null) {
+            id = setTimeout(tick, delay);
+          }
+        });
+      } else if (delay !== null) {
+        id = setTimeout(tick, delay);
+      }
+    }
+    if (delay !== null) {
+      id = setTimeout(tick, delay);
+      return () => id && clearTimeout(id);
+    }
+  }, [delay]);
+};

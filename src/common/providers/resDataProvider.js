@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import pick from 'lodash/pick';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
@@ -32,6 +33,21 @@ const getResourceAssociations = (resource) => {
   }
 };
 
+const cleanBody = (body, resource) => {
+  switch (resource) {
+    case 'users': {
+      return pick(body, [
+        'isAdmin',
+        'isActive',
+        'groups',
+      ]);
+    }
+    default: {
+      return body;
+    }
+  }
+};
+
 const resDataProvider = {
   ...dataProvider,
   getOne: async (resource, params) => {
@@ -39,6 +55,10 @@ const resDataProvider = {
 
     if (resource === 'sessions') {
       return json;
+    }
+
+    if (resource === 'users') {
+      json.groups = (json.Groups || []).map((g) => g.id);
     }
 
     return { data: json };
@@ -93,13 +113,24 @@ const resDataProvider = {
       url += `?${stringify(query)}`;
     }
 
-    const { json } = await httpClient(url);
+    let { json } = await httpClient(url);
+
     if (Array.isArray(json)) {
       return {
         data: json,
         total: json.length,
       };
     }
+
+    if (resource === 'users') { // hack "Groups"
+      json.data = json.data.map((j) => {
+        return {
+          ...j,
+          groups: (j.Groups || []).map((g) => g.id),
+        };
+      });
+    }
+
     return json;
   },
   getMany: async (resource, params) => {
@@ -122,9 +153,10 @@ const resDataProvider = {
 
   update: async (resource, params) => {
     const url = `${baseApi}/${resource}/${params.id}`;
+
     await httpClient(url, {
       method: 'PUT',
-      body: JSON.stringify(params.data),
+      body: JSON.stringify(cleanBody(params.data, resource)),
     });
     return httpClient(url).then(({ json }) => ({ data: json }));
   },
@@ -167,6 +199,13 @@ const resDataProvider = {
     const { json } = await httpClient(`${baseApi}/stats/sessions/past?${stringify(params)}`);
 
     return { data: json };
+  },
+  topicSync: async (resource = null, params) => {
+    await httpClient(`${baseApi}/topics/${params.id}/sync`, {
+      method: 'POST',
+    });
+
+    return { data: true };
   },
   topicStats: async (resource = null, params) => {
     const filters = {};

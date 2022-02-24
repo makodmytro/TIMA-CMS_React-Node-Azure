@@ -11,12 +11,13 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import QrDialog from './components/qr-dialog';
 import FormFields from './components/FormFields';
 import ShowQuestions from './components/ShowQuestionsButton';
-import { useDisabledDelete, useDisabledEdit } from '../hooks';
+import { useDisabledDelete, useDisabledEdit, useIsAdmin } from '../hooks';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const CustomToolbar = (props) => {
   const disableEdit = useDisabledEdit(props.record?.id);
   const disableDelete = useDisabledDelete(props.record?.id);
+  const admin = useIsAdmin();
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -24,7 +25,7 @@ const CustomToolbar = (props) => {
         label="Save"
         redirect="list"
         submitOnEnter
-        disabled={props.pristine || disableEdit}
+        disabled={props.pristine || (disableEdit && !admin)}
       />
       <ShowQuestions size="medium" ml={1} />
       {props.record.globalTopic ? null : <QrDialog ml={1} />}
@@ -32,7 +33,7 @@ const CustomToolbar = (props) => {
         basePath={props.basePath}
         record={props.record}
         undoable={false}
-        disabled={disableDelete}
+        disabled={disableDelete && !admin}
       />
     </Toolbar>
   );
@@ -40,7 +41,7 @@ const CustomToolbar = (props) => {
 
 const TopicEdit = ({ languages, dispatch, ...props }) => {
   return (
-    <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />}>
+    <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />} undoable={false}>
       <SimpleForm toolbar={<CustomToolbar />}>
         <FormFields {...props} languages={languages} />
       </SimpleForm>

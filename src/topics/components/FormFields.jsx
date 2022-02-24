@@ -8,7 +8,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import TopicImage from './Image';
 import { PlayableTextInput } from '../../common/components/playable-text';
-import { useDisabledEdit } from '../../hooks';
+import { useDisabledEdit, useIsAdmin } from '../../hooks';
 
 export const Advanced = (props) => (
   <>
@@ -19,8 +19,20 @@ export const Advanced = (props) => (
   </>
 );
 
+export const Qna = (props) => (
+  <>
+    <Typography>
+      QNA
+    </Typography>
+    <TextInput source="qnaApiVersion" label="Version" record={props.record} fullWidth disabled={props.disabled === true} />
+    <TextInput source="qnaSubscriptionKey" label="Subscription key" record={props.record} fullWidth disabled={props.disabled === true} />
+    <TextInput source="qnaKnowledgeBaseId" label="Knowledge base ID" record={props.record} fullWidth disabled={props.disabled === true} />
+  </>
+);
+
 const FormFields = (props) => {
   const disabled = useDisabledEdit(props?.record?.id);
+  const admin = useIsAdmin();
 
   const getLang = (r) => {
     if (!r || !props.languages[r.fk_languageId]) {
@@ -37,7 +49,7 @@ const FormFields = (props) => {
         validate={required()}
         fullWidth
         lang={getLang}
-        disabled={disabled}
+        disabled={disabled && !admin}
         record={props?.record}
       />
       <PlayableTextInput
@@ -46,7 +58,7 @@ const FormFields = (props) => {
         rows="4"
         multiline
         lang={getLang}
-        disabled={disabled}
+        disabled={disabled && !admin}
         record={props?.record}
       />
       <ReferenceInput
@@ -61,9 +73,18 @@ const FormFields = (props) => {
           optionText="name"
         />
       </ReferenceInput>
-      <TextInput source="topicImageUrl" fullWidth disabled={disabled} />
+      <TextInput source="topicImageUrl" fullWidth disabled={disabled && !admin} />
       <TopicImage {...props} />
-      <Advanced source="topicKey" disabled={disabled} />
+      <ReferenceInput source="fk_parentTopicId" reference="topics" label="Parent topic" fullWidth disabled={props.disabled === true} allowEmpty>
+        <SelectInput
+          optionText="name"
+          allowEmpty
+          emptyText="None"
+        />
+      </ReferenceInput>
+      <TextInput source="level" fullWidth disabled />
+      <Advanced source="topicKey" disabled={disabled && !admin} />
+      <Qna {...props} disabled={disabled && !admin} />
     </>
   );
 };

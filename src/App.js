@@ -21,6 +21,8 @@ import sessions from './sessions';
 import dashboard from './dashboard';
 import TestAsk from './answers/test';
 import demos from './demos';
+import users from './users';
+import groups from './groups';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
 import customReducer from './common/reducer/custom';
@@ -177,6 +179,12 @@ const AsyncResources = () => {
             <Resource
               key="users"
               name="users"
+              {...users}
+            />,
+            <Resource
+              key="groups"
+              name="groups"
+              {...groups}
             />,
             demo,
           ]);

@@ -45,7 +45,7 @@ const Menu = ({ onMenuClick, logout }) => {
         />
         {
           resources
-            .filter((r) => r.name !== 'users')
+            .filter((r) => r.name !== 'groups')
             .map((resource) => (
               <MenuItemLink
                 key={resource.name}
