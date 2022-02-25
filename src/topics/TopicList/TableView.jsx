@@ -1,4 +1,5 @@
 import React, { cloneElement } from 'react';
+import { useHistory } from 'react-router-dom'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -20,15 +21,24 @@ const Row = ({
   isChild,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
+  const history = useHistory();
 
   return (
     <>
-      <TableRow style={{ backgroundColor: isChild ? '#f9f4e7' : 'initial' }}>
+      <TableRow style={{ backgroundColor: isChild ? '#f9f4e7' : 'initial', cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
           {
             record.ChildTopics && !!record.ChildTopics.length && (
               <>
-                <IconButton size="small" color="primary" onClick={() => setExpanded(!expanded)}>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setExpanded(!expanded);
+                  }}
+                >
                   { !expanded && <AddIcon fontSize="small" /> }
                   { expanded && <MinusIcon fontSize="small" /> }
                 </IconButton>

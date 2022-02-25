@@ -67,7 +67,7 @@ const FormFields = (props) => {
         reference="languages"
         label="resources.topics.fields.language"
         fullWidth
-        disabled
+        disabled={disabled && !admin}
       >
         <SelectInput
           optionText="name"
