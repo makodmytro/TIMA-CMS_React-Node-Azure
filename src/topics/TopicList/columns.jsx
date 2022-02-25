@@ -5,7 +5,17 @@ import {
   BooleanField,
   DateField,
 } from 'react-admin';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TopicImage from '../components/Image';
+
+const Progress = ({ record }) => {
+  if (!record?.syncScheduled) {
+    return null;
+  }
+
+  return <Box textAlign="center"><CircularProgress size={20} color="primary" /></Box>;
+};
 
 const columns = [
   {
@@ -39,7 +49,7 @@ const columns = [
   },
   {
     key: 'syncScheduled',
-    el: (<BooleanField label="Sync scheduled" source="syncScheduled" />),
+    el: (<Progress />),
   },
   {
     key: 'updatedAt',

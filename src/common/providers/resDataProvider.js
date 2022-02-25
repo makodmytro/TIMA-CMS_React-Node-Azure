@@ -36,11 +36,17 @@ const getResourceAssociations = (resource) => {
 const cleanBody = (body, resource) => {
   switch (resource) {
     case 'users': {
-      return pick(body, [
+      const b = pick(body, [
         'isAdmin',
         'isActive',
         'groups',
       ]);
+
+      if (body.password && body.change_password) {
+        b.password = body.password;
+      }
+
+      return b;
     }
     default: {
       return body;
@@ -219,6 +225,14 @@ const resDataProvider = {
     }
 
     return json;
+  },
+  addUsersToGroup: async (resource = null, params) => {
+    await httpClient(`${baseApi}/groups/${params.id}/users`, {
+      method: 'PUT',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: true };
   },
   topicCreatePermission: async (resource = null, params) => {
     await httpClient(`${baseApi}/topics/${params.topic_id}/permissions/${params.group_id}`, {

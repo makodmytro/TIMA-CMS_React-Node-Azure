@@ -22,6 +22,20 @@ export const useDisabledEdit = (id, fallback = true) => {
   return boolDisabledEdit(permissions, id, fallback);
 };
 
+export const useDisabledApprove = (id, fallback = true) => {
+  const { permissions } = usePermissions();
+
+  if (permissions?.isAdmin) {
+    return false;
+  }
+
+  if (!permissions?.topics[id]) {
+    return fallback;
+  }
+
+  return !permissions?.topics[id].manage;
+};
+
 export const useDisabledDelete = (id, fallback = true) => {
   const { permissions } = usePermissions();
 
