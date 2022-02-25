@@ -84,7 +84,7 @@ const PlayableText = ({
     }
 
     if (!lang || !isString(lang)) {
-      notify('Missing language. Can not play', 'error');
+      // notify('Missing language. Can not play', 'error');
 
       return;
     }

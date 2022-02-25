@@ -268,6 +268,15 @@ const PermissionsDialog = ({
           )
         }
         {
+          !groups.length && (
+            <Box>
+              <Typography variant="body2">
+                All the groups are already assigned
+              </Typography>
+            </Box>
+          )
+        }
+        {
           !!groups.length && (
             <>
               <Box borderBottom="1px solid #D5D5D5" mb={2}>

@@ -5,6 +5,10 @@ import {
 
 // function non-hook to use in other places
 export const boolDisabledEdit = (permissions, id, fallback = true) => {
+  if (permissions?.isAdmin) {
+    return false;
+  }
+
   if (!permissions?.topics[id]) {
     return fallback;
   }
@@ -21,6 +25,10 @@ export const useDisabledEdit = (id, fallback = true) => {
 export const useDisabledDelete = (id, fallback = true) => {
   const { permissions } = usePermissions();
 
+  if (permissions?.isAdmin) {
+    return false;
+  }
+
   if (!permissions?.topics[id]) {
     return fallback;
   }
@@ -30,6 +38,10 @@ export const useDisabledDelete = (id, fallback = true) => {
 
 export const useDisabledCreate = () => {
   const { permissions } = usePermissions();
+
+  if (permissions?.isAdmin) {
+    return false;
+  }
 
   if (!permissions?.topics) {
     return true;
