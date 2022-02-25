@@ -17,7 +17,7 @@ import { PlayableTextField } from '../../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
 import ApprovedSwitchField from './approved-switch-field';
 import UseAsSuggestionSwitchField from './use-as-suggestion-switch-field';
-import { useDisabledEdit } from '../../hooks';
+import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const RelatedQuestionsTable = ({
   record,
@@ -26,6 +26,7 @@ const RelatedQuestionsTable = ({
   languages,
 }) => {
   const disabled = useDisabledEdit(record?.fk_topicId);
+  const disabledApproved = useDisabledApprove(record?.fk_topicId);
 
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -120,7 +121,7 @@ const RelatedQuestionsTable = ({
                     />
                   </TableCell>
                   <TableCell>
-                    <ApprovedSwitchField record={related} disabled={disabled} />
+                    <ApprovedSwitchField record={related} disabled={disabledApproved} />
                   </TableCell>
                   <TableCell>
                     <UseAsSuggestionSwitchField record={related} disabled={disabled} />

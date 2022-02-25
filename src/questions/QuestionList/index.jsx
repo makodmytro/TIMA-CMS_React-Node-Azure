@@ -36,13 +36,14 @@ import UseAsSuggestionSwitchField from '../components/use-as-suggestion-switch-f
 import styles from './styles';
 import Filters from './Filters';
 import AnswerField from './AnswerField';
-import { useDisabledEdit } from '../../hooks';
+import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const CustomGridItem = ({
   record, removeAnswer,
   visibleColumns,
 }) => {
   const disableEdit = useDisabledEdit(record?.fk_topicId);
+  const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
   const redirect = useRedirect();
 
@@ -82,7 +83,7 @@ const CustomGridItem = ({
         {visibleColumns.includes('approved')
           && (
             <TableCell>
-              <ApprovedSwitchField label="Approved" record={record} disabled={disableEdit} />
+              <ApprovedSwitchField label="Approved" record={record} disabled={disableApprove} />
             </TableCell>
           )}
         {visibleColumns.includes('useAsSuggestion')

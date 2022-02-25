@@ -20,7 +20,7 @@ import { Language } from '../../common/components/fields-values-by-fk';
 import DropDownMenu from '../components/list-dropdown-menu';
 import Filters from './Filters';
 import styles from './styles';
-import { useDisabledEdit } from '../../hooks';
+import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
@@ -77,7 +77,7 @@ const WrapTopicSelect = (props) => {
 };
 const WrapApprovedSwitch = (props) => {
   return (
-    <ApprovedSwitchField label="Approved" {...props} disabled={useDisabledEdit(props?.record?.fk_topicId)} />
+    <ApprovedSwitchField label="Approved" {...props} disabled={useDisabledApprove(props?.record?.fk_topicId)} />
   );
 };
 

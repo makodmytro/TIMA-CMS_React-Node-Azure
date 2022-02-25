@@ -53,7 +53,6 @@ const UsersCreate = (props) => {
           }}
           fullWidth
           disabled={disabled}
-          helperText="Must be changed after first login"
           autoComplete="new-password"
         />
         <BooleanInput source="isActive" label="Active" disabled={disabled} />
