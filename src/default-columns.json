@@ -1,7 +1,41 @@
 {
-  "topics": ["name", "welcomeText", "image", "lastSyncAt"],
-  "answers": ["text", "fk_languageId", "fk_topicId"],
-  "questions": ["text", "fk_answerId", "fk_topicId", "approved", "feedbackPositiveCount", "feedbackNegativeCount"],
-  "languages": ["code", "name", "welcomeText", "welcomeButton"],
-  "sessions": ["fk_languageId", "fk_topicId", "duration", "questionsCount", "answersCount", "demoCode", "updatedAt", "clientCountry"]
+  "topics": [
+    "name",
+    "welcomeText",
+    "updatedAt",
+    "syncScheduled",
+    "lastSyncAt"
+  ],
+  "answers": [
+    "text",
+    "fk_languageId",
+    "fk_topicId",
+    "fk_editorId",
+    "updatedAt"
+  ],
+  "questions": [
+    "text",
+    "fk_answerId",
+    "fk_topicId",
+    "approved",
+    "updatedAt",
+    "feedbackPositiveCount",
+    "feedbackNegativeCount"
+  ],
+  "languages": [
+    "code",
+    "name",
+    "welcomeText",
+    "welcomeButton"
+  ],
+  "sessions": [
+    "fk_languageId",
+    "fk_topicId",
+    "duration",
+    "questionsCount",
+    "answersCount",
+    "demoCode",
+    "updatedAt",
+    "clientCountry"
+  ]
 }
