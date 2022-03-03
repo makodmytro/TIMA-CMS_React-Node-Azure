@@ -85,7 +85,7 @@ const TopicList = () => {
         id,
       });
 
-      notify('Sync schedules');
+      notify('Sync scheduled');
       refresh();
     } catch (err) {
       notify('Failed to sync', 'error');

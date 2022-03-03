@@ -8,6 +8,7 @@ import {
   Toolbar,
   BooleanInput,
   useDataProvider,
+  useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -20,7 +21,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}
@@ -39,7 +40,7 @@ const ProfileCustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine}
@@ -51,6 +52,7 @@ const ProfileCustomToolbar = (props) => {
 const GroupsSelection = ({ disabled }) => {
   const [groups, setGroups] = React.useState([]);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
 
   const fetch = async () => {
     try {
@@ -82,7 +84,7 @@ const GroupsSelection = ({ disabled }) => {
     <Box>
       <Box borderBottom="1px solid #D5D5D5" mb={2}>
         <Typography variant="body2">
-          Select the groups the user belongs to
+          {translate('resources.groups.select_user')}
         </Typography>
       </Box>
       <Box display="flex" flexWrap="wrap">
@@ -109,6 +111,7 @@ const GroupsSelection = ({ disabled }) => {
 
 const UsersEdit = (props) => {
   const { permissions } = props;
+  const translate = useTranslate();
   const { id } = useParams();
   const [passwordToggle, setPasswordToggle] = React.useState(false);
   const disabled = !useIsAdmin();
@@ -121,7 +124,7 @@ const UsersEdit = (props) => {
         undoable={false}
       >
         <SimpleForm toolbar={<ProfileCustomToolbar />}>
-          <TextInput source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
+          <TextInput label={translate('resources.users.change_password')} source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
           <TextInput source="name" validate={required()} fullWidth disabled />
           <TextInput source="email" validate={required()} fullWidth disabled />
           <TextInput
@@ -129,21 +132,23 @@ const UsersEdit = (props) => {
             type="password"
             validate={required()}
             fullWidth
-            helperText="Must be changed after first login"
+            helperText={translate('misc.password_must_change')}
             autoComplete="new-password"
+            label="resources.users.fields.password"
           />
           <TextInput
             type="password"
             source="password_confirm"
             validate={(value, allValues) => {
               if (value !== allValues?.password) {
-                return 'Password does not match';
+                return translate('misc.password_mismatch');
               }
 
               return undefined;
             }}
             fullWidth
             autoComplete="new-password"
+            label="resources.users.fields.password_confirm"
           />
         </SimpleForm>
       </Edit>
@@ -174,29 +179,29 @@ const UsersEdit = (props) => {
                 type="password"
                 validate={required()}
                 fullWidth
-                disabled={disabled}
-                helperText="Must be changed after first login"
+                helperText={translate('misc.password_must_change')}
                 autoComplete="new-password"
+                label="resources.users.fields.password"
               />
               <TextInput
                 type="password"
                 source="password_confirm"
                 validate={(value, allValues) => {
                   if (value !== allValues?.password) {
-                    return 'Password does not match';
+                    return translate('misc.password_mismatch');
                   }
 
                   return undefined;
                 }}
                 fullWidth
-                disabled={disabled}
                 autoComplete="new-password"
+                label="resources.users.fields.password_confirm"
               />
             </>
           )
         }
-        <BooleanInput source="isActive" label="Active" disabled={disabled} />
-        <BooleanInput source="isAdmin" label="Admin" disabled={disabled} />
+        <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
+        <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />
         <GroupsSelection disabled={disabled} />
       </SimpleForm>
     </Edit>

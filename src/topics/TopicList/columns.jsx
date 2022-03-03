@@ -2,7 +2,6 @@ import React from 'react';
 import {
   TextField,
   ReferenceField,
-  BooleanField,
   DateField,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';

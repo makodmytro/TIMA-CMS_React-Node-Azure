@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
@@ -14,6 +15,7 @@ const DropdownMenu = ({
   onPermissionsClick,
 }) => {
   const admin = useIsAdmin();
+  const translate = useTranslate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -38,7 +40,7 @@ const DropdownMenu = ({
         color="secondary"
         size="small"
       >
-        Actions <ExpandIcon />
+        {translate('misc.actions')} <ExpandIcon />
       </Button>
       <Menu
         id="simple-menu"
@@ -77,7 +79,7 @@ const DropdownMenu = ({
                 }}
                 fullWidth
               >
-                Schedule sync
+                {translate('misc.schedule_sync')}
               </Button>
             </MenuItem>
           )
@@ -95,7 +97,7 @@ const DropdownMenu = ({
                 }}
                 fullWidth
               >
-                Manage permissions
+                {translate('misc.manage_permissions')}
               </Button>
             </MenuItem>
           )

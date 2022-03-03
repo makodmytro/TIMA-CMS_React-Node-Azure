@@ -13,6 +13,7 @@ import {
   Toolbar,
   SaveButton,
   DeleteButton,
+  useTranslate,
 } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import { useField } from 'react-final-form'; // eslint-disable-line
@@ -35,7 +36,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         submitOnEnter
         disabled={props.pristine || disableEdit}
       />
@@ -55,6 +56,8 @@ const CustomToolbar = (props) => {
 const Answer = ({
   record, answer, unlinkAnswer, scrollToSearch, disabled,
 }) => {
+  const translate = useTranslate();
+
   if (!record) {
     return null;
   }
@@ -69,7 +72,7 @@ const Answer = ({
         onClick={scrollToSearch}
         disabled={disabled === true}
       >
-        Link answer
+        {translate('resources.questions.link')}
       </Button>
     );
   }
@@ -77,8 +80,8 @@ const Answer = ({
   return (
     <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
       <Typography variant="body2">
-        Answer&nbsp;
-        <small><Link to={`/answers/${answer.id}`} target="_blank">View</Link></small>
+        {translate('misc.answer')}&nbsp;
+        <small><Link to={`/answers/${answer.id}`} target="_blank">{translate('misc.view')}</Link></small>
       </Typography>
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">
@@ -93,7 +96,7 @@ const Answer = ({
           onClick={() => unlinkAnswer(record.id)}
           disabled={disabled === true}
         >
-          Unlink
+          {translate('misc.unlink_answer')}
         </Button>
       </Box>
     </Box>
@@ -112,6 +115,7 @@ const FormFields = ({
 }) => {
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const {
     input: { value: fkLanguageId, onChange: changeLanguage },
@@ -187,12 +191,12 @@ const FormFields = ({
       <Confirm
         isOpen={!!tmpLanguageValue}
         loading={false}
-        title="Change language"
-        content="Changing a question's language will also have an effect in the topic"
+        title={translate('misc.change_language')}
+        content={translate('dialogs.change_language_confirmation')}
         onConfirm={onLanguageChangeConfirm}
         onClose={onLanguageChangeCancel}
-        confirm="Proceed"
-        cancel="Undo change"
+        confirm={translate('misc.proceed')}
+        cancel={translate('misc.undo_change')}
       />
       <PlayableTextInput
         label="resources.questions.fields.text"
@@ -237,8 +241,8 @@ const FormFields = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
-      <BooleanInput source="approved" disabled={disableEdit} />
-      <BooleanInput source="useAsSuggestion" disabled={disableEdit} />
+      <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
+      <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
       <Answer
         {...{
           answer, unlinkAnswer, record, scrollToSearch,
@@ -255,6 +259,7 @@ const QuestionEdit = ({
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
   const refresh = useRefresh();
   const [answer, setAnswer] = React.useState(null);
   const [record, setRecord] = React.useState(null);
@@ -303,8 +308,8 @@ const QuestionEdit = ({
       <Confirm
         isOpen={confirmations.unlink}
         loading={false}
-        title="Unlink answer"
-        content="Are you sure you want to unlink the answer from the question?"
+        title={translate('misc.unlink_answer')}
+        content={translate('dialogs.unlink_confirmation')}
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
       />
@@ -332,7 +337,7 @@ const QuestionEdit = ({
         </SimpleForm>
       </Edit>
       <Box my={1} p={2} boxShadow={3}>
-        <Typography>Related questions</Typography>
+        <Typography>{translate('resources.questions.fields.fk_questionId')}</Typography>
         <Box my={2}>
           <RelatedQuestionsTable
             record={record}
@@ -341,7 +346,7 @@ const QuestionEdit = ({
         </Box>
       </Box>
       <Box my={1} mb={6} p={2} boxShadow={3}>
-        <Typography>Search questions/answers to create link</Typography>
+        <Typography>{translate('misc.search_questions_answers_link')}</Typography>
         <SearchQuestionsAnswers
           record={record}
         />

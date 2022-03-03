@@ -6,6 +6,7 @@ import {
   List,
   ReferenceField,
   TextField,
+  useTranslate,
 } from 'react-admin';
 import Badge from '@material-ui/core/Badge';
 import ReactMarkdown from 'react-markdown';
@@ -72,12 +73,12 @@ export const Text = connect(mapStateToProps)(({ record, hideRelatedQuestions, la
 
 const WrapTopicSelect = (props) => {
   return (
-    <TopicSelectCell source="fk_topicId" label="Topic" sortBy="fk_topicId" {...props} disabled={useDisabledEdit(props?.record?.fk_topicId)} />
+    <TopicSelectCell source="fk_topicId" label="resources.answers.fields.fk_topicId" sortBy="fk_topicId" {...props} disabled={useDisabledEdit(props?.record?.fk_topicId)} />
   );
 };
 const WrapApprovedSwitch = (props) => {
   return (
-    <ApprovedSwitchField label="Approved" {...props} disabled={useDisabledApprove(props?.record?.fk_topicId)} />
+    <ApprovedSwitchField label="resources.answers.fields.approved" {...props} disabled={useDisabledApprove(props?.record?.fk_topicId)} />
   );
 };
 
@@ -87,20 +88,20 @@ const AnswerList = ({
   const columns = [
     {
       key: 'text',
-      el: <Text label="Text" sortBy="text" />,
+      el: <Text label="resources.answers.fields.text" sortBy="text" />,
     },
     {
       key: 'spokenText',
-      el: <TextField source="spokenText" label="Spoken text" sortBy="spokenText" />,
+      el: <TextField source="spokenText" label="resources.answers.fields.spokenText" sortBy="spokenText" />,
     },
     {
       key: 'fk_languageId',
-      el: <Language label="Language" sortBy="fk_languageId" />,
+      el: <Language label="resources.answers.fields.fk_languageId" sortBy="fk_languageId" />,
     },
     {
       key: 'fk_editorId',
       el: (
-        <ReferenceField source="fk_editorId" label="Editor" sortBy="fk_editorId" reference="users" link={false}>
+        <ReferenceField source="fk_editorId" label="resources.answers.fields.fk_editorId" sortBy="fk_editorId" reference="users" link={false}>
           <TextField source="name" />
         </ReferenceField>
       ),
@@ -115,7 +116,7 @@ const AnswerList = ({
     },
     {
       key: 'tags',
-      el: <TextField source="tags" label="Tags" sortable={false} />,
+      el: <TextField source="tags" label="resources.answers.fields.tags" sortable={false} />,
     },
     { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
   ];

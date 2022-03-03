@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -57,6 +58,7 @@ const styles = makeStyles((theme) => ({
 
 const QrDialog = ({ record, fullWidth, ml }) => {
   const classes = styles();
+  const translate = useTranslate();
   const [open, setOpen] = React.useState(false);
 
   const onClose = (e) => {
@@ -84,12 +86,12 @@ const QrDialog = ({ record, fullWidth, ml }) => {
           size="small"
           fullWidth={!!fullWidth}
         >
-          Show QR Code
+          {translate('misc.show_qr_code')}
         </Button>
       </Box>
       <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth className={classes.root} disableBackdropClick disableEscapeKeyDown>
         <DialogTitle disableTypography className={classes.title}>
-          <Typography variant="h6">QR Code</Typography>
+          <Typography variant="h6">{translate('misc.qr_code')}</Typography>
           <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
           </IconButton>
@@ -106,7 +108,7 @@ const QrDialog = ({ record, fullWidth, ml }) => {
             variant="contained"
             color="secondary"
           >
-            Print
+            {translate('misc.print')}
           </Button>
         </DialogActions>
       </Dialog>

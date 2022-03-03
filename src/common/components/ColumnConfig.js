@@ -41,11 +41,13 @@ const ColumnConfig = ({
         size="small"
         onClick={() => setOpen(true)}
       >
-        <SettingsIcon size="small" /> COLUMNS
+        <SettingsIcon size="small" /> {translate('misc.columns')}
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Configure visible columns</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {translate('misc.columns_config')}
+        </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" alignItems="flex-start">
             {columns.map((col) => (
@@ -65,7 +67,7 @@ const ColumnConfig = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="primary">
-            OK
+            {translate('misc.ok')}
           </Button>
         </DialogActions>
       </Dialog>

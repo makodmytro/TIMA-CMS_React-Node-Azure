@@ -5,12 +5,14 @@ import {
   useDataProvider,
   useRefresh,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import TickIcon from '@material-ui/icons/DoneAll';
 
 const BatchApproveButton = ({ answerId, variant, disabled }) => {
   const [open, setOpen] = React.useState(false);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const refresh = useRefresh();
 
@@ -46,8 +48,8 @@ const BatchApproveButton = ({ answerId, variant, disabled }) => {
           <Confirm
             isOpen={open}
             loading={false}
-            title="Batch approve"
-            content="Are you sure you want to approve this answer's related questions?"
+            title={translate('misc.batch_approve')}
+            content={translate('dialogs.batch_approve')}
             onConfirm={onConfirm}
             onClose={onClose}
           />
@@ -61,7 +63,7 @@ const BatchApproveButton = ({ answerId, variant, disabled }) => {
         variant={variant || 'text'}
         disabled={disabled === true}
       >
-        <TickIcon /> Approve questions
+        <TickIcon /> {translate('misc.batch_approve')}
       </Button>
     </>
   );

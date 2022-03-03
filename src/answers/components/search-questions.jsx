@@ -8,6 +8,7 @@ import {
   BooleanInput,
   required,
   usePermissions,
+  useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
@@ -26,6 +27,8 @@ import { Text } from '../AnswerList';
 import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
 
 const Filters = ({ onSubmit, initialValues }) => {
+  const translate = useTranslate();
+
   return (
     <Form
       onSubmit={onSubmit}
@@ -35,23 +38,23 @@ const Filters = ({ onSubmit, initialValues }) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4} md={3}>
-                <TextInput label="Text" source="q" fullWidth />
+                <TextInput label="misc.text" source="q" fullWidth />
               </Grid>
               <Grid item xs={12} sm={4} md={3}>
                 <SelectInput
-                  label="Approved"
+                  label="resources.questions.fields.approved"
                   source="approved"
                   choices={[
-                    { id: '__none__', name: 'Both' },
-                    { id: true, name: 'Only approved questions' },
-                    { id: false, name: 'Only not-approved questions' },
+                    { id: '__none__', name: translate('misc.both') },
+                    { id: true, name: translate('misc.only_approved_questions') },
+                    { id: false, name: translate('misc.only_not_approved_questions') },
                   ]}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} sm={4} md={2}>
                 <BooleanInput
-                  label="Ignored"
+                  label="resources.questions.fields.ignored"
                   source="ignored"
                   alwaysOn
                   onChange={() => handleSubmit()}
@@ -59,7 +62,7 @@ const Filters = ({ onSubmit, initialValues }) => {
               </Grid>
               <Grid item xs={12} sm={4} md={2}>
                 <BooleanInput
-                  label="All topics"
+                  label="resources.questions.fields.all_topics"
                   source="all_topics"
                 />
               </Grid>
@@ -71,7 +74,7 @@ const Filters = ({ onSubmit, initialValues }) => {
                     variant="contained"
                     fullWidth
                   >
-                    Search
+                    {translate('misc.search')}
                   </Button>
                 </Box>
               </Grid>
@@ -85,6 +88,7 @@ const Filters = ({ onSubmit, initialValues }) => {
 
 const CreateForm = ({ onSubmit }) => {
   const disabled = useDisabledCreate();
+  const translate = useTranslate();
 
   return (
     <Form
@@ -93,10 +97,10 @@ const CreateForm = ({ onSubmit }) => {
         text: '',
       }}
       render={({ handleSubmit, form }) => (
-        <form onSubmit={(e) => handleSubmit(e).then(form.restart)}>
+        <form onSubmit={(e) => handleSubmit(e)?.then(form.restart)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}>
-              <TextInput label="Text" source="text" fullWidth validate={required()} />
+              <TextInput label="resources.questions.fields.text" source="text" fullWidth validate={required()} />
             </Grid>
             <Grid item xs={12} sm={3}>
               <Box pt={2}>
@@ -107,7 +111,7 @@ const CreateForm = ({ onSubmit }) => {
                   fullWidth
                   disabled={disabled}
                 >
-                  Create question
+                  {translate('resources.questions.create')}
                 </Button>
               </Box>
             </Grid>
@@ -121,6 +125,7 @@ const CreateForm = ({ onSubmit }) => {
 const LinksDialog = ({
   record,
 }) => {
+  const translate = useTranslate();
   const { permissions } = usePermissions();
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -264,7 +269,7 @@ const LinksDialog = ({
         !results && (
           <Box py={2}>
             <Alert severity="info">
-              Use the filters to search for questions
+              {translate('misc.search_filters_explanations')}
             </Alert>
           </Box>
         )
@@ -273,7 +278,7 @@ const LinksDialog = ({
         results && !results.length && (
           <Box py={2}>
             <Alert severity="info">
-              No records were found
+              {translate('misc.no_records')}
             </Alert>
           </Box>
         )
@@ -285,8 +290,8 @@ const LinksDialog = ({
               <TableHead>
                 <TableRow>
                   <TableCell>&nbsp;</TableCell>
-                  <TableCell>Text</TableCell>
-                  <TableCell>Answer</TableCell>
+                  <TableCell>{translate('resources.questions.fields.text')}</TableCell>
+                  <TableCell>{translate('resoruces.questions.fields.fk_answerId')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -345,7 +350,7 @@ const LinksDialog = ({
                     color="primary"
                     size="small"
                   >
-                    Link answer for {selected.length} questions
+                    {translate('resources.answers.link_questions', { val: selected.length })}
                   </Button>
                 )
               }

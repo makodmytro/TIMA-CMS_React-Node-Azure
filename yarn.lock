@@ -9701,6 +9701,11 @@ ra-language-english@^3.10.3, ra-language-english@^3.12.0:
   dependencies:
     ra-core "^3.12.0"
 
+ra-language-german@^3.13.5:
+  version "3.13.5"
+  resolved "https://registry.yarnpkg.com/ra-language-german/-/ra-language-german-3.13.5.tgz#553385555907713a2ae08ba8f7aabd041b922936"
+  integrity sha512-dGWWJbIP5FUp0axoH+7sZj6011IgifEz55FLij3QSBI4ZusDdH/CL3l4oy+srUXFI+IzoXGGtQPJ7ax3p11cLQ==
+
 ra-ui-materialui@^3.12.0:
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-3.12.0.tgz#54f185efd64b5454cbf771f022f974a10045862c"

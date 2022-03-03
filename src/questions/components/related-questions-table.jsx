@@ -4,6 +4,7 @@ import {
   useRefresh,
   useNotify,
   Confirm,
+  useTranslate,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
@@ -25,6 +26,7 @@ const RelatedQuestionsTable = ({
   answerView,
   languages,
 }) => {
+  const translate = useTranslate();
   const disabled = useDisabledEdit(record?.fk_topicId);
   const disabledApproved = useDisabledApprove(record?.fk_topicId);
 
@@ -74,7 +76,7 @@ const RelatedQuestionsTable = ({
     || !relatedQuestions.length) {
     return (
       <Alert severity="info">
-        There are no related questions
+        {translate('resources.questions.no_related')}
       </Alert>
     );
   }
@@ -84,17 +86,17 @@ const RelatedQuestionsTable = ({
       <Confirm
         isOpen={confirmations.unlink}
         loading={false}
-        title="Unlink answer"
-        content="Are you sure you want to unlink the answer from the question?"
+        title={translate('misc.unlink_answer')}
+        content={translate('dialogs.unlink_confirmation')}
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
       />
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Text</TableCell>
-            <TableCell>Approved</TableCell>
-            <TableCell>Use as suggestion</TableCell>
+            <TableCell>{translate('resources.questions.fields.text')}</TableCell>
+            <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
+            <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
             <TableCell>&nbsp;</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
@@ -135,7 +137,7 @@ const RelatedQuestionsTable = ({
                       onClick={() => unlinkAnswerClicked(related.id)}
                       disabled={disabled}
                     >
-                      Unlink answer
+                      {translate('misc.unlink_answer')}
                     </Button>
                   </TableCell>
                   <TableCell>

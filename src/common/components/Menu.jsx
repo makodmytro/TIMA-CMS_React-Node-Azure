@@ -2,8 +2,15 @@ import * as React from 'react';
 import capitalize from 'lodash/capitalize';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
-import { MenuItemLink, getResources } from 'react-admin';
+import {
+  MenuItemLink,
+  getResources,
+  useLocale,
+  useSetLocale,
+} from 'react-admin';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 import DemoIcon from '@material-ui/icons/AddToQueue';
@@ -14,6 +21,8 @@ const Menu = ({ onMenuClick, logout }) => {
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
   const resources = useSelector(getResources);
   const dispatch = useDispatch();
+  const locale = useLocale();
+  const setLocale = useSetLocale();
 
   const onClick = (resource) => (e) => {
     const filter = {};
@@ -31,6 +40,13 @@ const Menu = ({ onMenuClick, logout }) => {
     });
 
     return onMenuClick(e);
+  };
+
+  const onLocaleChange = () => {
+    const l = locale === 'en' ? 'de' : 'en';
+
+    setLocale(l);
+    localStorage.setItem('tima-locale', l);
   };
 
   return (
@@ -77,6 +93,13 @@ const Menu = ({ onMenuClick, logout }) => {
           position: 'fixed', bottom: 5, left: 5, fontSize: 10,
         }}
       >
+        <Box textAlign="center">
+          <Typography variant="body2" component="span">DE</Typography>
+          &nbsp;
+          <Switch size="small" checked={locale === 'en'} onChange={onLocaleChange} />
+          &nbsp;
+          <Typography variant="body2" component="span">EN</Typography>
+        </Box>
         {baseApi}
       </div>
     </>

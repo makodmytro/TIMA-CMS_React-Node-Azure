@@ -5,6 +5,7 @@ import {
   SelectInput,
   TextInput,
   useListContext,
+  useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form';
 import DoneIcon from '@material-ui/icons/Done';
@@ -13,6 +14,7 @@ import styles from './styles';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
+  const translate = useTranslate();
   const {
     filterValues,
     setFilters,
@@ -61,10 +63,10 @@ const Filters = ({ languages, topics, ...props }) => {
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>
-          <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <TextInput label="misc.text" source="q" alwaysOn onChange={() => handleSubmit()} />
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="Language"
+            label="resources.questions.fields.fk_languageId"
             source="fk_languageId"
             reference="languages"
             alwaysOn
@@ -75,22 +77,22 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="Editor"
+            label="resources.questions.fields.fk_editorId"
             source="fk_editorId"
             reference="users"
             alwaysOn
             allowEmpty
             perPage={100}
           >
-            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
           </ReferenceInput>
           <ReferenceInput
-            label="Topic"
+            label="resources.questions.fields.fk_topicId"
             source="fk_topicId"
             reference="topics"
             alwaysOn
@@ -103,11 +105,11 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <SelectInput
-            label="Approved"
+            label="resources.questions.fields.approved"
             source="approved"
             allowEmpty
             emptyText="Both"
@@ -119,13 +121,13 @@ const Filters = ({ languages, topics, ...props }) => {
             ]}
           />
           <BooleanInput
-            label="Ignored"
+            label="resources.questions.fields.ignored"
             source="ignored"
             alwaysOn
             onChange={() => handleSubmit()}
           />
           <BooleanInput
-            label="Unanswered questions"
+            label="misc.unanswered_questions"
             source="unanswered"
             alwaysOn
             onChange={() => handleSubmit()}
