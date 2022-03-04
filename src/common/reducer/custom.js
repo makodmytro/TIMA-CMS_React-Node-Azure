@@ -1,6 +1,7 @@
 const defaultState = {
   topics: [],
   languages: [],
+  syncStatus: 0,
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -15,6 +16,12 @@ export default (state = defaultState, { type, payload }) => {
       return {
         ...state,
         topics: payload,
+      };
+    }
+    case 'CUSTOM_TOPICS_SYNC_STATUS': {
+      return {
+        ...state,
+        syncStatus: payload,
       };
     }
     default: {

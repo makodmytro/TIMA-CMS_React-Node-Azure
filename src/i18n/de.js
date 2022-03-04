@@ -6,6 +6,7 @@ const german = {
     languageSelect: 'Language',
   },
   'My profile': 'My profile',
+  'Topic Sync Scheduled': 'Topic Sync Scheduled',
   required: 'Required',
   Days: 'Days',
   Weeks: 'Weeks',
