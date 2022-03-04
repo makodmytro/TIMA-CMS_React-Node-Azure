@@ -5,6 +5,7 @@ import {
   email,
   Toolbar,
   SaveButton,
+  useTranslate,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { useIsAdmin } from '../hooks';
@@ -15,7 +16,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}
@@ -26,6 +27,7 @@ const CustomToolbar = (props) => {
 
 const UsersCreate = (props) => {
   const disabled = !useIsAdmin();
+  const translate = useTranslate();
 
   return (
     <Create {...props} actions={<CustomTopToolbar />}>
@@ -38,15 +40,17 @@ const UsersCreate = (props) => {
           validate={required()}
           fullWidth
           disabled={disabled}
-          helperText="Must be changed after first login"
+          helperText={translate('misc.password_must_change')}
           autoComplete="new-password"
+          label="resources.users.fields.password"
         />
         <TextInput
           type="password"
           source="password_confirm"
+          label="resources.users.fields.password_confirm"
           validate={(value, allValues) => {
             if (value !== allValues?.password) {
-              return 'Password does not match';
+              return translate('misc.password_mismatch');
             }
 
             return undefined;
@@ -55,8 +59,8 @@ const UsersCreate = (props) => {
           disabled={disabled}
           autoComplete="new-password"
         />
-        <BooleanInput source="isActive" label="Active" disabled={disabled} />
-        <BooleanInput source="isAdmin" label="Admin" disabled={disabled} />
+        <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
+        <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />
       </SimpleForm>
     </Create>
   );

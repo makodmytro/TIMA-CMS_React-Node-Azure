@@ -6,6 +6,7 @@ import {
   List,
   TextField,
   BooleanField,
+  useTranslate,
 } from 'react-admin';
 import {
   Tab,
@@ -28,6 +29,7 @@ function LinkTab(props) {
 }
 
 const UsersList = (props) => {
+  const translate = useTranslate();
   const columns = [
     {
       key: 'name',
@@ -58,8 +60,8 @@ const UsersList = (props) => {
           aria-label="nav tabs example"
           TabIndicatorProps={{ style: { background: 'white' } }}
         >
-          <LinkTab label="Users" to="/users" />
-          <LinkTab label="Groups" to="/groups" />
+          <LinkTab label={translate('misc.users')} to="/users" />
+          <LinkTab label={translate('misc.groups')} to="/groups" />
         </Tabs>
       </AppBar>
       <Box p={2} boxShadow={3}>

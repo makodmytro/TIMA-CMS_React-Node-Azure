@@ -11,38 +11,43 @@ import {
   SelectInput,
   ReferenceInput,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
-const Filters = ({ onSubmit, initialValues }) => (
-  <Form
-    onSubmit={onSubmit}
-    initialValues={initialValues}
-    render={({ handleSubmit }) => (
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4} md={3}>
-            <ReferenceInput label="Language" source="fk_languageId" reference="languages" fullWidth allowEmpty>
-              <SelectInput optionText="name" allowEmpty emptyText="None" />
-            </ReferenceInput>
+const Filters = ({ onSubmit, initialValues }) => {
+  const translate = useTranslate();
+
+  return (
+    <Form
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4} md={3}>
+              <ReferenceInput label="resources.answers.fk_languageId" source="fk_languageId" reference="languages" fullWidth allowEmpty>
+                <SelectInput optionText="name" allowEmpty emptyText={translate('misc.none')} />
+              </ReferenceInput>
+            </Grid>
+            <Grid item xs={12} sm={4} md={3}>
+              <Box pt={2}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                >
+                  {translate('misc.search')}
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <Box pt={2}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                fullWidth
-              >
-                Search
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </form>
-    )}
-  />
-);
+        </form>
+      )}
+    />
+  );
+};
 
 const PastSessions = () => {
   const [form, setForm] = React.useState({

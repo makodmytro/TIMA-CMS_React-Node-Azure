@@ -11,6 +11,7 @@ import {
   Toolbar,
   SaveButton,
   DeleteButton,
+  useTranslate,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './components/form';
@@ -27,7 +28,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         submitOnEnter
         disabled={props.pristine || disableEdit}
       />
@@ -52,6 +53,7 @@ const Fields = ({ setRecord, ...props }) => {
 };
 
 const AnswerEdit = (props) => {
+  const translate = useTranslate();
   const notify = useNotify();
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
@@ -114,7 +116,7 @@ const AnswerEdit = (props) => {
         </SimpleForm>
       </Edit>
       <Box my={1} p={2} boxShadow={3}>
-        <Typography>Related questions</Typography>
+        <Typography>{translate('resources.answers.related_questions')}</Typography>
         {
           answer && answer.id && answer.Questions && !!answer.Questions.length && (
             <Box textAlign="right">
@@ -131,7 +133,7 @@ const AnswerEdit = (props) => {
         </Box>
       </Box>
       <Box my={1} p={2} boxShadow={3}>
-        <Typography>Search questions to create link</Typography>
+        <Typography>{translate('resources.answers.search_questions')}</Typography>
         <SearchQuestions
           record={answer}
         />
@@ -139,7 +141,7 @@ const AnswerEdit = (props) => {
       {
         !disableEdit && (
           <Box my={1} p={2} boxShadow={3}>
-            <Typography>Media</Typography>
+            <Typography>{translate('resources.answers.media')}</Typography>
             <AnswerMedia answer={answer} />
           </Box>
         )

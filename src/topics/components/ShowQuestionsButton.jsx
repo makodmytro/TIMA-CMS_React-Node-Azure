@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -6,6 +7,8 @@ import Box from '@material-ui/core/Box';
 const ShowQuestions = ({
   record, size, fullWidth, ml,
 }) => {
+  const translate = useTranslate();
+
   if (!record) {
     return null;
   }
@@ -23,7 +26,7 @@ const ShowQuestions = ({
         to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
         fullWidth={!!fullWidth}
       >
-        Show questions
+        {translate('misc.show_questions')}
       </Button>
     </Box>
   );

@@ -61,7 +61,7 @@ const getListUrl = (initialUrl, resource, params) => {
     const { field, order } = params.sort || {};
 
     const {
-      q, unanswered, groupRelated, ...restFilter
+      q, unanswered, groupRelated, topLevelOnly, ...restFilter
     } = params.filter || {};
     const {
       from, to, active, search, ...filter
@@ -86,6 +86,7 @@ const getListUrl = (initialUrl, resource, params) => {
       ...(resource === 'questions' ? { group: 1 } : {}),
       ...(resource === 'demos' && active ? { active: true } : {}),
       ...(resource === 'demos' && search ? { search } : {}),
+      ...(resource === 'topics' && topLevelOnly ? { topLevelOnly } : {}),
       ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
     };
 

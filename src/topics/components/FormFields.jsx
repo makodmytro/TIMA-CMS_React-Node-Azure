@@ -4,31 +4,64 @@ import {
   required,
   SelectInput,
   TextInput,
+  useTranslate,
 } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import TopicImage from './Image';
 import { PlayableTextInput } from '../../common/components/playable-text';
 import { useDisabledEdit, useIsAdmin } from '../../hooks';
 
-export const Advanced = (props) => (
-  <>
-    <Typography>
-      Advanced
-    </Typography>
-    <TextInput source="topicKey" record={props.record} fullWidth disabled={props.disabled === true} />
-  </>
-);
+export const Advanced = (props) => {
+  const translate = useTranslate();
 
-export const Qna = (props) => (
-  <>
-    <Typography>
-      QNA
-    </Typography>
-    <TextInput source="qnaApiVersion" label="Version" record={props.record} fullWidth disabled={props.disabled === true} />
-    <TextInput source="qnaSubscriptionKey" label="Subscription key" record={props.record} fullWidth disabled={props.disabled === true} />
-    <TextInput source="qnaKnowledgeBaseId" label="Knowledge base ID" record={props.record} fullWidth disabled={props.disabled === true} />
-  </>
-);
+  return (
+    <>
+      <Typography>
+        {translate('misc.advanced')}
+      </Typography>
+      <TextInput
+        source="topicKey"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+        label="resources.topics.fields.topicKey"
+      />
+    </>
+  );
+};
+
+export const Qna = (props) => {
+  const translate = useTranslate();
+
+  return (
+    <>
+      <Typography>
+        {translate('misc.qna')}
+      </Typography>
+      <TextInput
+        source="qnaApiVersion"
+        label="resources.topics.fields.qnaApiVersion"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
+        source="qnaSubscriptionKey"
+        label="resources.topics.fields.qnaSubscriptionKey"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
+        source="qnaKnowledgeBaseId"
+        label="resources.topics.fields.qnaKnowledgeBaseId"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+    </>
+  );
+};
 
 const FormFields = (props) => {
   const disabled = useDisabledEdit(props?.record?.id);
@@ -51,6 +84,7 @@ const FormFields = (props) => {
         lang={getLang}
         disabled={disabled && !admin}
         record={props?.record}
+        label="resources.topics.fields.name"
       />
       <PlayableTextInput
         source="welcomeText"
@@ -60,6 +94,7 @@ const FormFields = (props) => {
         lang={getLang}
         disabled={disabled && !admin}
         record={props?.record}
+        label="resources.topics.fields.welcomeText"
       />
       <ReferenceInput
         validate={required()}
@@ -73,16 +108,28 @@ const FormFields = (props) => {
           optionText="name"
         />
       </ReferenceInput>
-      <TextInput source="topicImageUrl" fullWidth disabled={disabled && !admin} />
+      <TextInput
+        source="topicImageUrl"
+        fullWidth
+        disabled={disabled && !admin}
+        label="resources.topics.fields.image"
+      />
       <TopicImage {...props} />
-      <ReferenceInput source="fk_parentTopicId" reference="topics" label="Parent topic" fullWidth disabled={props.disabled === true} allowEmpty>
+      <ReferenceInput
+        source="fk_parentTopicId"
+        reference="topics"
+        label="resources.topics.fields.fk_parentTopicId"
+        fullWidth
+        disabled={props.disabled === true}
+        allowEmpty
+      >
         <SelectInput
           optionText="name"
           allowEmpty
           emptyText="None"
         />
       </ReferenceInput>
-      <TextInput source="level" fullWidth disabled />
+      <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
       <Advanced source="topicKey" disabled={disabled && !admin} />
       <Qna {...props} disabled={disabled && !admin} />
     </>

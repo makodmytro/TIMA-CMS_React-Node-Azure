@@ -37,7 +37,7 @@ const MarkdownInput = ({
           disabled={disabled === true}
         />
         <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
-          <TextInput source="spokenText" label="Spoken text" fullWidth multiline rows={2} disabled={disabled === true} />
+          <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />
           <PlayableText text={spokenText || value} lang={lang} hideText disabled={disabled === true} />
         </Box>
       </FormControl>

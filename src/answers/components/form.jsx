@@ -6,6 +6,7 @@ import {
   Confirm,
   BooleanInput,
   usePermissions,
+  useTranslate,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
@@ -42,6 +43,7 @@ const Approved = (props) => {
 const Form = ({
   languages, topics, edit, record,
 }) => {
+  const translate = useTranslate();
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const {
     input: { value: fkLanguageId, onChange: changeLanguage },
@@ -101,8 +103,8 @@ const Form = ({
           <Confirm
             isOpen={!!tmpLanguageValue}
             loading={false}
-            title="Change language"
-            content="Changing an answers's language will also have an effect its topic and the related question's topics"
+            title={translate('misc.change_language')}
+            content={translate('dialogs.change_language')}
             onConfirm={onLanguageChangeConfirm}
             onClose={onLanguageChangeCancel}
             confirm="Proceed"
@@ -111,7 +113,7 @@ const Form = ({
         )
       }
       <MarkdownInput
-        label="Text"
+        label="resources.answers.fields.text"
         source="text"
         lang={getLang()}
         disabled={disableEdit}
@@ -145,8 +147,8 @@ const Form = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
-      <Approved source="approved" label="Approved" disabled={disableEdit} />
-      <TagsInput source="tags" label="Tags" disabled={disableEdit} />
+      <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
+      <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
     </>
   );
 };

@@ -43,6 +43,11 @@
     "max-len": "off",
     "prefer-const": "warn",
     "indent": "warn",
-    "no-unreachable": "warn"
+    "no-unreachable": "warn",
+    "eol-last": "warn",
+    "arrow-parens": "warn",
+    "no-underscore-dangle": "warn",
+    "comma-dangle": "warn",
+    "spaced-comment": "off"
   }
 }

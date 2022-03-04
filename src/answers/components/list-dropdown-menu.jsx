@@ -2,6 +2,7 @@ import React from 'react';
 import {
   EditButton,
   DeleteButton,
+  useTranslate,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,6 +15,7 @@ const DropdownMenu = ({
   record,
   basePath,
 }) => {
+  const translate = useTranslate();
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableDelete = useDisabledDelete(record?.fk_topicId);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,7 +43,7 @@ const DropdownMenu = ({
         size="small"
         disabled={disableEdit && disableDelete}
       >
-        Actions <ExpandIcon />
+        {translate('misc.actions')} <ExpandIcon />
       </Button>
       <Menu
         id="simple-menu"

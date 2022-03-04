@@ -4,6 +4,7 @@ import {
   useNotify,
   useRefresh,
   Confirm,
+  useTranslate,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -29,6 +30,7 @@ const LinksDialog = ({
 }) => {
   const disabled = useDisabledEdit(record?.fk_topicId);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const refresh = useRefresh();
   const [topics, setTopics] = React.useState({});
@@ -81,7 +83,7 @@ const LinksDialog = ({
         },
       });
 
-      notify('The answer has been linked');
+      notify('The answer was linked');
       refresh();
       window.scroll(0, 0);
     } catch (err) {
@@ -244,11 +246,11 @@ const LinksDialog = ({
       <Confirm
         isOpen={dialogs.confirmation}
         loading={false}
-        title="Link"
+        title={translate('misc.link')}
         content={
           selected
-            ? `The selected record is linked to topic "${topics[selected.fk_topicId].name}". Linking will change the question's topic. Proceed?`
-            : 'Confirm'
+            ? translate('resources.questions.topic_mismatch_bis', { a: topics[selected.fk_topicId].name })
+            : translate('misc.confirm')
         }
         onConfirm={onConfirm}
         onClose={onClose}
@@ -264,7 +266,7 @@ const LinksDialog = ({
         !results && (
           <Box py={2}>
             <Alert severity="info">
-              Use the filters to search for answers or questions
+              {translate('misc.search_questions_answers')}
             </Alert>
           </Box>
         )
@@ -273,7 +275,7 @@ const LinksDialog = ({
         results && !results.length && (
           <Box py={2}>
             <Alert severity="info">
-              No records were found
+              {translate('misc.no_records')}
             </Alert>
           </Box>
         )
@@ -284,11 +286,11 @@ const LinksDialog = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Text</TableCell>
-                  <TableCell>Topic</TableCell>
+                  <TableCell>{translate('resources.questions.fields.text')}</TableCell>
+                  <TableCell>{translate('resources.questions.fields.fk_topicId')}</TableCell>
                   {
                     form.type === 'questions' && (
-                      <TableCell>Answer</TableCell>
+                      <TableCell>{translate('resources.questions.fields.fk_answerId')}</TableCell>
                     )
                   }
                   <TableCell>&nbsp;</TableCell>
@@ -360,7 +362,7 @@ const LinksDialog = ({
                           }}
                           disabled={disabled}
                         >
-                          Link to answer
+                          {translate('resources.questions.link')}
                         </Button>
                       </TableCell>
                     </TableRow>

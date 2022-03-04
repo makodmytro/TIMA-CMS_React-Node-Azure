@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { Title } from 'react-admin';
+import { Title, useTranslate } from 'react-admin';
 import ActiveSessions from './active-sessions';
 import PastSessions from './past-sessions';
 import Topics from './topics';
@@ -17,6 +17,7 @@ const styles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = styles();
+  const translate = useTranslate();
 
   return (
     <Box py={2}>
@@ -28,19 +29,19 @@ const Dashboard = () => {
 
       <Box mt={3}>
         <Typography variant="h5" className={classes.title}>
-          Past sessions
+          {translate('misc.past_sessions')}
         </Typography>
         <PastSessions />
       </Box>
       <Box mt={3}>
         <Typography variant="h5" className={classes.title}>
-          Topics
+          {translate('misc.topics')}
         </Typography>
         <Topics />
       </Box>
       <Box>
         <Typography variant="h5" className={classes.title}>
-          Sessions map
+          {translate('misc.sessions_map')}
         </Typography>
         <Map />
       </Box>

@@ -144,7 +144,7 @@ const AutocompleteInput = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Answer"
+            label="resources.questions.fields.fk_answerId"
             variant="filled"
             fullWidth
             InputProps={{

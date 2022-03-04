@@ -60,7 +60,7 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
       <AutocompleteInput />
-      <BooleanInput source="useAsSuggestion" />
+      <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />
     </>
   );
 };

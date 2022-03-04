@@ -5,6 +5,7 @@ import {
   useRefresh,
   Confirm,
   FileInput,
+  useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import Table from '@material-ui/core/Table';
@@ -43,6 +44,7 @@ const Icon = ({ media }) => {
 
 const MediaList = ({ answer }) => {
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const refresh = useRefresh();
   const [media, setMedia] = React.useState(false);
@@ -121,8 +123,8 @@ const MediaList = ({ answer }) => {
       <Confirm
         isOpen={confirmation.delete}
         loading={false}
-        title="Delete media"
-        content="Are you sure you want to delete this media file?"
+        title={translate('misc.delete_media')}
+        content={translate('dialogs.confirm_media_delete')}
         onConfirm={destroy}
         onClose={deleteMediaClosed}
       />
@@ -134,7 +136,7 @@ const MediaList = ({ answer }) => {
       {
         !answer.AnswerMedia.length && (
           <Alert severity="info" elevation={3}>
-            There is no media for this answer
+            {translate('resources.answers.no_media')}
           </Alert>
         )
       }
@@ -143,7 +145,7 @@ const MediaList = ({ answer }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Type</TableCell>
+                <TableCell>{translate('misc.type')}</TableCell>
                 <TableCell>&nbsp;</TableCell>
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
@@ -160,7 +162,7 @@ const MediaList = ({ answer }) => {
                         size="small"
                         variant="outlined"
                       >
-                        <Icon media={m} /> view
+                        <Icon media={m} /> {translate('misc.view')}
                       </Button>
                     </TableCell>
                     <TableCell>
@@ -171,7 +173,7 @@ const MediaList = ({ answer }) => {
                         onClick={() => deleteMediaClicked(m.id)}
                         variant="outlined"
                       >
-                        Delete
+                        {translate('ra.actions.delete')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -183,7 +185,7 @@ const MediaList = ({ answer }) => {
       }
       <Box my={2}>
         <hr />
-        <Typography>Upload new file</Typography>
+        <Typography>{translate('resources.answers.upload_media')}</Typography>
         <Form
           onSubmit={upload}
           initialValues={{
@@ -212,8 +214,8 @@ const MediaList = ({ answer }) => {
                         >
                           {
                             submitting
-                              ? 'Uploading'
-                              : 'Upload'
+                              ? translate('misc.uploading')
+                              : translate('misc.upload')
                           }
                         </Button>
                       </Box>

@@ -11,7 +11,7 @@ import {
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import authProvider from './common/providers/authProvider';
-import i18nProvider from './common/i18nProvider';
+import i18nProvider from './i18n';
 import resDataProvider from './common/providers/resDataProvider';
 import topic from './topics';
 import language from './languages';

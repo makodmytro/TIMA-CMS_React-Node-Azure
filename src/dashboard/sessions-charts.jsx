@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Box from '@material-ui/core/Box';
@@ -17,7 +18,7 @@ const secondsToTime = (seconds) => {
   return `${String(minutes).padStart(2, '0')}:${String(left).padStart(2, '0')}`;
 };
 
-const getStacked = (sessions) => {
+const getStacked = (sessions, translate) => {
   const u = (session) => {
     if (!session.totalUnanswered) {
       return 0;
@@ -37,7 +38,7 @@ const getStacked = (sessions) => {
   return {
     chart: { type: 'column' },
     title: {
-      text: 'Questions / unanswered',
+      text: translate('Questions / unanswered'),
     },
     xAxis: {
       categories: sessions.map((session) => session.date),
@@ -45,7 +46,7 @@ const getStacked = (sessions) => {
     yAxis: {
       min: 0,
       title: {
-        text: '# Questions',
+        text: translate('# Questions'),
       },
       stackLabels: {
         enabled: false,
@@ -69,23 +70,23 @@ const getStacked = (sessions) => {
       },
     },
     series: [{
-      name: 'Questions unanswered',
+      name: translate('Questions unanswered'),
       data: sessions.map((session) => u(session)),
       color: '#d32f2f',
     }, {
-      name: 'Questions answered',
+      name: translate('Questions answered'),
       data: sessions.map((session) => a(session)),
       color: '#1861e8',
     }],
   };
 };
 
-const getBars = (sessions) => ({
+const getBars = (sessions, translate) => ({
   chart: { type: 'column' },
-  title: { text: 'Session average duration' },
+  title: { text: translate('Session average duration') },
   yAxis: {
     title: {
-      text: 'Duration',
+      text: translate('Duration'),
     },
     labels: {
       formatter: (e) => secondsToTime(e.value),
@@ -107,11 +108,11 @@ const getBars = (sessions) => ({
   },
   tooltip: {
       formatter: function () { // eslint-disable-line
-      return `<b>Duration: </b> ${secondsToTime(this.y)}`;
+      return `<b>${translate('Duration')}: </b> ${secondsToTime(this.y)}`;
     },
   },
   series: [{
-    name: 'Duration',
+    name: translate('Duration'),
     data: sessions.map((session) => ({
       colorByPoint: true,
       y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
@@ -120,8 +121,10 @@ const getBars = (sessions) => ({
 });
 
 const SessionGraphs = ({ sessions }) => {
-  const stacked = getStacked(sessions);
-  const bars = getBars(sessions);
+  const translate = useTranslate();
+
+  const stacked = getStacked(sessions, translate);
+  const bars = getBars(sessions, translate);
 
   return (
     <Box>

@@ -8,6 +8,7 @@ import {
   useDataProvider,
   useNotify,
   Title,
+  useTranslate,
 } from 'react-admin';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -28,6 +29,7 @@ const Row = ({ label, value }) => (
 
 const TestAsk = ({ topics, languages }) => {
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -84,7 +86,7 @@ const TestAsk = ({ topics, languages }) => {
 
           ['question', 'topicId', 'languageId'].forEach((field) => {
             if (!values[field]) {
-              errors[field] = 'Required';
+              errors[field] = translate('Required');
             }
           });
 
@@ -97,7 +99,7 @@ const TestAsk = ({ topics, languages }) => {
                 <Grid item xs={12} sm={6} md={2}>
                   <SelectInput
                     source="languageId"
-                    label="Language"
+                    label="resources.answers.fields.fk_languageId"
                     choices={languages}
                     optionText="name"
                     optionValue="id"
@@ -108,7 +110,7 @@ const TestAsk = ({ topics, languages }) => {
                 <Grid item xs={12} sm={6} md={3}>
                   <SelectInput
                     source="topicId"
-                    label="Topic"
+                    label="resources.answers.fields.fk_topicId"
                     choices={topics.filter((t) => t.fk_languageId === values.languageId)}
                     optionText="name"
                     optionValue="id"
@@ -118,7 +120,7 @@ const TestAsk = ({ topics, languages }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={9} md={5}>
-                  <TextInput source="question" label="Question" margin="dense" fullWidth />
+                  <TextInput source="question" label="resources.answers.fields.fk_questionId" margin="dense" fullWidth />
                 </Grid>
                 <Grid item xs={12} sm={3} md={2}>
                   <Box pt={1.3}>
@@ -130,7 +132,7 @@ const TestAsk = ({ topics, languages }) => {
                       fullWidth
                       size="large"
                     >
-                      Test
+                      {translate('misc.test')}
                     </Button>
                   </Box>
                 </Grid>

@@ -1,7 +1,14 @@
 import React from 'react';
-import { AppBar } from 'react-admin';
+import {
+  AppBar,
+  UserMenu,
+  MenuItemLink,
+  usePermissions,
+  useTranslate,
+} from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import PersonIcon from '@material-ui/icons/AssignmentInd';
 import Logo from '../../assets/TIMA_logo.png';
 import { baseApi } from '../httpClient';
 
@@ -29,12 +36,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ProfileMenu = React.forwardRef(({ onClick }, ref) => {
+  const { permissions } = usePermissions();
+  const translate = useTranslate();
+
+  return (
+    <MenuItemLink
+      ref={ref}
+      to={`/users/${permissions?.userId}/edit`}
+      primaryText={translate('My profile')}
+      leftIcon={<PersonIcon />}
+      onClick={onClick} // close the menu on click
+    />
+  );
+});
+
+const MyUserMenu = props => (
+  <UserMenu {...props}>
+    <ProfileMenu />
+  </UserMenu>
+);
+
 const MyAppBar = (props) => {
   const classes = useStyles();
   const { onLanguageChange, language, ...rest } = props;
 
   return (
-    <AppBar color="transparent" {...rest}>
+    <AppBar color="transparent" {...rest} userMenu={<MyUserMenu {...rest} />}>
       <Typography
         variant="h6"
         color="inherit"

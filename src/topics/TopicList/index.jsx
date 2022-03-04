@@ -39,10 +39,11 @@ const TopicList = () => {
   const onSubmit = async (values = form, paging = pagination) => {
     setForm(values);
 
-    const { data, total } = await dataProvider.topicTree('topics', {
+    const { data, total } = await dataProvider.getList('topics', {
       filter: {
         ...(values.q ? { q: values.q } : {}),
         ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),
+        topLevelOnly: '1',
       },
       pagination: paging,
     });
@@ -85,7 +86,7 @@ const TopicList = () => {
         id,
       });
 
-      notify('Sync schedules');
+      notify('Sync scheduled');
       refresh();
     } catch (err) {
       notify('Failed to sync', 'error');

@@ -4,6 +4,7 @@ import {
   SelectInput,
   TextInput,
   useListContext,
+  useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form';
 import DoneIcon from '@material-ui/icons/Done';
@@ -12,6 +13,7 @@ import styles from './styles';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
+  const translate = useTranslate();
   const {
     filterValues,
     setFilters,
@@ -51,10 +53,10 @@ const Filters = ({ languages, topics, ...props }) => {
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>
-          <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <TextInput label="misc.text" source="q" alwaysOn onChange={() => handleSubmit()} />
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="Language"
+            label="resources.answers.fields.fk_languageId"
             source="fk_languageId"
             reference="languages"
             alwaysOn
@@ -65,22 +67,22 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="Editor"
+            label="resources.answers.fields.fk_editorId"
             source="fk_editorId"
             reference="users"
             alwaysOn
             allowEmpty
             perPage={100}
           >
-            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText="None" />
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
           </ReferenceInput>
           <ReferenceInput
-            label="Topic"
+            label="resources.answers.fields.fk_topicId"
             source="fk_topicId"
             reference="topics"
             alwaysOn
@@ -94,14 +96,14 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <SelectInput
-            label="Approved"
+            label="resources.answers.fields.approved"
             source="approved"
             allowEmpty
-            emptyText="Both"
+            emptyText={translate('misc.both')}
             onChange={() => handleSubmit()}
             defaultValue=""
             choices={[

@@ -9,6 +9,7 @@ import {
   useNotify,
   useRedirect,
   useRefresh,
+  useTranslate,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -140,13 +141,14 @@ const CustomGrid = ({
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
   const classes = styles();
+  const translate = useTranslate();
 
   const Th = ({ label, field }) => (visibleColumns.includes(field) ? (
     <TableCell
       className={classes.thead}
       onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
     >
-      {label}&nbsp;
+      {translate(label)}&nbsp;
       {
         field === currentSort.field && currentSort.order === 'DESC' && (
           <ArrowUp size="small" />
@@ -167,12 +169,12 @@ const CustomGrid = ({
           <Table>
             <TableHead>
               <TableRow>
-                <Th label="Text" field="text" />
-                <Th label="Answer" field="fk_answerId" />
-                <Th label="Topic" field="fk_topicId" />
-                <Th label="Approved" field="approved" />
-                <Th label="Suggestion" field="useAsSuggestion" />
-                <Th label="Updated at" field="updatedAt" />
+                <Th label="resources.questions.fields.text" field="text" />
+                <Th label="resources.questions.fields.fk_answerId" field="fk_answerId" />
+                <Th label="resources.questions.fields.fk_topicId" field="fk_topicId" />
+                <Th label="resources.questions.fields.approved" field="approved" />
+                <Th label="resources.questions.fields.useAsSuggestion" field="useAsSuggestion" />
+                <Th label="resources.questions.fields.updatedAt" field="updatedAt" />
                 <Th label={<ThumbsUpIcon />} field="feedbackPositiveCount" />
                 <Th label={<ThumbsDownIcon />} field="feedbackNegativeCount" />
                 <TableCell>&nbsp;</TableCell>
@@ -203,6 +205,7 @@ const QuestionList = ({
 }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
   const refresh = useRefresh();
   const [record, setRecord] = React.useState(null);
   const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
@@ -251,8 +254,8 @@ const QuestionList = ({
       <Confirm
         isOpen={removeAnswerConfirmOpened}
         loading={false}
-        title="Unlink answer"
-        content="Are you sure you want to unlink the answer from the question?"
+        title={translate('misc.unlink_answer')}
+        content={translate('dialogs.unlink_confirmation')}
         onConfirm={removeAnswer}
         onClose={onRemoveAnswerClose}
       />

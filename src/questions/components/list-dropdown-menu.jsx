@@ -5,6 +5,7 @@ import {
   EditButton,
   useRefresh,
   ResourceContextProvider,
+  useTranslate,
 } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,6 +18,7 @@ const DropdownMenu = ({
   record,
 }) => {
   const refresh = useRefresh();
+  const translate = useTranslate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableDelete = useDisabledDelete(record?.fk_topicId);
@@ -44,7 +46,7 @@ const DropdownMenu = ({
         size="small"
         disabled={disableEdit && disableDelete}
       >
-        Actions <ExpandIcon />
+        {translate('misc.actions')} <ExpandIcon />
       </Button>
       <Menu
         id="simple-menu"
@@ -62,7 +64,7 @@ const DropdownMenu = ({
           <EditButton
             basePath="/questions"
             record={record}
-            label="Edit question"
+            label={translate('resources.questions.edit')}
             color="secondary"
             fullWidth
             style={{ justifyContent: 'flex-start' }}
@@ -79,7 +81,7 @@ const DropdownMenu = ({
                 record={{
                   id: record.fk_answerId,
                 }}
-                label="Edit answer"
+                label={translate('resources.answers.edit')}
                 color="default"
                 fullWidth
                 style={{ justifyContent: 'flex-start' }}

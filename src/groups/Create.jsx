@@ -10,6 +10,7 @@ import {
   SaveButton,
   useDataProvider,
   useRedirect,
+  useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -22,7 +23,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}
@@ -32,6 +33,7 @@ const CustomToolbar = (props) => {
 };
 
 const UsersSelection = ({ users }) => {
+  const translate = useTranslate();
   const { input: { onChange, value } } = useField('Users');
 
   const handleChange = (id) => {
@@ -46,7 +48,7 @@ const UsersSelection = ({ users }) => {
     <Box>
       <Box borderBottom="1px solid #D5D5D5" mb={2}>
         <Typography variant="body2">
-          Select the users to be added to this group
+          {translate('resources.groups.select_users_bis')}
         </Typography>
       </Box>
       <Box display="flex" flexWrap="wrap">

@@ -5,6 +5,7 @@ import {
   useDataProvider,
   useNotify,
   useRefresh,
+  useTranslate,
 } from 'react-admin';
 
 const IgnoreButton = ({
@@ -13,6 +14,7 @@ const IgnoreButton = ({
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
+  const translate = useTranslate();
 
   const updateIgnored = async (ignored) => {
     try {
@@ -53,10 +55,10 @@ const IgnoreButton = ({
     >
       <BlockIcon fontSize="small" />&nbsp;
       {
-        record.ignored && (<>Un-ignore</>)
+        record.ignored && (<>{translate('misc.un_ignore')}</>)
       }
       {
-        !record.ignored && (<>Ignore</>)
+        !record.ignored && (<>{translate('misc.ignore')}</>)
       }
     </Button>
   );

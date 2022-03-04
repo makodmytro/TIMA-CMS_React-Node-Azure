@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,25 +17,24 @@ const AnswerDiffTopicDialog = ({
   onUpdate,
   onDuplicate,
 }) => {
+  const translate = useTranslate();
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" width="md" fullWidth>
-      <DialogTitle>Topics mismatch</DialogTitle>
+      <DialogTitle>{translate('resources.questions.topic_mismatch')}</DialogTitle>
       <DialogContent>
         <Typography>
-          The question is related to topic <b>"{topics[record.fk_topicId].name}"</b> but the
-          answer's topic is <b>"{topics[selected.fk_topicId].name}"</b>.
+          {translate('resources.questions.topic_mismatch_explanation', { a: topics[record.fk_topicId].name, b: topics[selected.fk_topicId].name })}
         </Typography>
         <Box py={2}>
           <Typography>
-            Please choose one of the options:
+            {translate('misc.choose_one_option')}:
           </Typography>
           <Typography>
-            1. Update the question and move it to the same topic as
-            the answer (both "{topics[selected.fk_topicId].name}")
+            {translate('resources.questions.topic_mismatch_option_a', { a: topics[selected.fk_topicId].name })}
           </Typography>
           <Typography>
-            2. Duplicate the answer with topic "{topics[record.fk_topicId].name}"
-            and link it with the question
+            {translate('resources.questions.topic_mismatch_option_b', { b: topics[record.fk_topicId].name })}
           </Typography>
         </Box>
       </DialogContent>
@@ -46,7 +46,7 @@ const AnswerDiffTopicDialog = ({
           type="button"
           onClick={onUpdate}
         >
-          Update the question
+          {translate('resources.questions.update')}
         </Button>
         <Button
           variant="contained"
@@ -55,7 +55,7 @@ const AnswerDiffTopicDialog = ({
           type="button"
           onClick={onDuplicate}
         >
-          Duplicate the answer
+          {translate('resources.answers.duplicate')}
         </Button>
         <Button
           variant="outlined"
@@ -64,7 +64,7 @@ const AnswerDiffTopicDialog = ({
           type="button"
           onClick={onClose}
         >
-          Cancel
+          {translate('misc.cancel')}
         </Button>
       </DialogActions>
     </Dialog>

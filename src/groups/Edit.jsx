@@ -14,7 +14,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}

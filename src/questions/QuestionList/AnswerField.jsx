@@ -1,10 +1,13 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { Text } from '../../answers/AnswerList';
 
 const AnswerField = ({ record }) => {
+  const translate = useTranslate();
+
   if (!record) {
     return null;
   }
@@ -20,7 +23,7 @@ const AnswerField = ({ record }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <AddIcon />
-        &nbsp;Link answer
+        &nbsp;{translate('misc.link_answer')}
       </Button>
     );
   }
@@ -36,7 +39,7 @@ const AnswerField = ({ record }) => {
       {
         !record.Answer && (
           <>
-            View related answer
+            {translate('misc.view_related_answer')}
           </>
         )
       }

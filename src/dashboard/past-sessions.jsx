@@ -8,85 +8,91 @@ import {
   SelectInput,
   required,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import { format, sub } from 'date-fns';
 import Alert from '@material-ui/lab/Alert';
 import SessionCharts from './sessions-charts';
 import { DateInput } from '../common/components/datetime-picker';
 
-const Filters = ({ onSubmit, initialValues }) => (
-  <Form
-    onSubmit={onSubmit}
-    validate={(values) => {
-      const errors = {};
+const Filters = ({ onSubmit, initialValues }) => {
+  const translate = useTranslate();
 
-      ['period', 'from', 'until'].forEach((field) => {
-        if (!values[field]) {
-          errors[field] = 'Required';
-        }
-      });
+  return (
+    <Form
+      onSubmit={onSubmit}
+      validate={(values) => {
+        const errors = {};
 
-      return errors;
-    }}
-    initialValues={initialValues}
-    render={({ handleSubmit }) => (
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4} md={3}>
-            <SelectInput
-              source="period"
-              label="Period"
-              choices={[
-                { id: 'days', name: 'Days' },
-                { id: 'weeks', name: 'Weeks' },
-                { id: 'months', name: 'Months' },
-              ]}
-              validate={required()}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <DateInput
-              source="from"
-              fullWidth
-              clearable={false}
-              inputVariant="filled"
-              label="From"
-              disableFuture
-            />
-          </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <DateInput
-              source="until"
-              fullWidth
-              clearable={false}
-              inputVariant="filled"
-              label="To"
-              disableFuture
-            />
-          </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <Box pt={2}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
+        ['period', 'from', 'until'].forEach((field) => {
+          if (!values[field]) {
+            errors[field] = translate('Required');
+          }
+        });
+
+        return errors;
+      }}
+      initialValues={initialValues}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4} md={3}>
+              <SelectInput
+                source="period"
+                label="Period"
+                choices={[
+                  { id: 'days', name: translate('Days') },
+                  { id: 'weeks', name: translate('Weeks') },
+                  { id: 'months', name: translate('Months') },
+                ]}
+                validate={required()}
                 fullWidth
-              >
-                Search
-              </Button>
-            </Box>
+              />
+            </Grid>
+            <Grid item xs={12} sm={4} md={3}>
+              <DateInput
+                source="from"
+                fullWidth
+                clearable={false}
+                inputVariant="filled"
+                label="From"
+                disableFuture
+              />
+            </Grid>
+            <Grid item xs={12} sm={4} md={3}>
+              <DateInput
+                source="until"
+                fullWidth
+                clearable={false}
+                inputVariant="filled"
+                label="To"
+                disableFuture
+              />
+            </Grid>
+            <Grid item xs={12} sm={4} md={3}>
+              <Box pt={2}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                >
+                  {translate('misc.search')}
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-    )}
-  />
-);
+        </form>
+      )}
+    />
+  );
+};
 
 const PastSessions = () => {
   const [sessions, setSessions] = React.useState([]);
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
 
   const initialValues = {
     period: 'days',
@@ -134,7 +140,7 @@ const PastSessions = () => {
         {
           !sessions.length && (
             <Alert severity="info" elevation={3}>
-              No sessions were found for the selected period
+              {translate('resources.sessions.no_results')}
             </Alert>
           )
         }

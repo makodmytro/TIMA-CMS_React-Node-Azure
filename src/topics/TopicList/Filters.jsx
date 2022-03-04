@@ -4,10 +4,12 @@ import {
   ReferenceInput,
   SelectInput,
   TextInput,
+  useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 
 const Filters = ({ onSubmit, initialValues }) => {
+  const translate = useTranslate();
   const preSubmit = (values) => {
     return onSubmit(values);
   };
@@ -20,19 +22,24 @@ const Filters = ({ onSubmit, initialValues }) => {
         return (
           <form onSubmit={handleSubmit}>
             <Box display="inline-block" px={1}>
-              <TextInput label="Text" source="q" alwaysOn onChange={() => handleSubmit()} />
+              <TextInput
+                label="misc.text"
+                source="q"
+                alwaysOn
+                onChange={() => handleSubmit()}
+              />
             </Box>
             <Box display="inline-block" px={1}>
               <ReferenceInput
-                label="Language"
+                label="resources.topics.fields.language"
                 source="fk_languageId"
                 reference="languages"
                 alwaysOn
                 onChange={() => handleSubmit()}
                 allowEmpty
-                emptyText="None"
+                emptyText={translate('misc.none')}
               >
-                <SelectInput optionText="name" allowEmpty emptyText="None" />
+                <SelectInput optionText="name" allowEmpty emptyText={translate('misc.none')} />
               </ReferenceInput>
             </Box>
           </form>
