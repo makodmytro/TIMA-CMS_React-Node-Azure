@@ -10,7 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
-import { useTranslate } from 'react-admin';
+import { useTranslate, useDataProvider } from 'react-admin';
 import ListDropdownMenu from '../components/list-dropdown-menu';
 
 const Row = ({
@@ -20,15 +20,31 @@ const Row = ({
   setOpen,
   isChild,
 }) => {
+  const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
+  const [children, setChildren] = React.useState([]);
   const history = useHistory();
+
+  const fetchChildren = async () => {
+    try {
+      const { data } = await dataProvider.getOne('topics', { id: record.id });
+
+      setChildren(data?.ChildTopics || []);
+    } catch (e) {} // eslint-disable-line
+  };
+
+  React.useEffect(() => {
+    if (expanded) {
+      fetchChildren();
+    }
+  }, [expanded]);
 
   return (
     <>
-      <TableRow style={{ backgroundColor: isChild ? '#f9f4e7' : 'initial', cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
+      <TableRow style={{ backgroundColor: isChild ? '#498ca754' : 'initial', cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
           {
-            record.ChildTopics && !!record.ChildTopics.length && (
+            !!record.childCount && record.childCount > 0 && (
               <>
                 <IconButton
                   size="small"
@@ -61,10 +77,10 @@ const Row = ({
         </TableCell>
       </TableRow>
       {
-        expanded && record.ChildTopics && !!record.ChildTopics.length && (
+        expanded && record.childCount && !!children.length && (
           <>
             {
-              record.ChildTopics.map((child, iii) => (
+              children.map((child, iii) => (
                 <Row
                   record={child}
                   columnsToDisplay={columnsToDisplay}

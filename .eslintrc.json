@@ -47,6 +47,7 @@
     "eol-last": "warn",
     "arrow-parens": "warn",
     "no-underscore-dangle": "warn",
-    "comma-dangle": "warn"
+    "comma-dangle": "warn",
+    "spaced-comment": "off"
   }
 }

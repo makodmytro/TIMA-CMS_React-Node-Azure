@@ -38,10 +38,10 @@ const columns = [
     key: 'qnaKnowledgeBaseId',
     el: (<TextField source="qnaKnowledgeBaseId" label="Knowledge base ID" />),
   },
-  {
+  /*{
     key: 'fk_parentTopicId',
     el: (<ReferenceField source="fk_parentTopicId" reference="topics" label="Parent topic"><TextField source="name" /></ReferenceField>),
-  },
+  },*/
   {
     key: 'image',
     el: (<TopicImage label="Image" />),
