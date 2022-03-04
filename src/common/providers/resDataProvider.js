@@ -257,6 +257,13 @@ const resDataProvider = {
 
     return { data: true };
   },
+  topicStatus: async (resource = null, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/status`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
   topicStats: async (resource = null, params) => {
     const filters = {};
 

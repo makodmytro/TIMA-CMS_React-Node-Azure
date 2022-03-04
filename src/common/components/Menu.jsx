@@ -7,8 +7,10 @@ import {
   getResources,
   useLocale,
   useSetLocale,
+  useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 import DefaultIcon from '@material-ui/icons/ViewList';
@@ -19,7 +21,9 @@ import { baseApi } from '../httpClient';
 const Menu = ({ onMenuClick, logout }) => {
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
+  const syncStatus = useSelector((state) => state.custom.syncStatus);
   const resources = useSelector(getResources);
+  const translate = useTranslate();
   const dispatch = useDispatch();
   const locale = useLocale();
   const setLocale = useSetLocale();
@@ -93,6 +97,16 @@ const Menu = ({ onMenuClick, logout }) => {
           position: 'fixed', bottom: 5, left: 5, fontSize: 10,
         }}
       >
+        {
+          !!syncStatus && syncStatus > 0 && (
+            <Box mb={2} textAlign="center">
+              <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                {translate('Topic Sync Scheduled')}
+              </Typography>
+              &nbsp; <CircularProgress color="primary" size={15} />
+            </Box>
+          )
+        }
         <Box textAlign="center">
           <Typography variant="body2" component="span">DE</Typography>
           &nbsp;

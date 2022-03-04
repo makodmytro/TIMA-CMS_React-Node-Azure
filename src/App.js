@@ -41,7 +41,28 @@ const AsyncResources = () => {
   const dataProvider = useDataProvider();
   const location = useLocation();
   const [ready, setReady] = React.useState(false);
+  const [tic, setTic] = React.useState(false);
+  const [tac, setTac] = React.useState(false);
   const timeout = React.useRef(null);
+  const topicsStatusTimeout = React.useRef(null);
+
+  const refreshSession = async () => {
+    setTic(false);
+
+    await dataProvider.refreshSession();
+
+    setTic(true);
+  };
+
+  const refreshTopicStatus = async () => {
+    setTac(false);
+
+    const { data } = await dataProvider.topicStatus();
+
+    store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data?.syncedTopics || 0 });
+
+    setTac(true);
+  };
 
   const check = async () => {
     try {
@@ -62,23 +83,29 @@ const AsyncResources = () => {
 
     store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
+
+    refreshTopicStatus();
   };
-
-  const refreshSession = async () => {
-    clearTimeout(timeout.current);
-    timeout.current = null;
-
-    await dataProvider.refreshSession();
-  };
-
-  const shouldRefreshSession = () => !timeout || !timeout.current;
 
   React.useEffect(() => {
     check();
   }, []);
 
   React.useEffect(() => {
-    if (shouldRefreshSession() && location.pathname !== '/login') {
+    if (location.pathname !== '/login' && tac) {
+      topicsStatusTimeout.current = setTimeout(() => {
+        refreshTopicStatus();
+      }, 1000 * 60 * 1);
+    }
+
+    if (location.pathname === '/login') {
+      clearTimeout(topicsStatusTimeout.current);
+      topicsStatusTimeout.current = null;
+    }
+  }, [location.pathname, tac]);
+
+  React.useEffect(() => {
+    if (location.pathname !== '/login' && tic) {
       timeout.current = setTimeout(() => {
         refreshSession();
       }, 1000 * 60 * 10);
@@ -88,7 +115,7 @@ const AsyncResources = () => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
-  }, [location.pathname, timeout]);
+  }, [location.pathname, tic]);
 
   if (!ready) {
     return (
