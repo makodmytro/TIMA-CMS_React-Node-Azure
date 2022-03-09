@@ -5,7 +5,6 @@ import {
   DateField,
   List,
   TextField,
-  BooleanField,
 } from 'react-admin';
 import {
   Tab,

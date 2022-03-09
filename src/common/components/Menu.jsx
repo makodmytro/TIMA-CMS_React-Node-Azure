@@ -33,6 +33,7 @@ const Menu = ({ onMenuClick, logout }) => {
 
     if (resource === 'questions') {
       filter.ignored = false;
+      filter.topLevelOnly = '1';
     }
 
     dispatch({

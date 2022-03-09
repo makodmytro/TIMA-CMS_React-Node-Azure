@@ -86,7 +86,7 @@ const getListUrl = (initialUrl, resource, params) => {
       ...(resource === 'questions' ? { group: 1 } : {}),
       ...(resource === 'demos' && active ? { active: true } : {}),
       ...(resource === 'demos' && search ? { search } : {}),
-      ...(resource === 'topics' && topLevelOnly ? { topLevelOnly } : {}),
+      ...((resource === 'topics' || resource === 'questions') && topLevelOnly ? { topLevelOnly } : {}),
       ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
     };
 
@@ -124,9 +124,9 @@ const resDataProvider = {
     return { data: json };
   },
   getList: async (resource, params) => {
-    let url = getListUrl(`${baseApi}/${resource}`, resource, params);
+    const url = getListUrl(`${baseApi}/${resource}`, resource, params);
 
-    let { json } = await httpClient(url);
+    const { json } = await httpClient(url);
 
     if (Array.isArray(json)) {
       return {
@@ -214,9 +214,9 @@ const resDataProvider = {
     return { data: json };
   },
   topicTree: async (resource = null, params) => {
-    let url = getListUrl(`${baseApi}/${resource}/tree`, resource, params);
+    const url = getListUrl(`${baseApi}/${resource}/tree`, resource, params);
 
-    let { json } = await httpClient(url);
+    const { json } = await httpClient(url);
 
     if (Array.isArray(json)) {
       return {

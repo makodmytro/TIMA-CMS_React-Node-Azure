@@ -20,6 +20,15 @@ const Filters = ({ languages, topics, ...props }) => {
     setFilters,
   } = useListContext();
 
+  React.useEffect(() => {
+    if (!filterValues.topLevelOnly) {
+      setFilters({
+        ...filterValues,
+        topLevelOnly: '1',
+      });
+    }
+  }, []);
+
   if (props.context === 'button') {
     return null;
   }

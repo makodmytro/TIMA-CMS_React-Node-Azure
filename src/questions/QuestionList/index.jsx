@@ -19,10 +19,13 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
+import AddIcon from '@material-ui/icons/Add';
+import MinusIcon from '@material-ui/icons/Remove';
 import PlayableText from '../../common/components/playable-text';
 import ThumbsUp from '../../assets/thumbs-up.png';
 import ThumbsDown from '../../assets/thumbs-down.png';
@@ -40,26 +43,66 @@ import AnswerField from './AnswerField';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const CustomGridItem = ({
-  record, removeAnswer,
+  record,
+  removeAnswer,
   visibleColumns,
+  isChild,
 }) => {
+  const dataProvider = useDataProvider();
+  const [expanded, setExpanded] = React.useState(false);
+  const [children, setChildren] = React.useState([]);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
   const redirect = useRedirect();
+
+  const fetchChildren = async () => {
+    try {
+      const { data } = await dataProvider.getOne('questions', { id: record.id });
+
+      setChildren(data?.ChildQuestions || []);
+    } catch (e) {} // eslint-disable-line
+  };
+
+  React.useEffect(() => {
+    if (expanded && !children.length) {
+      fetchChildren();
+    }
+  }, [expanded]);
 
   const link = (id) => (e) => {
     e.stopPropagation();
     redirect(`/questions/${id}`);
   };
 
+  const bg = isChild ? '#498ca754' : (record.fk_answerId ? 'default' : '#ff000030');
   return (
     <>
       <TableRow
         className={classes.cursor}
-        style={{ backgroundColor: record.fk_answerId ? 'default' : '#ff000030' }}
+        style={{ backgroundColor: bg }}
         onClick={link(record.id)}
       >
+        <TableCell>
+          {
+            !!record.childCount && record.childCount > 0 && (
+              <>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setExpanded(!expanded);
+                  }}
+                >
+                  { !expanded && <AddIcon fontSize="small" /> }
+                  { expanded && <MinusIcon fontSize="small" /> }
+                </IconButton>
+              </>
+            )
+          }
+        </TableCell>
         {visibleColumns.includes('text') && (
           <TableCell>
             <PlayableText
@@ -131,6 +174,23 @@ const CustomGridItem = ({
           />
         </TableCell>
       </TableRow>
+      {
+        expanded && record.childCount && !!children.length && (
+          <>
+            {
+              children.map((child, iii) => (
+                <CustomGridItem
+                  record={child}
+                  removeAnswer={removeAnswer}
+                  visibleColumns={visibleColumns}
+                  key={iii}
+                  isChild
+                />
+              ))
+            }
+          </>
+        )
+      }
     </>
   );
 };
@@ -169,6 +229,7 @@ const CustomGrid = ({
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>&nbsp;</TableCell>
                 <Th label="resources.questions.fields.text" field="text" />
                 <Th label="resources.questions.fields.fk_answerId" field="fk_answerId" />
                 <Th label="resources.questions.fields.fk_topicId" field="fk_topicId" />
@@ -269,7 +330,7 @@ const QuestionList = ({
           />
         )}
         filters={<Filters languages={languages} topics={topics} />}
-        filterDefaultValues={{ ignored: [false, null] }}
+        filterDefaultValues={{ ignored: [false, null], topLevelOnly: '1' }}
       >
         <CustomGrid
           visibleColumns={visibleColumns}

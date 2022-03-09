@@ -17,6 +17,7 @@ const FormFields = (props) => {
   const {
     input: { value },
   } = useField('fk_languageId');
+  const { input: { value: fk_topicId } } = useField('fk_topicId');
 
   const getLang = () => {
     if (!value || !props.languages[value]) {
@@ -54,12 +55,24 @@ const FormFields = (props) => {
         validate={required()}
         fullWidth
         filter={{ fk_languageId: value }}
+        disabled={!value}
       >
         <SelectInput
           optionText="name"
         />
       </ReferenceInput>
       <AutocompleteInput />
+      <ReferenceInput
+        label="resources.questions.fields.fk_parentQuestionId"
+        source="fk_parentQuestionId"
+        reference="questions"
+        filter={{ fk_topicId }}
+        disabled={!fk_topicId}
+        fullWidth
+        allowEmpty
+      >
+        <SelectInput optionText="text" emptyText="None" />
+      </ReferenceInput>
       <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />
     </>
   );

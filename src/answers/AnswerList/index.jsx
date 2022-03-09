@@ -6,7 +6,6 @@ import {
   List,
   ReferenceField,
   TextField,
-  useTranslate,
 } from 'react-admin';
 import Badge from '@material-ui/core/Badge';
 import ReactMarkdown from 'react-markdown';

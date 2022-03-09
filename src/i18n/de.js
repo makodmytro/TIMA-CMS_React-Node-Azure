@@ -150,6 +150,7 @@ const german = {
       topic_mismatch_option_a: '1. Update the question and move it to the same topic as the answer (both "%{a}")',
       topic_mismatch_option_b: '2. Duplicate the answer with topic "%{b}" and link it with the question',
       update: 'Update the question',
+      set_as_child: 'Set as child',
       fields: {
         text: 'Text',
         fk_editorId: 'Editor',
@@ -164,6 +165,7 @@ const german = {
         updatedAt: 'Updated',
         useAsSuggestion: 'Suggestion',
         all_topics: 'All topics',
+        ignored: 'Ignored',
       },
     },
     answers: {

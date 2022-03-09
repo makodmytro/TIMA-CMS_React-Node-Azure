@@ -57,9 +57,12 @@ const AsyncResources = () => {
   const refreshTopicStatus = async () => {
     setTac(false);
 
-    const { data } = await dataProvider.topicStatus();
+    try {
+      const { data } = await dataProvider.topicStatus();
 
-    store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data?.syncedTopics || 0 });
+      store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data?.syncedTopics || 0 });
+    } catch (e) { // eslint-disable-line
+    }
 
     setTac(true);
   };
