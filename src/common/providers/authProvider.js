@@ -35,24 +35,32 @@ const authProvider = {
     return Promise.resolve();
   },
   getPermissions: () => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
 
-    // user.permissions = [{
-    // fk_topicId: '882284d1-563d-4b88-9c20-1015b2f10e05',
-    // edit: true,
-    // delete: true,
-    // }];
-    // user.isAdmin = true;
+      // user.permissions = [{
+      // fk_topicId: '882284d1-563d-4b88-9c20-1015b2f10e05',
+      // edit: true,
+      // delete: true,
+      // }];
+      // user.isAdmin = true;
 
-    return Promise.resolve({
-      ...user,
-      topics: user.permissions.reduce((acc, cur) => {
-        return {
-          ...acc,
-          [cur.fk_topicId]: cur,
-        };
-      }, {}),
-    });
+      if (!user) {
+        return Promise.reject();
+      }
+
+      return Promise.resolve({
+        ...user,
+        topics: (user.permissions || []).reduce((acc, cur) => {
+          return {
+            ...acc,
+            [cur.fk_topicId]: cur,
+          };
+        }, {}),
+      });
+    } catch (e) {
+      return Promise.reject();
+    }
   },
   password: ({ oldPassword, newPassword }) => {
     const url = `${baseApi}/auth/password`;
