@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   TextInput,
+  useTranslate,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
@@ -13,6 +14,7 @@ import PlayableText from '../../common/components/playable-text';
 const MarkdownInput = ({
   source, label, lang, disabled,
 }) => {
+  const translate = useTranslate();
   const { input: { value: spokenText } } = useField('spokenText');
   const {
     input: { onChange, value },
@@ -25,7 +27,7 @@ const MarkdownInput = ({
 
   return (
     <>
-      <InputLabel error={invalid}>{label}</InputLabel>
+      <InputLabel error={invalid}>{translate(label)}</InputLabel>
       <FormControl fullWidth error={invalid}>
         <MdEditor
           style={{ height: '40vh', borderColor: !invalid ? 'rgba(224, 224, 224, 1)' : 'red' }}

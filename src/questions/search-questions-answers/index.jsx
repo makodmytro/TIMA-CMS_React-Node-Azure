@@ -146,6 +146,26 @@ const LinksDialog = ({
     setCount(total);
   };
 
+  const setAsChild = async (_selected) => {
+    try {
+      await dataProvider.update('questions', {
+        id: _selected.id,
+        data: {
+          fk_parentQuestionId: record.id,
+        },
+      });
+
+      notify('The question was set as child');
+      onSubmit(form);
+    } catch (err) {
+      if (err.body && err.body.message) {
+        notify(err.body.message, 'error');
+      }
+
+      throw err;
+    }
+  };
+
   const setPage = (page, submit = true) => {
     setPagination({
       ...pagination,
@@ -294,6 +314,11 @@ const LinksDialog = ({
                     )
                   }
                   <TableCell>&nbsp;</TableCell>
+                  {
+                    form.type === 'questions' && (
+                      <TableCell>&nbsp;</TableCell>
+                    )
+                  }
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -365,6 +390,24 @@ const LinksDialog = ({
                           {translate('resources.questions.link')}
                         </Button>
                       </TableCell>
+                      {
+                        form.type === 'questions' && (
+                          <TableCell>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              size="small"
+                              type="button"
+                              onClick={() => {
+                                setAsChild(result);
+                              }}
+                              disabled={disabled || result.fk_parentQuestionId === record.id}
+                            >
+                              {translate('resources.questions.set_as_child')}
+                            </Button>
+                          </TableCell>
+                        )
+                      }
                     </TableRow>
                   ))
                 }

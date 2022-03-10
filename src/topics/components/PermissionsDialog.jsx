@@ -139,7 +139,7 @@ const PermissionsDialog = ({
 
   const onSubmit = async ({ group_id, ...values }) => {
     try {
-      const { data } = await dataProvider.topicCreatePermission('topics', {
+      await dataProvider.topicCreatePermission('topics', {
         group_id,
         topic_id: topic?.id,
         data: values,

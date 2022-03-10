@@ -10,7 +10,6 @@ import { useIsAdmin } from '../../hooks';
 
 const DropdownMenu = ({
   record,
-  basePath,
   onSync,
   onPermissionsClick,
 }) => {

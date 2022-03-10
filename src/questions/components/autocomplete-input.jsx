@@ -3,6 +3,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import debounce from 'lodash/debounce';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +16,7 @@ const AutocompleteInput = () => {
   const [options, setOptions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const {
     input: { onChange, value: currentValue },
@@ -144,7 +146,7 @@ const AutocompleteInput = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="resources.questions.fields.fk_answerId"
+            label={translate('resources.questions.fields.fk_answerId')}
             variant="filled"
             fullWidth
             InputProps={{

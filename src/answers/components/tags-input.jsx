@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import { useField } from 'react-final-form';
 import ChipInput from 'material-ui-chip-input';
 
 const TagsInput = (props) => {
+  const translate = useTranslate();
   const { input: { value, onChange } } = useField(props.source);
 
   const asArray = (value || '').split(',').filter((s) => !!s);
@@ -21,7 +23,7 @@ const TagsInput = (props) => {
       newChipKeyCodes={[9, 13, 188]}
       margin="normal"
       blurBehavior="add"
-      label={props.label}
+      label={translate(props.label)}
       disabled={props?.disabled === true}
       fullWidth
     />

@@ -51,7 +51,7 @@ const ProfileMenu = React.forwardRef(({ onClick }, ref) => {
   );
 });
 
-const MyUserMenu = props => (
+const MyUserMenu = (props) => (
   <UserMenu {...props}>
     <ProfileMenu />
   </UserMenu>

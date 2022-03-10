@@ -291,7 +291,7 @@ const LinksDialog = ({
                 <TableRow>
                   <TableCell>&nbsp;</TableCell>
                   <TableCell>{translate('resources.questions.fields.text')}</TableCell>
-                  <TableCell>{translate('resoruces.questions.fields.fk_answerId')}</TableCell>
+                  <TableCell>{translate('resources.questions.fields.fk_answerId')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

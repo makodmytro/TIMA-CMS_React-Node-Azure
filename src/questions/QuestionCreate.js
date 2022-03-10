@@ -9,6 +9,7 @@ import {
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
+import TopicSelect from '../topics/components/TopicSelect';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import AutocompleteInput from './components/autocomplete-input';
@@ -17,6 +18,7 @@ const FormFields = (props) => {
   const {
     input: { value },
   } = useField('fk_languageId');
+  const { input: { value: fk_topicId } } = useField('fk_topicId');
 
   const getLang = () => {
     if (!value || !props.languages[value]) {
@@ -47,19 +49,25 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
 
-      <ReferenceInput
+      <TopicSelect
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
-        reference="topics"
-        validate={required()}
-        fullWidth
+        isRequired
         filter={{ fk_languageId: value }}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
+        disabled={!value}
+      />
       <AutocompleteInput />
+      <ReferenceInput
+        label="resources.questions.fields.fk_parentQuestionId"
+        source="fk_parentQuestionId"
+        reference="questions"
+        filter={{ fk_topicId }}
+        disabled={!fk_topicId}
+        fullWidth
+        allowEmpty
+      >
+        <SelectInput optionText="text" emptyText="None" />
+      </ReferenceInput>
       <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />
     </>
   );

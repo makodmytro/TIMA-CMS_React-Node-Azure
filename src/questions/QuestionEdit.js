@@ -22,6 +22,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ReactMarkdown from 'react-markdown';
+import TopicSelect from '../topics/components/TopicSelect';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import RelatedQuestionsTable from './components/related-questions-table';
@@ -227,20 +228,13 @@ const FormFields = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
-      <ReferenceInput
+      <TopicSelect
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
-        reference="topics"
-        validate={required()}
-        fullWidth
+        isRequired
         filter={{ fk_languageId: fkLanguageId }}
         disabled={disableEdit}
-      >
-        <SelectInput
-          optionText="name"
-          disabled={disableEdit}
-        />
-      </ReferenceInput>
+      />
       <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
       <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
       <Answer
@@ -249,6 +243,17 @@ const FormFields = ({
         }}
         disabled={disableEdit}
       />
+      <ReferenceInput
+        label="resources.questions.fields.fk_parentQuestionId"
+        source="fk_parentQuestionId"
+        reference="questions"
+        filter={{ fk_topicId: fkTopicId }}
+        disabled={!fkTopicId}
+        fullWidth
+        allowEmpty
+      >
+        <SelectInput optionText="text" emptyText="None" />
+      </ReferenceInput>
     </>
   );
 };
