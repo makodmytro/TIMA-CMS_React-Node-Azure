@@ -18,7 +18,7 @@ const ApprovedSwitchField = ({ record, disabled }) => {
     const data = {
       approved,
       approvedAt: approved ? (new Date()).toISOString() : null,
-      approvedBy_editorId: approved ? permissions.userId : null,
+      approvedBy_editorId: approved ? permissions?.userId : null,
     };
     try {
       await dataProvider.update('answers', {

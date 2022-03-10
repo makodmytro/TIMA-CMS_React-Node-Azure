@@ -87,14 +87,15 @@ const AsyncResources = () => {
     store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
 
-    refreshTopicStatus();
+    await delay(500);
+    setTac(true);
   };
 
   React.useEffect(() => {
     check();
   }, []);
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     if (location.pathname !== '/login' && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
@@ -105,7 +106,7 @@ const AsyncResources = () => {
       clearTimeout(topicsStatusTimeout.current);
       topicsStatusTimeout.current = null;
     }
-  }, [location.pathname, tac]);
+  }, [location.pathname, tac]);*/
 
   React.useEffect(() => {
     if (location.pathname !== '/login' && tic) {

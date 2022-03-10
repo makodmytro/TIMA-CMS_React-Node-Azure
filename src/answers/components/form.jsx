@@ -24,7 +24,7 @@ const Approved = (props) => {
   const afterChange = (checked) => {
     if (checked) {
       changeApprovedAt((new Date()).toISOString());
-      changeApprovedBy(permissions.editorId);
+      changeApprovedBy(permissions?.editorId);
     } else {
       changeApprovedAt(null);
       changeApprovedBy(null);
