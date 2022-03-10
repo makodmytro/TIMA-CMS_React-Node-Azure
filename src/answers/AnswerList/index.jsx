@@ -107,11 +107,11 @@ const AnswerList = ({
     },
     {
       key: 'fk_topicId',
-      el: <WrapTopicSelect />,
+      el: <WrapTopicSelect label="resources.answers.fields.fk_topicId" />,
     },
     {
       key: 'approved',
-      el: <WrapApprovedSwitch />,
+      el: <WrapApprovedSwitch label="resources.answers.fields.approved" />,
     },
     {
       key: 'tags',

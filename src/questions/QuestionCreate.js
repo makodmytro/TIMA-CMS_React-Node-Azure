@@ -9,6 +9,7 @@ import {
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
+import TopicSelect from '../topics/components/TopicSelect';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import AutocompleteInput from './components/autocomplete-input';
@@ -48,19 +49,13 @@ const FormFields = (props) => {
         />
       </ReferenceInput>
 
-      <ReferenceInput
+      <TopicSelect
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
-        reference="topics"
-        validate={required()}
-        fullWidth
+        isRequired
         filter={{ fk_languageId: value }}
         disabled={!value}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
+      />
       <AutocompleteInput />
       <ReferenceInput
         label="resources.questions.fields.fk_parentQuestionId"

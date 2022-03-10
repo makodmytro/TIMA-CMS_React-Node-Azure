@@ -12,6 +12,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
+import TopicSelect from '../../topics/components/TopicSelect';
 import { useDisabledEdit, useDisabledCreate } from '../../hooks';
 
 const Approved = (props) => {
@@ -133,7 +134,7 @@ const Form = ({
         />
       </ReferenceInput>
 
-      <ReferenceInput
+      {/*<ReferenceInput
         source="fk_topicId"
         label="resources.answers.fields.fk_topicId"
         reference="topics"
@@ -146,7 +147,15 @@ const Form = ({
           optionText="name"
           disabled={disableEdit}
         />
-      </ReferenceInput>
+    </ReferenceInput>*/}
+      <TopicSelect
+        source="fk_topicId"
+        isRequired
+        label="resources.answers.fields.fk_topicId"
+        editting={edit}
+        disabled={disableEdit}
+        filter={{ fk_languageId: fkLanguageId }}
+      />
       <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
     </>

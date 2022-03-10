@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import Select from '@material-ui/core/Select';
-import { useDataProvider, useListContext, useRefresh } from 'react-admin';
+import {
+  useDataProvider,
+  useListContext,
+  useRefresh,
+  ReferenceField,
+  TextField,
+} from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
+
+const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
 
 const TopicSelectCell = ({
   record, source, label, disabled,
@@ -53,4 +61,18 @@ const TopicSelectCell = ({
   );
 };
 
-export default TopicSelectCell;
+const TopicCell = (props) => {
+  if (!SELECT_TOPIC_LEVELS || SELECT_TOPIC_LEVELS === '0') {
+    return (
+      <TopicSelectCell {...props} />
+    );
+  }
+
+  return (
+    <ReferenceField {...props} reference="topics" basePath="topics" link={false}>
+      <TextField source="name" />
+    </ReferenceField>
+  );
+};
+
+export default TopicCell;

@@ -105,6 +105,7 @@ const english = {
     past_sessions: 'Past sessions',
     topics: 'Topics',
     sessions_map: 'Sessions map',
+    edit_topic: 'Edit',
   },
   resources: {
     topics: {
