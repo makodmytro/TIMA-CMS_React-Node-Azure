@@ -42,11 +42,14 @@ import Filters from './Filters';
 import AnswerField from './AnswerField';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
+const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
+const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+
 const CustomGridItem = ({
   record,
   removeAnswer,
   visibleColumns,
-  isChild,
+  level,
 }) => {
   const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
@@ -75,9 +78,10 @@ const CustomGridItem = ({
     redirect(`/questions/${id}`);
   };
 
-  const bg = isChild ? '#498ca754' : (record.fk_answerId ? 'default' : '#ff000030');
-  return (
-    <>
+  const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
+
+  if (level) {
+    return (
       <TableRow
         className={classes.cursor}
         style={{ backgroundColor: bg }}
@@ -86,6 +90,53 @@ const CustomGridItem = ({
         <TableCell>
           {
             !!record.childCount && record.childCount > 0 && (
+              <>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setExpanded(!expanded);
+                  }}
+                >
+                  { !expanded && <AddIcon fontSize="small" /> }
+                  { expanded && <MinusIcon fontSize="small" /> }
+                </IconButton>
+              </>
+            )
+          }
+        </TableCell>
+        <TableCell style={{ paddingLeft: `${30 * level}px` }}>
+          <PlayableText
+            text={record.text}
+            lang={record.Language ? record.Language.code : null}
+          />
+        </TableCell>
+        {
+          (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
+            <TableCell key={i}>&nbsp;</TableCell>
+          ))
+        }
+        <TableCell>
+          <DropdownMenu
+            record={record}
+            removeAnswer={removeAnswer}
+          />
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return (
+    <>
+      <TableRow
+        className={classes.cursor}
+        onClick={link(record.id)}
+      >
+        <TableCell>
+          {
+            !!record.childCount && record.childCount > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
               <>
                 <IconButton
                   size="small"
@@ -184,7 +235,7 @@ const CustomGridItem = ({
                   removeAnswer={removeAnswer}
                   visibleColumns={visibleColumns}
                   key={iii}
-                  isChild
+                  level={(level || 0) + 1}
                 />
               ))
             }

@@ -12,13 +12,17 @@ import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
 import { useTranslate, useDataProvider } from 'react-admin';
 import ListDropdownMenu from '../components/list-dropdown-menu';
+import columns from './columns';
+
+const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
+const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
 
 const Row = ({
   record,
   columnsToDisplay,
   onSync,
   setOpen,
-  isChild,
+  level,
 }) => {
   const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
@@ -39,12 +43,14 @@ const Row = ({
     }
   }, [expanded]);
 
+  const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
+
   return (
     <>
-      <TableRow style={{ backgroundColor: isChild ? '#498ca754' : 'initial', cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
+      <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && (
+            !!record.childCount && record.childCount > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
               <>
                 <IconButton
                   size="small"
@@ -63,14 +69,34 @@ const Row = ({
           }
         </TableCell>
         {
-          columnsToDisplay
+          !level && columnsToDisplay
             .map((col, ii) => {
               return (
                 <TableCell key={ii}>
+                  {
+                    level === 1 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
+                  }
+                  {
+                    level === 2 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
+                  }
                   {cloneElement(col.el, { key: col.key, record })}
                 </TableCell>
               );
             })
+        }
+        {
+          level && level > 0 && (
+            <>
+              <TableCell style={{ paddingLeft: `${30 * level}px` }}>
+                {cloneElement(columns[0].el, { key: columns[0].key, record })}
+              </TableCell>
+              {
+                (Array.from(Array(columnsToDisplay.length - 1).keys())).map((v, i) => (
+                  <TableCell key={i}>&nbsp;</TableCell>
+                ))
+              }
+            </>
+          )
         }
         <TableCell>
           <ListDropdownMenu onSync={onSync} onPermissionsClick={(id) => setOpen(id)} record={record} />
@@ -87,7 +113,7 @@ const Row = ({
                   onSync={onSync}
                   setOpen={setOpen}
                   key={iii}
-                  isChild
+                  level={(level || 0) + 1}
                 />
               ))
             }

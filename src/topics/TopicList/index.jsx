@@ -19,6 +19,8 @@ import TableView from './TableView';
 import Filters from './Filters';
 import { useRecursiveTimeout, useIsAdmin } from '../../hooks';
 
+const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
+
 const TopicList = () => {
   const admin = useIsAdmin();
   const [open, setOpen] = React.useState(null);
@@ -43,7 +45,7 @@ const TopicList = () => {
       filter: {
         ...(values.q ? { q: values.q } : {}),
         ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),
-        topLevelOnly: '1',
+        topLevelOnly: TOPICS_ENABLE_TREE_LIST,
       },
       pagination: paging,
     });
