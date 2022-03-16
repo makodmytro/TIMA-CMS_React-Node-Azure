@@ -29,6 +29,7 @@ import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
+import azureLogin from './auth/azure';
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -150,6 +151,7 @@ const AsyncResources = () => {
       title="TIMA Management"
       theme={theme}
       layout={MyLayout}
+      loginPage={azureLogin}
       customRoutes={[
         <Route
           exact

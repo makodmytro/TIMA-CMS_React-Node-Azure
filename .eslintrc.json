@@ -49,7 +49,8 @@
     "no-underscore-dangle": "warn",
     "comma-dangle": "warn",
     "spaced-comment": "off",
-    "no-nested-ternary": "off"
-
+    "no-nested-ternary": "off",
+    "default-case": "off",
+    "no-useless-return": "off"
   }
 }
