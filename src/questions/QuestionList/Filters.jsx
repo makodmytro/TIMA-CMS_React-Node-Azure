@@ -8,12 +8,18 @@ import {
   useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import TopicSelectDialog from '../../topics/components/TopicSelectDialog';
 import styles from './styles';
+
+const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
+  const [open, setOpen] = React.useState(false);
   const translate = useTranslate();
   const {
     filterValues,
@@ -35,6 +41,14 @@ const Filters = ({ languages, topics, ...props }) => {
 
   const handleSetFilters = (filters) => {
     setFilters(filters, {});
+  };
+
+  const onTopicFilterConfirm = (ids) => {
+    setFilters({
+      ...filterValues,
+      fk_topicId: ids,
+    });
+    setOpen(false);
   };
 
   const handleTopicChange = (event) => {
@@ -100,23 +114,43 @@ const Filters = ({ languages, topics, ...props }) => {
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
           </ReferenceInput>
-          <ReferenceInput
-            label="resources.questions.fields.fk_topicId"
-            source="fk_topicId"
-            reference="topics"
-            alwaysOn
-            allowEmpty
-            perPage={100}
-            onChange={handleTopicChange}
-            filter={getTopicsFilter()}
-          >
-            <SelectInput
-              optionText="name"
-              className={classes.select}
-              allowEmpty
-              emptyText={translate('misc.none')}
-            />
-          </ReferenceInput>
+          {
+            TOPICS_ENABLE_TREE_LIST === '1' && (
+              <Box display="inline-flex" style={{ verticalAlign: 'top', flexDirection: 'column' }} pb={4}>
+                <Button onClick={() => setOpen(true)}>
+                  {translate('resources.topics.filter_by_topics')} {filterValues.fk_topicId ? `(${filterValues.fk_topicId.length})` : ''}
+                </Button>
+                <TopicSelectDialog
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  onConfirm={onTopicFilterConfirm}
+                  initialValues={filterValues.fk_topicId || []}
+                />
+              </Box>
+            )
+          }
+          {
+            TOPICS_ENABLE_TREE_LIST !== '1' && (
+              <ReferenceInput
+                label="resources.questions.fields.fk_topicId"
+                source="fk_topicId"
+                reference="topics"
+                alwaysOn
+                allowEmpty
+                perPage={100}
+                onChange={handleTopicChange}
+                filter={getTopicsFilter()}
+              >
+                <SelectInput
+                  optionText="name"
+                  className={classes.select}
+                  allowEmpty
+                  emptyText={translate('misc.none')}
+                />
+              </ReferenceInput>
+            )
+          }
+
           <SelectInput
             label="resources.questions.fields.approved"
             source="approved"

@@ -50,6 +50,8 @@
     "comma-dangle": "warn",
     "spaced-comment": "off",
     "no-nested-ternary": "off",
-    "semi": "warn"
+    "semi": "warn",
+    "no-use-before-define": "off",
+    "no-await-in-loop": "off"
   }
 }

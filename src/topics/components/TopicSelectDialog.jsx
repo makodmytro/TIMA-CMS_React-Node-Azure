@@ -28,17 +28,12 @@ const Row = ({
   onFetchChildren,
   selected,
   toggleSelected,
+  expanded,
+  toggleExpanded,
   level,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  React.useEffect(() => {
-    if (expanded) {
-      onFetchChildren(record.id);
-    }
-  }, [expanded]);
-
   const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
+  const isExpanded = expanded.includes(record.id);
 
   return (
     <>
@@ -53,11 +48,11 @@ const Row = ({
                   onClick={(e) => {
                     e.stopPropagation();
 
-                    setExpanded(!expanded);
+                    return toggleExpanded(record.id);
                   }}
                 >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
+                  { !isExpanded && <AddIcon fontSize="small" /> }
+                  { isExpanded && <MinusIcon fontSize="small" /> }
                 </IconButton>
               </>
             )
@@ -69,21 +64,25 @@ const Row = ({
         <TableCell>
           <Checkbox
             checked={selected.includes(record.id)}
-            onChange={() => toggleSelected(record.id)}
+            onChange={() => toggleSelected(record)}
           />
         </TableCell>
       </TableRow>
       {
-        expanded && record.childCount && topicsChildren[record.id] && !!topicsChildren[record.id].length && (
+        isExpanded && record.childCount > 0 && topicsChildren[record.id] && !!topicsChildren[record.id].length && (
           <>
             {
               topicsChildren[record.id].map((child, iii) => (
                 <Row
                   record={child}
-                  onFetchChildren={onFetchChildren}
-                  topicsChildren={topicsChildren}
-                  toggleSelected={toggleSelected}
-                  selected={selected}
+                  {...{
+                    topicsChildren,
+                    onFetchChildren,
+                    selected,
+                    toggleSelected,
+                    expanded,
+                    toggleExpanded,
+                  }}
                   key={iii}
                   level={(level || 0) + 1}
                 />
@@ -107,17 +106,7 @@ export default function TopicSelectDialog({
   const [topicsChildren, setChildren] = React.useState({});
   const [topics, setTopics] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-
-  const fetchChildren = async (id) => {
-    try {
-      const { data } = await dataProvider.getOne('topics', { id });
-
-      setChildren({
-        ...topicsChildren,
-        [id]: data?.ChildTopics || [],
-      });
-    } catch (e) {} // eslint-disable-line
-  };
+  const [expanded, setExpanded] = React.useState([]);
 
   const fetch = async () => {
     try {
@@ -130,11 +119,40 @@ export default function TopicSelectDialog({
     } catch (e) {} // eslint-disable-line
   };
 
-  const toggleSelected = (id) => {
-    if (selected.includes(id)) {
-      setSelected(selected.filter((v) => v !== id));
+  const toggleSelected = async (topic) => {
+    if (selected.includes(topic.id)) {
+      setSelected(selected.filter((s) => s !== topic.id));
     } else {
-      setSelected(selected.concat([id]));
+      let ids = [topic.id];
+
+      if (topic.childCount && !expanded.includes(topic.id)) {
+        toggleExpanded(topic.id);
+      }
+
+      setSelected(selected.concat(ids));
+    }
+  };
+
+  const onFetchChildren = async (id) => {
+    try {
+      const { data } = await dataProvider.getOne('topics', { id });
+
+      setChildren({
+        ...topicsChildren,
+        [id]: data?.ChildTopics || [],
+      });
+    } catch (e) {} // eslint-disable-line
+  };
+
+  const toggleExpanded = async (id) => {
+    if (expanded.includes(id)) {
+      setExpanded(expanded.filter((e) => e !== id));
+    } else {
+      setExpanded(expanded.concat([id]));
+
+      if (!topicsChildren[id]) {
+        onFetchChildren(id);
+      }
     }
   };
 
@@ -162,10 +180,14 @@ export default function TopicSelectDialog({
                   <Row
                     key={i}
                     record={record}
-                    topicsChildren={topicsChildren}
-                    onFetchChildren={fetchChildren}
-                    selected={selected}
-                    toggleSelected={toggleSelected}
+                    {...{
+                      topicsChildren,
+                      onFetchChildren,
+                      selected,
+                      toggleSelected,
+                      expanded,
+                      toggleExpanded,
+                    }}
                   />
                 ))
               }
