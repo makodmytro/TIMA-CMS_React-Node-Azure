@@ -49,7 +49,7 @@
     "no-underscore-dangle": "warn",
     "comma-dangle": "warn",
     "spaced-comment": "off",
-    "no-nested-ternary": "off"
-
+    "no-nested-ternary": "off",
+    "semi": "warn"
   }
 }

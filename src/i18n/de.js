@@ -78,6 +78,7 @@ const german = {
     upload: 'Upload',
     loading: 'Loading',
     close: 'Close',
+    clear: 'Clear',
     cancel: 'Cancel',
     un_ignore: 'Un-ignore',
     ignore: 'Ignore',
@@ -110,6 +111,7 @@ const german = {
   resources: {
     topics: {
       name: 'Topic |||| Topics',
+      filter_by_topics: 'Filter by topics',
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
