@@ -126,6 +126,8 @@ const german = {
         fk_parentTopicId: 'Parent topic',
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
+        qnaMetadataKey: 'Metadata key',
+        qnaMetadataValue: 'Metadata value'
       },
     },
     languages: {

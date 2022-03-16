@@ -39,6 +39,20 @@ export const Qna = (props) => {
         {translate('misc.qna')}
       </Typography>
       <TextInput
+        source="qnaMetadataKey"
+        label="resources.topics.fields.qnaMetadataKey"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
+        source="qnaMetadataValue"
+        label="resources.topics.fields.qnaMetadataValue"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
         source="qnaApiVersion"
         label="resources.topics.fields.qnaApiVersion"
         record={props.record}
@@ -67,6 +81,8 @@ const FormFields = (props) => {
   const disabled = useDisabledEdit(props?.record?.id);
   const admin = useIsAdmin();
 
+  const isENBW = process.env.REACT_APP_TIMA_ENVIRONMENT === 'ENBW';
+
   const getLang = (r) => {
     if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
       return null;
@@ -76,7 +92,7 @@ const FormFields = (props) => {
   };
 
   return (
-    <>
+    <>env: {process.env.TIMA_ENVIRONMENT}*
       <PlayableTextInput
         source="name"
         validate={required()}
@@ -86,16 +102,18 @@ const FormFields = (props) => {
         record={props?.record}
         label="resources.topics.fields.name"
       />
-      <PlayableTextInput
-        source="welcomeText"
-        fullWidth
-        rows="4"
-        multiline
-        lang={getLang}
-        disabled={disabled && !admin}
-        record={props?.record}
-        label="resources.topics.fields.welcomeText"
-      />
+      { isENBW ? null : (
+        <PlayableTextInput
+          source="welcomeText"
+          fullWidth
+          rows="4"
+          multiline
+          lang={getLang}
+          disabled={disabled && !admin}
+          record={props?.record}
+          label="resources.topics.fields.welcomeText"
+        />
+      )}
       <ReferenceInput
         validate={required()}
         source="fk_languageId"
@@ -108,13 +126,15 @@ const FormFields = (props) => {
           optionText="name"
         />
       </ReferenceInput>
-      <TextInput
-        source="topicImageUrl"
-        fullWidth
-        disabled={disabled && !admin}
-        label="resources.topics.fields.image"
-      />
-      <TopicImage {...props} />
+      { isENBW ? null : (
+        <TextInput
+          source="topicImageUrl"
+          fullWidth
+          disabled={disabled && !admin}
+          label="resources.topics.fields.image"
+        />
+      )}
+      { isENBW ? null : <TopicImage {...props} />}
       <ReferenceInput
         source="fk_parentTopicId"
         reference="topics"
@@ -129,8 +149,9 @@ const FormFields = (props) => {
           emptyText="None"
         />
       </ReferenceInput>
-      <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
-      <Advanced source="topicKey" disabled={disabled && !admin} />
+      { //<TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
+       }
+      { isENBW ? null : <Advanced source="topicKey" disabled={disabled && !admin} />}
       <Qna {...props} disabled={disabled && !admin} />
     </>
   );
