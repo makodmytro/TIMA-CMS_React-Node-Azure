@@ -73,12 +73,6 @@ const Row = ({
             .map((col, ii) => {
               return (
                 <TableCell key={ii}>
-                  {
-                    level === 1 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
-                  }
-                  {
-                    level === 2 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
-                  }
                   {cloneElement(col.el, { key: col.key, record })}
                 </TableCell>
               );
