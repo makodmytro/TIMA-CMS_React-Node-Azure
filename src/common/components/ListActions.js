@@ -11,6 +11,24 @@ import ColumnConfig from './ColumnConfig';
 import defaultColumns from '../../default-columns.json';
 import { useDisabledCreate, useIsAdmin } from '../../hooks';
 
+const DEFAULT_COLUMNS_ANSWERS = process.env.REACT_APP_DEFAULT_COLUMNS_ANSWERS || null;
+const DEFAULT_COLUMNS_QUESTIONS = process.env.REACT_APP_DEFAULT_COLUMNS_QUESTIONS || null;
+const DEFAULT_COLUMNS_TOPICS = process.env.REACT_APP_DEFAULT_COLUMNS_TOPICS || null;
+const DEFAULT_COLUMNS_LANGUAGES = process.env.REACT_APP_DEFAULT_COLUMNS_LANGUAGES || null;
+const DEFAULT_COLUMNS_SESSIONS = process.env.REACT_APP_DEFAULT_COLUMNS_SESSIONS || null;
+const DEFAULT_COLUMNS_USERS = process.env.REACT_APP_DEFAULT_COLUMNS_USERS || null;
+const DEFAULT_COLUMNS_GROUPS = process.env.REACT_APP_DEFAULT_COLUMNS_GROUPS || null;
+
+const config = {
+  answers: DEFAULT_COLUMNS_ANSWERS ? DEFAULT_COLUMNS_ANSWERS.split(',') : null,
+  questions: DEFAULT_COLUMNS_QUESTIONS ? DEFAULT_COLUMNS_QUESTIONS.split(',') : null,
+  topics: DEFAULT_COLUMNS_TOPICS ? DEFAULT_COLUMNS_TOPICS.split(',') : null,
+  languages: DEFAULT_COLUMNS_LANGUAGES ? DEFAULT_COLUMNS_LANGUAGES.split(',') : null,
+  sessions: DEFAULT_COLUMNS_SESSIONS ? DEFAULT_COLUMNS_SESSIONS.split(',') : null,
+  users: DEFAULT_COLUMNS_USERS ? DEFAULT_COLUMNS_USERS.split(',') : null,
+  groups: DEFAULT_COLUMNS_GROUPS ? DEFAULT_COLUMNS_GROUPS.split(',') : null,
+};
+
 export const getVisibleColumns = (columns, resource, defaults = []) => {
   const savedConfig = localStorage.getItem(`columns-${resource}`);
 
@@ -20,6 +38,10 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 
   if (defaults.length > 0) {
     return columns.filter((c) => defaults.includes(c.key)).map((c) => c.key);
+  }
+
+  if (config[resource] && config[resource].length) {
+    return columns.filter((c) => config[resource].includes(c.key)).map((c) => c.key);
   }
 
   if (defaultColumns && defaultColumns[resource] && defaultColumns[resource].length) {

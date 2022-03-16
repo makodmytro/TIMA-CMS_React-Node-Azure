@@ -95,7 +95,7 @@ const AsyncResources = () => {
     check();
   }, []);
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     if (location.pathname !== '/login' && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
@@ -106,7 +106,7 @@ const AsyncResources = () => {
       clearTimeout(topicsStatusTimeout.current);
       topicsStatusTimeout.current = null;
     }
-  }, [location.pathname, tac]);*/
+  }, [location.pathname, tac]);
 
   React.useEffect(() => {
     if (location.pathname !== '/login' && tic) {

@@ -63,3 +63,7 @@ code {
 .MuiFormHelperText-contained {
   margin-left: 0px !important;
 }
+
+.public-DraftEditor-content {
+  height: 30vh !important;
+}
