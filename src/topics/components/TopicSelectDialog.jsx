@@ -7,7 +7,7 @@ import {
 import Checkbox from '@material-ui/core/Checkbox';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
+import Box from '@material-ui/core/Box';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
@@ -103,12 +103,15 @@ export default function TopicSelectDialog({
 }) {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const [loading, setLoading] = React.useState(0);
   const [topicsChildren, setChildren] = React.useState({});
   const [topics, setTopics] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [expanded, setExpanded] = React.useState([]);
 
   const fetch = async () => {
+    setLoading((l) => l + 1);
+
     try {
       const { data } = await dataProvider.getList('topics', {
         pagination: { perPage: 200, page: 1 },
@@ -117,31 +120,102 @@ export default function TopicSelectDialog({
 
       setTopics(data);
     } catch (e) {} // eslint-disable-line
+
+    setLoading((l) => l - 1);
   };
 
   const toggleSelected = async (topic) => {
     if (selected.includes(topic.id)) {
-      setSelected(selected.filter((s) => s !== topic.id));
-    } else {
       let ids = [topic.id];
 
-      if (topic.childCount && !expanded.includes(topic.id)) {
-        toggleExpanded(topic.id);
+      if (topicsChildren[topic.id]) {
+        topicsChildren[topic.id].forEach((tc) => {
+          if (selected.includes(tc.id)) {
+            ids.push(tc.id);
+          }
+
+          if (topicsChildren[tc.id]) {
+            topicsChildren[tc.id].forEach((tc2) => {
+              if (selected.includes(tc2.id)) {
+                ids.push(tc2.id);
+              }
+            })
+          }
+        })
+      }
+
+      setSelected(selected.filter((s) => !ids.includes(s)));
+    } else {
+      let ids = [topic.id];
+      let idsToExpand = [];
+
+      if (!expanded.includes(topic.id)) {
+        idsToExpand.push(topic.id);
+      }
+
+      if (topic.childCount) {
+        let children = await (
+          topicsChildren[topic.id] ? topicsChildren[topic.id] : onFetchChildren(topic.id)
+        );
+
+        const grandChildren = await Promise.all(
+          children.map((child) => {
+            if (child.childCount) {
+              if (topicsChildren[child.id]) {
+                return topicsChildren[child.id];
+              }
+
+              return onFetchChildren(child.id);
+            }
+
+            return Promise.resolve(null);
+          })
+        );
+
+        children = children.concat(
+          grandChildren.reduce((acc, cur) => {
+            if (!cur) {
+              return acc;
+            }
+
+            return acc.concat(cur);
+          }, []),
+        );
+
+        children.forEach((c) => {
+          if (!selected.includes(c.id)) {
+            ids.push(c.id);
+          }
+
+          if (c.childCount && !expanded.includes(c.id)) {
+            idsToExpand.push(c.id);
+          }
+        });
       }
 
       setSelected(selected.concat(ids));
+      setExpanded(expanded.concat(idsToExpand));
     }
   };
 
   const onFetchChildren = async (id) => {
+    setLoading((l) => l + 1);
+
     try {
       const { data } = await dataProvider.getOne('topics', { id });
 
-      setChildren({
-        ...topicsChildren,
+      setChildren((tc) => ({
+        ...tc,
         [id]: data?.ChildTopics || [],
-      });
+      }));
+
+      setLoading((l) => l - 1);
+
+      return data?.ChildTopics;
     } catch (e) {} // eslint-disable-line
+
+    setLoading((l) => l - 1);
+    return [];
   };
 
   const toggleExpanded = async (id) => {
@@ -171,8 +245,20 @@ export default function TopicSelectDialog({
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
-        <DialogTitle id="form-dialog-title">{translate('resources.topics.filter_by_topics')}</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          <Box display="flex">
+            <Box flex={2}>
+              {translate('resources.topics.filter_by_topics')}
+            </Box>
+            <Box flex={1} textAlign="right">
+              {
+                loading > 0 && <CircularProgress color="primary" size={20} />
+              }
+            </Box>
+          </Box>
+        </DialogTitle>
         <DialogContent>
+          {JSON.stringify(selected)}
           <Table>
             <TableBody>
               {
