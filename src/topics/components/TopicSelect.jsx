@@ -180,7 +180,11 @@ const MultiTopicSelect = ({
   }, []);
 
   React.useEffect(() => {
-    setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+    if (filter.fk_languageId) {
+      setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+    } else {
+      setFilteredTopics(topics);
+    }
   }, [filter, topics]);
 
   const selected = topicsSubTwo.length

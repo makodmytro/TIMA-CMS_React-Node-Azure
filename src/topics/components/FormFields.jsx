@@ -30,11 +30,11 @@ export const Advanced = (props) => {
         {translate('misc.advanced')}
       </Typography>
       <TextInput
-        source="topicfieldName"
+        source="topicKey"
         record={props.record}
         fullWidth
         disabled={props.disabled === true}
-        label="resources.topics.fields.topicfieldName"
+        label="resources.topics.fields.topicKey"
       />
     </>
   );
@@ -49,6 +49,27 @@ export const Qna = (props) => {
         {translate('misc.qna')}
       </Typography>
       <TextInput
+        source="qnaMetadataKey"
+        label="resources.topics.fields.qnaMetadataKey"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
+        source="qnaMetadataValue"
+        label="resources.topics.fields.qnaMetadataValue"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
+        source="qnaApiEndpoint"
+        label="resources.topics.fields.qnaApiEndpoint"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
+      <TextInput
         source="qnaApiVersion"
         label="resources.topics.fields.qnaApiVersion"
         record={props.record}
@@ -56,8 +77,8 @@ export const Qna = (props) => {
         disabled={props.disabled === true}
       />
       <TextInput
-        source="qnaSubscriptionfieldName"
-        label="resources.topics.fields.qnaSubscriptionfieldName"
+        source="qnaSubscriptionKey"
+        label="resources.topics.fields.qnaSubscriptionKey"
         record={props.record}
         fullWidth
         disabled={props.disabled === true}
@@ -132,7 +153,9 @@ const FormFields = (props) => {
           label="resources.topics.fields.image"
         />
       </HiddenField>
-      <TopicImage {...props} />
+      <HiddenField fieldName="topicImageUrl">
+        <TopicImage {...props} />
+      </HiddenField>
       <HiddenField fieldName="fk_parentTopicId">
         <ReferenceInput
           source="fk_parentTopicId"
@@ -152,8 +175,8 @@ const FormFields = (props) => {
       <HiddenField fieldName="level">
         <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
       </HiddenField>
-      <HiddenField fieldName="topicfieldName">
-        <Advanced source="topicfieldName" disabled={disabled && !admin} />
+      <HiddenField fieldName="topicKey">
+        <Advanced source="topicKey" disabled={disabled && !admin} />
       </HiddenField>
       <HiddenField fieldName="qna">
         <Qna {...props} disabled={disabled && !admin} />

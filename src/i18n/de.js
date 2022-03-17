@@ -78,6 +78,7 @@ const german = {
     upload: 'Upload',
     loading: 'Loading',
     close: 'Close',
+    clear: 'Clear',
     cancel: 'Cancel',
     un_ignore: 'Un-ignore',
     ignore: 'Ignore',
@@ -110,6 +111,7 @@ const german = {
   resources: {
     topics: {
       name: 'Topic |||| Topics',
+      filter_by_topics: 'Filter by topics',
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
@@ -120,12 +122,15 @@ const german = {
         language: 'Language',
         editor: 'Editor',
         level: 'Level',
+        qnaApiEndpoint: 'QNA API endpoint',
         qnaApiVersion: 'QNA API version',
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         qnaSubscriptionKey: 'QNA Subscription key',
         fk_parentTopicId: 'Parent topic',
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
+        qnaMetadataKey: 'Metadata key',
+        qnaMetadataValue: 'Metadata value'
       },
     },
     languages: {
