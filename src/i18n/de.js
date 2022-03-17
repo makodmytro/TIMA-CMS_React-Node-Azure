@@ -130,7 +130,7 @@ const german = {
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
         qnaMetadataKey: 'Metadata key',
-        qnaMetadataValue: 'Metadata value'
+        qnaMetadataValue: 'Metadata value',
       },
     },
     languages: {

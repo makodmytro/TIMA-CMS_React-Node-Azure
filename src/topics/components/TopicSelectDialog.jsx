@@ -7,7 +7,7 @@ import {
 import Checkbox from '@material-ui/core/Checkbox';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
+import Box from '@material-ui/core/Box';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,17 +15,16 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
+import IndeterminateCheckBox from '@material-ui/icons/IndeterminateCheckBox';
 
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 
 const Row = ({
   record,
-  topicsChildren,
-  onFetchChildren,
   selected,
   toggleSelected,
   expanded,
@@ -40,7 +39,7 @@ const Row = ({
       <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }}>
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && (
+            !!record.ChildTopics && record.ChildTopics.length > 0 && (
               <>
                 <IconButton
                   size="small"
@@ -65,19 +64,20 @@ const Row = ({
           <Checkbox
             checked={selected.includes(record.id)}
             onChange={() => toggleSelected(record)}
+            indeterminate={!selected.includes(record.id) && record?.ChildTopics.some((ct) => selected.includes(ct.id))}
+            indeterminateIcon={<IndeterminateCheckBox color="secondary" />}
+            color="secondary"
           />
         </TableCell>
       </TableRow>
       {
-        isExpanded && record.childCount > 0 && topicsChildren[record.id] && !!topicsChildren[record.id].length && (
+        isExpanded && record.ChildTopics && record.ChildTopics.length > 0 && (
           <>
             {
-              topicsChildren[record.id].map((child, iii) => (
+              record.ChildTopics.map((child, iii) => (
                 <Row
                   record={child}
                   {...{
-                    topicsChildren,
-                    onFetchChildren,
                     selected,
                     toggleSelected,
                     expanded,
@@ -103,45 +103,80 @@ export default function TopicSelectDialog({
 }) {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
-  const [topicsChildren, setChildren] = React.useState({});
+  const [loading, setLoading] = React.useState(0);
   const [topics, setTopics] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [expanded, setExpanded] = React.useState([]);
 
   const fetch = async () => {
+    setLoading((l) => l + 1);
+
     try {
-      const { data } = await dataProvider.getList('topics', {
+      const { data } = await dataProvider.topicTree('topics', {
         pagination: { perPage: 200, page: 1 },
-        filter: { topLevelOnly: '1' },
+        // filter: { topLevelOnly: '1' },
       });
 
       setTopics(data);
     } catch (e) {} // eslint-disable-line
+
+    setLoading((l) => l - 1);
   };
 
   const toggleSelected = async (topic) => {
     if (selected.includes(topic.id)) {
-      setSelected(selected.filter((s) => s !== topic.id));
-    } else {
-      let ids = [topic.id];
+      const ids = [topic.id];
 
-      if (topic.childCount && !expanded.includes(topic.id)) {
-        toggleExpanded(topic.id);
+      if (topic.ChildTopics && topic.ChildTopics.length) {
+        topic.ChildTopics.forEach((tc) => {
+          if (selected.includes(tc.id)) {
+            ids.push(tc.id);
+          }
+
+          if (tc.ChildTopics && tc.ChildTopics.length) {
+            tc.ChildTopics.forEach((tc2) => {
+              if (selected.includes(tc2.id)) {
+                ids.push(tc2.id);
+              }
+            });
+          }
+        });
+      }
+
+      setSelected(selected.filter((s) => !ids.includes(s)));
+    } else {
+      const ids = [topic.id];
+      const idsToExpand = [];
+
+      if (!expanded.includes(topic.id)) {
+        idsToExpand.push(topic.id);
+      }
+
+      if (topic.ChildTopics && topic.ChildTopics.length) {
+        let children = topic.ChildTopics;
+
+        children = children.reduce((acc, child) => {
+          if (child.ChildTopics && child.ChildTopics.length) {
+            return acc.concat(child.ChildTopics);
+          }
+
+          return acc;
+        }, children);
+
+        children.forEach((c) => {
+          if (!selected.includes(c.id)) {
+            ids.push(c.id);
+          }
+
+          if (c.ChildTopics && c.ChildTopics.length && !expanded.includes(c.id)) {
+            idsToExpand.push(c.id);
+          }
+        });
       }
 
       setSelected(selected.concat(ids));
+      setExpanded(expanded.concat(idsToExpand));
     }
-  };
-
-  const onFetchChildren = async (id) => {
-    try {
-      const { data } = await dataProvider.getOne('topics', { id });
-
-      setChildren({
-        ...topicsChildren,
-        [id]: data?.ChildTopics || [],
-      });
-    } catch (e) {} // eslint-disable-line
   };
 
   const toggleExpanded = async (id) => {
@@ -149,10 +184,6 @@ export default function TopicSelectDialog({
       setExpanded(expanded.filter((e) => e !== id));
     } else {
       setExpanded(expanded.concat([id]));
-
-      if (!topicsChildren[id]) {
-        onFetchChildren(id);
-      }
     }
   };
 
@@ -171,7 +202,18 @@ export default function TopicSelectDialog({
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
-        <DialogTitle id="form-dialog-title">{translate('resources.topics.filter_by_topics')}</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          <Box display="flex">
+            <Box flex={2}>
+              {translate('resources.topics.filter_by_topics')}
+            </Box>
+            <Box flex={1} textAlign="right">
+              {
+                loading > 0 && <CircularProgress color="primary" size={20} />
+              }
+            </Box>
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <Table>
             <TableBody>
@@ -181,8 +223,6 @@ export default function TopicSelectDialog({
                     key={i}
                     record={record}
                     {...{
-                      topicsChildren,
-                      onFetchChildren,
                       selected,
                       toggleSelected,
                       expanded,
