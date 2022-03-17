@@ -52,6 +52,13 @@ export const Qna = (props) => {
         fullWidth
         disabled={props.disabled === true}
       />
+       <TextInput
+        source="qnaApiEndpoint"
+        label="resources.topics.fields.qnaApiEndpoint"
+        record={props.record}
+        fullWidth
+        disabled={props.disabled === true}
+      />
       <TextInput
         source="qnaApiVersion"
         label="resources.topics.fields.qnaApiVersion"
