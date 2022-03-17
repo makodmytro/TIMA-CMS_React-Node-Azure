@@ -24,8 +24,6 @@ const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR ||
 
 const Row = ({
   record,
-  topicsChildren,
-  onFetchChildren,
   selected,
   toggleSelected,
   expanded,
@@ -40,7 +38,7 @@ const Row = ({
       <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }}>
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && (
+            !!record.ChildTopics && record.ChildTopics.length > 0 && (
               <>
                 <IconButton
                   size="small"
@@ -69,15 +67,13 @@ const Row = ({
         </TableCell>
       </TableRow>
       {
-        isExpanded && record.childCount > 0 && topicsChildren[record.id] && !!topicsChildren[record.id].length && (
+        isExpanded && record.ChildTopics && record.ChildTopics.length > 0 && (
           <>
             {
-              topicsChildren[record.id].map((child, iii) => (
+              record.ChildTopics.map((child, iii) => (
                 <Row
                   record={child}
                   {...{
-                    topicsChildren,
-                    onFetchChildren,
                     selected,
                     toggleSelected,
                     expanded,
@@ -104,7 +100,6 @@ export default function TopicSelectDialog({
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const [loading, setLoading] = React.useState(0);
-  const [topicsChildren, setChildren] = React.useState({});
   const [topics, setTopics] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [expanded, setExpanded] = React.useState([]);
@@ -113,9 +108,9 @@ export default function TopicSelectDialog({
     setLoading((l) => l + 1);
 
     try {
-      const { data } = await dataProvider.getList('topics', {
+      const { data } = await dataProvider.topicTree('topics', {
         pagination: { perPage: 200, page: 1 },
-        filter: { topLevelOnly: '1' },
+        // filter: { topLevelOnly: '1' },
       });
 
       setTopics(data);
@@ -126,68 +121,50 @@ export default function TopicSelectDialog({
 
   const toggleSelected = async (topic) => {
     if (selected.includes(topic.id)) {
-      let ids = [topic.id];
+      const ids = [topic.id];
 
-      if (topicsChildren[topic.id]) {
-        topicsChildren[topic.id].forEach((tc) => {
+      if (topic.ChildTopics && topic.ChildTopics.length) {
+        topic.ChildTopics.forEach((tc) => {
           if (selected.includes(tc.id)) {
             ids.push(tc.id);
           }
 
-          if (topicsChildren[tc.id]) {
-            topicsChildren[tc.id].forEach((tc2) => {
+          if (tc.ChildTopics && tc.ChildTopics.length) {
+            tc.ChildTopics.forEach((tc2) => {
               if (selected.includes(tc2.id)) {
                 ids.push(tc2.id);
               }
-            })
+            });
           }
-        })
+        });
       }
 
       setSelected(selected.filter((s) => !ids.includes(s)));
     } else {
-      let ids = [topic.id];
-      let idsToExpand = [];
+      const ids = [topic.id];
+      const idsToExpand = [];
 
       if (!expanded.includes(topic.id)) {
         idsToExpand.push(topic.id);
       }
 
-      if (topic.childCount) {
-        let children = await (
-          topicsChildren[topic.id] ? topicsChildren[topic.id] : onFetchChildren(topic.id)
-        );
+      if (topic.ChildTopics && topic.ChildTopics.length) {
+        let children = topic.ChildTopics;
 
-        const grandChildren = await Promise.all(
-          children.map((child) => {
-            if (child.childCount) {
-              if (topicsChildren[child.id]) {
-                return topicsChildren[child.id];
-              }
+        children = children.reduce((acc, child) => {
+          if (child.ChildTopics && child.ChildTopics.length) {
+            return acc.concat(child.ChildTopics);
+          }
 
-              return onFetchChildren(child.id);
-            }
-
-            return Promise.resolve(null);
-          })
-        );
-
-        children = children.concat(
-          grandChildren.reduce((acc, cur) => {
-            if (!cur) {
-              return acc;
-            }
-
-            return acc.concat(cur);
-          }, []),
-        );
+          return acc;
+        }, children);
 
         children.forEach((c) => {
           if (!selected.includes(c.id)) {
             ids.push(c.id);
           }
 
-          if (c.childCount && !expanded.includes(c.id)) {
+          if (c.ChildTopics && c.ChildTopics.length && !expanded.includes(c.id)) {
             idsToExpand.push(c.id);
           }
         });
@@ -198,35 +175,11 @@ export default function TopicSelectDialog({
     }
   };
 
-  const onFetchChildren = async (id) => {
-    setLoading((l) => l + 1);
-
-    try {
-      const { data } = await dataProvider.getOne('topics', { id });
-
-      setChildren((tc) => ({
-        ...tc,
-        [id]: data?.ChildTopics || [],
-      }));
-
-      setLoading((l) => l - 1);
-
-      return data?.ChildTopics;
-    } catch (e) {} // eslint-disable-line
-
-    setLoading((l) => l - 1);
-    return [];
-  };
-
   const toggleExpanded = async (id) => {
     if (expanded.includes(id)) {
       setExpanded(expanded.filter((e) => e !== id));
     } else {
       setExpanded(expanded.concat([id]));
-
-      if (!topicsChildren[id]) {
-        onFetchChildren(id);
-      }
     }
   };
 
@@ -258,7 +211,6 @@ export default function TopicSelectDialog({
           </Box>
         </DialogTitle>
         <DialogContent>
-          {JSON.stringify(selected)}
           <Table>
             <TableBody>
               {
@@ -267,8 +219,6 @@ export default function TopicSelectDialog({
                     key={i}
                     record={record}
                     {...{
-                      topicsChildren,
-                      onFetchChildren,
                       selected,
                       toggleSelected,
                       expanded,

@@ -13,7 +13,7 @@ import RichTextEditor from 'react-rte';
 import MdEditor from 'react-markdown-editor-lite';
 import PlayableText from '../../common/components/playable-text';
 
-const RteInput = ({
+const MarkdownInput = ({
   source, label, lang, disabled,
 }) => {
   const [state, setState] = React.useState(RichTextEditor.createEmptyValue());
@@ -56,7 +56,7 @@ const RteInput = ({
   );
 };
 
-export const MarkdownInput = ({
+export const MarkdownInputOld = ({
   source, label, lang, disabled,
 }) => {
   const translate = useTranslate();
@@ -92,4 +92,4 @@ export const MarkdownInput = ({
   );
 };
 
-export default RteInput;
+export default MarkdownInput;

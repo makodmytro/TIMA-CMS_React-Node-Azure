@@ -144,7 +144,10 @@ const resDataProvider = {
       });
     }
 
-    return json;
+    return {
+      data: json.data || [],
+      total: json.total || 0,
+    };
   },
   getMany: async (resource, params) => {
     const query = {
