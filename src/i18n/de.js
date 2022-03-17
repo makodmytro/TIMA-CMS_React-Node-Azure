@@ -122,6 +122,7 @@ const german = {
         language: 'Language',
         editor: 'Editor',
         level: 'Level',
+        qnaApiEndpoint: 'QNA API endpoint',
         qnaApiVersion: 'QNA API version',
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         qnaSubscriptionKey: 'QNA Subscription key',
