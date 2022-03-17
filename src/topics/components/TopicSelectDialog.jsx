@@ -34,6 +34,17 @@ const Row = ({
   const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
   const isExpanded = expanded.includes(record.id);
 
+  const childrenSelected = record.ChildTopics.filter((ct) => selected.includes(ct.id)).length;
+  const indeterminateChildren = !!childrenSelected && childrenSelected !== record.ChildTopics.length && record.ChildTopics.length > 0;
+
+  let grandChildren = 0;
+  const grandChildrenSelected = record.ChildTopics.reduce((acc, ct) => {
+    grandChildren += ct.ChildTopics.length;
+
+    return acc + ct.ChildTopics.filter((ctt) => selected.includes(ctt.id)).length;
+  }, 0);
+  const indeterminateGrandchildren = grandChildrenSelected && (grandChildrenSelected + childrenSelected) !== (grandChildren + record.ChildTopics.length) && grandChildren > 0;
+
   return (
     <>
       <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }}>
@@ -64,7 +75,7 @@ const Row = ({
           <Checkbox
             checked={selected.includes(record.id)}
             onChange={() => toggleSelected(record)}
-            indeterminate={!selected.includes(record.id) && record?.ChildTopics.some((ct) => selected.includes(ct.id))}
+            indeterminate={indeterminateChildren || indeterminateGrandchildren}
             indeterminateIcon={<IndeterminateCheckBox color="secondary" />}
             color="secondary"
           />
@@ -186,6 +197,47 @@ export default function TopicSelectDialog({
       setExpanded(expanded.concat([id]));
     }
   };
+
+  React.useEffect(() => {
+    let ids = [];
+    let idsToDeselect = [];
+
+    topics.forEach((topic) => {
+      let grandChildren = 0;
+      let childrenSelected = 0;
+      const grandChildrenSelected = topic.ChildTopics.reduce((acc, ct) => {
+        grandChildren += ct.ChildTopics.length;
+
+        if (selected.includes(ct.id)) {
+          childrenSelected += 1;
+        }
+
+        const gcSelected = ct.ChildTopics.filter((ctt) => selected.includes(ctt.id)).length;
+
+        if (ct.ChildTopics.length && ct.ChildTopics.length === gcSelected && !selected.includes(ct.id)) {
+          ids.push(ct.id);
+        }
+
+        if (ct.ChildTopics.length && !gcSelected && selected.includes(ct.id)) {
+          idsToDeselect.push(ct.id);
+        }
+
+        return acc + gcSelected;
+      }, 0);
+
+      if (topic.ChildTopics.length && childrenSelected === topic.ChildTopics.length && grandChildren === grandChildrenSelected && !selected.includes(topic.id)) {
+        ids.push(topic.id);
+      }
+
+      if (grandChildren + topic.ChildTopics.length && childrenSelected + grandChildrenSelected === 0 && selected.includes(topic.id)) {
+        idsToDeselect.push(topic.id);
+      }
+    });
+
+    if (ids.length || idsToDeselect.length) {
+      setSelected((s) => s.filter((id) => !idsToDeselect.includes(id)).concat(ids));
+    }
+  }, [selected]);
 
   React.useEffect(() => {
     if (open && !topics.length) {
