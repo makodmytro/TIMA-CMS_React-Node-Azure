@@ -19,6 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
+import IndeterminateCheckBox from '@material-ui/icons/IndeterminateCheckBox';
 
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 
@@ -63,6 +64,9 @@ const Row = ({
           <Checkbox
             checked={selected.includes(record.id)}
             onChange={() => toggleSelected(record)}
+            indeterminate={!selected.includes(record.id) && record?.ChildTopics.some((ct) => selected.includes(ct.id))}
+            indeterminateIcon={<IndeterminateCheckBox color="secondary" />}
+            color="secondary"
           />
         </TableCell>
       </TableRow>
