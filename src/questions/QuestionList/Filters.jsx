@@ -82,7 +82,6 @@ const Filters = ({ languages, topics, ...props }) => {
   };
 
   return (
-
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>

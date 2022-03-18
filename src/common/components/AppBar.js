@@ -62,7 +62,7 @@ const MyAppBar = (props) => {
   const { onLanguageChange, language, ...rest } = props;
 
   return (
-    <AppBar color="transparent" {...rest} userMenu={<MyUserMenu {...rest} />}>
+    <AppBar color="transparent" {...rest} userMenu={<MyUserMenu {...rest} />} style={{ backgroundColor: '#fafafa' }}>
       <Typography
         variant="h6"
         color="inherit"

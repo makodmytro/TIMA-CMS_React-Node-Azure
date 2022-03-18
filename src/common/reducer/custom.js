@@ -1,5 +1,8 @@
 const defaultState = {
   topics: [],
+  topicsTree: [],
+  topicsTreeTimestamp: null,
+  loading: false,
   languages: [],
   syncStatus: 0,
 };
@@ -10,6 +13,26 @@ export default (state = defaultState, { type, payload }) => {
       return {
         ...state,
         languages: payload,
+      };
+    }
+    case 'CUSTOM_TOPICS_TREE_FETCH_REQUEST': {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case 'CUSTOM_TOPICS_TREE_FETCH_FAILED': {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case 'CUSTOM_TOPICS_TREE_FETCH_SUCCESS': {
+      return {
+        ...state,
+        topicsTree: payload,
+        topicsTreeTimestamp: +new Date(),
+        loading: false,
       };
     }
     case 'CUSTOM_TOPICS_FETCH_SUCCESS': {
