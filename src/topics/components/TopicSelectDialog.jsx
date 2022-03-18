@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   useTranslate,
-  useDataProvider,
   TextField,
 } from 'react-admin';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -113,7 +112,6 @@ export default function TopicSelectDialog({
   onClose,
   initialValues,
 }) {
-  const dataProvider = useDataProvider();
   const translate = useTranslate();
   const { topics, loading } = useTopicsTree();
   const [selected, setSelected] = React.useState([]);
@@ -184,8 +182,8 @@ export default function TopicSelectDialog({
   };
 
   React.useEffect(() => {
-    let ids = [];
-    let idsToDeselect = [];
+    const ids = [];
+    const idsToDeselect = [];
 
     topics.forEach((topic) => {
       let grandChildren = 0;
