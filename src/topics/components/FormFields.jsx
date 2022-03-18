@@ -11,6 +11,16 @@ import TopicImage from './Image';
 import { PlayableTextInput } from '../../common/components/playable-text';
 import { useDisabledEdit, useIsAdmin } from '../../hooks';
 
+const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_TOPICS ? process.env.REACT_APP_HIDE_FIELDS_TOPICS.split(',') : [];
+
+const HiddenField = ({ children, fieldName }) => {
+  if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
+    return null;
+  }
+
+  return children;
+};
+
 export const Advanced = (props) => {
   const translate = useTranslate();
 
@@ -88,8 +98,6 @@ const FormFields = (props) => {
   const disabled = useDisabledEdit(props?.record?.id);
   const admin = useIsAdmin();
 
-  const isENBW = process.env.REACT_APP_TIMA_ENVIRONMENT === 'ENBW';
-
   const getLang = (r) => {
     if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
       return null;
@@ -99,17 +107,19 @@ const FormFields = (props) => {
   };
 
   return (
-    <>env: {process.env.TIMA_ENVIRONMENT}*
-      <PlayableTextInput
-        source="name"
-        validate={required()}
-        fullWidth
-        lang={getLang}
-        disabled={disabled && !admin}
-        record={props?.record}
-        label="resources.topics.fields.name"
-      />
-      { isENBW ? null : (
+    <>
+      <HiddenField fieldName="name">
+        <PlayableTextInput
+          source="name"
+          validate={required()}
+          fullWidth
+          lang={getLang}
+          disabled={disabled && !admin}
+          record={props?.record}
+          label="resources.topics.fields.name"
+        />
+      </HiddenField>
+      <HiddenField fieldName="welcomeText">
         <PlayableTextInput
           source="welcomeText"
           fullWidth
@@ -120,46 +130,57 @@ const FormFields = (props) => {
           record={props?.record}
           label="resources.topics.fields.welcomeText"
         />
-      )}
-      <ReferenceInput
-        validate={required()}
-        source="fk_languageId"
-        reference="languages"
-        label="resources.topics.fields.language"
-        fullWidth
-        disabled={disabled && !admin}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      { isENBW ? null : (
+      </HiddenField>
+      <HiddenField fieldName="fk_languageId">
+        <ReferenceInput
+          validate={required()}
+          source="fk_languageId"
+          reference="languages"
+          label="resources.topics.fields.language"
+          fullWidth
+          disabled={disabled && !admin}
+        >
+          <SelectInput
+            optionText="name"
+          />
+        </ReferenceInput>
+      </HiddenField>
+      <HiddenField fieldName="topicImageUrl">
         <TextInput
           source="topicImageUrl"
           fullWidth
           disabled={disabled && !admin}
           label="resources.topics.fields.image"
         />
-      )}
-      { isENBW ? null : <TopicImage {...props} />}
-      <ReferenceInput
-        source="fk_parentTopicId"
-        reference="topics"
-        label="resources.topics.fields.fk_parentTopicId"
-        fullWidth
-        disabled={props.disabled === true}
-        allowEmpty
-      >
-        <SelectInput
-          optionText="name"
+      </HiddenField>
+      <HiddenField fieldName="topicImageUrl">
+        <TopicImage {...props} />
+      </HiddenField>
+      <HiddenField fieldName="fk_parentTopicId">
+        <ReferenceInput
+          source="fk_parentTopicId"
+          reference="topics"
+          label="resources.topics.fields.fk_parentTopicId"
+          fullWidth
+          disabled={props.disabled === true}
           allowEmpty
-          emptyText="None"
-        />
-      </ReferenceInput>
-      { //<TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
-       }
-      { isENBW ? null : <Advanced source="topicKey" disabled={disabled && !admin} />}
-      <Qna {...props} disabled={disabled && !admin} />
+        >
+          <SelectInput
+            optionText="name"
+            allowEmpty
+            emptyText="None"
+          />
+        </ReferenceInput>
+      </HiddenField>
+      <HiddenField fieldName="level">
+        <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
+      </HiddenField>
+      <HiddenField fieldName="topicKey">
+        <Advanced source="topicKey" disabled={disabled && !admin} />
+      </HiddenField>
+      <HiddenField fieldName="qna">
+        <Qna {...props} disabled={disabled && !admin} />
+      </HiddenField>
     </>
   );
 };

@@ -20,6 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
 import IndeterminateCheckBox from '@material-ui/icons/IndeterminateCheckBox';
+import { useTopicsTree } from '../useTopics';
 
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 
@@ -114,25 +115,9 @@ export default function TopicSelectDialog({
 }) {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
-  const [loading, setLoading] = React.useState(0);
-  const [topics, setTopics] = React.useState([]);
+  const { topics, loading } = useTopicsTree();
   const [selected, setSelected] = React.useState([]);
   const [expanded, setExpanded] = React.useState([]);
-
-  const fetch = async () => {
-    setLoading((l) => l + 1);
-
-    try {
-      const { data } = await dataProvider.topicTree('topics', {
-        pagination: { perPage: 200, page: 1 },
-        // filter: { topLevelOnly: '1' },
-      });
-
-      setTopics(data);
-    } catch (e) {} // eslint-disable-line
-
-    setLoading((l) => l - 1);
-  };
 
   const toggleSelected = async (topic) => {
     if (selected.includes(topic.id)) {
@@ -238,12 +223,6 @@ export default function TopicSelectDialog({
       setSelected((s) => s.filter((id) => !idsToDeselect.includes(id)).concat(ids));
     }
   }, [selected]);
-
-  React.useEffect(() => {
-    if (open && !topics.length) {
-      fetch();
-    }
-  }, [open]);
 
   React.useEffect(() => {
     if (!selected.length) {

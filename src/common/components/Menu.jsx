@@ -18,6 +18,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import DemoIcon from '@material-ui/icons/AddToQueue';
 import { baseApi } from '../httpClient';
 
+const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
+
 const Menu = ({ onMenuClick, logout }) => {
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
@@ -66,7 +68,7 @@ const Menu = ({ onMenuClick, logout }) => {
         />
         {
           resources
-            .filter((r) => r.name !== 'groups')
+            .filter((r) => r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name))
             .map((resource) => (
               <MenuItemLink
                 key={resource.name}

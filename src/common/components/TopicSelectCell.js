@@ -6,11 +6,12 @@ import {
   useDataProvider,
   useListContext,
   useRefresh,
-  ReferenceField,
   TextField,
 } from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { useTopicsTree } from '../../topics/useTopics';
+import * as TopicsLogic from '../../topics/logic';
 
 const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
 
@@ -61,6 +62,20 @@ const TopicSelectCell = ({
   );
 };
 
+const MultiLevelLabel = ({ record }) => {
+  const { topics } = useTopicsTree();
+
+  if (!topics.length) {
+    return null;
+  }
+
+  const label = TopicsLogic.getTreeLabel(record?.fk_topicId, topics);
+
+  return (
+    <TextField source="name" record={{ name: label }} />
+  );
+};
+
 const TopicCell = (props) => {
   if (!SELECT_TOPIC_LEVELS || SELECT_TOPIC_LEVELS === '0') {
     return (
@@ -68,11 +83,7 @@ const TopicCell = (props) => {
     );
   }
 
-  return (
-    <ReferenceField {...props} reference="topics" basePath="topics" link={false}>
-      <TextField source="name" />
-    </ReferenceField>
-  );
+  return (<MultiLevelLabel {...props} />);
 };
 
 export default TopicCell;

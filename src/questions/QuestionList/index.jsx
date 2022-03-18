@@ -68,7 +68,7 @@ const CustomGridItem = ({
   };
 
   React.useEffect(() => {
-    if (expanded && !children.length) {
+    if (expanded && !children.length && !record.ChildQuestions?.length) {
       fetchChildren();
     }
   }, [expanded]);
@@ -82,49 +82,68 @@ const CustomGridItem = ({
 
   if (level) {
     return (
-      <TableRow
-        className={classes.cursor}
-        style={{ backgroundColor: bg }}
-        onClick={link(record.id)}
-      >
-        <TableCell>
-          {
-            !!record.childCount && record.childCount > 0 && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
+      <>
+        <TableRow
+          className={classes.cursor}
+          style={{ backgroundColor: bg }}
+          onClick={link(record.id)}
+        >
+          <TableCell>
+            {
+              !!record.childCount && record.childCount > 0 && (
+                <>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
 
-                    setExpanded(!expanded);
-                  }}
-                >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
+                      setExpanded(!expanded);
+                    }}
+                  >
+                    { !expanded && <AddIcon fontSize="small" /> }
+                    { expanded && <MinusIcon fontSize="small" /> }
+                  </IconButton>
+                </>
+              )
+            }
+          </TableCell>
+          <TableCell style={{ paddingLeft: `${30 * level}px` }}>
+            <PlayableText
+              text={record.text}
+              lang={record.Language ? record.Language.code : null}
+            />
+          </TableCell>
+          {
+            (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
+              <TableCell key={i}>&nbsp;</TableCell>
+            ))
           }
-        </TableCell>
-        <TableCell style={{ paddingLeft: `${30 * level}px` }}>
-          <PlayableText
-            text={record.text}
-            lang={record.Language ? record.Language.code : null}
-          />
-        </TableCell>
+          <TableCell>
+            <DropdownMenu
+              record={record}
+              removeAnswer={removeAnswer}
+            />
+          </TableCell>
+        </TableRow>
         {
-          (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
-            <TableCell key={i}>&nbsp;</TableCell>
-          ))
+          expanded && record.childCount && !!record.ChildQuestions.length && (
+            <>
+              {
+                record.ChildQuestions.map((child, iii) => (
+                  <CustomGridItem
+                    record={child}
+                    removeAnswer={removeAnswer}
+                    visibleColumns={visibleColumns}
+                    key={iii}
+                    level={(level || 0) + 1}
+                  />
+                ))
+              }
+            </>
+          )
         }
-        <TableCell>
-          <DropdownMenu
-            record={record}
-            removeAnswer={removeAnswer}
-          />
-        </TableCell>
-      </TableRow>
+      </>
     );
   }
 
