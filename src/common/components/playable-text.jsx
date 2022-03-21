@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
+import { useSelector } from 'react-redux';
 import {
   useDataProvider,
   useNotify,
@@ -67,12 +68,16 @@ const PlayableText = ({
   el,
   text,
   lang,
+  fkLanguageId,
   hideText,
 }) => {
+  const languages = useSelector((state) => state.admin.resources.languages.data);
   const [playing, setPlaying] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const classes = styles();
+
+  const code = lang || languages[fkLanguageId]?.code || 'de-DE';
 
   const getAudio = async (e) => {
     e.stopPropagation();
@@ -83,7 +88,7 @@ const PlayableText = ({
       return;
     }
 
-    if (!lang || !isString(lang)) {
+    if (!code || !isString(code)) {
       // notify('Missing language. Can not play', 'error');
 
       return;
@@ -93,7 +98,7 @@ const PlayableText = ({
       const { data } = await dataProvider.tts(null, {
         data: {
           text,
-          languageCode: lang,
+          languageCode: code,
         },
       });
 
@@ -134,7 +139,7 @@ const PlayableText = ({
             size="small"
             className={classes.play}
             onClick={stop}
-            color={lang ? 'secondary' : 'disabled'}
+            color={code ? 'secondary' : 'disabled'}
           />
         )
       }
@@ -144,7 +149,7 @@ const PlayableText = ({
             size="small"
             className={classes.play}
             onClick={getAudio}
-            color={lang ? 'secondary' : 'disabled'}
+            color={code ? 'secondary' : 'disabled'}
           />
         )
       }

@@ -256,6 +256,25 @@ const LinksDialog = ({
     }
   };
 
+  const setFollowup = async () => {
+    try {
+      await Promise.all(
+        selected.map((id) => {
+          return dataProvider.answersAddFollowup('answers', {
+            id: record.id,
+            question_id: id,
+          });
+        }),
+      );
+
+      notify('The questions were set as follow up');
+      start();
+      refresh();
+    } catch (err) {
+      notify(`Failed to link questions: ${err.message}`, 'error');
+    }
+  };
+
   return (
     <>
       <Filters
@@ -343,15 +362,27 @@ const LinksDialog = ({
             <Box textAlign="right" py={2}>
               {
                 !!selected.length && (
-                  <Button
-                    type="button"
-                    onClick={save}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                  >
-                    {translate('resources.answers.link_questions', { val: selected.length })}
-                  </Button>
+                  <>
+                    <Button
+                      type="button"
+                      onClick={save}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                    >
+                      {translate('resources.answers.link_questions', { val: selected.length })}
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      onClick={setFollowup}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                    >
+                      {translate('resources.answers.set_followup', { val: selected.length })}
+                    </Button>
+                  </>
                 )
               }
             </Box>
