@@ -6,8 +6,23 @@ import {
   List,
   ReferenceField,
   TextField,
+  useRedirect,
+  useTranslate,
+  useListContext,
 } from 'react-admin';
+import AddIcon from '@material-ui/icons/Add';
+import MinusIcon from '@material-ui/icons/Remove';
 import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import Table from '@material-ui/core/Table';
+import ArrowDown from '@material-ui/icons/ArrowDownward';
+import ArrowUp from '@material-ui/icons/ArrowUpward';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import ReactMarkdown from 'react-markdown';
 import PlayableText from '../../common/components/playable-text';
 import ListActions, {
@@ -21,6 +36,19 @@ import DropDownMenu from '../components/list-dropdown-menu';
 import Filters from './Filters';
 import styles from './styles';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
+
+const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
+const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+const columns = [
+  { key: 'text' },
+  { key: 'spokenText' },
+  { key: 'fk_languageId' },
+  { key: 'fk_editorId' },
+  { key: 'fk_topicId' },
+  { key: 'approved' },
+  { key: 'tags' },
+  { key: 'updatedAt' },
+];
 
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
@@ -36,8 +64,8 @@ const mapStateToProps = (state) => {
 
 export const Text = connect(mapStateToProps)(({ record, hideRelatedQuestions, languages }) => {
   const classes = styles();
-  const badgeContent = record.relatedQuestions
-    ? `+${record.relatedQuestions}`
+  const badgeContent = record.RelatedQuestions?.length
+    ? `+${record.RelatedQuestions?.length}`
     : '-';
 
   return (
@@ -81,45 +109,245 @@ const WrapApprovedSwitch = (props) => {
   );
 };
 
+const CustomGridItem = ({
+  record,
+  visibleColumns,
+  level,
+}) => {
+  const [expanded, setExpanded] = React.useState(false);
+  const classes = styles();
+  const redirect = useRedirect();
+
+  const link = (id) => (e) => {
+    e.stopPropagation();
+    redirect(`/answers/${id}`);
+  };
+
+  const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
+
+  if (level) {
+    return (
+      <>
+        <TableRow
+          className={classes.cursor}
+          style={{ backgroundColor: bg }}
+          onClick={(e) => {
+            e.stopPropagation();
+            redirect(`/questions/${record.id}`);
+          }}
+        >
+          <TableCell>
+            {
+              !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && (
+                <>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      setExpanded(!expanded);
+                    }}
+                  >
+                    { !expanded && <AddIcon fontSize="small" /> }
+                    { expanded && <MinusIcon fontSize="small" /> }
+                  </IconButton>
+                </>
+              )
+            }
+          </TableCell>
+          <TableCell style={{ paddingLeft: `${30 * level}px` }}>
+            <PlayableText
+              text={record.text}
+              fkLanguageId={record.fk_languageId}
+            />
+          </TableCell>
+          {
+            (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
+              <TableCell key={i}>&nbsp;</TableCell>
+            ))
+          }
+          <TableCell>
+            &nbsp;
+          </TableCell>
+        </TableRow>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <TableRow
+        className={classes.cursor}
+        onClick={link(record.id)}
+      >
+        <TableCell>
+          {
+            !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
+              <>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setExpanded(!expanded);
+                  }}
+                >
+                  { !expanded && <AddIcon fontSize="small" /> }
+                  { expanded && <MinusIcon fontSize="small" /> }
+                </IconButton>
+              </>
+            )
+          }
+        </TableCell>
+
+        {
+          visibleColumns.includes('text') && (
+            <TableCell>
+              <Text label="resources.answers.fields.text" sortBy="text" record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('spokenText') && (
+            <TableCell>
+              <TextField source="spokenText" label="resources.answers.fields.spokenText" sortBy="spokenText" record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('fk_languageId') && (
+            <TableCell>
+              <Language label="resources.answers.fields.fk_languageId" sortBy="fk_languageId" record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('fk_editorId') && (
+            <TableCell>
+              <ReferenceField source="fk_editorId" label="resources.answers.fields.fk_editorId" sortBy="fk_editorId" reference="users" link={false} record={record} basePath="answers">
+                <TextField source="name" />
+              </ReferenceField>
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('fk_topicId') && (
+            <TableCell>
+              <WrapTopicSelect label="resources.answers.fields.fk_topicId" record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('approved') && (
+            <TableCell>
+              <WrapApprovedSwitch label="resources.answers.fields.approved" record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('tags') && (
+            <TableCell>
+              <TextField source="tags" label="resources.answers.fields.tags" sortable={false} record={record} />
+            </TableCell>
+          )
+        }
+        {
+          visibleColumns.includes('updatedAt') && (
+            <TableCell>
+              <DateField source="updatedAt" showTime record={record} />
+            </TableCell>
+          )
+        }
+        <TableCell>
+          <DropDownMenu record={record} />
+        </TableCell>
+      </TableRow>
+      {
+        expanded && record.FollowupQuestions && !!record.FollowupQuestions.length && (
+          <>
+            {
+              record.FollowupQuestions.map((child, iii) => (
+                <CustomGridItem
+                  record={child}
+                  visibleColumns={visibleColumns}
+                  key={iii}
+                  level={(level || 0) + 1}
+                />
+              ))
+            }
+          </>
+        )
+      }
+    </>
+  );
+};
+
+const CustomGrid = ({ visibleColumns }) => {
+  const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
+  const classes = styles();
+  const translate = useTranslate();
+
+  const Th = ({ label, field }) => (visibleColumns.includes(field) ? (
+    <TableCell
+      className={classes.thead}
+      onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
+    >
+      {translate(label)}&nbsp;
+      {
+        field === currentSort.field && currentSort.order === 'DESC' && (
+          <ArrowUp size="small" />
+        )
+      }
+      {
+        field === currentSort.field && currentSort.order === 'ASC' && (
+          <ArrowDown size="small" />
+        )
+      }
+    </TableCell>
+  ) : null);
+
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Box my={1}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>&nbsp;</TableCell>
+                <Th label="resources.answers.fields.text" field="text" />
+                <Th label="resources.answers.fields.spokenText" field="spokenText" />
+                <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />
+                <Th label="resources.answers.fields.fk_editorId" field="fk_editorId" />
+                <Th label="resources.answers.fields.fk_topicId" field="fk_topicId" />
+                <Th label="resources.answers.fields.approved" field="approved" />
+                <Th label="resources.answers.fields.updatedAt" field="updatedAt" />
+                <TableCell>&nbsp;</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                ids.map((id) => (
+                  <CustomGridItem
+                    key={id}
+                    record={data[id]}
+                    basePath={basePath}
+                    visibleColumns={visibleColumns}
+                  />
+                ))
+              }
+            </TableBody>
+          </Table>
+        </Box>
+      </Grid>
+    </Grid>
+  );
+};
+
 const AnswerList = ({
   languages, topics, dispatch, ...props
 }) => {
-  const columns = [
-    {
-      key: 'text',
-      el: <Text label="resources.answers.fields.text" sortBy="text" />,
-    },
-    {
-      key: 'spokenText',
-      el: <TextField source="spokenText" label="resources.answers.fields.spokenText" sortBy="spokenText" />,
-    },
-    {
-      key: 'fk_languageId',
-      el: <Language label="resources.answers.fields.fk_languageId" sortBy="fk_languageId" />,
-    },
-    {
-      key: 'fk_editorId',
-      el: (
-        <ReferenceField source="fk_editorId" label="resources.answers.fields.fk_editorId" sortBy="fk_editorId" reference="users" link={false}>
-          <TextField source="name" />
-        </ReferenceField>
-      ),
-    },
-    {
-      key: 'fk_topicId',
-      el: <WrapTopicSelect label="resources.answers.fields.fk_topicId" />,
-    },
-    {
-      key: 'approved',
-      el: <WrapApprovedSwitch label="resources.answers.fields.approved" />,
-    },
-    {
-      key: 'tags',
-      el: <TextField source="tags" label="resources.answers.fields.tags" sortable={false} />,
-    },
-    { key: 'updatedAt', el: <DateField source="updatedAt" showTime /> },
-  ];
-
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
 
   return (
@@ -137,9 +365,7 @@ const AnswerList = ({
         bulkActionButtons={false}
       >
         <Datagrid rowClick="edit">
-          {columns.filter((col) => visibleColumns.includes(col.key))
-            .map((col) => cloneElement(col.el, { key: col.key }))}
-          <DropDownMenu />
+          <CustomGrid visibleColumns={visibleColumns} />
         </Datagrid>
       </List>
     </>

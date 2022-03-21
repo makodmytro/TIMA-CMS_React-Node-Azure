@@ -331,6 +331,22 @@ const resDataProvider = {
       method: 'PUT',
       body: JSON.stringify({ approved: true }),
     });
+
+    return { data: true };
+  },
+  answersAddFollowup: async (resource, params) => {
+    await httpClient(`${baseApi}/answers/${params.id}/followups/${params.question_id}`, {
+      method: 'POST',
+    });
+
+    return { data: true };
+  },
+  answersRemoveFollowup: async (resource, params) => {
+    await httpClient(`${baseApi}/answers/${params.id}/followups/${params.question_id}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
   },
   refreshSession: async (resource) => {
     const { json } = await httpClient(`${baseApi}/users/refresh`, {

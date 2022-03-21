@@ -38,6 +38,7 @@ const german = {
   'Saved successfully': 'Saved successfully',
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
+  'The questions were set as follow up': 'The questions were set as follow up',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -149,6 +150,7 @@ const german = {
       edit: 'Edit question',
       link: 'Link to answer',
       no_related: 'There are no related questions',
+      no_followup: 'There are no follow up questions',
       use_as_suggestion: 'Use as suggestion',
       topic_mismatch: 'Topics mismatch',
       topic_mismatch_bis: 'The selected record is linked to topic "%{a}". Linking will change the question\'s topic. Proceed?',
@@ -177,9 +179,11 @@ const german = {
     answers: {
       name: 'Answer |||| Answers',
       link_questions: 'Link answer for %{val} questions',
+      set_followup: 'Set %{val} questions as followup',
       no_media: 'There is no media for this answer',
       upload_media: 'Upload new file',
       related_questions: 'Related questions',
+      followup_questions: 'Followup questions',
       search_questions: 'Search questions to create link',
       media: 'Media',
       edit: 'Edit answer',

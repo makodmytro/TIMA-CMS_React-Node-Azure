@@ -17,6 +17,7 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './components/form';
 import AnswerMedia from './media/media';
 import RelatedQuestionsTable from '../questions/components/related-questions-table';
+import FollowupQuestionsTable from '../questions/components/followup-questions-table';
 import SearchQuestions from './components/search-questions';
 import BatchApproveButton from './components/batch-approve-button';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
@@ -115,29 +116,45 @@ const AnswerEdit = (props) => {
           />
         </SimpleForm>
       </Edit>
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>{translate('resources.answers.related_questions')}</Typography>
+      <Box my={1} boxShadow={3}>
         {
-          answer && answer.id && answer.Questions && !!answer.Questions.length && (
-            <Box textAlign="right">
+          answer && answer.id && answer.RelatedQuestions && !!answer.RelatedQuestions.length && (
+            <Box textAlign="right" p={2}>
               <BatchApproveButton answerId={answer.id} variant="outlined" />
             </Box>
           )
         }
-        <Box my={2}>
-          <RelatedQuestionsTable
-            record={answer}
-            relatedQuestions={answer ? answer.Questions : []}
-            answerView
-          />
+        <Box display="flex">
+          <Box flex={1} p={2}>
+            <Typography>{translate('resources.answers.related_questions')}</Typography>
+            <Box my={2}>
+              <RelatedQuestionsTable
+                record={answer}
+                relatedQuestions={answer ? answer.RelatedQuestions : []}
+                answerView
+              />
+            </Box>
+          </Box>
+          <Box flex={1} p={2}>
+            <Typography>{translate('resources.answers.followup_questions')}</Typography>
+            <Box my={2}>
+              <FollowupQuestionsTable
+                record={answer}
+                relatedQuestions={answer ? answer.FollowupQuestions : []}
+                answerView
+              />
+            </Box>
+          </Box>
         </Box>
       </Box>
+
       <Box my={1} p={2} boxShadow={3}>
         <Typography>{translate('resources.answers.search_questions')}</Typography>
         <SearchQuestions
           record={answer}
         />
       </Box>
+
       {
         !disableEdit && (
           <Box my={1} p={2} boxShadow={3}>

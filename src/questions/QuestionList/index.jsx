@@ -51,27 +51,11 @@ const CustomGridItem = ({
   visibleColumns,
   level,
 }) => {
-  const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
-  const [children, setChildren] = React.useState([]);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
   const redirect = useRedirect();
-
-  const fetchChildren = async () => {
-    try {
-      const { data } = await dataProvider.getOne('questions', { id: record.id });
-
-      setChildren(data?.ChildQuestions || []);
-    } catch (e) {} // eslint-disable-line
-  };
-
-  React.useEffect(() => {
-    if (expanded && !children.length && !record.ChildQuestions?.length) {
-      fetchChildren();
-    }
-  }, [expanded]);
 
   const link = (id) => (e) => {
     e.stopPropagation();
@@ -90,7 +74,7 @@ const CustomGridItem = ({
         >
           <TableCell>
             {
-              !!record.childCount && record.childCount > 0 && (
+              !!record.relatedQuestions && record.relatedQuestions.length > 0 && (
                 <>
                   <IconButton
                     size="small"
@@ -111,7 +95,7 @@ const CustomGridItem = ({
           <TableCell style={{ paddingLeft: `${30 * level}px` }}>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : null}
+              fkLanguageId={record.fk_languageId}
             />
           </TableCell>
           {
@@ -126,23 +110,6 @@ const CustomGridItem = ({
             />
           </TableCell>
         </TableRow>
-        {
-          expanded && record.childCount && !!record.ChildQuestions.length && (
-            <>
-              {
-                record.ChildQuestions.map((child, iii) => (
-                  <CustomGridItem
-                    record={child}
-                    removeAnswer={removeAnswer}
-                    visibleColumns={visibleColumns}
-                    key={iii}
-                    level={(level || 0) + 1}
-                  />
-                ))
-              }
-            </>
-          )
-        }
       </>
     );
   }
@@ -155,7 +122,7 @@ const CustomGridItem = ({
       >
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
+            !!record.relatedQuestions && record.relatedQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
               <>
                 <IconButton
                   size="small"
@@ -177,7 +144,7 @@ const CustomGridItem = ({
           <TableCell>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : null}
+              fkLanguageId={record.fk_languageId}
             />
           </TableCell>
         )}
@@ -245,10 +212,10 @@ const CustomGridItem = ({
         </TableCell>
       </TableRow>
       {
-        expanded && record.childCount && !!children.length && (
+        expanded && record.relatedQuestions && !!record.relatedQuestions.length && (
           <>
             {
-              children.map((child, iii) => (
+              record.relatedQuestions.map((child, iii) => (
                 <CustomGridItem
                   record={child}
                   removeAnswer={removeAnswer}
