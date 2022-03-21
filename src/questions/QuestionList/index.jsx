@@ -39,7 +39,7 @@ import ApprovedSwitchField from '../components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../components/use-as-suggestion-switch-field';
 import styles from './styles';
 import Filters from './Filters';
-import AnswerField from './AnswerField';
+import AnswerField from '../components/AnswerField';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';

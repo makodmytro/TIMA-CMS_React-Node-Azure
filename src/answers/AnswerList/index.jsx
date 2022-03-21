@@ -1,4 +1,4 @@
-import React, { cloneElement, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
   Datagrid,
@@ -12,7 +12,6 @@ import {
 } from 'react-admin';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
-import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -23,7 +22,6 @@ import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import ReactMarkdown from 'react-markdown';
 import PlayableText from '../../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
@@ -33,6 +31,8 @@ import ApprovedSwitchField from '../components/approved-swtich-field';
 import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
 import DropDownMenu from '../components/list-dropdown-menu';
+import AnswerTextField from '../components/TextField';
+import AnswerField from '../../questions/components/AnswerField';
 import Filters from './Filters';
 import styles from './styles';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
@@ -61,42 +61,6 @@ const mapStateToProps = (state) => {
 
   return { topics, languages };
 };
-
-export const Text = connect(mapStateToProps)(({ record, hideRelatedQuestions, languages }) => {
-  const classes = styles();
-  const badgeContent = record.RelatedQuestions?.length
-    ? `+${record.RelatedQuestions?.length}`
-    : '-';
-
-  return (
-    <div className={classes.markdown}>
-      {
-        !hideRelatedQuestions && (
-          <div className={classes.related}>
-            <Badge
-              badgeContent={badgeContent}
-              color="primary"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-            >
-              &nbsp;
-            </Badge>
-          </div>
-        )
-      }
-      <div className="second">
-        <ReactMarkdown source={record.text} />
-      </div>
-      <PlayableText
-        hideText
-        text={record.spokenText || record.text}
-        lang={languages[record.fk_languageId] ? languages[record.fk_languageId].code : null}
-      />
-    </div>
-  );
-});
 
 const WrapTopicSelect = (props) => {
   return (
@@ -162,8 +126,11 @@ const CustomGridItem = ({
               fkLanguageId={record.fk_languageId}
             />
           </TableCell>
+          <TableCell style={{ width: '25%' }}>
+            <AnswerField label="Answer" record={record} />
+          </TableCell>
           {
-            (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
+            (Array.from(Array(visibleColumns.length - 2).keys())).map((v, i) => (
               <TableCell key={i}>&nbsp;</TableCell>
             ))
           }
@@ -205,7 +172,7 @@ const CustomGridItem = ({
         {
           visibleColumns.includes('text') && (
             <TableCell>
-              <Text label="resources.answers.fields.text" sortBy="text" record={record} />
+              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} />
             </TableCell>
           )
         }

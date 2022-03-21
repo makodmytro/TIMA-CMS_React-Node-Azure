@@ -23,7 +23,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../../common/components/playable-text';
-import { Text } from '../AnswerList';
+import AnswerTextField from './TextField';
 import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
 
 const Filters = ({ onSubmit, initialValues }) => {
@@ -331,7 +331,7 @@ const LinksDialog = ({
                       <TableCell style={{ width: '50%' }}>
                         {
                           result.fk_answerId && (
-                            <Text record={{ ...result.Answer, Language: result.Language }} />
+                            <AnswerTextField record={{ ...result.Answer, Language: result.Language }} />
                           )
                         }
                         {
