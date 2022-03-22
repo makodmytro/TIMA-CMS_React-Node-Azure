@@ -178,6 +178,8 @@ const english = {
         all_topics: 'All topics',
         ignored: 'Ignored',
       },
+      add_related: 'Add Question',
+      add_followup: 'Add Followup'
     },
     answers: {
       name: 'Answer |||| Answers',
@@ -263,7 +265,7 @@ const english = {
         name: 'Name',
         createdAt: 'Created at',
       },
-    },
+    }
   },
 };
 

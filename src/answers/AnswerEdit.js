@@ -20,6 +20,16 @@ import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow
 import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
 
+const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
+
+const HiddenField = ({ children, fieldName }) => {
+  if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
+    return null;
+  }
+
+  return children;
+};
+
 const CustomToolbar = (props) => {
   const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
   const disableDelete = useDisabledDelete(props?.record?.fk_topicId);
@@ -118,14 +128,16 @@ const AnswerEdit = (props) => {
         <FollowupQuestionsActionsRow record={answer} />
       </Box>
 
-      {
-        !disableEdit && (
-          <Box my={1} p={2} boxShadow={3}>
-            <Typography>{translate('resources.answers.media')}</Typography>
-            <AnswerMedia answer={answer} />
-          </Box>
-        )
-      }
+      <HiddenField fieldName="media">
+        {
+          !disableEdit && (
+            <Box my={1} p={2} boxShadow={3}>
+              <Typography>{translate('resources.answers.media')}</Typography>
+              <AnswerMedia answer={answer} />
+            </Box>
+          )
+        }
+      </HiddenField>
     </>
   );
 };

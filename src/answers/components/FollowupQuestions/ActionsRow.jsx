@@ -46,7 +46,7 @@ const ActionsRow = ({ record }) => {
           onClick={() => setCreateOpen(true)}
           fullWidth
         >
-          {translate('misc.add')}
+          {translate('resources.questions.add_followup')}
         </Button>
       </Box>
       <SearchCreateDialog record={record} open={createOpen} onClose={() => setCreateOpen(false)} />
