@@ -9,16 +9,13 @@ import {
 import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
-import ApprovedSwitchField from './approved-switch-field';
-import UseAsSuggestionSwitchField from './use-as-suggestion-switch-field';
-import { useDisabledEdit, useDisabledApprove } from '../../hooks';
+import { useDisabledEdit } from '../../hooks';
 
 const RelatedQuestionsTable = ({
   record,
@@ -28,7 +25,6 @@ const RelatedQuestionsTable = ({
 }) => {
   const translate = useTranslate();
   const disabled = useDisabledEdit(record?.fk_topicId);
-  const disabledApproved = useDisabledApprove(record?.fk_topicId);
 
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -92,15 +88,6 @@ const RelatedQuestionsTable = ({
         onClose={unlinkAnswerClosed}
       />
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>{translate('resources.questions.fields.text')}</TableCell>
-            <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
-            <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
-            <TableCell>&nbsp;</TableCell>
-            <TableCell>&nbsp;</TableCell>
-          </TableRow>
-        </TableHead>
         <TableBody>
           {
             relatedQuestions
@@ -122,15 +109,9 @@ const RelatedQuestionsTable = ({
                       record={{ ...related }}
                     />
                   </TableCell>
-                  <TableCell>
-                    <ApprovedSwitchField record={related} disabled={disabledApproved} />
-                  </TableCell>
-                  <TableCell>
-                    <UseAsSuggestionSwitchField record={related} disabled={disabled} />
-                  </TableCell>
-                  <TableCell>
+                  <TableCell align="right">
                     <Button
-                      className="error-btn"
+                      className="error-btn btn-xs"
                       size="small"
                       type="button"
                       variant="outlined"
@@ -140,9 +121,10 @@ const RelatedQuestionsTable = ({
                       {translate('misc.unlink_answer')}
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="right">
                     <DropdownMenu
                       record={{ ...related }}
+                      editInline
                     />
                   </TableCell>
                 </TableRow>

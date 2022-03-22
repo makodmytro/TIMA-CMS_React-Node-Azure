@@ -10,15 +10,19 @@ import {
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
+import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import IgnoreButton from './ignore-button';
+import EditDialog from './EditDialog';
 import { useDisabledEdit, useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
+  editInline,
 }) => {
   const refresh = useRefresh();
   const translate = useTranslate();
+  const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableDelete = useDisabledDelete(record?.fk_topicId);
@@ -61,15 +65,36 @@ const DropdownMenu = ({
         <MenuItem
           onClick={handleClose}
         >
-          <EditButton
-            basePath="/questions"
-            record={record}
-            label={translate('resources.questions.edit')}
-            color="secondary"
-            fullWidth
-            style={{ justifyContent: 'flex-start' }}
-            disabled={disableEdit}
-          />
+          {
+            !editInline && (
+              <EditButton
+                basePath="/questions"
+                record={record}
+                label={translate('resources.questions.edit')}
+                color="secondary"
+                fullWidth
+                style={{ justifyContent: 'flex-start' }}
+                disabled={disableEdit}
+              />
+            )
+          }
+          {
+            editInline && (
+              <>
+                <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
+                <Button
+                  disabled={disableEdit}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  size="small"
+                  fullWidth
+                >
+                  <EditIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('resources.questions.edit')}
+                </Button>
+              </>
+            )
+          }
         </MenuItem>
         {
           !!record.fk_answerId && (

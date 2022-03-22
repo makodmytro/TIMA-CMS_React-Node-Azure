@@ -346,7 +346,7 @@ const QuestionEdit = ({
         <Box my={2}>
           <RelatedQuestionsTable
             record={record}
-            relatedQuestions={answer ? answer.Questions : []}
+            relatedQuestions={answer ? answer.RelatedQuestions : []}
           />
         </Box>
       </Box>

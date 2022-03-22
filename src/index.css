@@ -51,8 +51,13 @@ code {
 }
 
 .error-btn {
-  border-color: red !important;
-  color: red !important;
+  border-color: rgb(214, 66, 66) !important;
+  color: rgb(214, 66, 66) !important;
+}
+
+.btn-xs {
+  font-size: 0.8rem !important;
+  padding: 2px 6px 0px 6px !important;
 }
 
 .error-btn:disabled {

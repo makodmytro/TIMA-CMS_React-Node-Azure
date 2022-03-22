@@ -159,6 +159,7 @@ const german = {
       topic_mismatch_option_b: '2. Duplicate the answer with topic "%{b}" and link it with the question',
       update: 'Update the question',
       set_as_child: 'Set as child',
+      no_results: 'No questions were found',
       fields: {
         text: 'Text',
         fk_editorId: 'Editor',
