@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  Datagrid,
   DateField,
   List,
   ReferenceField,
@@ -331,9 +330,7 @@ const AnswerList = ({
         filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}
       >
-        <Datagrid rowClick="edit">
-          <CustomGrid visibleColumns={visibleColumns} />
-        </Datagrid>
+        <CustomGrid visibleColumns={visibleColumns} />
       </List>
     </>
   );
