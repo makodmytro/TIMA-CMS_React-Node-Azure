@@ -105,6 +105,7 @@ const CustomGridItem = ({
           }
           <TableCell>
             <DropdownMenu
+              editInline
               record={record}
               removeAnswer={removeAnswer}
             />
@@ -206,6 +207,7 @@ const CustomGridItem = ({
 
         <TableCell>
           <DropdownMenu
+            editInline
             record={record}
             removeAnswer={removeAnswer}
           />

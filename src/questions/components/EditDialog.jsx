@@ -92,11 +92,20 @@ const EditDialog = ({ record, open, onClose }) => {
                 <Box textAlign="right" py={2}>
                   <Button
                     variant="contained"
+                    type="button"
+                    size="small"
+                    onClick={() => onClose()}
+                  >
+                    {translate('misc.cancel')}
+                  </Button>
+                  &nbsp;
+                  <Button
+                    variant="contained"
                     color="primary"
                     type="submit"
                     size="small"
                   >
-                    {translate('resources.questions.edit')}
+                    {translate('misc.save')}
                   </Button>
                 </Box>
               </form>

@@ -48,6 +48,7 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    save: 'Save',
     add: 'Add',
     advanced: 'Advanced',
     qna: 'QNA',
