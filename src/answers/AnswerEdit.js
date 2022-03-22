@@ -16,10 +16,8 @@ import {
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './components/form';
 import AnswerMedia from './media/media';
-import RelatedQuestionsTable from '../questions/components/related-questions-table';
-import FollowupQuestionsTable from '../questions/components/followup-questions-table';
-import SearchQuestions from './components/search-questions';
-import BatchApproveButton from './components/batch-approve-button';
+import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow';
+import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
 
 const CustomToolbar = (props) => {
@@ -102,7 +100,7 @@ const AnswerEdit = (props) => {
     <>
       <Edit
         {...props}
-        actions={<CustomTopToolbar />}
+        actions={<CustomTopToolbar extra={<RelatedQuestionsActionsRow record={answer} />} />}
         undoable={false}
         onSuccess={onSucces}
         mutationMode="pessimistic"
@@ -116,43 +114,8 @@ const AnswerEdit = (props) => {
           />
         </SimpleForm>
       </Edit>
-      <Box my={1} boxShadow={3}>
-        {
-          answer && answer.id && answer.RelatedQuestions && !!answer.RelatedQuestions.length && (
-            <Box textAlign="right" p={2}>
-              <BatchApproveButton answerId={answer.id} variant="outlined" />
-            </Box>
-          )
-        }
-        <Box display="flex">
-          <Box flex={1} p={2}>
-            <Typography>{translate('resources.answers.related_questions')}</Typography>
-            <Box my={2}>
-              <RelatedQuestionsTable
-                record={answer}
-                relatedQuestions={answer ? answer.RelatedQuestions : []}
-                answerView
-              />
-            </Box>
-          </Box>
-          <Box flex={1} p={2}>
-            <Typography>{translate('resources.answers.followup_questions')}</Typography>
-            <Box my={2}>
-              <FollowupQuestionsTable
-                record={answer}
-                relatedQuestions={answer ? answer.FollowupQuestions : []}
-                answerView
-              />
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>{translate('resources.answers.search_questions')}</Typography>
-        <SearchQuestions
-          record={answer}
-        />
+      <Box pt={2}>
+        <FollowupQuestionsActionsRow record={answer} />
       </Box>
 
       {

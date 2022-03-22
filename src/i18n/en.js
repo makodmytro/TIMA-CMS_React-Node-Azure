@@ -48,6 +48,7 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    add: 'Add',
     advanced: 'Advanced',
     qna: 'QNA',
     actions: 'Actions',
@@ -159,6 +160,7 @@ const english = {
       topic_mismatch_option_b: '2. Duplicate the answer with topic "%{b}" and link it with the question',
       update: 'Update the question',
       set_as_child: 'Set as child',
+      no_results: 'No questions were found',
       fields: {
         text: 'Text',
         fk_editorId: 'Editor',
@@ -189,6 +191,7 @@ const english = {
       edit: 'Edit answer',
       create: 'Create answer',
       duplicate: 'Duplicate the answer',
+      add_related_question: 'Add related question',
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',
