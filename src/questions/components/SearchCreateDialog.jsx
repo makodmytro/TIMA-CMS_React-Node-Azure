@@ -102,6 +102,21 @@ const ResultsList = ({
 
   return (
     <>
+      <Box textAlign="right" py={2}>
+        {
+          !!selected.length && (
+            <Button
+              type="button"
+              onClick={() => selectedButtonOnClick(selected)}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              {translate(selectedButtonText, { val: selected.length })}
+            </Button>
+          )
+        }
+      </Box>
       <Table>
         <TableHead>
           <TableRow>

@@ -178,7 +178,7 @@ const german = {
         ignored: 'Ignored',
       },
       add_related: 'Add Question',
-      add_followup: 'Add Followup'
+      add_followup: 'Add Followup',
     },
     answers: {
       name: 'Answer |||| Answers',
@@ -263,7 +263,7 @@ const german = {
         name: 'Name',
         createdAt: 'Created at',
       },
-    }
+    },
   },
 };
 

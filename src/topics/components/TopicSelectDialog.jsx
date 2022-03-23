@@ -226,7 +226,36 @@ export default function TopicSelectDialog({
     if (!selected.length) {
       setSelected(initialValues);
     }
-  }, [initialValues]);
+
+    if (topics.length) {
+      let ids = [];
+
+      topics.forEach((topic) => {
+        const children = topic.ChildTopics.reduce((acc, c) => {
+          if (initialValues.includes(c.id)) {
+            acc.push(c.id);
+          }
+
+          c.ChildTopics.forEach((cc) => {
+            if (initialValues.includes(cc.id)) {
+              acc.push(cc.fk_parentTopicId);
+              acc.push(cc.id);
+            }
+          });
+
+          return acc;
+        }, []);
+
+        if ((initialValues.includes(topic.id) || children.length) && !expanded.includes(topic.id)) {
+          ids.push(topic.id);
+        }
+
+        ids = ids.concat(children);
+      });
+
+      setExpanded((e) => Array.from(new Set(e.concat(ids))));
+    }
+  }, [initialValues, topics]);
 
   return (
     <div>

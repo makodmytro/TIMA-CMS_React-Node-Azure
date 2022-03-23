@@ -28,7 +28,9 @@ const ActionsRow = ({ record }) => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography>{translate('resources.answers.related_questions')}</Typography>
+            <Typography>
+              {record?.RelatedQuestions?.length || 0}  {translate('resources.answers.related_questions')}
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box flex={1}>
