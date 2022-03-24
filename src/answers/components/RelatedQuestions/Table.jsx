@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
+import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
@@ -37,6 +38,7 @@ const RelatedQuestionsTable = ({
     <Table>
       <TableHead>
         <TableRow>
+          <TableCell>&nbsp;</TableCell>
           <TableCell>{translate('resources.questions.fields.text')}</TableCell>
           <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
           <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
@@ -56,6 +58,15 @@ const RelatedQuestionsTable = ({
             })
             .map((related, i) => (
               <TableRow key={i}>
+                <TableCell>
+                  {
+                    !!related.qna_promptDisplayOrder && (
+                      <span>
+                        <ForumTwoTone fontSize="small" />&nbsp;
+                      </span>
+                    )
+                  }
+                </TableCell>
                 <TableCell>
                   <PlayableTextField
                     source="text"

@@ -26,6 +26,7 @@ import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbsDownIcon from '@material-ui/icons/ThumbDown';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
+import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
 import PlayableText from '../../common/components/playable-text';
 import ThumbsUp from '../../assets/thumbs-up.png';
 import ThumbsDown from '../../assets/thumbs-down.png';
@@ -40,6 +41,7 @@ import UseAsSuggestionSwitchField from '../components/use-as-suggestion-switch-f
 import styles from './styles';
 import Filters from './Filters';
 import AnswerField from '../components/AnswerField';
+import EditDialog from '../components/EditDialog';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
@@ -51,28 +53,32 @@ const CustomGridItem = ({
   visibleColumns,
   level,
 }) => {
+  const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
   const redirect = useRedirect();
 
-  const link = (id) => (e) => {
-    e.stopPropagation();
-    redirect(`/questions/${id}`);
-  };
-
   const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
 
   if (level) {
     return (
       <>
+        <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
         <TableRow
           className={classes.cursor}
           style={{ backgroundColor: bg }}
-          onClick={link(record.id)}
+          onClick={() => setOpen(true)}
         >
           <TableCell>
+            {
+              !!record.qna_promptDisplayOrder && (
+                <span>
+                  <ForumTwoTone fontSize="small" />&nbsp;
+                </span>
+              )
+            }
             {
               !!record.relatedQuestions && record.relatedQuestions.length > 0 && (
                 <>
@@ -117,9 +123,10 @@ const CustomGridItem = ({
 
   return (
     <>
+      <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
       <TableRow
         className={classes.cursor}
-        onClick={link(record.id)}
+        onClick={() => setOpen(true)}
       >
         <TableCell>
           {

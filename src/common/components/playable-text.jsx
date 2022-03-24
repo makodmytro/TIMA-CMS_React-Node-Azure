@@ -15,6 +15,8 @@ import StopIcon from '@material-ui/icons/Stop';
 import { makeStyles } from '@material-ui/core/styles';
 import Audio from '../audio';
 
+const DISABLED = process.env.REACT_APP_HIDE_SPEECH_FIELD || '0';
+
 const styles = makeStyles(() => ({
   play: {
     cursor: 'pointer',
@@ -134,7 +136,7 @@ const PlayableText = ({
       }
       &nbsp;
       {
-        playing && (
+        playing && DISABLED !== '1' && (
           <StopIcon
             size="small"
             className={classes.play}
@@ -144,7 +146,7 @@ const PlayableText = ({
         )
       }
       {
-        !playing && (
+        !playing && DISABLED !== '1' && (
           <PlayArrow
             size="small"
             className={classes.play}
