@@ -107,25 +107,47 @@ const AnswerEdit = (props) => {
   };
 
   return (
-    <>
-      <Edit
-        {...props}
-        actions={<CustomTopToolbar extra={<RelatedQuestionsActionsRow record={answer} />} />}
-        undoable={false}
-        onSuccess={onSucces}
-        mutationMode="pessimistic"
-        transform={(data) => {
-          return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
-        }}
-      >
-        <SimpleForm toolbar={<CustomToolbar />}>
-          <Fields
-            setRecord={setAnswer}
-          />
-        </SimpleForm>
-      </Edit>
-      <Box pt={2}>
-        <FollowupQuestionsActionsRow record={answer} />
+    <Box pt={2}>
+      <CustomTopToolbar />
+      <RelatedQuestionsActionsRow record={answer} />
+      <Box display="flex">
+        <Box flex={1} px={1}>
+          <Box height="50%" borderBottom="1px solid gray" borderLeft="1px solid gray" display="flex" alignItems="end" textAlign="right" position="relative">
+            <i className="arrow-right" style={{ right: 0, bottom: '-5px' }} />
+          </Box>
+        </Box>
+        <Box flex={20}>
+          <Edit
+            {...props}
+            undoable={false}
+            onSuccess={onSucces}
+            mutationMode="pessimistic"
+            transform={(data) => {
+              return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
+            }}
+          >
+            <SimpleForm toolbar={<CustomToolbar />}>
+              <Fields
+                setRecord={setAnswer}
+              />
+            </SimpleForm>
+          </Edit>
+        </Box>
+      </Box>
+      <Box display="flex" pt={1}>
+        <Box flex={2} display="flex" height="80px">
+          <Box flex={1} borderRight="1px solid gray">
+            &nbsp;
+          </Box>
+          <Box flex={1} borderBottom="1px solid gray" display="flex" alignItems="end" textAlign="right" position="relative">
+            <i className="arrow-right" style={{ right: 0, bottom: '-5px' }} />
+          </Box>
+        </Box>
+        <Box flex={6} display="flex" pt={6} pl={2}>
+          <Box flex={1}>
+            <FollowupQuestionsActionsRow record={answer} />
+          </Box>
+        </Box>
       </Box>
 
       <HiddenField fieldName="media">
@@ -138,7 +160,7 @@ const AnswerEdit = (props) => {
           )
         }
       </HiddenField>
-    </>
+    </Box>
   );
 };
 

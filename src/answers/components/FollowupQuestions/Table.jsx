@@ -8,8 +8,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
+import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
+import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
@@ -18,7 +19,6 @@ import { useDisabledEdit, useDisabledApprove } from '../../../hooks';
 
 const FollowupQuestionsTable = ({
   record,
-  onUnlinkClick,
 }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
@@ -57,6 +57,15 @@ const FollowupQuestionsTable = ({
             .map((related, i) => (
               <TableRow key={i}>
                 <TableCell>
+                  {
+                    !!related.qna_promptDisplayOrder && (
+                      <span>
+                        <ForumTwoTone fontSize="small" />&nbsp;
+                      </span>
+                    )
+                  }
+                </TableCell>
+                <TableCell>
                   <PlayableTextField
                     source="text"
                     getLanguageFromRecord={(r) => {
@@ -72,16 +81,7 @@ const FollowupQuestionsTable = ({
                   <UseAsSuggestionSwitchField record={related} disabled={disabled} />
                 </TableCell>
                 <TableCell>
-                  <Button
-                    className="error-btn btn-xs"
-                    size="small"
-                    type="button"
-                    variant="outlined"
-                    onClick={() => onUnlinkClick(related.id)}
-                    disabled={disabled}
-                  >
-                    {translate('misc.unlink_answer')}
-                  </Button>
+                  <AnswerField record={related} />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu

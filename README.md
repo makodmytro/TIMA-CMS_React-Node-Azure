@@ -20,3 +20,4 @@
 | REACT_APP_DEFAULT_COLUMNS_GROUPS | List of comma separated column names to show as default for Groups. It takes presedence over the `default-columns.json` file. | "name, fk_languageId" | null | N |
 | REACT_APP_HIDE_FIELDS_TOPICS | List of comma separated Topic columns to hide in the edit form | "name,fk_languageId" | null | N |
 | REACT_APP_HIDE_MENU_ITEMS | List of comma Resource names to hide in the side menu | "topics,languages,users" | null | N |
+| REACT_APP_HIDE_SPEECH_FIELD | Disable Speed icon [>] everywhere when the variable is set to "1" | "1" | null | N |
