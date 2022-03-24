@@ -53,13 +53,14 @@ const Filters = ({
               </Box>
               <Box flex={1} px={2} pt={5}>
                 {
-                  !disableCreate && enableCreate && (
+                  !disableCreate && !selected.length && (
                     <Button
                       type="button"
                       color="primary"
                       variant="contained"
                       size="small"
                       onClick={() => onCreateSubmit({ text: values.q })}
+                      disabled={!enableCreate}
                       fullWidth
                     >
                       {translate('resources.questions.create')}
