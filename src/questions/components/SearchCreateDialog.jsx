@@ -51,7 +51,7 @@ const Filters = ({
                 </Typography>
                 <TextInput label="misc.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
-              <Box flex={1} px={2} pt={2}>
+              <Box flex={1} px={2} pt={5}>
                 {
                   !disableCreate && enableCreate && (
                     <Button
@@ -71,8 +71,8 @@ const Filters = ({
                     <Button
                       type="button"
                       onClick={onSelectedSubmit}
-                      variant="outlined"
-                      color="primary"
+                      variant="contained"
+                      color="secondary"
                       size="small"
                     >
                       {translate(selectedButtonText, { val: selected.length })}
