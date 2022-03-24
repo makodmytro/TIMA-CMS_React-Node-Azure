@@ -51,6 +51,9 @@
     "spaced-comment": "off",
     "no-nested-ternary": "off",
     "default-case": "off",
-    "no-useless-return": "off"
+    "no-useless-return": "off",
+    "semi": "warn",
+    "no-use-before-define": "off",
+    "no-await-in-loop": "off"
   }
 }

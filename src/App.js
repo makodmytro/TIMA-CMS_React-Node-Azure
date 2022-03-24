@@ -69,9 +69,11 @@ const AsyncResources = () => {
   };
 
   const check = async () => {
+    const a = async () => (location.pathname === '/login' ? Promise.resolve() : dataProvider.activeSessions());
+
     try {
       await Promise.all([
-        await dataProvider.activeSessions(),
+        await a(),
         await delay(250),
       ]);
     } catch (err) { // eslint-disable-line

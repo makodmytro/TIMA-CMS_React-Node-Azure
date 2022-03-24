@@ -10,6 +10,9 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 const L = () => {
   const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+
+  console.log(isAuthenticated, 'isAuthenticated');
 
   function RequestProfileData() {
     // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -61,6 +64,9 @@ export default () => {
   return (
     <MsalProvider instance={msalInstance}>
       <SignInButton />
+      <AuthenticatedTemplate>
+        <L />
+      </AuthenticatedTemplate>
     </MsalProvider>
   );
 };

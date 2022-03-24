@@ -133,21 +133,6 @@ const Form = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
-
-      {/*<ReferenceInput
-        source="fk_topicId"
-        label="resources.answers.fields.fk_topicId"
-        reference="topics"
-        validate={required()}
-        fullWidth
-        filter={{ fk_languageId: fkLanguageId }}
-        disabled={disableEdit}
-      >
-        <SelectInput
-          optionText="name"
-          disabled={disableEdit}
-        />
-    </ReferenceInput>*/}
       <TopicSelect
         source="fk_topicId"
         isRequired

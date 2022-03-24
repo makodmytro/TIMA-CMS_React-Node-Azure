@@ -38,6 +38,7 @@ const english = {
   'Saved successfully': 'Saved successfully',
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
+  'The questions were set as follow up': 'The questions were set as follow up',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -47,6 +48,8 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    save: 'Save',
+    add: 'Add',
     advanced: 'Advanced',
     qna: 'QNA',
     actions: 'Actions',
@@ -78,6 +81,7 @@ const english = {
     upload: 'Upload',
     loading: 'Loading',
     close: 'Close',
+    clear: 'Clear',
     cancel: 'Cancel',
     un_ignore: 'Un-ignore',
     ignore: 'Ignore',
@@ -110,6 +114,7 @@ const english = {
   resources: {
     topics: {
       name: 'Topic |||| Topics',
+      filter_by_topics: 'Filter by topics',
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
@@ -120,12 +125,15 @@ const english = {
         language: 'Language',
         editor: 'Editor',
         level: 'Level',
+        qnaApiEndpoint: 'QNA API endpoint',
         qnaApiVersion: 'QNA API version',
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         qnaSubscriptionKey: 'QNA Subscription key',
         fk_parentTopicId: 'Parent topic',
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
+        qnaMetadataKey: 'Metadata key',
+        qnaMetadataValue: 'Metadata value',
       },
     },
     languages: {
@@ -144,6 +152,7 @@ const english = {
       edit: 'Edit question',
       link: 'Link to answer',
       no_related: 'There are no related questions',
+      no_followup: 'There are no follow up questions',
       use_as_suggestion: 'Use as suggestion',
       topic_mismatch: 'Topics mismatch',
       topic_mismatch_bis: 'The selected record is linked to topic "%{a}". Linking will change the question\'s topic. Proceed?',
@@ -152,6 +161,7 @@ const english = {
       topic_mismatch_option_b: '2. Duplicate the answer with topic "%{b}" and link it with the question',
       update: 'Update the question',
       set_as_child: 'Set as child',
+      no_results: 'No questions were found, click "Create" to add a new question',
       fields: {
         text: 'Text',
         fk_editorId: 'Editor',
@@ -168,18 +178,23 @@ const english = {
         all_topics: 'All topics',
         ignored: 'Ignored',
       },
+      add_related: 'Add Question',
+      add_followup: 'Add Followup',
     },
     answers: {
       name: 'Answer |||| Answers',
       link_questions: 'Link answer for %{val} questions',
+      set_followup: 'Set %{val} questions as followup',
       no_media: 'There is no media for this answer',
       upload_media: 'Upload new file',
       related_questions: 'Related questions',
+      followup_questions: 'Followup questions',
       search_questions: 'Search questions to create link',
       media: 'Media',
       edit: 'Edit answer',
       create: 'Create answer',
       duplicate: 'Duplicate the answer',
+      add_related_question: 'Add related question',
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',

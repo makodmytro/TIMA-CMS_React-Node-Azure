@@ -3,7 +3,7 @@ import { useTranslate } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import { Text } from '../../answers/AnswerList';
+import AnswerTextField from '../../answers/components/TextField';
 
 const AnswerField = ({ record }) => {
   const translate = useTranslate();
@@ -51,7 +51,7 @@ const AnswerField = ({ record }) => {
   }
 
   return (
-    <Text
+    <AnswerTextField
       record={{
         ...record.Answer,
         Language: record.Language,

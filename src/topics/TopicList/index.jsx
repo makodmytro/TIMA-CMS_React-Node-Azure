@@ -41,7 +41,7 @@ const TopicList = () => {
   const onSubmit = async (values = form, paging = pagination) => {
     setForm(values);
 
-    const { data, total } = await dataProvider.getList('topics', {
+    const { data, total } = await dataProvider.topicTree('topics', {
       filter: {
         ...(values.q ? { q: values.q } : {}),
         ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),

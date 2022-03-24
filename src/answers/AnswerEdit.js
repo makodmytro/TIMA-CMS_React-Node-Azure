@@ -16,10 +16,19 @@ import {
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import Form from './components/form';
 import AnswerMedia from './media/media';
-import RelatedQuestionsTable from '../questions/components/related-questions-table';
-import SearchQuestions from './components/search-questions';
-import BatchApproveButton from './components/batch-approve-button';
+import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow';
+import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
+
+const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
+
+const HiddenField = ({ children, fieldName }) => {
+  if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
+    return null;
+  }
+
+  return children;
+};
 
 const CustomToolbar = (props) => {
   const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
@@ -101,7 +110,7 @@ const AnswerEdit = (props) => {
     <>
       <Edit
         {...props}
-        actions={<CustomTopToolbar />}
+        actions={<CustomTopToolbar extra={<RelatedQuestionsActionsRow record={answer} />} />}
         undoable={false}
         onSuccess={onSucces}
         mutationMode="pessimistic"
@@ -115,37 +124,20 @@ const AnswerEdit = (props) => {
           />
         </SimpleForm>
       </Edit>
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>{translate('resources.answers.related_questions')}</Typography>
+      <Box pt={2}>
+        <FollowupQuestionsActionsRow record={answer} />
+      </Box>
+
+      <HiddenField fieldName="media">
         {
-          answer && answer.id && answer.Questions && !!answer.Questions.length && (
-            <Box textAlign="right">
-              <BatchApproveButton answerId={answer.id} variant="outlined" />
+          !disableEdit && (
+            <Box my={1} p={2} boxShadow={3}>
+              <Typography>{translate('resources.answers.media')}</Typography>
+              <AnswerMedia answer={answer} />
             </Box>
           )
         }
-        <Box my={2}>
-          <RelatedQuestionsTable
-            record={answer}
-            relatedQuestions={answer ? answer.Questions : []}
-            answerView
-          />
-        </Box>
-      </Box>
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>{translate('resources.answers.search_questions')}</Typography>
-        <SearchQuestions
-          record={answer}
-        />
-      </Box>
-      {
-        !disableEdit && (
-          <Box my={1} p={2} boxShadow={3}>
-            <Typography>{translate('resources.answers.media')}</Typography>
-            <AnswerMedia answer={answer} />
-          </Box>
-        )
-      }
+      </HiddenField>
     </>
   );
 };

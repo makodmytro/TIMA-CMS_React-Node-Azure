@@ -29,8 +29,8 @@ const MultiTopicSelect = ({
   const [loading, setLoading] = React.useState(false);
   const [filteredTopics, setFilteredTopics] = React.useState([]);
   const [topics, setTopics] = React.useState([]);
-  const [topicsSubOne, setTopicsSubOne] = React.useState([]);
-  const [topicsSubTwo, setTopicsSubTwo] = React.useState([]);
+  const [topicsChild, setTopicsChild] = React.useState([]);
+  const [topicsGrandchild, setTopicsGrandchild] = React.useState([]);
 
   const { errors } = useFormState();
   const { meta: { dirty: sourceDirty }, input: { value, onChange } } = useField(source);
@@ -38,77 +38,85 @@ const MultiTopicSelect = ({
   const { meta: { dirty: topicTwoDirty }, input: { value: topicTwo, onChange: onTopicTwoChange } } = useField('topicTwo');
   const { meta: { dirty: topicThreeDirty }, input: { value: topicThree, onChange: onTopicThreeChange } } = useField('topicThree');
 
-  const fetchChildren = async (_id, level = 1) => {
-    try {
-      const { data } = await dataProvider.getOne('topics', { id: _id });
+  const findWhatIsSelected = async (_id) => {
+    // try to match to the top level tops
+    const parent = topics.find((topic) => topic.id === _id);
 
-      if (level === 1) {
-        setTopicsSubOne(data?.ChildTopics || []);
-      } else {
-        setTopicsSubTwo(data?.ChildTopics || []);
+    // if it matches the selected value is top level, we set it
+    if (parent) {
+      onTopicOneChange(parent.id);
+
+      return;
+    }
+
+    // try to match to level 1 ChildTopics
+    let child = null;
+    topics.forEach((topic) => {
+      const found = (topic.ChildTopics || []).find((c) => c.id === _id);
+
+      if (found) {
+        child = found;
       }
-    } catch (e) {} // eslint-disable-line
-  };
+    });
 
-  const fetchParent = async (_id) => {
-    setLoading(true);
-    try {
-      // this function gets called on edit
-      // we get the currently selected topic
-      const { data } = await dataProvider.getOne('topics', { id: _id });
+    // if it matches the selected value is 2nd level
+    if (child) {
+      onTopicOneChange(child.fk_parentTopicId);
 
-      // if the topic has a parent, then we need to move up a level
-      if (data.fk_parentTopicId) {
-        // get the parent topic
-        const { data: parent } = await dataProvider.getOne('topics', { id: data.fk_parentTopicId });
+      setTimeout(() => onTopicTwoChange(child.id), 500);
+    }
 
-        // if the parent has a parent itself, we know the selected Topic is from the third select
-        // first select grand parent, second select parent, third select our selected topic
-        if (parent.fk_parentTopicId) {
-          // fetchChildren(parent.fk_parentTopicId, 1);
-          // fetchChildren(parent.id, 2);
+    // try to match to level 2 ChildTopics
+    let grandchild = null;
 
-          onTopicOneChange(parent.fk_parentTopicId);
+    topics.forEach((topic) => {
+      (topic.ChildTopics || []).forEach((c) => {
+        (c.ChildTopics || []).forEach((ct) => {
+          if (ct.id === _id) {
+            grandchild = ct;
+          }
+        });
+      });
+    });
 
-          setTimeout(() => onTopicTwoChange(parent.id), 1000);
-          setTimeout(() => {
-            onTopicThreeChange(data.id);
-            setLoading(false);
-          }, 1500);
-        } else {
-          // if the parent doesn't have a parent itself, we know the selected Topic is from the second select
-          // first select parent, second select our selected topic
-          // fetchChildren(parent.id, 1);
-          onTopicOneChange(parent.id);
+    // if it matches the selected value is 3rd level
+    if (grandchild) {
+      let grandchildParent;
 
-          setTimeout(() => {
-            onTopicTwoChange(data.id);
-            setLoading(false);
-          }, 1000);
+      topics.forEach((topic) => {
+        const found = (topic.ChildTopics || []).find((c) => c.id === grandchild.fk_parentTopicId);
+
+        if (found) {
+          grandchildParent = found;
         }
-      } else {
-        // if the selected topic doesnt have a parent, we know its from the first select
-        onTopicOneChange(_id);
-        setLoading(false);
-      }
-    } catch (e) {} // eslint-disable-line
+      });
+
+      onTopicOneChange(grandchildParent?.fk_parentTopicId);
+
+      setTimeout(() => onTopicTwoChange(grandchildParent?.id), 500);
+      setTimeout(() => onTopicThreeChange(grandchild.id), 1000);
+    }
   };
 
   const fetch = async () => {
+    setLoading(true);
+
     try {
-      const { data } = await dataProvider.getList('topics', {
+      const { data } = await dataProvider.topicTree('topics', {
         pagination: { perPage: 200, page: 1 },
-        filter: { topLevelOnly: '1' },
+        // filter: { topLevelOnly: '1' },
       });
 
       setTopics(data);
     } catch (e) {} // eslint-disable-line
+
+    setLoading(false);
   };
 
   React.useEffect(() => {
     if (topicOne) {
-      setTopicsSubOne([]);
-      setTopicsSubTwo([]);
+      setTopicsChild([]);
+      setTopicsGrandchild([]);
       onTopicTwoChange(null);
       onTopicThreeChange(null);
 
@@ -118,10 +126,10 @@ const MultiTopicSelect = ({
         return;
       }
 
-      if (topic.childCount > 0) {
+      if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        fetchChildren(topic.id);
+        setTopicsChild(topic.ChildTopics);
       } else {
         onChange(topicOne);
       }
@@ -130,19 +138,19 @@ const MultiTopicSelect = ({
 
   React.useEffect(() => {
     if (topicTwo) {
-      setTopicsSubTwo([]);
+      setTopicsGrandchild([]);
       onTopicThreeChange(null);
 
-      const topic = topicsSubOne.find((t) => t.id === topicTwo);
+      const topic = topicsChild.find((t) => t.id === topicTwo);
 
       if (!topic) {
         return;
       }
 
-      if (topic.childCount > 0) {
+      if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        fetchChildren(topic.id, 2);
+        setTopicsGrandchild(topic.ChildTopics);
       } else {
         onChange(topicTwo);
       }
@@ -158,15 +166,7 @@ const MultiTopicSelect = ({
   React.useEffect(() => {
     // editing, we need to go backwards
     if (value && !topicOne && topics.length) {
-      const topic = topics.find((t) => t.id === value);
-
-      // if we have topic match, its a top level topic
-      if (topic) {
-        onTopicOneChange(topic.id);
-      } else {
-        // if we don't have topic match we need to retrieve the parent
-        fetchParent(value);
-      }
+      findWhatIsSelected(value);
     }
   }, [value, topicOne, topics]);
 
@@ -180,14 +180,18 @@ const MultiTopicSelect = ({
   }, []);
 
   React.useEffect(() => {
-    setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+    if (filter.fk_languageId) {
+      setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+    } else {
+      setFilteredTopics(topics);
+    }
   }, [filter, topics]);
 
-  const selected = topicsSubTwo.length
-    ? topicsSubTwo.find((t) => t.id === value)
+  const selected = topicsGrandchild.length
+    ? topicsGrandchild.find((t) => t.id === value)
     : (
-      topicsSubOne.length
-        ? topicsSubOne.find((t) => t.id === value)
+      topicsChild.length
+        ? topicsChild.find((t) => t.id === value)
         : topics.find((t) => t.id === value)
     );
 
@@ -225,11 +229,11 @@ const MultiTopicSelect = ({
               />
             </Box>
             {
-              !!topicsSubOne.length && (
+              !!topicsChild.length && (
                 <Box flex={1} mr={1}>
                   <SelectInput
                     source="topicTwo"
-                    choices={topicsSubOne}
+                    choices={topicsChild}
                     optionText="name"
                     optionValue="id"
                     label=""
@@ -242,11 +246,11 @@ const MultiTopicSelect = ({
               )
             }
             {
-              !!topicsSubTwo.length && (
+              !!topicsGrandchild.length && (
                 <Box flex={1}>
                   <SelectInput
                     source="topicThree"
-                    choices={topicsSubTwo}
+                    choices={topicsGrandchild}
                     optionText="name"
                     optionValue="id"
                     label=""

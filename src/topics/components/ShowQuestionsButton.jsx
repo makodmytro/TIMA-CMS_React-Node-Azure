@@ -13,6 +13,12 @@ const ShowQuestions = ({
     return null;
   }
 
+  const ids = (record.ChildTopics || []).reduce((acc, cur) => {
+    const grandchildren = (cur.ChildTopics || []).map((gt) => gt.id);
+
+    return acc.concat([cur.id]).concat(grandchildren);
+  }, [record.id]);
+
   return (
     <Box ml={ml} width={fullWidth ? '100%' : 'initial'}>
       <Button
@@ -23,7 +29,7 @@ const ShowQuestions = ({
         size={size || 'small'}
         color="primary"
         variant="outlined"
-        to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: record.id }))}`}
+        to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: ids }))}`}
         fullWidth={!!fullWidth}
       >
         {translate('misc.show_questions')}

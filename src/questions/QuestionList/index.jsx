@@ -39,7 +39,7 @@ import ApprovedSwitchField from '../components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../components/use-as-suggestion-switch-field';
 import styles from './styles';
 import Filters from './Filters';
-import AnswerField from './AnswerField';
+import AnswerField from '../components/AnswerField';
 import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
@@ -51,27 +51,11 @@ const CustomGridItem = ({
   visibleColumns,
   level,
 }) => {
-  const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
-  const [children, setChildren] = React.useState([]);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
   const redirect = useRedirect();
-
-  const fetchChildren = async () => {
-    try {
-      const { data } = await dataProvider.getOne('questions', { id: record.id });
-
-      setChildren(data?.ChildQuestions || []);
-    } catch (e) {} // eslint-disable-line
-  };
-
-  React.useEffect(() => {
-    if (expanded && !children.length) {
-      fetchChildren();
-    }
-  }, [expanded]);
 
   const link = (id) => (e) => {
     e.stopPropagation();
@@ -82,49 +66,52 @@ const CustomGridItem = ({
 
   if (level) {
     return (
-      <TableRow
-        className={classes.cursor}
-        style={{ backgroundColor: bg }}
-        onClick={link(record.id)}
-      >
-        <TableCell>
-          {
-            !!record.childCount && record.childCount > 0 && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
+      <>
+        <TableRow
+          className={classes.cursor}
+          style={{ backgroundColor: bg }}
+          onClick={link(record.id)}
+        >
+          <TableCell>
+            {
+              !!record.relatedQuestions && record.relatedQuestions.length > 0 && (
+                <>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
 
-                    setExpanded(!expanded);
-                  }}
-                >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
+                      setExpanded(!expanded);
+                    }}
+                  >
+                    { !expanded && <AddIcon fontSize="small" /> }
+                    { expanded && <MinusIcon fontSize="small" /> }
+                  </IconButton>
+                </>
+              )
+            }
+          </TableCell>
+          <TableCell style={{ paddingLeft: `${30 * level}px` }}>
+            <PlayableText
+              text={record.text}
+              fkLanguageId={record.fk_languageId}
+            />
+          </TableCell>
+          {
+            (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
+              <TableCell key={i}>&nbsp;</TableCell>
+            ))
           }
-        </TableCell>
-        <TableCell style={{ paddingLeft: `${30 * level}px` }}>
-          <PlayableText
-            text={record.text}
-            lang={record.Language ? record.Language.code : null}
-          />
-        </TableCell>
-        {
-          (Array.from(Array(visibleColumns.length - 1).keys())).map((v, i) => (
-            <TableCell key={i}>&nbsp;</TableCell>
-          ))
-        }
-        <TableCell>
-          <DropdownMenu
-            record={record}
-            removeAnswer={removeAnswer}
-          />
-        </TableCell>
-      </TableRow>
+          <TableCell>
+            <DropdownMenu
+              editInline
+              record={record}
+              removeAnswer={removeAnswer}
+            />
+          </TableCell>
+        </TableRow>
+      </>
     );
   }
 
@@ -136,7 +123,7 @@ const CustomGridItem = ({
       >
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
+            !!record.relatedQuestions && record.relatedQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
               <>
                 <IconButton
                   size="small"
@@ -158,7 +145,7 @@ const CustomGridItem = ({
           <TableCell>
             <PlayableText
               text={record.text}
-              lang={record.Language ? record.Language.code : null}
+              fkLanguageId={record.fk_languageId}
             />
           </TableCell>
         )}
@@ -220,16 +207,17 @@ const CustomGridItem = ({
 
         <TableCell>
           <DropdownMenu
+            editInline
             record={record}
             removeAnswer={removeAnswer}
           />
         </TableCell>
       </TableRow>
       {
-        expanded && record.childCount && !!children.length && (
+        expanded && record.relatedQuestions && !!record.relatedQuestions.length && (
           <>
             {
-              children.map((child, iii) => (
+              record.relatedQuestions.map((child, iii) => (
                 <CustomGridItem
                   record={child}
                   removeAnswer={removeAnswer}

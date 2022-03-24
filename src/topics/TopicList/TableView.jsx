@@ -10,7 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
-import { useTranslate, useDataProvider } from 'react-admin';
+import { useTranslate } from 'react-admin';
 import ListDropdownMenu from '../components/list-dropdown-menu';
 import columns from './columns';
 
@@ -24,24 +24,8 @@ const Row = ({
   setOpen,
   level,
 }) => {
-  const dataProvider = useDataProvider();
   const [expanded, setExpanded] = React.useState(false);
-  const [children, setChildren] = React.useState([]);
   const history = useHistory();
-
-  const fetchChildren = async () => {
-    try {
-      const { data } = await dataProvider.getOne('topics', { id: record.id });
-
-      setChildren(data?.ChildTopics || []);
-    } catch (e) {} // eslint-disable-line
-  };
-
-  React.useEffect(() => {
-    if (expanded) {
-      fetchChildren();
-    }
-  }, [expanded]);
 
   const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
 
@@ -50,7 +34,7 @@ const Row = ({
       <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
           {
-            !!record.childCount && record.childCount > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
+            !!record.ChildTopics && record.ChildTopics.length > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
               <>
                 <IconButton
                   size="small"
@@ -73,12 +57,6 @@ const Row = ({
             .map((col, ii) => {
               return (
                 <TableCell key={ii}>
-                  {
-                    level === 1 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
-                  }
-                  {
-                    level === 2 && (<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
-                  }
                   {cloneElement(col.el, { key: col.key, record })}
                 </TableCell>
               );
@@ -103,10 +81,10 @@ const Row = ({
         </TableCell>
       </TableRow>
       {
-        expanded && record.childCount && !!children.length && (
+        expanded && record.ChildTopics && !!record.ChildTopics.length && (
           <>
             {
-              children.map((child, iii) => (
+              record.ChildTopics.map((child, iii) => (
                 <Row
                   record={child}
                   columnsToDisplay={columnsToDisplay}

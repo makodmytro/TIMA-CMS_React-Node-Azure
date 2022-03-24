@@ -13,7 +13,17 @@ import RichTextEditor from 'react-rte';
 import MdEditor from 'react-markdown-editor-lite';
 import PlayableText from '../../common/components/playable-text';
 
-const RteInput = ({
+const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
+
+const HiddenField = ({ children, fieldName }) => {
+  if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
+    return null;
+  }
+
+  return children;
+};
+
+const MarkdownInput = ({
   source, label, lang, disabled,
 }) => {
   const [state, setState] = React.useState(RichTextEditor.createEmptyValue());
@@ -47,16 +57,18 @@ const RteInput = ({
           disabled={disabled === true}
           readOnly={disabled === true}
         />
-        <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
-          <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />
-          <PlayableText text={spokenText || value} lang={lang} hideText disabled={disabled === true} />
-        </Box>
+        <HiddenField fieldName="spokenText">
+          <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
+            <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />
+            <PlayableText text={spokenText || value} lang={lang} hideText disabled={disabled === true} />
+          </Box>
+        </HiddenField>
       </FormControl>
     </>
   );
 };
 
-export const MarkdownInput = ({
+export const MarkdownInputOld = ({
   source, label, lang, disabled,
 }) => {
   const translate = useTranslate();
@@ -92,4 +104,4 @@ export const MarkdownInput = ({
   );
 };
 
-export default RteInput;
+export default MarkdownInput;

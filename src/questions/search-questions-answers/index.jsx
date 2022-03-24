@@ -18,7 +18,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import WarningIcon from '@material-ui/icons/Warning';
 import { PlayableTextField } from '../../common/components/playable-text';
-import { Text } from '../../answers/AnswerList';
+import AnswerTextField from '../../answers/components/TextField';
 import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
 import Filters from './filters-form';
 import CreateForm from './answer-create-form';
@@ -341,7 +341,7 @@ const LinksDialog = ({
                         }
                         {
                           form.type === 'answers' && (
-                            <Text
+                            <AnswerTextField
                               record={result}
                               hideRelatedQuestions
                             />
@@ -368,7 +368,7 @@ const LinksDialog = ({
                           <TableCell style={{ width: '25%' }}>
                             {
                               result.fk_answerId && (
-                                <Text
+                                <AnswerTextField
                                   record={result.Answer}
                                   hideRelatedQuestions
                                 />

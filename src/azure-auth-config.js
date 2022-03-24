@@ -1,10 +1,8 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-
 import { LogLevel } from '@azure/msal-browser';
 
+const AZURE_CLIENT_ID = process.env.REACT_APP_AZURE_CLIENT_ID;
+const AZURE_AUTHORITY = process.env.REACT_APP_AZURE_AUTHORITY;
+const AZURE_REDIRECT_URI = process.env.REACT_APP_AZURE_REDIRECT_URI;
 /**
  * Configuration object to be passed to MSAL instance on creation.
  * For a full list of MSAL.js configuration parameters, visit:
@@ -12,9 +10,9 @@ import { LogLevel } from '@azure/msal-browser';
  */
 export const msalConfig = {
   auth: {
-    clientId: 'ed5f9b3d-35b6-417c-a3a4-dbd17fce4ba9',
-    authority: 'https://login.microsoftonline.com/common/',
-    redirectUri: 'http://localhost:3000'
+    clientId: AZURE_CLIENT_ID,
+    authority: AZURE_AUTHORITY,
+    redirectUri: AZURE_REDIRECT_URI,
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
@@ -60,5 +58,25 @@ export const loginRequest = {
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 export const graphConfig = {
-  graphMeEndpoint: 'Enter_the_Graph_Endpoint_Herev1.0/me'
+  graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
 };
+
+/**
+ * Attaches a given access token to a MS Graph API call. Returns information about the user
+ * @param accessToken
+ */
+ export async function callMsGraph(accessToken) {
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append('Authorization', bearer);
+
+  const options = {
+    method: 'GET',
+    headers
+  };
+
+  return fetch(graphConfig.graphMeEndpoint, options)
+    .then(response => response.json())
+    .catch(error => console.log(error));
+}
