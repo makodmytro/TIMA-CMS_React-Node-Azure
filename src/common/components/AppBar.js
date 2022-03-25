@@ -5,13 +5,17 @@ import {
   MenuItemLink,
   usePermissions,
   useTranslate,
+  Logout,
 } from 'react-admin';
+import { useMsal } from '@azure/msal-react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Logo from '../../assets/TIMA_logo.png';
 import { baseApi } from '../httpClient';
+
+const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -69,12 +73,34 @@ const MyUserMenu = (props) => {
   );
 };
 
+const CustomLogout = () => {
+  const { instance, accounts } = useMsal();
+  // console.log(accounts[0], instance.getAccountByHomeId(accounts[0]?.homeAccountId));
+
+  const onClick = () => {
+    instance.loginRedirect({
+      account: accounts[0],
+      postLogoutRedirectUri: process.env.REACT_APP_AZURE_REDIRECT_URI,
+    });
+  };
+
+  return (
+    <Logout onClick={onClick} />
+  );
+};
+
 const MyAppBar = (props) => {
   const classes = useStyles();
   const { onLanguageChange, language, ...rest } = props;
 
   return (
-    <AppBar color="transparent" {...rest} userMenu={<MyUserMenu {...rest} />} style={{ backgroundColor: '#fafafa' }}>
+    <AppBar
+      color="transparent"
+      {...rest}
+      userMenu={<MyUserMenu {...rest} />}
+      style={{ backgroundColor: '#fafafa' }}
+      logout={USE_AZURE_LOGIN === '1' ? <CustomLogout /> : <Logout />}
+    >
       <Typography
         variant="h6"
         color="inherit"

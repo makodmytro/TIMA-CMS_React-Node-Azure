@@ -14,7 +14,7 @@ export const msalConfig = {
     clientId: AZURE_CLIENT_ID,
     authority: AZURE_AUTHORITY,
     redirectUri: AZURE_REDIRECT_URI, // eslint-disable-line
-    postLogoutRedirectUri: '/', // Indicates the page to navigate after logout.
+    postLogoutRedirectUri: AZURE_REDIRECT_URI, // Indicates the page to navigate after logout.
     navigateToLoginRequestUrl: false,
   },
   cache: {
