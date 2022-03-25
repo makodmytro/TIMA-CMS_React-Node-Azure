@@ -9,6 +9,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Logo from '../../assets/TIMA_logo.png';
 import { baseApi } from '../httpClient';
 
@@ -51,11 +52,22 @@ const ProfileMenu = React.forwardRef(({ onClick }, ref) => {
   );
 });
 
-const MyUserMenu = (props) => (
-  <UserMenu {...props}>
-    <ProfileMenu />
-  </UserMenu>
-);
+const MyUserMenu = (props) => {
+  const { permissions } = usePermissions();
+
+  return (
+    <UserMenu
+      {...props}
+      icon={(
+        <>
+          <small>{permissions?.userName}</small> &nbsp;<AccountCircleIcon />
+        </>
+      )}
+    >
+      <ProfileMenu />
+    </UserMenu>
+  );
+};
 
 const MyAppBar = (props) => {
   const classes = useStyles();

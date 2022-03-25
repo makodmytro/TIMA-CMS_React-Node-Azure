@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import { LogLevel } from '@azure/msal-browser';
 
 const AZURE_CLIENT_ID = process.env.REACT_APP_AZURE_CLIENT_ID;
@@ -12,7 +13,9 @@ export const msalConfig = {
   auth: {
     clientId: AZURE_CLIENT_ID,
     authority: AZURE_AUTHORITY,
-    redirectUri: AZURE_REDIRECT_URI,
+    redirectUri: AZURE_REDIRECT_URI, // eslint-disable-line
+    postLogoutRedirectUri: '/', // Indicates the page to navigate after logout.
+    navigateToLoginRequestUrl: false,
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
@@ -26,16 +29,16 @@ export const msalConfig = {
         }
         switch (level) {
           case LogLevel.Error:
-            console.error(message);
+            console.error(message); // eslint-disable-line
             return;
           case LogLevel.Info:
-            console.info(message);
+            console.info(message); // eslint-disable-line
             return;
           case LogLevel.Verbose:
-            console.debug(message);
+            console.debug(message); // eslint-disable-line
             return;
           case LogLevel.Warning:
-            console.warn(message);
+            console.warn(message); // eslint-disable-line
             return;
         }
       }

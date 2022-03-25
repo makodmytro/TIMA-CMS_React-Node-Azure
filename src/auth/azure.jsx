@@ -1,72 +1,55 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useAuthProvider, useRedirect, useNotify } from 'react-admin';
 import {
-  AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, MsalProvider,
+  AuthenticatedTemplate, useMsal,
   useIsAuthenticated,
 } from '@azure/msal-react';
-import { PublicClientApplication } from '@azure/msal-browser';
-import { loginRequest, msalConfig } from '../azure-auth-config';
+import { CircularProgress, Box } from '@material-ui/core';
+import { loginRequest } from '../azure-auth-config';
 
-const msalInstance = new PublicClientApplication(msalConfig);
-
-const L = () => {
+const Authenticated = () => {
   const { instance, accounts } = useMsal();
   const isAuthenticated = useIsAuthenticated();
+  const authProvider = useAuthProvider();
+  const redirect = useRedirect();
+  const notify = useNotify();
 
-  console.log(isAuthenticated, 'isAuthenticated');
+  const requestProfileData = async () => {
+    try {
+      // Silently acquires an access token which is then attached to a request for MS Graph data
+      const { accessToken } = await instance.acquireTokenSilent({
+        ...loginRequest,
+        account: accounts[0],
+      });
+      const success = await authProvider.exhangeToken({ token: accessToken });
 
-  function RequestProfileData() {
-    // Silently acquires an access token which is then attached to a request for MS Graph data
-    instance.acquireTokenSilent({
-      ...loginRequest,
-      account: accounts[0]
-    }).then((response) => {
-      console.log(response);
-      // callMsGraph(response.accessToken).then(response => setGraphData(response));
-    });
-  }
-
-  return (
-    <div>
-      {JSON.stringify(accounts)}
-      <button type="button" onClick={RequestProfileData}>Click</button>
-    </div>
-  );
-};
-
-export const SignInButton = () => {
-  const { instance } = useMsal();
-
-  const handleLogin = (loginType) => {
-      if (loginType === 'popup') {
-          instance.loginPopup(loginRequest).catch(e => {
-              console.log(e);
-          });
-      } else if (loginType === 'redirect') {
-          instance.loginRedirect(loginRequest).catch(e => {
-              console.log(e);
-          });
+      if (success) {
+        redirect('/');
       }
+    } catch (err) {
+      notify('There was an error authenticating', 'error');
+    }
   };
 
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      requestProfileData();
+    }
+  }, [isAuthenticated]);
+
   return (
-    <div>
-      <button type="button" onClick={() => handleLogin('popup')}>
-        Popup
-      </button>
-      <button type="button" onClick={() => handleLogin('redirect')}>
-        Redirect
-      </button>
-    </div>
+    <Box height="100vh">
+      <Box textAlign="center" mt={10}>
+        <CircularProgress color="primary" />
+      </Box>
+    </Box>
   );
 };
 
 export default () => {
   return (
-    <MsalProvider instance={msalInstance}>
-      <SignInButton />
-      <AuthenticatedTemplate>
-        <L />
-      </AuthenticatedTemplate>
-    </MsalProvider>
+    <AuthenticatedTemplate>
+      <Authenticated />
+    </AuthenticatedTemplate>
   );
 };

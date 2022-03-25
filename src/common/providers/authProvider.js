@@ -1,6 +1,21 @@
 import httpClient, { baseApi } from '../httpClient';
 
 const authProvider = {
+  exhangeToken: async ({ token }) => {
+    const { body } = await httpClient(`${baseApi}/users/exchangeToken`, {
+      method: 'POST',
+      headers: new Headers({
+        'ms-access-token': token,
+      }),
+    });
+
+    const { accessToken, data } = JSON.parse(body);
+
+    localStorage.setItem('token', accessToken);
+    localStorage.setItem('user', JSON.stringify(data));
+
+    return Promise.resolve(true);
+  },
   login: ({ username, password }) => {
     const url = `${baseApi}/users/login`;
     return httpClient(url, {
