@@ -57,9 +57,9 @@ const UsersSelection = ({ users }) => {
             return (
               <Box key={user.id} flex="0 0 50%">
                 <BooleanInput
-                  name={user.id}
+                  name={`u_${user.id}`}
                   label={user.name}
-                  record={{ [user.id]: value.includes(user.id) }}
+                  record={{ [`u_${user.id}`]: value.includes(user.id) }}
                   onChange={() => handleChange(user.id)}
                 />
               </Box>
