@@ -24,3 +24,4 @@
 | REACT_APP_AZURE_CLIENT_ID | Azure Client ID | "asdasd-qweqwe-123123-2" | null | When REACT_APP_USE_AZURE_LOGIN=1 |
 | REACT_APP_AZURE_AUTHORITY | Azure Authority URL | https://login.microsoftonline.com/d2fbe2cc-08e7-4a9c/ | null | When REACT_APP_USER_AZURE_LOGIN=1 |
 | REACT_APP_AZURE_REDIRECT_URI | Azure redirect URL after login. Must be base URL without path | http://localhost:3000 | When REACT_APP_USER_AZURE_LOGIN=1 |
+| REACT_APP_HIDE_SPEECH_FIELD | Disable Speed icon [>] everywhere when the variable is set to "1" | "1" | null | N |

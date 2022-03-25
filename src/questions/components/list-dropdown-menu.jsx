@@ -140,8 +140,8 @@ const DropdownMenu = ({
 
 DropdownMenu.propTypes = {
   record: PropTypes.shape({
-    fk_answerId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+    fk_answerId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
 };
 

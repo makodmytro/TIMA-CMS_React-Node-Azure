@@ -27,7 +27,14 @@ import { PlayableTextField } from '../../common/components/playable-text';
 import AnswerTextField from '../../answers/components/TextField';
 import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
 
-const Filters = ({ onSubmit, onCreateSubmit, enableCreate }) => {
+const Filters = ({
+  onSubmit,
+  onCreateSubmit,
+  enableCreate,
+  selected,
+  onSelectedSubmit,
+  selectedButtonText,
+}) => {
   const translate = useTranslate();
   const disableCreate = useDisabledCreate();
 
@@ -38,25 +45,41 @@ const Filters = ({ onSubmit, onCreateSubmit, enableCreate }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
-              <Box flex={4}>
+              <Box flex={3}>
+                <Typography variant="body2">
+                  {translate('misc.search_create_questions')}
+                </Typography>
                 <TextInput label="misc.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
-              <Box flex={1} px={2} pt={2}>
+              <Box flex={1} px={2} pt={5}>
                 {
-                  !disableCreate && enableCreate && (
+                  !disableCreate && !selected.length && (
                     <Button
                       type="button"
                       color="primary"
                       variant="contained"
                       size="small"
                       onClick={() => onCreateSubmit({ text: values.q })}
+                      disabled={!enableCreate}
                       fullWidth
                     >
                       {translate('resources.questions.create')}
                     </Button>
                   )
                 }
-
+                {
+                  !!selected.length && (
+                    <Button
+                      type="button"
+                      onClick={onSelectedSubmit}
+                      variant="contained"
+                      color="secondary"
+                      size="small"
+                    >
+                      {translate(selectedButtonText, { val: selected.length })}
+                    </Button>
+                  )
+                }
               </Box>
             </Box>
           </form>
@@ -68,25 +91,13 @@ const Filters = ({ onSubmit, onCreateSubmit, enableCreate }) => {
 
 const ResultsList = ({
   questions,
-  selectedButtonOnClick,
-  selectedButtonText,
+  selected,
+  toggleSelect,
 }) => {
   const translate = useTranslate();
   const { permissions } = usePermissions();
-  const [selected, setSelected] = React.useState([]);
-
-  React.useEffect(() => {
-    setSelected([]);
-  }, [JSON.stringify(questions)]);
 
   const isSelected = (question) => selected.includes(question.id);
-  const toggleSelect = (question) => {
-    if (isSelected(question)) {
-      setSelected(selected.filter((s) => s !== question.id));
-    } else {
-      setSelected(selected.concat([question.id]));
-    }
-  };
 
   if (!questions) {
     return null;
@@ -102,21 +113,6 @@ const ResultsList = ({
 
   return (
     <>
-      <Box textAlign="right" py={2}>
-        {
-          !!selected.length && (
-            <Button
-              type="button"
-              onClick={() => selectedButtonOnClick(selected)}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              {translate(selectedButtonText, { val: selected.length })}
-            </Button>
-          )
-        }
-      </Box>
       <Table>
         <TableHead>
           <TableRow>
@@ -155,21 +151,6 @@ const ResultsList = ({
           }
         </TableBody>
       </Table>
-      <Box textAlign="right" py={2}>
-        {
-          !!selected.length && (
-            <Button
-              type="button"
-              onClick={() => selectedButtonOnClick(selected)}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              {translate(selectedButtonText, { val: selected.length })}
-            </Button>
-          )
-        }
-      </Box>
     </>
   );
 };
@@ -183,6 +164,7 @@ const SearchCreateDialog = ({
   selectedButtonText,
   selectedButtonOnClick,
 }) => {
+  const [selected, setSelected] = React.useState([]);
   const [enableCreate, setEnableCreate] = React.useState(false);
   const [questions, setQuestions] = React.useState(null);
   const translate = useTranslate();
@@ -205,6 +187,8 @@ const SearchCreateDialog = ({
   };
 
   const onFiltersSubmit = debounce(async (values) => {
+    setSelected([]);
+
     if (!values.q) {
       setQuestions(null);
 
@@ -234,12 +218,31 @@ const SearchCreateDialog = ({
     }
   }, 500);
 
+  const toggleSelect = (question) => {
+    if (selected.includes(question.id)) {
+      setSelected(selected.filter((s) => s !== question.id));
+    } else {
+      setSelected(selected.concat([question.id]));
+    }
+  };
+
+  const onSelectedSubmit = () => {
+    selectedButtonOnClick(selected);
+  };
+
+  React.useEffect(() => {
+    if (open) {
+      setSelected([]);
+      setQuestions(null);
+    }
+  }, [open]);
+
   if (!open) {
     return null;
   }
 
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="md">
+    <Dialog open onClose={onClose} fullWidth maxWidth="lg">
       <Box display="flex" p={2}>
         <Box flex={5}>
           <Typography>
@@ -255,12 +258,21 @@ const SearchCreateDialog = ({
         </Box>
       </Box>
       <Box p={2}>
-        <Filters onSubmit={onFiltersSubmit} enableCreate={enableCreate} onCreateSubmit={onCreateSubmit} />
+        <Filters
+          onSubmit={onFiltersSubmit}
+          enableCreate={enableCreate}
+          onCreateSubmit={onCreateSubmit}
+          selected={selected}
+          onSelectedSubmit={onSelectedSubmit}
+          selectedButtonText={selectedButtonText}
+        />
         <hr />
         <ResultsList
-          questions={questions}
-          selectedButtonOnClick={selectedButtonOnClick}
-          selectedButtonText={selectedButtonText}
+          {...{
+            questions,
+            selected,
+            toggleSelect,
+          }}
         />
       </Box>
     </Dialog>
