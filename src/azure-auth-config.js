@@ -4,6 +4,7 @@ import { LogLevel } from '@azure/msal-browser';
 const AZURE_CLIENT_ID = process.env.REACT_APP_AZURE_CLIENT_ID;
 const AZURE_AUTHORITY = process.env.REACT_APP_AZURE_AUTHORITY;
 const AZURE_REDIRECT_URI = process.env.REACT_APP_AZURE_REDIRECT_URI;
+const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 /**
  * Configuration object to be passed to MSAL instance on creation.
  * For a full list of MSAL.js configuration parameters, visit:
@@ -14,7 +15,7 @@ export const msalConfig = {
     clientId: AZURE_CLIENT_ID,
     authority: AZURE_AUTHORITY,
     redirectUri: AZURE_REDIRECT_URI, // eslint-disable-line
-    postLogoutRedirectUri: AZURE_REDIRECT_URI, // Indicates the page to navigate after logout.
+    postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI, // Indicates the page to navigate after logout.
     navigateToLoginRequestUrl: false,
   },
   cache: {

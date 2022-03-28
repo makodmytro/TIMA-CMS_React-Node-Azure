@@ -16,6 +16,7 @@ import Logo from '../../assets/TIMA_logo.png';
 import { baseApi } from '../httpClient';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
+const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -78,9 +79,9 @@ const CustomLogout = () => {
   // console.log(accounts[0], instance.getAccountByHomeId(accounts[0]?.homeAccountId));
 
   const onClick = () => {
-    instance.loginRedirect({
+    instance.logoutRedirect({
       account: accounts[0],
-      postLogoutRedirectUri: process.env.REACT_APP_AZURE_REDIRECT_URI,
+      postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI,
     });
   };
 
