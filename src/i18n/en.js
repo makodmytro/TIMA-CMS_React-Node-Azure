@@ -243,6 +243,7 @@ const english = {
     users: {
       name: 'User |||| Users',
       change_password: 'Change password',
+      add: 'Add user',
       fields: {
         id: 'ID',
         name: 'Name',

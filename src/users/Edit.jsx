@@ -15,13 +15,15 @@ import Typography from '@material-ui/core/Typography';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { useIsAdmin } from '../hooks';
 
+const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
+
 const CustomToolbar = (props) => {
   const disabled = !useIsAdmin();
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="ra.action.save"
+        label={AZURE_LOGIN ? 'resources.users.add' : 'ra.action.save'}
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}
@@ -164,12 +166,16 @@ const UsersEdit = (props) => {
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled />
         <TextInput source="email" validate={required()} fullWidth disabled />
-        <BooleanInput
-          source="change_password"
-          label="Change user password"
-          disabled={disabled}
-          onChange={(v) => setPasswordToggle(v)}
-        />
+        {
+          !AZURE_LOGIN && (
+            <BooleanInput
+              source="change_password"
+              label="Change user password"
+              disabled={disabled}
+              onChange={(v) => setPasswordToggle(v)}
+            />
+          )
+        }
 
         {
           passwordToggle && (
