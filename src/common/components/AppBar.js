@@ -83,6 +83,8 @@ const CustomLogout = () => {
       account: accounts[0],
       postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI,
     });
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return (

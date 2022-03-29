@@ -1,18 +1,27 @@
 import React from 'react';
-import { useAuthProvider, useRedirect, useNotify } from 'react-admin';
+import {
+  useAuthProvider,
+  useRedirect,
+  useNotify,
+  useTranslate,
+} from 'react-admin';
 import {
   AuthenticatedTemplate, useMsal,
   useIsAuthenticated,
 } from '@azure/msal-react';
-import { CircularProgress, Box } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
+import Logo from '../assets/TIMA_logo.png';
 
 const Authenticated = () => {
+  const [error, setError] = React.useState(false);
   const { instance, accounts } = useMsal();
   const isAuthenticated = useIsAuthenticated();
   const authProvider = useAuthProvider();
   const redirect = useRedirect();
   const notify = useNotify();
+  const translate = useTranslate();
 
   const requestProfileData = async () => {
     try {
@@ -27,6 +36,10 @@ const Authenticated = () => {
         redirect('/');
       }
     } catch (err) {
+      if (err && err.status && err.status === 403) {
+        setError(true);
+      }
+
       notify('There was an error authenticating', 'error');
     }
   };
@@ -38,10 +51,41 @@ const Authenticated = () => {
   }, [isAuthenticated]);
 
   return (
-    <Box height="100vh">
-      <Box textAlign="center" mt={10}>
-        <CircularProgress color="primary" />
-      </Box>
+    <Box
+      textAlign="center"
+      alignContent="center"
+      style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: '30vh',
+        boxSizing: 'border-box',
+        backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+      }}
+    >
+      {
+        !error && (
+          <>
+            <Box py={2}>
+              <img src={Logo} alt="logo" width="135" />
+            </Box>
+            <Typography variant="body2" component="div" style={{ color: 'white' }}>
+              LOADING
+            </Typography>
+          </>
+        )
+      }
+      {
+        error && (
+          <Box textAlign="center" mt={15} px={20}>
+            <Box p={2}>
+              <Alert severity="info" elevation={3}>
+                {translate('misc.azure_403')}
+              </Alert>
+            </Box>
+          </Box>
+        )
+      }
     </Box>
   );
 };
