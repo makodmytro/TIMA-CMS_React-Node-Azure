@@ -65,6 +65,7 @@ const ListActions = (props) => {
     columns,
     visibleColumns,
     onColumnsChange,
+    createButtonLabel,
     ...rest
   } = props;
   const {
@@ -94,8 +95,8 @@ const ListActions = (props) => {
         context: 'button',
       })}
       { /* some rendering bug probably */ }
-      { disabled && <CreateButton basePath={basePath} disabled />}
-      { !disabled && <CreateButton basePath={basePath} />}
+      { disabled && <CreateButton basePath={basePath} disabled {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
+      { !disabled && <CreateButton basePath={basePath} {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
 
       <ExportButton
         disabled={total === 0 || disabled}

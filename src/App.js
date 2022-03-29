@@ -29,6 +29,9 @@ import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
+import AzureLogin from './auth/azure';
+
+const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -68,9 +71,11 @@ const AsyncResources = () => {
   };
 
   const check = async () => {
+    const a = async () => (location.pathname.includes('/login') || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
+
     try {
       await Promise.all([
-        await dataProvider.activeSessions(),
+        await a(),
         await delay(250),
       ]);
     } catch (err) { // eslint-disable-line
@@ -96,26 +101,26 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (location.pathname !== '/login' && tac) {
+    if (!location.pathname.includes('/login') && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
       }, 1000 * 60 * 1);
     }
 
-    if (location.pathname === '/login') {
+    if (location.pathname.includes('/login')) {
       clearTimeout(topicsStatusTimeout.current);
       topicsStatusTimeout.current = null;
     }
   }, [location.pathname, tac]);
 
   React.useEffect(() => {
-    if (location.pathname !== '/login' && tic) {
+    if (!location.pathname.includes('/login') && tic) {
       timeout.current = setTimeout(() => {
         refreshSession();
       }, 1000 * 60 * 10);
     }
 
-    if (location.pathname === '/login') {
+    if (location.pathname.includes('/login')) {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
@@ -150,6 +155,9 @@ const AsyncResources = () => {
       title="TIMA Management"
       theme={theme}
       layout={MyLayout}
+      {...(
+        USE_AZURE_LOGIN === '1' ? { loginPage: AzureLogin } : {}
+      )}
       customRoutes={[
         <Route
           exact
