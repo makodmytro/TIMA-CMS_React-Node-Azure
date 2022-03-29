@@ -9,6 +9,7 @@ export REACT_APP_HIDE_FIELDS_TOPICS="welcomeText,topicImageUrl,topicKey,topicIma
 export REACT_APP_HIDE_MENU_ITEMS=stats/sessions
 export REACT_APP_HIDE_FIELDS_ANSWERS="spokenText,media"
 export REACT_APP_HIDE_SPEECH_FIELD=1
+export REACT_APP_USE_AZURE_LOGIN=1
 export REACT_APP_AZURE_CLIENT_ID=c1e9c1c7-0f6b-4951-a0dd-a6a9d1064b51
 export REACT_APP_AZURE_AUTHORITY=https://login.microsoftonline.com/ee920d54-46e4-4e1e-aa99-6d010a689325
 export REACT_APP_AZURE_REDIRECT_URI=https://qnaeditor1frontend.z6.web.core.windows.net/

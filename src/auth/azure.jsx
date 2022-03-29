@@ -28,21 +28,29 @@ const Authenticated = () => {
   const requestProfileData = async () => {
     try {
       // Silently acquires an access token which is then attached to a request for MS Graph data
+      console.log('requestProfileData called');
       const { accessToken } = await instance.acquireTokenSilent({
         ...loginRequest,
         account: accounts[0],
       });
+      console.log('accessToken', accessToken);
+
       const success = await authProvider.exhangeToken({ token: accessToken });
+      console.log('requestProfileData - exchangeToken success=', success);
 
       if (success) {
         redirect('/');
       }
     } catch (err) {
-      if (err && err.status && err.status === 403) {
+      console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
+      console.error(err);
+      if (err?.subError === 'consent_required') {
+        const url = `${process.env.REACT_APP_AZURE_AUTHORITY}/adminconsent?client_id=${process.env.REACT_APP_AZURE_CLIENT_ID}&state=1&redirect_uri=${process.env.REACT_APP_AZURE_REDIRECT_URI}`;
+        window.location.href = url;
+      } else {
         setError(true);
+        notify('Azure authentication failed', 'error');
       }
-
-      notify('There was an error authenticating', 'error');
     }
   };
 
