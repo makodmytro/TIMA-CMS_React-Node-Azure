@@ -19,6 +19,8 @@ import ListActions, {
   handleColumnsChange,
 } from '../common/components/ListActions';
 
+const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
+
 function LinkTab(props) {
   return (
     <Tab
@@ -73,6 +75,7 @@ const UsersList = (props) => {
               visibleColumns={visibleColumns}
               onColumnsChange={handleColumnsChange('users', setVisibleColumns)}
               columns={columns}
+              createButtonLabel={AZURE_LOGIN ? translate('resources.users.add') : null}
             />
           )}
         >

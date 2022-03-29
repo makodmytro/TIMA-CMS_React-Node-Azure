@@ -5,6 +5,7 @@ import {
   DateField,
   List,
   TextField,
+  useTranslate,
 } from 'react-admin';
 import {
   Tab,
@@ -27,6 +28,7 @@ function LinkTab(props) {
 }
 
 const GroupsList = (props) => {
+  const translate = useTranslate();
   const columns = [
     {
       key: 'name',
@@ -49,8 +51,8 @@ const GroupsList = (props) => {
           aria-label="nav tabs example"
           TabIndicatorProps={{ style: { background: 'white' } }}
         >
-          <LinkTab label="Users" to="/users" />
-          <LinkTab label="Groups" to="/groups" />
+          <LinkTab label={translate('misc.users')} to="/users" />
+          <LinkTab label={translate('misc.groups')} to="/groups" />
         </Tabs>
       </AppBar>
       <Box p={2} boxShadow={3}>

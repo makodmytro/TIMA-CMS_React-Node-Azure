@@ -48,6 +48,7 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    azure_403: 'Your user has not been activated for this application, please contact support',
     search_create_questions: 'Search for existing question and link or create a new question',
     save: 'Save',
     add: 'Add',
@@ -243,6 +244,7 @@ const english = {
     users: {
       name: 'User |||| Users',
       change_password: 'Change password',
+      add: 'Add user',
       fields: {
         id: 'ID',
         name: 'Name',
