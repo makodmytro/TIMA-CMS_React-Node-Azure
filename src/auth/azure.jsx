@@ -9,10 +9,12 @@ import {
   AuthenticatedTemplate, useMsal,
   useIsAuthenticated,
 } from '@azure/msal-react';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
 import Logo from '../assets/TIMA_logo.png';
+
+const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 
 const Authenticated = () => {
   const [error, setError] = React.useState(false);
@@ -42,6 +44,15 @@ const Authenticated = () => {
 
       notify('There was an error authenticating', 'error');
     }
+  };
+
+  const onClick = () => {
+    instance.logoutRedirect({
+      account: accounts[0],
+      postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI,
+    });
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   React.useEffect(() => {
@@ -77,11 +88,16 @@ const Authenticated = () => {
       }
       {
         error && (
-          <Box textAlign="center" mt={15} px={20}>
-            <Box p={2}>
+          <Box textAlign="center" mt={15} display="flex" justifyContent="center">
+            <Box p={2} width="40vw">
               <Alert severity="info" elevation={3}>
                 {translate('misc.azure_403')}
               </Alert>
+              <Box mt={2}>
+                <Typography onClick={onClick} variant="body2" style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }}>
+                  {translate('ra.auth.logout')}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         )
