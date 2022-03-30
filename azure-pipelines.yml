@@ -20,3 +20,9 @@ steps:
 - script: yarn run build
   displayName: 'Build frontend app'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
