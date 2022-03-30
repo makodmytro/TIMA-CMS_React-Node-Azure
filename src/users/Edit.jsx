@@ -23,7 +23,7 @@ const CustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label={AZURE_LOGIN ? 'resources.users.add' : 'ra.action.save'}
+        label="ra.action.save"
         redirect="list"
         submitOnEnter
         disabled={props.pristine || disabled}
@@ -206,8 +206,16 @@ const UsersEdit = (props) => {
             </>
           )
         }
-        <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
-        <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />
+        <BooleanInput
+          source="isActive"
+          label="resources.users.fields.isActive"
+          disabled={disabled}
+        />
+        <BooleanInput
+          source="isAdmin"
+          label="resources.users.fields.isAdmin"
+          disabled={disabled}
+        />
         <GroupsSelection disabled={disabled} />
       </SimpleForm>
     </Edit>
