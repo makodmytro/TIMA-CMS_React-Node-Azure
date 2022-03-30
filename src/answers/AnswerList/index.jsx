@@ -38,6 +38,10 @@ import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS
+  ? process.env.REACT_APP_HIDE_FIELDS_ANSWERS.split(',')
+  : [];
+
 const columns = [
   { key: 'text' },
   { key: 'spokenText' },
@@ -47,7 +51,7 @@ const columns = [
   { key: 'approved' },
   { key: 'tags' },
   { key: 'updatedAt' },
-];
+].filter((c) => !HIDDEN_FIELDS.includes(c.key));
 
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages

@@ -7,6 +7,10 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TopicImage from '../components/Image';
 
+const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_TOPICS
+  ? process.env.REACT_APP_HIDE_FIELDS_TOPICS.split(',')
+  : [];
+
 const Progress = ({ record }) => {
   if (!record?.syncScheduled) {
     return null;
@@ -55,4 +59,4 @@ const columns = [
   },
 ];
 
-export default columns;
+export default columns.filter((c) => !HIDDEN_FIELDS.includes(c.key));
