@@ -9,7 +9,7 @@ trigger:
 # define variables to use during the build
 variables:
   projectFolder: 'src/'
-  buildOutputFolder: '/build'
+  buildOutputFolder: 'build/'
 
 pool:
   vmImage: ubuntu-latest
