@@ -81,7 +81,7 @@ const ListActions = (props) => {
 
   if (resource === 'questions' || resource === 'answers') {
     disabled = useDisabledCreate();
-  } else if (['topics', 'languages', 'users', 'groups'].includes(resource)) {
+  } else if (['topics', 'languages', 'users', 'groups', 'audit'].includes(resource)) {
     disabled = !useIsAdmin();
   }
 

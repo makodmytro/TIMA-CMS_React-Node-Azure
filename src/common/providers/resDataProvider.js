@@ -91,11 +91,19 @@ const getListUrl = (initialUrl, resource, params) => {
     };
 
     if (from) {
-      query.from = from;
+      if (resource === 'audit') {
+        query.filter.from = from;
+      } else {
+        query.from = from;
+      }
     }
 
     if (to) {
-      query.to = to;
+      if (resource === 'audit') {
+        query.filter.to = to;
+      } else {
+        query.to = to;
+      }
     }
 
     if (groupRelated) {

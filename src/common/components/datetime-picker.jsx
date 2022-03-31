@@ -35,7 +35,7 @@ export const DateTimeInput = ({
         clearable
         {...rest}
       />
-      <FormHelperText margin="dense">&nbsp;</FormHelperText>
+      <p style={{ marginTop: '8px' }} className="MuiFormHelperText-root MuiFormHelperText-contained MuiFormHelperText-marginDense" />
     </FormGroup>
   );
 };
