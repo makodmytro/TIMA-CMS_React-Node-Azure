@@ -95,10 +95,10 @@ const GroupsSelection = ({ disabled }) => {
             return (
               <Box key={group.id} flex="0 0 30%">
                 <BooleanInput
-                  name={group.id}
+                  name={`u_${group.id}`}
                   label={group.name}
                   defaultValue={value.includes(group.id)}
-                  record={{ [group.id]: value.includes(group.id) }}
+                  record={{ [`u_${group.id}`]: value.includes(group.id) }}
                   onChange={() => handleChange(group.id)}
                   disabled={disabled}
                 />
@@ -109,6 +109,19 @@ const GroupsSelection = ({ disabled }) => {
       </Box>
     </Box>
   );
+};
+
+const NullableBoolean = ({ record, source, ...rest }) => {
+  return (
+    <BooleanInput
+      source={source}
+      record={{
+        ...record,
+        [source]: record?.source || false,
+      }}
+      {...rest}
+    />
+  )
 };
 
 const UsersEdit = (props) => {
@@ -206,12 +219,12 @@ const UsersEdit = (props) => {
             </>
           )
         }
-        <BooleanInput
+        <NullableBoolean
           source="isActive"
           label="resources.users.fields.isActive"
           disabled={disabled}
         />
-        <BooleanInput
+        <NullableBoolean
           source="isAdmin"
           label="resources.users.fields.isAdmin"
           disabled={disabled}
