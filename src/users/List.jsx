@@ -39,7 +39,7 @@ const UsersList = (props) => {
     },
     { key: 'email', el: (<TextField source="email" />) },
     {
-      key: 'last_login',
+      key: 'lastLogin',
       el: (<DateField source="lastLogin" />),
     },
     {
