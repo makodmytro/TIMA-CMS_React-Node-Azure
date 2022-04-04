@@ -179,6 +179,7 @@ const english = {
         useAsSuggestion: 'Suggestion',
         all_topics: 'All topics',
         ignored: 'Ignored',
+        status: 'Status',
       },
       add_related: 'Add Question',
       add_followup: 'Add Followup',
@@ -207,6 +208,7 @@ const english = {
         updatedAt: 'Updated',
         approved: 'Approved',
         tags: 'Tags',
+        status: 'Status',
       },
     },
     sources: {
@@ -245,6 +247,21 @@ const english = {
       name: 'User |||| Users',
       change_password: 'Change password',
       add: 'Add user',
+      workflow: {
+        role: 'Workflow role',
+        roles: {
+          EDITOR: 'Editor',
+          REVIEWER: 'Reviewer',
+        },
+        status: {
+          EDITING: 'Editing',
+          READY_FOR_REVIEW: 'Ready for review',
+          CONTENT_ERROR: 'Content error',
+          REVIEWED: 'Reviewed',
+          INTEGRATION_ERROR: 'Integration error',
+          DEPLOYED: 'Deployed',
+        },
+      },
       fields: {
         id: 'ID',
         name: 'Name',
@@ -267,6 +284,7 @@ const english = {
         id: 'ID',
         name: 'Name',
         createdAt: 'Created at',
+        workflowRole: 'Workflow role',
       },
     },
     audit: {

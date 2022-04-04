@@ -387,6 +387,20 @@ const resDataProvider = {
 
     return { data: json };
   },
+  workflowRoles: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/workflow/roles`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
+  workflowStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/workflow/status`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;

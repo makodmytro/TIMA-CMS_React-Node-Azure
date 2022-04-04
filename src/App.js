@@ -89,9 +89,15 @@ const AsyncResources = () => {
     const topics = await dataProvider.getList('topics', {
       pagination: { perPage: 200, page: 1 },
     });
+    const [roles, status] = await Promise.all([
+      dataProvider.workflowRoles(),
+      dataProvider.workflowStatus(),
+    ]);
 
     store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
+    store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
+    store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
 
     await delay(500);
     setTac(true);

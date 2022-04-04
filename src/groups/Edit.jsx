@@ -6,6 +6,7 @@ import {
   Toolbar,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import WorkflowRole from './components/WorkflowRole';
 import { useIsAdmin } from '../hooks';
 
 const CustomToolbar = (props) => {
@@ -36,9 +37,11 @@ const LanguageEdit = (props) => {
     <Edit
       {...props}
       actions={<CustomTopToolbar />}
+      undoable={false}
     >
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
+        <WorkflowRole source="workflowRole" fullWidth disabled={disabled} />
       </SimpleForm>
     </Edit>
   );
