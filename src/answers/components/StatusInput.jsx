@@ -120,21 +120,19 @@ const StatusInput = ({ record, disabled }) => {
     .filter((o) => record?.possibleNextStatus.includes(o.value))
     .map((o) => ({ id: o.value, name: translate(`resources.users.workflow.status.${o.name}`) }));
 
-  if (record.status && !editting) {
+  if (!editting) {
     const matching = status.find((s) => s.value === record.status);
 
-    if (matching) {
-      return (
-        <Box mt={2}>
-          <Typography variant="body2">
-            {translate('resources.answers.fields.status')}
-          </Typography>
-          <Button color="secondary" onClick={() => setEditting(true)} size="small">
-            {translate(`resources.users.workflow.status.${matching.name}`)} &nbsp;&nbsp;<PencilIcon fontSize="small" />
-          </Button>
-        </Box>
-      );
-    }
+    return (
+      <Box mt={2}>
+        <Typography variant="body2">
+          {translate('resources.answers.fields.status')}
+        </Typography>
+        <Button color="secondary" onClick={() => setEditting(true)} size="small">
+          {matching ? translate(`resources.users.workflow.status.${matching.name}`) : 'N/A'} &nbsp;&nbsp;<PencilIcon fontSize="small" />
+        </Button>
+      </Box>
+    );
   }
 
   return (
