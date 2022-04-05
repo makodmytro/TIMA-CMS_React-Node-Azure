@@ -6,6 +6,7 @@ import {
   TextField,
   FunctionField,
 } from 'react-admin';
+import { useSelector } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -21,6 +22,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 const StatusHistory = ({ record }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const status = useSelector((state) => state.custom.workflowStatus)
   const [history, setHistory] = React.useState(null);
 
   const fetch = async () => {
@@ -50,11 +52,29 @@ const StatusHistory = ({ record }) => {
   }
 
   const render = (r) => {
-    if (r.previousStatus) {
-      return `${r.previousStatus} -> ${r.newStatus}`;
+    if (!status.length) {
+      if (r.previousStatus) {
+        return `${r.previousStatus} -> ${r.newStatus}`;
+      }
+
+      return r.newStatus;
     }
 
-    return r.newStatus;
+    const _new = status.find((s) => s.value === r.newStatus);
+
+    if (r.previousStatus) {
+      const _prev = status.find((s) => s.value === r.previousStatus);
+
+      if (_prev) {
+        return `${translate(`resources.users.workflow.status.${_prev.name}`)} -> ${translate(`resources.users.workflow.status.${_new.name}`)}`;
+      }
+    }
+
+    if (!_new) {
+      return '-';
+    }
+
+    return translate(`resources.users.workflow.status.${_new.name}`);
   };
 
   return (
