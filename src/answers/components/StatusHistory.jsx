@@ -45,12 +45,6 @@ const StatusHistory = ({ record }) => {
     return null;
   }
 
-  const filtered = history.filter((h) => h.previousStatus !== h.newStatus);
-
-  if (!filtered.length) {
-    return null;
-  }
-
   const render = (r) => {
     if (!status.length) {
       if (r.previousStatus) {
@@ -62,7 +56,7 @@ const StatusHistory = ({ record }) => {
 
     const _new = status.find((s) => s.value === r.newStatus);
 
-    if (r.previousStatus) {
+    if (r.previousStatus && r.previousStatus !== r.newStatus) {
       const _prev = status.find((s) => s.value === r.previousStatus);
 
       if (_prev) {
@@ -102,7 +96,7 @@ const StatusHistory = ({ record }) => {
               </TableHead>
               <TableBody>
                 {
-                  filtered.map((row, i) => (
+                  history.map((row, i) => (
                     <TableRow key={i}>
                       <TableCell>
                         <DateField record={row} source="createdAt" showTime />
