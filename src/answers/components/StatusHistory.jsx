@@ -22,7 +22,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 const StatusHistory = ({ record }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
-  const status = useSelector((state) => state.custom.workflowStatus)
+  const status = useSelector((state) => state.custom.workflowStatus);
   const [history, setHistory] = React.useState(null);
 
   const fetch = async () => {

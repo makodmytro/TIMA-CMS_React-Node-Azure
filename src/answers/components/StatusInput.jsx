@@ -10,6 +10,7 @@ import {
   TextInput,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
+import PencilIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
@@ -96,6 +97,7 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
 
 const StatusInput = ({ record, disabled }) => {
   const [open, setOpen] = React.useState(false);
+  const [editting, setEditting] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -117,6 +119,23 @@ const StatusInput = ({ record, disabled }) => {
   const options = status
     .filter((o) => record?.possibleNextStatus.includes(o.value))
     .map((o) => ({ id: o.value, name: translate(`resources.users.workflow.status.${o.name}`) }));
+
+  if (record.status && !editting) {
+    const matching = status.find((s) => s.value === record.status);
+
+    if (matching) {
+      return (
+        <Box mt={2}>
+          <Typography variant="body2">
+            {translate('resources.answers.fields.status')}
+          </Typography>
+          <Button color="secondary" onClick={() => setEditting(true)} size="small">
+            {translate(`resources.users.workflow.status.${matching.name}`)} &nbsp;&nbsp;<PencilIcon fontSize="small" />
+          </Button>
+        </Box>
+      );
+    }
+  }
 
   return (
     <Box display="flex" mt={2}>
