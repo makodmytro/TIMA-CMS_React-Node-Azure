@@ -71,6 +71,19 @@ const AsyncResources = () => {
     setTac(true);
   };
 
+  const fetchWorkflow = async () => {
+    if (localStorage.getItem('token')) {
+      try {
+        const [roles, status] = await Promise.all([
+          dataProvider.workflowRoles(),
+          dataProvider.workflowStatus(),
+        ]);
+        store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
+        store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+      } catch (e) {} // eslint-disable-line
+    }
+  };
+
   const check = async () => {
     const a = async () => (location.pathname.includes('/login') || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
 
@@ -89,15 +102,11 @@ const AsyncResources = () => {
     const topics = await dataProvider.getList('topics', {
       pagination: { perPage: 200, page: 1 },
     });
-    const [roles, status] = await Promise.all([
-      dataProvider.workflowRoles(),
-      dataProvider.workflowStatus(),
-    ]);
 
     store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
-    store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
-    store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+
+    fetchWorkflow();
 
     await delay(500);
     setTac(true);
