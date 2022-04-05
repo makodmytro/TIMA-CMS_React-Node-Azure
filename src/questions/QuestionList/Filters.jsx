@@ -7,6 +7,7 @@ import {
   useListContext,
   useTranslate,
 } from 'react-admin';
+import { useSelector } from 'react-redux';
 import { Form } from 'react-final-form';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -21,6 +22,7 @@ const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const [open, setOpen] = React.useState(false);
   const translate = useTranslate();
+  const status = useSelector((state) => state.custom.workflowStatus);
   const {
     filterValues,
     setFilters,
@@ -173,6 +175,17 @@ const Filters = ({ languages, topics, ...props }) => {
             source="unanswered"
             alwaysOn
             onChange={() => handleSubmit()}
+          />
+          <SelectInput
+            label="resources.questions.fields.status"
+            source="status"
+            allowEmpty
+            emptyText={translate('misc.none')}
+            onChange={() => handleSubmit()}
+            defaultValue=""
+            choices={status.map((s) => ({
+              id: s.value, name: translate(`resources.users.workflow.status.${s.name}`),
+            }))}
           />
         </form>
 

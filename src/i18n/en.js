@@ -39,6 +39,7 @@ const english = {
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
   'The questions were set as follow up': 'The questions were set as follow up',
+  'Comment added successfully': 'Comment added successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -112,6 +113,8 @@ const english = {
     topics: 'Topics',
     sessions_map: 'Sessions map',
     edit_topic: 'Edit',
+    can_not_change_status: 'The status cannot be changed by your current role',
+    add_comment: 'Add comment',
   },
   resources: {
     topics: {
@@ -179,6 +182,7 @@ const english = {
         useAsSuggestion: 'Suggestion',
         all_topics: 'All topics',
         ignored: 'Ignored',
+        status: 'Status',
       },
       add_related: 'Add Question',
       add_followup: 'Add Followup',
@@ -197,6 +201,13 @@ const english = {
       create: 'Create answer',
       duplicate: 'Duplicate the answer',
       add_related_question: 'Add related question',
+      status_history: 'Status history',
+      status: {
+        createdAt: 'Date',
+        updatedBy: 'Editor',
+        status: 'Status',
+        comment: 'Comment',
+      },
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',
@@ -207,6 +218,7 @@ const english = {
         updatedAt: 'Updated',
         approved: 'Approved',
         tags: 'Tags',
+        status: 'Status',
       },
     },
     sources: {
@@ -245,6 +257,21 @@ const english = {
       name: 'User |||| Users',
       change_password: 'Change password',
       add: 'Add user',
+      workflow: {
+        role: 'Workflow role',
+        roles: {
+          EDITOR: 'Editor',
+          REVIEWER: 'Reviewer',
+        },
+        status: {
+          EDITING: 'Editing',
+          READY_FOR_REVIEW: 'Ready for review',
+          CONTENT_ERROR: 'Content error',
+          REVIEWED: 'Reviewed',
+          INTEGRATION_ERROR: 'Integration error',
+          DEPLOYED: 'Deployed',
+        },
+      },
       fields: {
         id: 'ID',
         name: 'Name',
@@ -267,6 +294,7 @@ const english = {
         id: 'ID',
         name: 'Name',
         createdAt: 'Created at',
+        workflowRole: 'Workflow role',
       },
     },
     audit: {

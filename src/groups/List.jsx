@@ -1,5 +1,6 @@
 import React, { cloneElement, useState } from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
+import { useSelector } from 'react-redux';
 import {
   Datagrid,
   DateField,
@@ -27,12 +28,34 @@ function LinkTab(props) {
   );
 }
 
+const WorkflowRole = ({ record }) => {
+  const roles = useSelector((state) => state.custom.workflowRoles);
+  const translate = useTranslate();
+
+  const match = roles.find((r) => r.value === record?.workflowRole);
+
+  if (!match) {
+    return '-';
+  }
+
+  return (
+    <TextField
+      source="role"
+      record={{ role: translate(`resources.users.workflow.roles.${match.name}`) }}
+    />
+  );
+};
+
 const GroupsList = (props) => {
   const translate = useTranslate();
   const columns = [
     {
       key: 'name',
       el: (<TextField source="name" />),
+    },
+    {
+      key: 'workflowRole',
+      el: (<WorkflowRole label="resources.users.workflow.role" />),
     },
     {
       key: 'createdAt',

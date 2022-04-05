@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
+import StatusInput from './StatusInput';
 import { useDisabledEdit, useDisabledCreate } from '../../hooks';
 
 const Approved = (props) => {
@@ -143,6 +144,11 @@ const Form = ({
       />
       <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
+      {
+        edit && (
+          <StatusInput source="status" disabled={disableEdit} record={record} />
+        )
+      }
     </>
   );
 };

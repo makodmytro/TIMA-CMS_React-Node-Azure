@@ -39,6 +39,7 @@ const german = {
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
   'The questions were set as follow up': 'Die Fragen wurden als Folgefragen erstellt',
+  'Comment added successfully': 'Comment added successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Bist du sicher, dass du die mit dieser Antwort verbundenen Fragen bestätigen möchtest?',
@@ -111,6 +112,8 @@ const german = {
     topics: 'Themen',
     sessions_map: 'Sessions Karte',
     edit_topic: 'Thema bearbeiten',
+    can_not_change_status: 'The status cannot be changed by your current role',
+    add_comment: 'Add comment',
   },
   resources: {
     topics: {
@@ -178,6 +181,7 @@ const german = {
         useAsSuggestion: 'Vorschlag',
         all_topics: 'Alle Themen',
         ignored: 'Ignored',
+        status: 'Status',
       },
       add_related: 'Frage hinzufügen',
       add_followup: 'Folgefrage hinzufügen',
@@ -195,6 +199,13 @@ const german = {
       edit: 'Antwort bearbeiten',
       create: 'Antwort erstellen',
       duplicate: 'Antwort duplizieren',
+      status_history: 'Status history',
+      status: {
+        createdAt: 'Date',
+        updatedBy: 'Editor',
+        status: 'Status',
+        comment: 'Comment',
+      },
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',
@@ -205,6 +216,7 @@ const german = {
         updatedAt: 'Aktualisiert',
         approved: 'Bestätigt',
         tags: 'Tags',
+        status: 'Status',
       },
     },
     sources: {
@@ -243,6 +255,21 @@ const german = {
       name: 'Nutzer |||| Nutzer',
       change_password: 'Passwort ändern',
       add: 'Nutzer hinzufügen',
+      workflow: {
+        role: 'Workflow role',
+        roles: {
+          EDITOR: 'Editor',
+          REVIEWER: 'Reviewer',
+        },
+        status: {
+          EDITING: 'Editing',
+          READY_FOR_REVIEW: 'Ready for review',
+          CONTENT_ERROR: 'Content error',
+          REVIEWED: 'Reviewed',
+          INTEGRATION_ERROR: 'Integration error',
+          DEPLOYED: 'Deployed',
+        },
+      },
       fields: {
         id: 'ID',
         name: 'Name',
@@ -265,6 +292,7 @@ const german = {
         id: 'ID',
         name: 'Name',
         createdAt: 'Erstellt am',
+        workflowRole: 'Workflow role',
       },
     },
   },

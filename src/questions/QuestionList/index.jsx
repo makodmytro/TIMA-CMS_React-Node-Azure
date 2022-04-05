@@ -38,6 +38,7 @@ import ListActions, {
 import TopicSelectCell from '../../common/components/TopicSelectCell';
 import ApprovedSwitchField from '../components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../components/use-as-suggestion-switch-field';
+import StatusField from '../../common/components/StatusField';
 import styles from './styles';
 import Filters from './Filters';
 import AnswerField from '../components/AnswerField';
@@ -169,6 +170,13 @@ const CustomGridItem = ({
               <TopicSelectCell label="Topic" source="fk_topicId" record={record} disabled={disableEdit} />
             </TableCell>
           )}
+        {
+          visibleColumns.includes('status') && (
+            <TableCell>
+              <StatusField source="status" label="resources.questions.fields.status" sortable={false} record={record} />
+            </TableCell>
+          )
+        }
         {visibleColumns.includes('approved')
           && (
             <TableCell>
@@ -279,6 +287,7 @@ const CustomGrid = ({
                 <Th label="resources.questions.fields.text" field="text" />
                 <Th label="resources.questions.fields.fk_answerId" field="fk_answerId" />
                 <Th label="resources.questions.fields.fk_topicId" field="fk_topicId" />
+                <Th label="resources.questions.fields.status" field="status" />
                 <Th label="resources.questions.fields.approved" field="approved" />
                 <Th label="resources.questions.fields.useAsSuggestion" field="useAsSuggestion" />
                 <Th label="resources.questions.fields.updatedAt" field="updatedAt" />
@@ -321,6 +330,7 @@ const QuestionList = ({
     { key: 'text' },
     { key: 'fk_answerId' },
     { key: 'fk_topicId' },
+    { key: 'status' },
     { key: 'approved' },
     { key: 'useAsSuggestion' },
     { key: 'updatedAt' },
