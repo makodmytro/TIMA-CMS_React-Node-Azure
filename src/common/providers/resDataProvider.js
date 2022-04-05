@@ -299,7 +299,26 @@ const resDataProvider = {
 
     return { data: json };
   },
+  answerWorkflow: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status`);
 
+    return { data: json };
+  },
+  statusComment: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status/comment`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: true };
+  },
+  updateAnswerStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status/${params.status}`, {
+      method: 'PUT',
+    });
+
+    return { data: true };
+  },
   getAnswerMedia: async (resource, params) => {
     const token = localStorage.getItem('token');
     const headers = new Headers({

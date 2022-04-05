@@ -39,6 +39,7 @@ const german = {
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
   'The questions were set as follow up': 'Die Fragen wurden als Folgefragen erstellt',
+  'Comment added successfully': 'Comment added successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Bist du sicher, dass du die mit dieser Antwort verbundenen Fragen bestätigen möchtest?',
@@ -111,6 +112,8 @@ const german = {
     topics: 'Themen',
     sessions_map: 'Sessions Karte',
     edit_topic: 'Thema bearbeiten',
+    can_not_change_status: 'The status cannot be changed by your current role',
+    add_comment: 'Add comment',
   },
   resources: {
     topics: {
@@ -196,6 +199,13 @@ const german = {
       edit: 'Edit answer',
       create: 'Create answer',
       duplicate: 'Duplicate the answer',
+      status_history: 'Status history',
+      status: {
+        createdAt: 'Date',
+        updatedBy: 'Editor',
+        status: 'Status',
+        comment: 'Comment',
+      },
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslate, TextField } from 'react-admin';
+import Box from '@material-ui/core/Box';
 import StatusColorCodes from '../../status-color-codes.json';
 
 const StatusField = ({ record }) => {
@@ -18,21 +19,20 @@ const StatusField = ({ record }) => {
   }
 
   return (
-    <div>
-      <span
+    <Box position="relative">
+      <Box
         style={{
           width: '10px',
           height: '10px',
           borderRadius: '20px',
-          borderColor: StatusColorCodes[match.name],
-          color: StatusColorCodes[match.name],
-          opacity: '0.7',
+          border: `1px solid ${StatusColorCodes[match.name]}`,
+          backgroundColor: `${StatusColorCodes[match.name]}81`,
         }}
       >
         &nbsp;
-      </span>
+      </Box>
       <TextField source="name" record={{ name: translate(`resources.users.workflow.status.${match.name}`) }} />
-    </div>
+    </Box>
   );
 };
 

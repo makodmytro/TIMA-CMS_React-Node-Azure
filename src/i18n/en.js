@@ -39,6 +39,7 @@ const english = {
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
   'The questions were set as follow up': 'The questions were set as follow up',
+  'Comment added successfully': 'Comment added successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -112,6 +113,8 @@ const english = {
     topics: 'Topics',
     sessions_map: 'Sessions map',
     edit_topic: 'Edit',
+    can_not_change_status: 'The status cannot be changed by your current role',
+    add_comment: 'Add comment',
   },
   resources: {
     topics: {
@@ -198,6 +201,13 @@ const english = {
       create: 'Create answer',
       duplicate: 'Duplicate the answer',
       add_related_question: 'Add related question',
+      status_history: 'Status history',
+      status: {
+        createdAt: 'Date',
+        updatedBy: 'Editor',
+        status: 'Status',
+        comment: 'Comment',
+      },
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',

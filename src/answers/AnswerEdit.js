@@ -18,6 +18,7 @@ import Form from './components/form';
 import AnswerMedia from './media/media';
 import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow';
 import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
+import StatusHistory from './components/StatusHistory';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -124,6 +125,9 @@ const AnswerEdit = (props) => {
           />
         </SimpleForm>
       </Edit>
+      <Box pt={2}>
+        <StatusHistory record={answer} />
+      </Box>
       <Box pt={2}>
         <FollowupQuestionsActionsRow record={answer} />
       </Box>
