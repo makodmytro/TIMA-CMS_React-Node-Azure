@@ -157,7 +157,7 @@ const StatusInput = ({ record, disabled }) => {
         }
       </Box>
       <Box flex={1} textAlign="center" mt={2}>
-        <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary">
+        <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabled}>
           {translate('misc.add_comment')}
         </Button>
       </Box>

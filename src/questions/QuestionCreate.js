@@ -14,6 +14,8 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
 import AutocompleteInput from './components/autocomplete-input';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const FormFields = (props) => {
   const {
     input: { value },
@@ -68,7 +70,11 @@ const FormFields = (props) => {
       >
         <SelectInput optionText="text" emptyText="None" />
       </ReferenceInput>
-      <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />
+      {
+        !USE_WORKFLOW && (
+          <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />
+        )
+      }
     </>
   );
 };

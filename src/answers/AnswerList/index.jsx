@@ -39,9 +39,16 @@ import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS
   ? process.env.REACT_APP_HIDE_FIELDS_ANSWERS.split(',')
   : [];
+
+if (!USE_WORKFLOW) {
+  HIDDEN_FIELDS.push('status');
+} else {
+  HIDDEN_FIELDS.push('approved');
+}
 
 const columns = [
   { key: 'text' },

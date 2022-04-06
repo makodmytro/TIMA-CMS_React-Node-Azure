@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  Confirm,
   DateField,
   List,
-  useDataProvider,
   useListContext,
-  useNotify,
-  useRedirect,
-  useRefresh,
   useTranslate,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
@@ -47,19 +42,48 @@ import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_QUESTIONS
+  ? process.env.REACT_APP_HIDE_FIELDS_QUESTIONS.split(',')
+  : [];
+
+if (!USE_WORKFLOW) {
+  HIDDEN_FIELDS.push('status');
+} else {
+  HIDDEN_FIELDS.push('approved');
+}
+
+if (!USE_WORKFLOW) {
+  HIDDEN_FIELDS.push('status');
+} else {
+  HIDDEN_FIELDS.push('approved');
+  HIDDEN_FIELDS.push('useAsSuggestion');
+}
+
+const columns = [
+  { key: 'text' },
+  { key: 'fk_answerId' },
+  { key: 'fk_topicId' },
+  { key: 'status' },
+  { key: 'approved' },
+  { key: 'useAsSuggestion' },
+  { key: 'updatedAt' },
+  { key: 'feedbackPositiveCount' },
+  { key: 'feedbackNegativeCount' },
+].filter((c) => !HIDDEN_FIELDS.includes(c.key));
 
 const CustomGridItem = ({
   record,
-  removeAnswer,
   visibleColumns,
   level,
 }) => {
+  record.allowEdit = false; // eslint-disable-line
+
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
   const disableApprove = useDisabledApprove(record?.fk_topicId);
   const classes = styles();
-  const redirect = useRedirect();
 
   const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
 
@@ -114,7 +138,7 @@ const CustomGridItem = ({
             <DropdownMenu
               editInline
               record={record}
-              removeAnswer={removeAnswer}
+              disabled={record.allowEdit === false}
             />
           </TableCell>
         </TableRow>
@@ -224,7 +248,7 @@ const CustomGridItem = ({
           <DropdownMenu
             editInline
             record={record}
-            removeAnswer={removeAnswer}
+            disabled={record.allowEdit === false}
           />
         </TableCell>
       </TableRow>
@@ -235,7 +259,6 @@ const CustomGridItem = ({
               record.relatedQuestions.map((child, iii) => (
                 <CustomGridItem
                   record={child}
-                  removeAnswer={removeAnswer}
                   visibleColumns={visibleColumns}
                   key={iii}
                   level={(level || 0) + 1}
@@ -250,7 +273,6 @@ const CustomGridItem = ({
 };
 
 const CustomGrid = ({
-  removeAnswer,
   visibleColumns,
 }) => {
   const { ids, data, basePath, currentSort, setSort } = useListContext(); // eslint-disable-line
@@ -303,7 +325,6 @@ const CustomGrid = ({
                     key={id}
                     record={data[id]}
                     basePath={basePath}
-                    removeAnswer={removeAnswer}
                     visibleColumns={visibleColumns}
                   />
                 ))
@@ -319,63 +340,10 @@ const CustomGrid = ({
 const QuestionList = ({
   languages, topics, dispatch, ...props
 }) => {
-  const dataProvider = useDataProvider();
-  const notify = useNotify();
-  const translate = useTranslate();
-  const refresh = useRefresh();
-  const [record, setRecord] = React.useState(null);
-  const [removeAnswerConfirmOpened, setRemoveAnswerConfirmOpened] = React.useState(false);
-
-  const columns = [
-    { key: 'text' },
-    { key: 'fk_answerId' },
-    { key: 'fk_topicId' },
-    { key: 'status' },
-    { key: 'approved' },
-    { key: 'useAsSuggestion' },
-    { key: 'updatedAt' },
-    { key: 'feedbackPositiveCount' },
-    { key: 'feedbackNegativeCount' },
-  ];
-
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'questions'));
-
-  const onRemoveAnswerOpen = (r) => {
-    setRecord(r);
-    setRemoveAnswerConfirmOpened(true);
-  };
-
-  const onRemoveAnswerClose = () => {
-    setRecord(null);
-    setRemoveAnswerConfirmOpened(false);
-  };
-
-  const removeAnswer = async () => {
-    try {
-      await dataProvider.update('questions', {
-        id: record.id,
-        data: { fk_answerId: null },
-      });
-
-      refresh();
-    } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
-    }
-    onRemoveAnswerClose();
-  };
 
   return (
     <>
-      <Confirm
-        isOpen={removeAnswerConfirmOpened}
-        loading={false}
-        title={translate('misc.unlink_answer')}
-        content={translate('dialogs.unlink_confirmation')}
-        onConfirm={removeAnswer}
-        onClose={onRemoveAnswerClose}
-      />
       <List
         {...props}
         actions={(
@@ -390,7 +358,6 @@ const QuestionList = ({
       >
         <CustomGrid
           visibleColumns={visibleColumns}
-          removeAnswer={onRemoveAnswerOpen}
         />
       </List>
     </>

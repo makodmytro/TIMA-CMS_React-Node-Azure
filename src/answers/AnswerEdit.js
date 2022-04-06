@@ -32,8 +32,8 @@ const HiddenField = ({ children, fieldName }) => {
 };
 
 const CustomToolbar = (props) => {
-  const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
-  const disableDelete = useDisabledDelete(props?.record?.fk_topicId);
+  const disableEdit = useDisabledEdit(props?.record?.fk_topicId) || props?.record?.allowEdit === false;
+  const disableDelete = useDisabledDelete(props?.record?.fk_topicId) || props?.record?.allowEdit === false;
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -68,7 +68,7 @@ const AnswerEdit = (props) => {
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const [answer, setAnswer] = React.useState(null);
-  const disableEdit = useDisabledEdit(answer?.fk_topicId);
+  const disableEdit = useDisabledEdit(answer?.fk_topicId) || (answer && answer.allowEdit === false);
   const ref = React.useRef();
 
   React.useEffect(() => {

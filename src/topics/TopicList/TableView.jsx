@@ -77,7 +77,11 @@ const Row = ({
           )
         }
         <TableCell>
-          <ListDropdownMenu onSync={onSync} onPermissionsClick={(id) => setOpen(id)} record={record} />
+          <ListDropdownMenu
+            onSync={onSync}
+            onPermissionsClick={level > 0 ? null : (id) => setOpen(id)}
+            record={record}
+          />
         </TableCell>
       </TableRow>
       {

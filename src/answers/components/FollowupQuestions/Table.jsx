@@ -17,13 +17,15 @@ import ApprovedSwitchField from '../../../questions/components/approved-switch-f
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledEdit, useDisabledApprove } from '../../../hooks';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const FollowupQuestionsTable = ({
   record,
 }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
-  const disabled = useDisabledEdit(record?.fk_topicId);
-  const disabledApproved = useDisabledApprove(record?.fk_topicId);
+  const disabled = useDisabledEdit(record?.fk_topicId) || (record && record.allowEdit === false);
+  const disabledApproved = useDisabledApprove(record?.fk_topicId) || (record && record.allowEdit === false);
 
   if (!record || !record.FollowupQuestions || !record.FollowupQuestions.length) {
     return (
@@ -38,8 +40,14 @@ const FollowupQuestionsTable = ({
       <TableHead>
         <TableRow>
           <TableCell>{translate('resources.questions.fields.text')}</TableCell>
-          <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
-          <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
+          {
+            !USE_WORKFLOW && (
+              <>
+                <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
+                <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
+              </>
+            )
+          }
           <TableCell>&nbsp;</TableCell>
           <TableCell>&nbsp;</TableCell>
         </TableRow>
@@ -74,12 +82,18 @@ const FollowupQuestionsTable = ({
                     record={{ ...related }}
                   />
                 </TableCell>
-                <TableCell>
-                  <ApprovedSwitchField record={related} disabled={disabledApproved} />
-                </TableCell>
-                <TableCell>
-                  <UseAsSuggestionSwitchField record={related} disabled={disabled} />
-                </TableCell>
+                {
+                  !USE_WORKFLOW && (
+                    <>
+                      <TableCell>
+                        <ApprovedSwitchField record={related} disabled={disabledApproved} />
+                      </TableCell>
+                      <TableCell>
+                        <UseAsSuggestionSwitchField record={related} disabled={disabled} />
+                      </TableCell>
+                    </>
+                  )
+                }
                 <TableCell>
                   <AnswerField record={related} />
                 </TableCell>
@@ -87,6 +101,7 @@ const FollowupQuestionsTable = ({
                   <DropdownMenu
                     record={{ ...related }}
                     editInline
+                    disabled={disabled}
                   />
                 </TableCell>
               </TableRow>

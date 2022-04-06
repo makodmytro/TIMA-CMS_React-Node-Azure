@@ -72,7 +72,7 @@ const AsyncResources = () => {
   };
 
   const fetchWorkflow = async () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
       try {
         const [roles, status] = await Promise.all([
           dataProvider.workflowRoles(),

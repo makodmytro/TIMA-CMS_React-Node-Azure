@@ -84,7 +84,7 @@ const DropdownMenu = ({
           )
         }
         {
-          admin && (
+          admin && !!onPermissionsClick && (
             <MenuItem
               onClick={(e) => e.stopPropagation()}
             >

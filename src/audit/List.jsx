@@ -5,7 +5,6 @@ import {
   List,
   TextField,
   Filter,
-  ReferenceField,
   ReferenceInput,
   SelectInput,
   useTranslate,
@@ -103,11 +102,7 @@ const LogsList = (props) => {
     },
     {
       key: 'fk_userId',
-      el: (
-        <ReferenceField source="fk_userId" reference="users">
-          <TextField source="name" />
-        </ReferenceField>
-      ),
+      el: <TextField source="userName" label="resources.audit.fields.fk_userId" />,
     },
     {
       key: 'createdAt',
