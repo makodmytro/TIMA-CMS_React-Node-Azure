@@ -266,8 +266,9 @@ const english = {
         status: {
           EDITING: 'Editing',
           READY_FOR_REVIEW: 'Ready for review',
-          CONTENT_ERROR: 'Content error',
           REVIEWED: 'Reviewed',
+          REVIEWING: 'Reviewing',
+          CONTENT_ERROR: 'Content error',
           INTEGRATION_ERROR: 'Integration error',
           DEPLOYED: 'Deployed',
         },
