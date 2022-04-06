@@ -21,7 +21,7 @@ import { useDisabledEdit } from '../../hooks';
 
 const EditDialog = ({ record, open, onClose }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
-  const disableEdit = useDisabledEdit(record?.fk_topicId);
+  const disableEdit = useDisabledEdit(record?.fk_topicId) || record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -104,6 +104,7 @@ const EditDialog = ({ record, open, onClose }) => {
                     color="primary"
                     type="submit"
                     size="small"
+                    disabled={record?.allowEdit === false}
                   >
                     {translate('misc.save')}
                   </Button>

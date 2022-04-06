@@ -17,6 +17,7 @@ import { loginRequest } from '../azure-auth-config';
 import Logo from '../assets/TIMA_logo.png';
 
 const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const Authenticated = () => {
   const [error, setError] = React.useState(false);
@@ -45,14 +46,16 @@ const Authenticated = () => {
       if (success) {
         redirect('/');
 
-        try {
-          const [roles, status] = await Promise.all([
-            dataProvider.workflowRoles(),
-            dataProvider.workflowStatus(),
-          ]);
-          store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
-          store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
-        } catch (e) {} // eslint-disable-line
+        if (USE_WORKFLOW) {
+          try {
+            const [roles, status] = await Promise.all([
+              dataProvider.workflowRoles(),
+              dataProvider.workflowStatus(),
+            ]);
+            store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
+            store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+          } catch (e) {} // eslint-disable-line
+        }
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));

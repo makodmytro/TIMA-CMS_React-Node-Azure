@@ -6,10 +6,15 @@ import {
 } from 'react-admin';
 import { useSelector } from 'react-redux';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const WorkflowRole = (props) => {
-  const dataProvider = useDataProvider();
   const translate = useTranslate();
   const options = useSelector((state) => state.custom.workflowRoles);
+
+  if (!USE_WORKFLOW) {
+    return null;
+  }
 
   return (
     <AutocompleteInput

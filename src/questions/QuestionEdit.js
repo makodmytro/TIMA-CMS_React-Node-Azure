@@ -30,6 +30,8 @@ import SearchQuestionsAnswers from './search-questions-answers';
 import IgnoreButton from './components/ignore-button';
 import { useDisabledEdit, useDisabledDelete } from '../hooks';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const CustomToolbar = (props) => {
   const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
   const disableDelete = useDisabledDelete(props?.record?.fk_topicId);
@@ -235,8 +237,14 @@ const FormFields = ({
         filter={{ fk_languageId: fkLanguageId }}
         disabled={disableEdit}
       />
-      <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
-      <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
+      {
+        !USE_WORKFLOW && (
+          <>
+            <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
+            <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
+          </>
+        )
+      }
       <Answer
         {...{
           answer, unlinkAnswer, record, scrollToSearch,

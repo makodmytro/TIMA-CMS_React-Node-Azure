@@ -14,6 +14,7 @@ const ActionsRow = ({ record }) => {
   const translate = useTranslate();
   const [expanded, setExpanded] = React.useState(false);
   const [createOpen, setCreateOpen] = React.useState(false);
+  const disabled = record && record.allowEdit === false;
 
   if (!record) {
     return null;
@@ -46,6 +47,7 @@ const ActionsRow = ({ record }) => {
           color="secondary"
           type="button"
           onClick={() => setCreateOpen(true)}
+          disabled={disabled}
           fullWidth
         >
           {translate('resources.questions.add_related')}

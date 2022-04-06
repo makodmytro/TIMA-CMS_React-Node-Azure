@@ -19,13 +19,14 @@ import { useDisabledEdit, useDisabledDelete } from '../../hooks';
 const DropdownMenu = ({
   record,
   editInline,
+  disabled,
 }) => {
   const refresh = useRefresh();
   const translate = useTranslate();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const disableEdit = useDisabledEdit(record?.fk_topicId);
-  const disableDelete = useDisabledDelete(record?.fk_topicId);
+  const disableEdit = useDisabledEdit(record?.fk_topicId) || disabled;
+  const disableDelete = useDisabledDelete(record?.fk_topicId) || disabled;
 
   const handleClick = (event) => {
     event.stopPropagation();

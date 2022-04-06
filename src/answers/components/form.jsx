@@ -16,6 +16,8 @@ import TopicSelect from '../../topics/components/TopicSelect';
 import StatusInput from './StatusInput';
 import { useDisabledEdit, useDisabledCreate } from '../../hooks';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const Approved = (props) => {
   const { permissions } = usePermissions();
 
@@ -53,7 +55,9 @@ const Form = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
-  const disableEdit = edit ? useDisabledEdit(fkTopicId) : useDisabledCreate();
+  const disableEdit = edit
+    ? (useDisabledEdit(fkTopicId) || (record && record.allowEdit === false))
+    : useDisabledCreate();
 
   const getLang = () => {
     if (!fkLanguageId || !languages[fkLanguageId]) {
@@ -142,10 +146,14 @@ const Form = ({
         disabled={disableEdit}
         filter={{ fk_languageId: fkLanguageId }}
       />
-      <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
+      {
+        !USE_WORKFLOW && (
+          <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
+        )
+      }
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
       {
-        edit && (
+        edit && USE_WORKFLOW && (
           <StatusInput source="status" disabled={disableEdit} record={record} />
         )
       }
