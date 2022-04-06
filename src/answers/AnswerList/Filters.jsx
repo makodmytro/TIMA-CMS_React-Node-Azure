@@ -16,6 +16,7 @@ import TopicSelectDialog from '../../topics/components/TopicSelectDialog';
 import styles from './styles';
 
 const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
@@ -134,29 +135,37 @@ const Filters = ({ languages, topics, ...props }) => {
               </ReferenceInput>
             )
           }
-          <SelectInput
-            label="resources.answers.fields.approved"
-            source="approved"
-            allowEmpty
-            emptyText={translate('misc.both')}
-            onChange={() => handleSubmit()}
-            defaultValue=""
-            choices={[
-              { id: true, name: <DoneIcon color="primary" /> },
-              { id: false, name: <ClearIcon /> },
-            ]}
-          />
-          <SelectInput
-            label="resources.answers.fields.status"
-            source="status"
-            allowEmpty
-            emptyText={translate('misc.none')}
-            onChange={() => handleSubmit()}
-            defaultValue=""
-            choices={status.map((s) => ({
-              id: s.value, name: translate(`resources.users.workflow.status.${s.name}`),
-            }))}
-          />
+          {
+            !USE_WORKFLOW && (
+              <SelectInput
+                label="resources.answers.fields.approved"
+                source="approved"
+                allowEmpty
+                emptyText={translate('misc.both')}
+                onChange={() => handleSubmit()}
+                defaultValue=""
+                choices={[
+                  { id: true, name: <DoneIcon color="primary" /> },
+                  { id: false, name: <ClearIcon /> },
+                ]}
+              />
+            )
+          }
+          {
+            USE_WORKFLOW && (
+              <SelectInput
+                label="resources.answers.fields.status"
+                source="status"
+                allowEmpty
+                emptyText={translate('misc.none')}
+                onChange={() => handleSubmit()}
+                defaultValue=""
+                choices={status.map((s) => ({
+                  id: s.value, name: translate(`resources.users.workflow.status.${s.name}`),
+                }))}
+              />
+            )
+          }
         </form>
       )}
     </Form>

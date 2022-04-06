@@ -51,12 +51,6 @@ if (!USE_WORKFLOW) {
   HIDDEN_FIELDS.push('status');
 } else {
   HIDDEN_FIELDS.push('approved');
-}
-
-if (!USE_WORKFLOW) {
-  HIDDEN_FIELDS.push('status');
-} else {
-  HIDDEN_FIELDS.push('approved');
   HIDDEN_FIELDS.push('useAsSuggestion');
 }
 
