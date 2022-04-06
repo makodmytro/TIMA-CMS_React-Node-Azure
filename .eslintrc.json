@@ -46,7 +46,7 @@
     "no-unreachable": "warn",
     "eol-last": "warn",
     "arrow-parens": "warn",
-    "no-underscore-dangle": "warn",
+    "no-underscore-dangle": "off",
     "comma-dangle": "warn",
     "spaced-comment": "off",
     "no-nested-ternary": "off",

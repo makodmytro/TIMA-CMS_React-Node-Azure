@@ -23,6 +23,7 @@ import TestAsk from './answers/test';
 import demos from './demos';
 import users from './users';
 import groups from './groups';
+import audit from './audit';
 import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
 import customReducer from './common/reducer/custom';
@@ -70,6 +71,19 @@ const AsyncResources = () => {
     setTac(true);
   };
 
+  const fetchWorkflow = async () => {
+    if (localStorage.getItem('token')) {
+      try {
+        const [roles, status] = await Promise.all([
+          dataProvider.workflowRoles(),
+          dataProvider.workflowStatus(),
+        ]);
+        store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
+        store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+      } catch (e) {} // eslint-disable-line
+    }
+  };
+
   const check = async () => {
     const a = async () => (location.pathname.includes('/login') || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
 
@@ -91,6 +105,8 @@ const AsyncResources = () => {
 
     store.dispatch({ type: 'CUSTOM_LANGUAGES_FETCH_SUCCESS', payload: languages.data });
     store.dispatch({ type: 'CUSTOM_TOPICS_FETCH_SUCCESS', payload: topics.data });
+
+    fetchWorkflow();
 
     await delay(500);
     setTac(true);
@@ -226,6 +242,11 @@ const AsyncResources = () => {
               {...groups}
             />,
             demo,
+            <Resource
+              key="audit"
+              name="audit"
+              {...audit}
+            />,
           ]);
         }
       }

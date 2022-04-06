@@ -29,6 +29,7 @@ import ListActions, {
 import ApprovedSwitchField from '../components/approved-swtich-field';
 import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
+import StatusField from '../../common/components/StatusField';
 import DropDownMenu from '../components/list-dropdown-menu';
 import AnswerTextField from '../components/TextField';
 import AnswerField from '../../questions/components/AnswerField';
@@ -38,16 +39,21 @@ import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
+const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS
+  ? process.env.REACT_APP_HIDE_FIELDS_ANSWERS.split(',')
+  : [];
+
 const columns = [
   { key: 'text' },
   { key: 'spokenText' },
   { key: 'fk_languageId' },
   { key: 'fk_editorId' },
+  { key: 'status' },
   { key: 'fk_topicId' },
   { key: 'approved' },
   { key: 'tags' },
   { key: 'updatedAt' },
-];
+].filter((c) => !HIDDEN_FIELDS.includes(c.key));
 
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
@@ -199,6 +205,13 @@ const CustomGridItem = ({
           )
         }
         {
+          visibleColumns.includes('status') && (
+            <TableCell>
+              <StatusField source="status" label="resources.answers.fields.status" sortable={false} record={record} />
+            </TableCell>
+          )
+        }
+        {
           visibleColumns.includes('fk_topicId') && (
             <TableCell>
               <WrapTopicSelect label="resources.answers.fields.fk_topicId" record={record} />
@@ -286,6 +299,7 @@ const CustomGrid = ({ visibleColumns }) => {
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />
                 <Th label="resources.answers.fields.fk_editorId" field="fk_editorId" />
+                <Th label="resources.answers.fields.status" field="status" />
                 <Th label="resources.answers.fields.fk_topicId" field="fk_topicId" />
                 <Th label="resources.answers.fields.approved" field="approved" />
                 <Th label="resources.answers.fields.updatedAt" field="updatedAt" />

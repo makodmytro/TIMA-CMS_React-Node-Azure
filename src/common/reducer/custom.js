@@ -5,6 +5,8 @@ const defaultState = {
   loading: false,
   languages: [],
   syncStatus: 0,
+  workflowRoles: [],
+  workflowStatus: [],
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -39,6 +41,18 @@ export default (state = defaultState, { type, payload }) => {
       return {
         ...state,
         topics: payload,
+      };
+    }
+    case 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS': {
+      return {
+        ...state,
+        workflowRoles: payload,
+      };
+    }
+    case 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS': {
+      return {
+        ...state,
+        workflowStatus: payload,
       };
     }
     case 'CUSTOM_TOPICS_SYNC_STATUS': {

@@ -1,15 +1,17 @@
 import React from 'react';
 import {
   useAuthProvider,
+  useDataProvider,
   useRedirect,
   useNotify,
   useTranslate,
 } from 'react-admin';
+import { useStore } from 'react-redux';
 import {
   AuthenticatedTemplate, useMsal,
   useIsAuthenticated,
 } from '@azure/msal-react';
-import { Typography, Box, Link } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
 import Logo from '../assets/TIMA_logo.png';
@@ -19,6 +21,8 @@ const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_UR
 const Authenticated = () => {
   const [error, setError] = React.useState(false);
   const { instance, accounts } = useMsal();
+  const dataProvider = useDataProvider();
+  const store = useStore();
   const isAuthenticated = useIsAuthenticated();
   const authProvider = useAuthProvider();
   const redirect = useRedirect();
@@ -40,6 +44,15 @@ const Authenticated = () => {
 
       if (success) {
         redirect('/');
+
+        try {
+          const [roles, status] = await Promise.all([
+            dataProvider.workflowRoles(),
+            dataProvider.workflowStatus(),
+          ]);
+          store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
+          store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+        } catch (e) {} // eslint-disable-line
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));

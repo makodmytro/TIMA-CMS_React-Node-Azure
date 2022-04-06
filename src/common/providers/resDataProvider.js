@@ -91,11 +91,19 @@ const getListUrl = (initialUrl, resource, params) => {
     };
 
     if (from) {
-      query.from = from;
+      if (resource === 'audit') {
+        query.filter.from = from;
+      } else {
+        query.from = from;
+      }
     }
 
     if (to) {
-      query.to = to;
+      if (resource === 'audit') {
+        query.filter.to = to;
+      } else {
+        query.to = to;
+      }
     }
 
     if (groupRelated) {
@@ -291,7 +299,26 @@ const resDataProvider = {
 
     return { data: json };
   },
+  answerWorkflow: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status`);
 
+    return { data: json };
+  },
+  statusComment: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status/comment`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: true };
+  },
+  updateAnswerStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/${params.id}/status/${params.status}`, {
+      method: 'PUT',
+    });
+
+    return { data: true };
+  },
   getAnswerMedia: async (resource, params) => {
     const token = localStorage.getItem('token');
     const headers = new Headers({
@@ -376,6 +403,20 @@ const resDataProvider = {
       body: JSON.stringify(rest),
       headers: new Headers({ Authorization: `Bearer ${token}` }),
     }, true);
+
+    return { data: json };
+  },
+  workflowRoles: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/workflow/roles`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
+  workflowStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/workflow/status`, {
+      method: 'GET',
+    });
 
     return { data: json };
   },

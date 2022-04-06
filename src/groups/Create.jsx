@@ -15,6 +15,7 @@ import {
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import WorkflowRole from './components/WorkflowRole';
 import { useIsAdmin } from '../hooks';
 
 const CustomToolbar = (props) => {
@@ -137,6 +138,7 @@ const GroupsCreate = (props) => {
     >
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
+        <WorkflowRole source="workflowRole" fullWidth disabled={disabled} />
         <UsersSelection users={users} />
       </SimpleForm>
     </Create>
