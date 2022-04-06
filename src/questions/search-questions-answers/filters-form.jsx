@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+
 const Filters = ({ onSubmit, initialValues }) => {
   const translate = useTranslate();
 
@@ -38,18 +40,22 @@ const Filters = ({ onSubmit, initialValues }) => {
               {
                 values.type === 'questions' && (
                   <>
-                    <Grid item xs={12} sm={4} md={3}>
-                      <SelectInput
-                        label="Approved"
-                        source="approved"
-                        choices={[
-                          { id: '__none__', name: translate('misc.both') },
-                          { id: true, name: translate('misc.only_approved_questions') },
-                          { id: false, name: translate('misc.only_not_approved_questions') },
-                        ]}
-                        fullWidth
-                      />
-                    </Grid>
+                    {
+                      !USE_WORKFLOW && (
+                        <Grid item xs={12} sm={4} md={3}>
+                          <SelectInput
+                            label="Approved"
+                            source="approved"
+                            choices={[
+                              { id: '__none__', name: translate('misc.both') },
+                              { id: true, name: translate('misc.only_approved_questions') },
+                              { id: false, name: translate('misc.only_not_approved_questions') },
+                            ]}
+                            fullWidth
+                          />
+                        </Grid>
+                      )
+                    }
                     <Grid item xs={12} sm={4} md={3}>
                       <BooleanInput
                         label="resources.questions.fields.ignored"
