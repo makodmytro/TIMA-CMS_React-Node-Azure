@@ -320,7 +320,7 @@ const resDataProvider = {
     return { data: true };
   },
   getAnswerMedia: async (resource, params) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
     });
@@ -382,8 +382,8 @@ const resDataProvider = {
 
     const { accessToken, data } = json;
 
-    localStorage.setItem('token', accessToken);
-    localStorage.setItem('user', JSON.stringify(data));
+    sessionStorage.setItem('token', accessToken);
+    sessionStorage.setItem('user', JSON.stringify(data));
 
     return { data: json };
   },

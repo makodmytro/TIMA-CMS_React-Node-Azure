@@ -1,5 +1,5 @@
 const initialState = {
-  language: localStorage.getItem('language') || '',
+  language: sessionStorage.getItem('language') || '',
 };
 
 export const setLanguage = (lng) => ({
@@ -9,7 +9,7 @@ export const setLanguage = (lng) => ({
 
 export default (previousState = initialState, { type, payload }) => {
   if (type === 'SET_LANGUAGE') {
-    localStorage.setItem('language', payload);
+    sessionStorage.setItem('language', payload);
     return {
       ...previousState,
       language: payload,

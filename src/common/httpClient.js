@@ -6,7 +6,7 @@ const httpClient = (url, options = {}, omitToken = false) => {
     options.headers = new Headers({ Accept: 'application/json' });
   }
 
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   if (token && !omitToken) {
     options.headers.set('Authorization', `Bearer ${token}`);
   }

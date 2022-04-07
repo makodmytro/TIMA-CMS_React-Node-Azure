@@ -30,7 +30,7 @@ const config = {
 };
 
 export const getVisibleColumns = (columns, resource, defaults = []) => {
-  const savedConfig = localStorage.getItem(`columns-${resource}`);
+  const savedConfig = sessionStorage.getItem(`columns-${resource}`);
 
   if (savedConfig) {
     return JSON.parse(savedConfig);
@@ -52,7 +52,7 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 };
 
 export const handleColumnsChange = (resource, callback) => (columns) => {
-  localStorage.setItem(`columns-${resource}`, JSON.stringify(columns));
+  sessionStorage.setItem(`columns-${resource}`, JSON.stringify(columns));
   callback(columns);
 };
 

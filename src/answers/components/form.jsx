@@ -102,6 +102,12 @@ const Form = ({
       },
     };
 
+  React.useEffect(() => {
+    if (Object.keys(languages).length && !fkLanguageId) {
+      changeLanguage(Object.keys(languages)[0]);
+    }
+  }, [languages, fkLanguageId]);
+
   return (
     <>
       {
