@@ -44,8 +44,6 @@ const Authenticated = () => {
       console.log('requestProfileData - exchangeToken success=', success);
 
       if (success) {
-        redirect('/');
-
         if (USE_WORKFLOW) {
           try {
             const [roles, status] = await Promise.all([
@@ -56,6 +54,8 @@ const Authenticated = () => {
             store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
           } catch (e) {} // eslint-disable-line
         }
+
+        redirect('/');
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));

@@ -120,7 +120,7 @@ const AsyncResources = () => {
     if (!location.pathname.includes('/login') && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
-      }, 1000 * 60 * 1);
+      }, 1000 * 60 * 5);
     }
 
     if (location.pathname.includes('/login')) {
