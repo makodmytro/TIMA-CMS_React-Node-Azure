@@ -55,9 +55,11 @@ const Form = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
-  const disableEdit = edit
-    ? (useDisabledEdit(fkTopicId) || (record && record.allowEdit === false))
+  const disableEditRule = edit
+    ? useDisabledEdit(fkTopicId)
     : useDisabledCreate();
+  const disableEditProp = (record && record.allowEdit === false);
+  const disableEdit = disableEditRule || disableEditProp;
 
   const getLang = () => {
     if (!fkLanguageId || !languages[fkLanguageId]) {
@@ -160,7 +162,7 @@ const Form = ({
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
       {
         edit && USE_WORKFLOW && (
-          <StatusInput source="status" disabled={disableEdit} record={record} />
+          <StatusInput source="status" disabled={disableEditRule} record={record} />
         )
       }
     </>
