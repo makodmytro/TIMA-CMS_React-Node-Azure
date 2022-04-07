@@ -51,7 +51,7 @@ const ProfileCustomToolbar = (props) => {
   );
 };
 
-const GroupsSelection = ({ disabled }) => {
+export const GroupsSelection = ({ disabled }) => {
   const [groups, setGroups] = React.useState([]);
   const dataProvider = useDataProvider();
   const translate = useTranslate();

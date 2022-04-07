@@ -53,7 +53,7 @@ const Menu = ({ onMenuClick, logout }) => {
     const l = locale === 'en' ? 'de' : 'en';
 
     setLocale(l);
-    localStorage.setItem('tima-locale', l);
+    sessionStorage.setItem('tima-locale', l);
   };
 
   return (

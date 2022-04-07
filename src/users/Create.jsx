@@ -6,9 +6,12 @@ import {
   Toolbar,
   SaveButton,
   useTranslate,
+  useDataProvider,
+  useRedirect,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { useIsAdmin } from '../hooks';
+import { GroupsSelection } from './Edit';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 
@@ -28,12 +31,49 @@ const CustomToolbar = (props) => {
 };
 
 const UsersCreate = (props) => {
+  const [record, setRecord] = React.useState(null);
+  const [_groups, setGroups] = React.useState([]);
+  const redirect = useRedirect();
+  const dataProvider = useDataProvider();
   const disabled = !useIsAdmin();
   const translate = useTranslate();
 
+  const onSuccess = async () => {
+    if (!_groups.length) {
+      return redirect('/users');
+    }
+
+    await dataProvider.update('users', {
+      id: record.id,
+      data: {
+        ...record,
+        groups: _groups,
+      },
+    });
+
+    return redirect('/users');
+  };
+
+  React.useEffect(() => {
+    if (record) {
+      onSuccess();
+    }
+  }, [_groups, record]);
+
   return (
-    <Create {...props} actions={<CustomTopToolbar />}>
-      <SimpleForm toolbar={<CustomToolbar />}>
+    <Create
+      {...props}
+      actions={<CustomTopToolbar />}
+      transform={({ groups, ...rest }) => {
+        setGroups(groups);
+
+        return rest;
+      }}
+      onSuccess={async ({ data }) => {
+        setRecord(data);
+      }}
+    >
+      <SimpleForm toolbar={<CustomToolbar />} initialValues={{ groups: [] }}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} autoComplete="no" />
         <TextInput source="email" validate={[required(), email()]} fullWidth disabled={disabled} autoComplete="no" />
         {
@@ -70,6 +110,7 @@ const UsersCreate = (props) => {
 
         <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
         <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />
+        <GroupsSelection disabled={disabled} />
       </SimpleForm>
     </Create>
   );

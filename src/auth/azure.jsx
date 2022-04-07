@@ -75,8 +75,8 @@ const Authenticated = () => {
       account: accounts[0],
       postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI,
     });
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
   };
 
   React.useEffect(() => {
