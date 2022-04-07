@@ -8,6 +8,7 @@ import {
   useTranslate,
   SelectInput,
   TextInput,
+  Confirm,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import PencilIcon from '@material-ui/icons/Edit';
@@ -97,6 +98,7 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
 
 const StatusInput = ({ record, disabled }) => {
   const [open, setOpen] = React.useState(false);
+  const [dialog, setDialog] = React.useState(false);
   const [editting, setEditting] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -117,18 +119,41 @@ const StatusInput = ({ record, disabled }) => {
   };
 
   const options = status
-    .filter((o) => record?.possibleNextStatus.includes(o.value))
+    .filter((o) => (record?.possibleNextStatus || []).includes(o.value))
     .map((o) => ({ id: o.value, name: translate(`resources.users.workflow.status.${o.name}`) }));
+  const matching = status.find((s) => s.value === record.status);
+
+  if (matching && !options.find((o) => o.id === matching.value)) {
+    options.push({ id: matching.value, name: translate(`resources.users.workflow.status.${matching.name}`) });
+  }
 
   if (!editting) {
-    const matching = status.find((s) => s.value === record.status);
-
     return (
       <Box mt={2}>
+        <Confirm
+          isOpen={dialog}
+          title={translate('resources.answers.fields.status')}
+          content={translate('resources.answers.status_can_not_change')}
+          onConfirm={() => setDialog(false)}
+          onClose={() => setDialog(false)}
+          confirm={translate('misc.ok')}
+          cancel={null}
+          CancelIcon={() => null}
+        />
         <Typography variant="body2">
           {translate('resources.answers.fields.status')}
         </Typography>
-        <Button color="secondary" onClick={() => setEditting(true)} size="small">
+        <Button
+          color="secondary"
+          onClick={() => {
+            if ((matching && options.length >= 2) || (!matching && options.length)) {
+              setEditting(true);
+            } else {
+              setDialog(true);
+            }
+          }}
+          size="small"
+        >
           {matching ? translate(`resources.users.workflow.status.${matching.name}`) : 'N/A'} &nbsp;&nbsp;<PencilIcon fontSize="small" />
         </Button>
       </Box>
@@ -138,7 +163,7 @@ const StatusInput = ({ record, disabled }) => {
   return (
     <Box display="flex" mt={2}>
       <StatusCommentDialog open={open} onClose={() => setOpen(false)} record={record} />
-      <Box flex={3}>
+      <Box flex={9}>
         <SelectInput
           label="resources.answers.fields.status"
           record={record}
@@ -156,9 +181,14 @@ const StatusInput = ({ record, disabled }) => {
           )
         }
       </Box>
-      <Box flex={1} textAlign="center" mt={2}>
-        <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabled}>
+      <Box flex={3} textAlign="center" mt={2}>
+        <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabled} size="small">
           {translate('misc.add_comment')}
+        </Button>
+        &nbsp;
+
+        <Button type="button" onClick={() => setEditting(false)} variant="outlined" color="secondary" size="small">
+          {translate('misc.cancel')}
         </Button>
       </Box>
     </Box>

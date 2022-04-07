@@ -200,6 +200,7 @@ const german = {
       create: 'Antwort erstellen',
       duplicate: 'Antwort duplizieren',
       status_history: 'Status history',
+      status_can_not_change: 'The status can not be changed',
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
