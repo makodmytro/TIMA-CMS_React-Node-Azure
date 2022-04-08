@@ -58,7 +58,6 @@ const columns = [
   { key: 'text' },
   { key: 'fk_answerId' },
   { key: 'fk_topicId' },
-  { key: 'status' },
   { key: 'approved' },
   { key: 'useAsSuggestion' },
   { key: 'updatedAt' },

@@ -23,7 +23,6 @@ const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const [open, setOpen] = React.useState(false);
   const translate = useTranslate();
-  const status = useSelector((state) => state.custom.workflowStatus);
   const {
     filterValues,
     setFilters,
@@ -182,21 +181,6 @@ const Filters = ({ languages, topics, ...props }) => {
             alwaysOn
             onChange={() => handleSubmit()}
           />
-          {
-            USE_WORKFLOW && (
-              <SelectInput
-                label="resources.questions.fields.status"
-                source="status"
-                allowEmpty
-                emptyText={translate('misc.none')}
-                onChange={() => handleSubmit()}
-                defaultValue=""
-                choices={status.map((s) => ({
-                  id: s.value, name: translate(`resources.users.workflow.status.${s.name}`),
-                }))}
-              />
-            )
-          }
         </form>
       )}
     </Form>

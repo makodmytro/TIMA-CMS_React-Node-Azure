@@ -46,29 +46,34 @@ const StatusHistory = ({ record }) => {
   }
 
   const render = (r) => {
-    if (!status.length) {
-      if (r.previousStatus) {
-        return `${r.previousStatus} -> ${r.newStatus}`;
+    try {
+          if (!status.length) {
+            if (r.previousStatus) {
+              return `${r.previousStatus} -> ${r.newStatus}`;
+            }
+
+            return r.newStatus;
+          }
+
+          const _new = status.find((s) => s.value === r.newStatus);
+
+          if (r.previousStatus && r.previousStatus !== r.newStatus) {
+            const _prev = status.find((s) => s.value === r.previousStatus);
+
+            if (_prev) {
+              return `${translate(`resources.users.workflow.status.${_prev?.name}`)} -> ${translate(`resources.users.workflow.status.${_new?.name}`)}`;
+            }
+          }
+
+          if (!_new) {
+            return '-';
+          }
+
+          return translate(`resources.users.workflow.status.${_new?.name}`);
+      } catch (err) {
+        console.log(err); // eslint-disable-line
+        return '';
       }
-
-      return r.newStatus;
-    }
-
-    const _new = status.find((s) => s.value === r.newStatus);
-
-    if (r.previousStatus && r.previousStatus !== r.newStatus) {
-      const _prev = status.find((s) => s.value === r.previousStatus);
-
-      if (_prev) {
-        return `${translate(`resources.users.workflow.status.${_prev.name}`)} -> ${translate(`resources.users.workflow.status.${_new.name}`)}`;
-      }
-    }
-
-    if (!_new) {
-      return '-';
-    }
-
-    return translate(`resources.users.workflow.status.${_new.name}`);
   };
 
   return (
