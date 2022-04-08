@@ -61,7 +61,7 @@ const Menu = ({ onMenuClick, logout }) => {
       <Box py={2}>
         <MenuItemLink
           to="/"
-          primaryText="Dashboard"
+          primaryText={translate('Dashboard')}
           leftIcon={<HomeIcon />}
           onClick={onMenuClick}
           sidebarIsOpen={open}
@@ -73,10 +73,7 @@ const Menu = ({ onMenuClick, logout }) => {
               <MenuItemLink
                 key={resource.name}
                 to={`/${resource.name}`}
-                primaryText={
-                  (resource.options && resource.options.label)
-                  || capitalize(resource.name)
-                }
+                primaryText={translate(`resources.${resource.name}.name`, { smart_count: 2 })}
                 leftIcon={
                   resource.icon ? <resource.icon /> : <DefaultIcon />
                 }
@@ -87,7 +84,7 @@ const Menu = ({ onMenuClick, logout }) => {
         }
         <MenuItemLink
           to="/test-ask"
-          primaryText="Test"
+          primaryText={translate('Test')}
           leftIcon={<DemoIcon />}
           onClick={onMenuClick}
           sidebarIsOpen={open}
