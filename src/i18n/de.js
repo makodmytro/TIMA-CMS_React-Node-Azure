@@ -172,6 +172,7 @@ const german = {
       fields: {
         text: 'Text',
         fk_userId: 'Ersteller',
+        fk_createdByUserId: 'Created By',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_answerId: 'Antwort',
@@ -214,6 +215,7 @@ const german = {
         text: 'Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Ersteller',
+        fk_createdByUserId: 'Created By',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_questionId: 'Frage',
