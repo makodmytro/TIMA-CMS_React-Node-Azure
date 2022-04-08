@@ -174,6 +174,7 @@ const english = {
       fields: {
         text: 'Text',
         fk_userId: 'Created By',
+        fk_createdByUserId: 'Created By',
         fk_languageId: 'Language',
         fk_topicId: 'Topic',
         fk_answerId: 'Answer',
@@ -217,6 +218,7 @@ const english = {
         text: 'Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Created By',
+        fk_createdByUserId: 'Created By',
         fk_languageId: 'Language',
         fk_topicId: 'Topic',
         fk_questionId: 'Question',

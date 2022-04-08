@@ -10,7 +10,7 @@
     "text",
     "fk_languageId",
     "fk_topicId",
-    "fk_userId",
+    "fk_createdByUserId",
     "updatedAt"
   ],
   "questions": [
