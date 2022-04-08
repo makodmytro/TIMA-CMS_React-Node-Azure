@@ -84,7 +84,7 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText={translate('misc.none')}
+              emptyText={translate('misc.all')}
             />
           </ReferenceInput>
           <ReferenceInput
@@ -96,7 +96,7 @@ const Filters = ({ languages, topics, ...props }) => {
             allowEmpty
             perPage={100}
           >
-            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.all')} />
           </ReferenceInput>
           {
             TOPICS_ENABLE_TREE_LIST === '1' && (
@@ -130,7 +130,7 @@ const Filters = ({ languages, topics, ...props }) => {
                   optionText="name"
                   className={classes.select}
                   allowEmpty
-                  emptyText={translate('misc.none')}
+                  emptyText={translate('misc.all')}
                 />
               </ReferenceInput>
             )
@@ -157,7 +157,7 @@ const Filters = ({ languages, topics, ...props }) => {
                 label="resources.answers.fields.status"
                 source="status"
                 allowEmpty
-                emptyText={translate('misc.none')}
+                emptyText={translate('misc.all')}
                 onChange={() => handleSubmit()}
                 defaultValue=""
                 choices={status.map((s) => ({

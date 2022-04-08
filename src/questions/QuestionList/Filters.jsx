@@ -101,7 +101,7 @@ const Filters = ({ languages, topics, ...props }) => {
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText={translate('misc.none')}
+              emptyText={translate('misc.all')}
             />
           </ReferenceInput>
           <ReferenceInput
@@ -146,7 +146,7 @@ const Filters = ({ languages, topics, ...props }) => {
                   optionText="name"
                   className={classes.select}
                   allowEmpty
-                  emptyText={translate('misc.none')}
+                  emptyText={translate('misc.all')}
                 />
               </ReferenceInput>
             )

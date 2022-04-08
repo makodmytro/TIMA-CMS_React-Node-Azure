@@ -66,6 +66,7 @@ const german = {
     ok: 'OK',
     back: 'Zurück',
     none: 'None',
+    all: 'All',
     text: 'Text',
     both: 'Beides',
     batch_approve: 'Fragen bestätigen',
