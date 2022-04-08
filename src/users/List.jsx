@@ -1,9 +1,11 @@
 import React, { cloneElement, useState } from 'react';
 import { Link } from 'react-router-dom'; // eslint-disable-line
+import { useSelector } from 'react-redux';
 import {
   Datagrid,
   DateField,
   List,
+  FunctionField,
   TextField,
   BooleanField,
   useTranslate,
@@ -25,12 +27,14 @@ function LinkTab(props) {
   return (
     <Tab
       component={Link}
+      style={{ textDecoration: 'underline', border: '2px solid white' }}
       {...props}
     />
   );
 }
 
 const UsersList = (props) => {
+  const roles = useSelector((state) => state.custom.workflowRoles);
   const translate = useTranslate();
   const columns = [
     {
@@ -38,6 +42,20 @@ const UsersList = (props) => {
       el: (<TextField source="name" />),
     },
     { key: 'email', el: (<TextField source="email" />) },
+    {
+      key: 'roles',
+      el: (
+        <FunctionField
+          source="userRoles"
+          render={(record) => {
+            return roles
+              .filter((r) => (record.userRoles || []).includes(r.value))
+              .map((r) => translate(`resources.users.workflow.roles.${r.name}`))
+              .join(', ');
+          }}
+        />
+      ),
+    },
     {
       key: 'lastLogin',
       el: (<DateField source="lastLogin" />),
@@ -62,7 +80,7 @@ const UsersList = (props) => {
           aria-label="nav tabs example"
           TabIndicatorProps={{ style: { background: 'white' } }}
         >
-          <LinkTab label={translate('misc.users')} to="/users" />
+          <LinkTab label={translate('misc.users')} to="/users" disabled />
           <LinkTab label={translate('misc.groups')} to="/groups" />
         </Tabs>
       </AppBar>
