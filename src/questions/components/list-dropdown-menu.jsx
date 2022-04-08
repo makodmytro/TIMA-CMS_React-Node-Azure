@@ -89,6 +89,7 @@ const DropdownMenu = ({
                     setOpen(true);
                   }}
                   size="small"
+                  style={{ justifyContent: 'flex-start', textAlign: 'left' }}
                   fullWidth
                 >
                   <EditIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('resources.questions.edit')}

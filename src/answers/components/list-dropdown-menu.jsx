@@ -59,7 +59,7 @@ const DropdownMenu = ({
           onClick={(e) => e.stopPropagation()}
         >
           <EditButton
-            basePath={basePath}
+            basePath="/answers"
             record={record}
             fullWidth
             style={{ justifyContent: 'flex-start' }}
@@ -75,7 +75,7 @@ const DropdownMenu = ({
           onClick={(e) => e.stopPropagation()}
         >
           <DeleteButton
-            basePath={basePath}
+            basePath="/answers"
             record={record}
             undoable={false}
             fullWidth

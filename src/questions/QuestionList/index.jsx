@@ -70,8 +70,6 @@ const CustomGridItem = ({
   visibleColumns,
   level,
 }) => {
-  record.allowEdit = false; // eslint-disable-line
-
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const disableEdit = useDisabledEdit(record?.fk_topicId);
