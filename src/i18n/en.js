@@ -115,6 +115,7 @@ const english = {
     edit_topic: 'Edit',
     can_not_change_status: 'The status cannot be changed by your current role',
     add_comment: 'Add comment',
+    remove: 'Remove',
   },
   resources: {
     topics: {
@@ -292,6 +293,8 @@ const english = {
       name: 'Group |||| Groups',
       select_user: 'Select the groups the user belongs to',
       select_users_bis: 'Select the users to be added to this group',
+      remove_user: 'Remove user from the group?',
+      users: 'Users in the group',
       fields: {
         id: 'ID',
         name: 'Name',

@@ -246,6 +246,13 @@ const resDataProvider = {
 
     return { data: true };
   },
+  removeUserFromGroup: async (resource, params) => {
+    await httpClient(`${baseApi}/groups/${params.id}/users/${params.user_id}`, {
+      method: 'DELETE',
+    });
+
+    return { data: true };
+  },
   topicCreatePermission: async (resource = null, params) => {
     await httpClient(`${baseApi}/topics/${params.topic_id}/permissions/${params.group_id}`, {
       method: 'PUT',

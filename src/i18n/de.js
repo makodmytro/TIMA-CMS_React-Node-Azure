@@ -114,6 +114,7 @@ const german = {
     edit_topic: 'Thema bearbeiten',
     can_not_change_status: 'The status cannot be changed by your current role',
     add_comment: 'Add comment',
+    remove: 'Remove',
   },
   resources: {
     topics: {
@@ -290,6 +291,8 @@ const german = {
       name: 'Gruppen |||| Gruppen',
       select_user: 'Gruppen auswählen, zu denen der Nutzer gehört',
       select_users_bis: 'Nutzer auswählen, die zu der Gruppe hinzugefügt werden sollen',
+      remove_user: 'Remove user from the group?',
+      users: 'Users in the group',
       fields: {
         id: 'ID',
         name: 'Name',
