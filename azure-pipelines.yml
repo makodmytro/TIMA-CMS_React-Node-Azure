@@ -4,16 +4,62 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- demo1
+
+# define variables to use during the build
+variables:
+  projectFolder: 'src/'
+  buildOutputFolder: 'build/'
+  REACT_APP_BASE_API : 'https://qnaeditor-backend1.azurewebsites.net/api'
+  REACT_APP_TIMA_ENVIRONMENT : 'ENBW'
+  REACT_APP_SELECT_TOPIC_LEVELS : 1'
+  REACT_APP_TOPICS_TREE_CHILD_COLOR : '498ca752'
+  REACT_APP_TOPICS_ENABLE_TREE_LIST : '1'
+  QUESTIONS_TREE_CHILD_COLOR : '498ca752'
+  REACT_APP_QUESTIONS_ENABLE_TREE_LIST : '1'
+  REACT_APP_HIDE_FIELDS_TOPICS : 'welcomeText,topicImageUrl,topicKey,topicImageUrl'
+  REACT_APP_HIDE_MENU_ITEMS : 'stats/sessions'
+  REACT_APP_HIDE_FIELDS_ANSWERS : 'spokenText,media'
+  REACT_APP_HIDE_SPEECH_FIELD : '1'
+  REACT_APP_USE_AZURE_LOGIN : '1'
+  REACT_APP_AZURE_CLIENT_ID : 'c1e9c1c7-0f6b-4951-a0dd-a6a9d1064b51'
+  REACT_APP_AZURE_AUTHORITY : 'https://login.microsoftonline.com/ee920d54-46e4-4e1e-aa99-6d010a689325'
+  REACT_APP_AZURE_REDIRECT_URI : 'https://qnaeditor1frontend.z6.web.core.windows.net/'
+  REACT_APP_AZURE_LOGOUT_REDIRECT_URI : 'https://qnaeditor1frontend.z6.web.core.windows.net/'
+  REACT_APP_USER_WORKFLOW : '1'
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- script: yarn install
+  displayName: 'Install dependencies'
+
+- script: yarn run build
+  displayName: 'Build frontend app'
+
+
+## Copy the client to the staging directory
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(buildOutputFolder)' 
+    contents: '**/*' 
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
+
+## Archive the files into a zip file for publishing
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    includeRootFolder: false
+
+## Publish the zip file
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
