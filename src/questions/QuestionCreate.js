@@ -105,7 +105,7 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
           return rest;
         }}
       >
-        <SimpleForm>
+        <SimpleForm redirect="list">
           <FormFields languages={languages} />
         </SimpleForm>
       </Create>

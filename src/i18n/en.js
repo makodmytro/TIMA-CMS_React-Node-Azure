@@ -102,6 +102,7 @@ const english = {
     confirm: 'Confirm',
     search_questions_answers: 'Use the filters to search for answers or questions',
     search_questions_answers_link: 'Search questions/answers to create link',
+    search_answers_link: 'Search answers to create a link',
     proceed: 'Proceed',
     create: 'Create',
     users: 'Users',
