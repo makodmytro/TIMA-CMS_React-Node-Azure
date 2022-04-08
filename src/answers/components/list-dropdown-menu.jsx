@@ -13,7 +13,6 @@ import { useDisabledDelete, useDisabledEdit } from '../../hooks';
 
 const DropdownMenu = ({
   record,
-  basePath,
 }) => {
   const translate = useTranslate();
   const disableEdit = useDisabledEdit(record?.fk_topicId);

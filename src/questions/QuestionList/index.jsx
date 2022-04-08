@@ -148,7 +148,6 @@ const CustomGridItem = ({
       <TableRow
         className={classes.cursor}
         onClick={(e) => {
-          console.log('1');
           e.preventDefault();
           e.stopPropagation();
 

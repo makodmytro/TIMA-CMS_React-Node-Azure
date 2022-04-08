@@ -24,7 +24,7 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextField } from '../../common/components/playable-text';
-import AnswerTextField from '../../answers/components/TextField';
+import AnswerField from './AnswerField';
 import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
 
 const Filters = ({
@@ -139,7 +139,7 @@ const ResultsList = ({
                 <TableCell style={{ width: '50%' }}>
                   {
                     question.fk_answerId && (
-                      <AnswerTextField record={{ ...question.Answer, Language: question.Language }} />
+                      <AnswerField record={question} />
                     )
                   }
                   {

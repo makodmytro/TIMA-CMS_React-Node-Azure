@@ -324,7 +324,7 @@ const english = {
         actionType: 'Action',
         createdAt: 'Date',
       },
-    }
+    },
   },
 };
 

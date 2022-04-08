@@ -7,7 +7,6 @@ import {
   useListContext,
   useTranslate,
 } from 'react-admin';
-import { useSelector } from 'react-redux';
 import { Form } from 'react-final-form';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  useDataProvider,
   AutocompleteInput,
   useTranslate,
 } from 'react-admin';

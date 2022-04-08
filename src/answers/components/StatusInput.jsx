@@ -113,6 +113,7 @@ const StatusInput = ({ record, disabled }) => {
         status: e.target.value,
       });
       refresh();
+      notify('The record has been updated');
     } catch (err) {
       notify('Failed to change the status', 'error');
     }

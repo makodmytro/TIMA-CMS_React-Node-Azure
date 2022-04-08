@@ -45,7 +45,7 @@ const AnswerField = ({ record }) => {
     e.stopPropagation();
     e.preventDefault();
 
-    redirect(`/answers/${record.Answer.id}/edit`)
+    redirect(`/answers/${record.Answer.id}/edit`);
   };
 
   return (

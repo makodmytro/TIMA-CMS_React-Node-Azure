@@ -54,10 +54,11 @@ const cleanBody = (body, resource) => {
   }
 };
 
-const getListUrl = (initialUrl, resource, params) => {
+const getListUrl = (initialUrl, resource, _params) => {
   let url = initialUrl;
+  const params = { ..._params };
 
-  if (params) {
+  if (_params) {
     const { field, order } = params.sort || {};
 
     const {
@@ -77,6 +78,14 @@ const getListUrl = (initialUrl, resource, params) => {
 
     const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
 
+    if (from && resource === 'audit') {
+      params.filter.from = from;
+    }
+
+    if (to && resource === 'audit') {
+      params.filter.to = to;
+    }
+
     const query = {
       limit: perPage,
       offset: (page - 1) * perPage,
@@ -90,20 +99,12 @@ const getListUrl = (initialUrl, resource, params) => {
       ...(params.include ? { include: params.include } : getResourceAssociations(resource)),
     };
 
-    if (from) {
-      if (resource === 'audit') {
-        query.filter.from = from;
-      } else {
-        query.from = from;
-      }
+    if (from && resource !== 'audit') {
+      query.from = from;
     }
 
-    if (to) {
-      if (resource === 'audit') {
-        query.filter.to = to;
-      } else {
-        query.to = to;
-      }
+    if (to && resource !== 'audit') {
+      query.to = to;
     }
 
     if (groupRelated) {

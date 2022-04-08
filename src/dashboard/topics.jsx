@@ -26,7 +26,7 @@ const Filters = ({ onSubmit, initialValues }) => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4} md={3}>
-              <ReferenceInput label="resources.answers.fk_languageId" source="fk_languageId" reference="languages" fullWidth allowEmpty>
+              <ReferenceInput label="resources.answers.fields.fk_languageId" source="fk_languageId" reference="languages" fullWidth allowEmpty>
                 <SelectInput optionText="name" allowEmpty emptyText={translate('misc.none')} />
               </ReferenceInput>
             </Grid>
