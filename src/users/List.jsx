@@ -27,6 +27,7 @@ function LinkTab(props) {
   return (
     <Tab
       component={Link}
+      style={{ textDecoration: 'underline', border: '2px solid white' }}
       {...props}
     />
   );
@@ -79,7 +80,7 @@ const UsersList = (props) => {
           aria-label="nav tabs example"
           TabIndicatorProps={{ style: { background: 'white' } }}
         >
-          <LinkTab label={translate('misc.users')} to="/users" />
+          <LinkTab label={translate('misc.users')} to="/users" disabled />
           <LinkTab label={translate('misc.groups')} to="/groups" />
         </Tabs>
       </AppBar>

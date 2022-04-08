@@ -23,6 +23,7 @@ function LinkTab(props) {
   return (
     <Tab
       component={Link}
+      style={{ textDecoration: 'underline', border: '2px solid white' }}
       {...props}
     />
   );
@@ -75,7 +76,7 @@ const GroupsList = (props) => {
           TabIndicatorProps={{ style: { background: 'white' } }}
         >
           <LinkTab label={translate('misc.users')} to="/users" />
-          <LinkTab label={translate('misc.groups')} to="/groups" />
+          <LinkTab label={translate('misc.groups')} to="/groups" disabled />
         </Tabs>
       </AppBar>
       <Box p={2} boxShadow={3}>
