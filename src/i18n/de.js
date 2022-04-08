@@ -117,6 +117,7 @@ const german = {
     can_not_change_status: 'The status cannot be changed by your current role',
     add_comment: 'Add comment',
     remove: 'Remove',
+    search_users: 'Type to search for users',
   },
   resources: {
     topics: {
@@ -259,6 +260,7 @@ const german = {
       name: 'Nutzer |||| Nutzer',
       change_password: 'Passwort ändern',
       add: 'Nutzer hinzufügen',
+      no_results: 'No records found',
       workflow: {
         role: 'Workflow role',
         roles: {
@@ -295,6 +297,8 @@ const german = {
       select_users_bis: 'Nutzer auswählen, die zu der Gruppe hinzugefügt werden sollen',
       remove_user: 'Remove user from the group?',
       users: 'Users in the group',
+      add_users: 'Add users',
+      add_users_action: 'Add %{n} users to the group',
       fields: {
         id: 'ID',
         name: 'Name',

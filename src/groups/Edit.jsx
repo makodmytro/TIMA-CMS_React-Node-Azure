@@ -18,6 +18,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import ConfirmButton from '../common/components/ConfirmButton';
 import WorkflowRole from './components/WorkflowRole';
+import AddUsersDialog from './components/AddUsersDialog';
 import { useIsAdmin } from '../hooks';
 
 const CustomToolbar = (props) => {
@@ -66,6 +67,9 @@ const UsersList = ({ record }) => {
         </Typography>
       </Box>
       <Box px={1}>
+        <Box textAlign="right">
+          <AddUsersDialog record={record} />
+        </Box>
         {
           record?.Users?.map((user) => {
             return (

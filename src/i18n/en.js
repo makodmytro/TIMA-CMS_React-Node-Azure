@@ -118,6 +118,7 @@ const english = {
     can_not_change_status: 'The status cannot be changed by your current role',
     add_comment: 'Add comment',
     remove: 'Remove',
+    search_users: 'Type to search for users',
   },
   resources: {
     topics: {
@@ -261,6 +262,7 @@ const english = {
       name: 'User |||| Users',
       change_password: 'Change password',
       add: 'Add user',
+      no_results: 'No records found',
       workflow: {
         role: 'Workflow role',
         roles: {
@@ -297,6 +299,8 @@ const english = {
       select_users_bis: 'Select the users to be added to this group',
       remove_user: 'Remove user from the group?',
       users: 'Users in the group',
+      add_users: 'Add users',
+      add_users_action: 'Add %{n} users to the group',
       fields: {
         id: 'ID',
         name: 'Name',
