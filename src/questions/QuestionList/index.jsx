@@ -85,7 +85,12 @@ const CustomGridItem = ({
         <TableRow
           className={classes.cursor}
           style={{ backgroundColor: bg }}
-          onClick={() => setOpen(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            setOpen(true);
+          }}
         >
           <TableCell>
             {
@@ -142,7 +147,13 @@ const CustomGridItem = ({
       <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
       <TableRow
         className={classes.cursor}
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          console.log('1');
+          e.preventDefault();
+          e.stopPropagation();
+
+          setOpen(true);
+        }}
       >
         <TableCell>
           {

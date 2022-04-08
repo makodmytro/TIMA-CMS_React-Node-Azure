@@ -101,6 +101,7 @@ const german = {
     confirm: 'Bestätigen',
     search_questions_answers: 'Verwende die Filter, um Fragen oder Antworten zu suchen',
     search_questions_answers_link: 'Suche Fragen/ Antworten um sie zu verlinken',
+    search_answers_link: 'Search answers to create a link',
     proceed: 'Weiter',
     create: 'Erstellen',
     users: 'Nutzer',

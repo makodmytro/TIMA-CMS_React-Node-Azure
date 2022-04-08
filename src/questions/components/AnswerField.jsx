@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslate, useRedirect } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import AnswerTextField from '../../answers/components/TextField';
+import AnswerLinkDialog from './AnswerLinkDialog';
 
 const AnswerField = ({ record }) => {
   const translate = useTranslate();
@@ -15,17 +15,7 @@ const AnswerField = ({ record }) => {
 
   if (!record.fk_answerId) {
     return (
-      <Button
-        component={Link}
-        to={`/questions/${record.id}`}
-        size="small"
-        className="error-btn btn-xs"
-        variant="outlined"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <AddIcon />
-        &nbsp;{translate('misc.link_answer')}
-      </Button>
+      <AnswerLinkDialog record={record} />
     );
   }
 
