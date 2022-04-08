@@ -7,7 +7,6 @@ import {
   useTranslate,
   useDataProvider,
   useRefresh,
-  Confirm,
 } from 'react-admin';
 import {
   Box,

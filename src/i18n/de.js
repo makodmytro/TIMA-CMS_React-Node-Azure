@@ -316,7 +316,7 @@ const german = {
         actionType: 'Action',
         createdAt: 'Date',
       },
-    }
+    },
   },
 };
 

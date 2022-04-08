@@ -9,7 +9,7 @@ import {
   useTranslate,
 } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
@@ -47,6 +47,8 @@ const Approved = (props) => {
 const Form = ({
   languages, topics, edit, record,
 }) => {
+  const _languages = useSelector((state) => state.custom.languages);
+
   const translate = useTranslate();
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const {
@@ -105,10 +107,10 @@ const Form = ({
     };
 
   React.useEffect(() => {
-    if (Object.keys(languages).length && !fkLanguageId) {
-      changeLanguage(Object.keys(languages)[0]);
+    if (_languages.length && !fkLanguageId) {
+      changeLanguage(_languages[0].id);
     }
-  }, [languages, fkLanguageId]);
+  }, [_languages, fkLanguageId]);
 
   return (
     <>

@@ -1,4 +1,4 @@
- /* eslint-disable */
+/* eslint-disable */
 import { LogLevel } from '@azure/msal-browser';
 
 const AZURE_CLIENT_ID = process.env.REACT_APP_AZURE_CLIENT_ID;

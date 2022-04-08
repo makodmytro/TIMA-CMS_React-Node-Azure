@@ -35,7 +35,7 @@ const Filters = ({
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit, form, values }) => {
+      render={({ handleSubmit, form }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
@@ -194,7 +194,6 @@ const AnswerLinkDialog = ({ record }) => {
         className="error-btn btn-xs"
         variant="outlined"
         onClick={(e) => {
-          console.log('2');
           e.stopPropagation();
           e.preventDefault();
 

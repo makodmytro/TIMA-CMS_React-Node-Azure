@@ -1,5 +1,4 @@
 import * as React from 'react';
-import capitalize from 'lodash/capitalize';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
 import {

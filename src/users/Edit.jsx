@@ -121,7 +121,7 @@ const NullableBoolean = ({ record, source, ...rest }) => {
       }}
       {...rest}
     />
-  )
+  );
 };
 
 const UsersEdit = (props) => {
