@@ -106,8 +106,8 @@ const Filters = ({ languages, topics, ...props }) => {
           </ReferenceInput>
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="resources.questions.fields.fk_editorId"
-            source="fk_editorId"
+            label="resources.questions.fields.fk_userId"
+            source="fk_userId"
             reference="users"
             alwaysOn
             allowEmpty

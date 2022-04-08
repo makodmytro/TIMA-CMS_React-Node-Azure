@@ -168,7 +168,7 @@ const german = {
       no_results: 'Keine Fragen gefunden, klicke "Erstellen" um eine neue Frage hinzuzufügen',
       fields: {
         text: 'Text',
-        fk_editorId: 'Editor',
+        fk_userId: 'Ersteller',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_answerId: 'Antwort',
@@ -210,7 +210,7 @@ const german = {
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',
-        fk_editorId: 'Editor',
+        fk_userId: 'Ersteller',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_questionId: 'Frage',

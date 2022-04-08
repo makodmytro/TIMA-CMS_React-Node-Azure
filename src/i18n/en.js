@@ -169,7 +169,7 @@ const english = {
       no_results: 'No questions were found, click "Create" to add a new question',
       fields: {
         text: 'Text',
-        fk_editorId: 'Editor',
+        fk_userId: 'Created By',
         fk_languageId: 'Language',
         fk_topicId: 'Topic',
         fk_answerId: 'Answer',
@@ -212,7 +212,7 @@ const english = {
       fields: {
         text: 'Text',
         spokenText: 'Spoken txt',
-        fk_editorId: 'Editor',
+        fk_userId: 'Created By',
         fk_languageId: 'Language',
         fk_topicId: 'Topic',
         fk_questionId: 'Question',

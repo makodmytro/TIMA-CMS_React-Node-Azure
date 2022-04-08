@@ -54,7 +54,7 @@ const columns = [
   { key: 'text' },
   { key: 'spokenText' },
   { key: 'fk_languageId' },
-  { key: 'fk_editorId' },
+  { key: 'fk_userId' },
   { key: 'status' },
   { key: 'fk_topicId' },
   { key: 'approved' },
@@ -203,9 +203,9 @@ const CustomGridItem = ({
           )
         }
         {
-          visibleColumns.includes('fk_editorId') && (
+          visibleColumns.includes('fk_userId') && (
             <TableCell>
-              <ReferenceField source="fk_editorId" label="resources.answers.fields.fk_editorId" sortBy="fk_editorId" reference="users" link={false} record={record} basePath="answers">
+              <ReferenceField source="fk_userId" label="resources.answers.fields.fk_userId" sortBy="fk_userId" reference="users" link={false} record={record} basePath="answers">
                 <TextField source="name" />
               </ReferenceField>
             </TableCell>
@@ -305,7 +305,7 @@ const CustomGrid = ({ visibleColumns }) => {
                 <Th label="resources.answers.fields.text" field="text" />
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />
-                <Th label="resources.answers.fields.fk_editorId" field="fk_editorId" />
+                <Th label="resources.answers.fields.fk_userId" field="fk_userId" />
                 <Th label="resources.answers.fields.status" field="status" />
                 <Th label="resources.answers.fields.fk_topicId" field="fk_topicId" />
                 <Th label="resources.answers.fields.approved" field="approved" />
