@@ -297,6 +297,21 @@ const german = {
         workflowRole: 'Workflow role',
       },
     },
+    audit: {
+      name: 'Audit |||| Audit',
+      actions: {
+        1: 'Added',
+        2: 'Updated',
+        3: 'Deleted',
+        4: 'Login',
+      },
+      fields: {
+        fk_userId: 'User',
+        entityName: 'Entity',
+        actionType: 'Action',
+        createdAt: 'Date',
+      },
+    }
   },
 };
 
