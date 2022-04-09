@@ -21,7 +21,7 @@ const ActionsRow = ({ record }) => {
   }
 
   return (
-    <Box mb={2} display="flex">
+    <Box mb={1} display="flex">
       <Box flex={6}>
         <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
           <AccordionSummary

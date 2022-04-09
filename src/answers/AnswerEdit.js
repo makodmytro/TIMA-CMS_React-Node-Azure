@@ -19,6 +19,7 @@ import AnswerMedia from './media/media';
 import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow';
 import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
 import StatusHistory from './components/StatusHistory';
+import StatusWarning from './components/StatusWarning';
 import { useDisabledDelete, useDisabledEdit } from '../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -40,7 +41,7 @@ const CustomToolbar = (props) => {
       <SaveButton
         label="ra.action.save"
         submitOnEnter
-        disabled={props.pristine || disableEdit}
+        disabled={disableEdit}
       />
       <DeleteButton
         basePath={props.basePath}
@@ -109,9 +110,11 @@ const AnswerEdit = (props) => {
 
   return (
     <>
+      <CustomTopToolbar />
+      <StatusWarning record={answer} />
+      <RelatedQuestionsActionsRow record={answer} />
       <Edit
         {...props}
-        actions={<CustomTopToolbar extra={<RelatedQuestionsActionsRow record={answer} />} />}
         undoable={false}
         onSuccess={onSucces}
         mutationMode="pessimistic"

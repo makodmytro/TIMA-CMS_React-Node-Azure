@@ -4,7 +4,7 @@ import german from './de';
 
 const DEFAULT_LANGUAGE = process.env.REACT_APP_DEFAULT_LANGUAGE || 'de';
 
-const _locale = sessionStorage.getItem('tima-locale') || DEFAULT_LANGUAGE.toLowerCase();
+const _locale = localStorage.getItem('tima-locale') || DEFAULT_LANGUAGE.toLowerCase();
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === 'en') {
