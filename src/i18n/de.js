@@ -206,6 +206,8 @@ const german = {
       duplicate: 'Antwort duplizieren',
       status_history: 'Status history',
       status_can_not_change: 'The status can not be changed',
+      no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
+      allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
