@@ -115,7 +115,9 @@ const StatusInput = ({ record, disabled }) => {
       refresh();
       notify('The record has been updated');
     } catch (err) {
-      notify('Failed to change the status', 'error');
+      setEditting(false)
+      refresh();
+      notify(err.message, 'error');//'Failed to change the status', 'error');
     }
   };
 
