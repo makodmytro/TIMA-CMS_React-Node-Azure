@@ -327,6 +327,7 @@ const english = {
         createdAt: 'Date',
       },
     },
+    'stats/sessions': 'Sessions'
   },
 };
 

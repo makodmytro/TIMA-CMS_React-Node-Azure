@@ -173,7 +173,7 @@ const german = {
       fields: {
         text: 'Text',
         fk_userId: 'Ersteller',
-        fk_createdByUserId: 'Created By',
+        fk_createdByUserId: 'Ersteller',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_answerId: 'Antwort',
@@ -218,7 +218,7 @@ const german = {
         text: 'Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Ersteller',
-        fk_createdByUserId: 'Created By',
+        fk_createdByUserId: 'Ersteller',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_questionId: 'Frage',
@@ -277,7 +277,7 @@ const german = {
           REVIEWING: 'Überprüfung',
           REVIEWED: 'Redaktionell abgenommen',
           CONTENT_ERROR: 'Contentfehler',
-          INTEGRATION_ERROR: 'Integrationfehler',
+          INTEGRATION_ERROR: 'Integrationsfehler',
           DEPLOYED: 'QnA live',
         },
       },
@@ -325,6 +325,7 @@ const german = {
         createdAt: 'Date',
       },
     },
+    'stats/sessions': 'Sessions'
   },
 };
 
