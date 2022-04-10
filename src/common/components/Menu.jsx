@@ -7,6 +7,7 @@ import {
   useLocale,
   useSetLocale,
   useTranslate,
+  useDataProvider
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -28,6 +29,7 @@ const Menu = ({ onMenuClick, logout }) => {
   const dispatch = useDispatch();
   const locale = useLocale();
   const setLocale = useSetLocale();
+  const dataProvider = useDataProvider();
 
   const onClick = (resource) => (e) => {
     const filter = {};
@@ -113,6 +115,18 @@ const Menu = ({ onMenuClick, logout }) => {
           &nbsp;
           <Typography variant="body2" component="span">EN</Typography>
         </Box>
+        <div>
+          CMS Build:
+          <span style={{ float: 'right' }}>
+            {process.env.REACT_APP_VERSION}
+          </span>
+        </div>
+        <div>
+          Backend Build:
+          <span style={{ float: 'right' }}>
+            {dataProvider.backendVersion}
+          </span>
+        </div>
         {baseApi}
       </div>
     </>

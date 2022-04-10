@@ -428,6 +428,13 @@ const resDataProvider = {
 
     return { data: json };
   },
+  backendVersion: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/admin/version`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;
