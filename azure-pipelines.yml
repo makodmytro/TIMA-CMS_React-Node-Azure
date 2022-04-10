@@ -26,7 +26,7 @@ variables:
   REACT_APP_AZURE_AUTHORITY : 'https://login.microsoftonline.com/ee920d54-46e4-4e1e-aa99-6d010a689325'
   REACT_APP_AZURE_REDIRECT_URI : 'https://qnaeditor1frontend.z6.web.core.windows.net/'
   REACT_APP_AZURE_LOGOUT_REDIRECT_URI : 'https://qnaeditor1frontend.z6.web.core.windows.net/'
-  REACT_APP_USER_WORKFLOW : '1'
+  REACT_APP_USE_WORKFLOW : '1'
 
 pool:
   vmImage: ubuntu-latest
