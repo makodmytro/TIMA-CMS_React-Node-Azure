@@ -160,11 +160,6 @@ const Form = ({
         )
       }
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
-      {
-        edit && USE_WORKFLOW && (
-          <StatusInput source="status" disabled={disableEditRule} record={record} />
-        )
-      }
     </>
   );
 };
