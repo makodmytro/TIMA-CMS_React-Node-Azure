@@ -67,7 +67,7 @@ const english = {
     ok: 'OK',
     back: 'Back',
     none: 'None',
-    all: 'Alle',
+    all: 'All',
     text: 'Text',
     both: 'Both',
     batch_approve: 'Approve questions',
