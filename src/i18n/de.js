@@ -330,7 +330,6 @@ const german = {
         createdAt: 'Date',
       },
     },
-    'stats/sessions': 'Sessions'
   },
 };
 
