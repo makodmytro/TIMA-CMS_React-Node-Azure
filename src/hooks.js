@@ -51,6 +51,9 @@ export const useDisabledDelete = (id, fallback = true) => {
 };
 
 export const useDisabledCreate = () => {
+  //workaround
+  return false; //always not disabled
+  /*
   const { permissions } = usePermissions();
 
   if (permissions?.isAdmin) {
@@ -65,7 +68,7 @@ export const useDisabledCreate = () => {
     return permissions?.topics[key].edit;
   });
 
-  return !canCreate;
+  return !canCreate;*/
 };
 
 export const useIsAdmin = () => {
