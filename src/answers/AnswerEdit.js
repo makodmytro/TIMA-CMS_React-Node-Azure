@@ -33,8 +33,8 @@ const HiddenField = ({ children, fieldName }) => {
 };
 
 const CustomToolbar = (props) => {
-  const disableEdit = useDisabledEdit(props?.record?.fk_topicId) || props?.record?.allowEdit === false;
-  const disableDelete = useDisabledDelete(props?.record?.fk_topicId) || props?.record?.allowEdit === false;
+  const disableEdit = /*useDisabledEdit(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
+  const disableDelete = /*useDisabledDelete(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>

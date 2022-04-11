@@ -33,8 +33,8 @@ import { useDisabledEdit, useDisabledDelete } from '../hooks';
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const CustomToolbar = (props) => {
-  const disableEdit = useDisabledEdit(props?.record?.fk_topicId);
-  const disableDelete = useDisabledDelete(props?.record?.fk_topicId);
+  const disableEdit = /*useDisabledEdit(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
+  const disableDelete = /*useDisabledDelete(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
