@@ -99,6 +99,8 @@ const DropdownMenu = ({
           }
         </MenuItem>
         {
+          //TODO - only if not in Answers view
+          /*
           !!record.fk_answerId && (
             <MenuItem
               onClick={handleClose}
@@ -115,7 +117,7 @@ const DropdownMenu = ({
                 disabled={disableEdit}
               />
             </MenuItem>
-          )
+          )*/
         }
         <MenuItem onClick={handleClose}>
           <ResourceContextProvider value="questions">
@@ -132,9 +134,11 @@ const DropdownMenu = ({
             />
           </ResourceContextProvider>
         </MenuItem>
+        {/*
         <MenuItem onClick={handleClose}>
           <IgnoreButton record={record} onClick={handleClose} disabled={disableEdit} />
         </MenuItem>
+      */}
       </Menu>
     </div>
   );
