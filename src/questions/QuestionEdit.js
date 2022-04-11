@@ -126,7 +126,7 @@ const FormFields = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
-  const disableEdit = useDisabledEdit(record?.fk_topicId);
+  const disableEdit =/* useDisabledEdit(record?.fk_topicId);*/ record?.allowEdit === false;
 
   let fetching = false;
 

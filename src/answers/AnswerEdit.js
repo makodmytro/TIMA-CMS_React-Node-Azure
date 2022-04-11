@@ -69,7 +69,7 @@ const AnswerEdit = (props) => {
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const [answer, setAnswer] = React.useState(null);
-  const disableEdit = useDisabledEdit(answer?.fk_topicId) || (answer && answer.allowEdit === false);
+  const disableEdit = /*useDisabledEdit(answer?.fk_topicId) ||*/ (answer && answer.allowEdit === false);
   const ref = React.useRef();
 
   React.useEffect(() => {
