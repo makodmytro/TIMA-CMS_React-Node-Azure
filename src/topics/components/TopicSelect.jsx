@@ -12,6 +12,7 @@ import PencilIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import * as TopicsLogic from '../logic'
 
 const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
 
@@ -187,6 +188,8 @@ const MultiTopicSelect = ({
     }
   }, [filter, topics]);
 
+  const selectedTopicLabel = TopicsLogic.getTreeLabel(value, topics);
+/*
   const selected = topicsGrandchild.length
     ? topicsGrandchild.find((t) => t.id === value)
     : (
@@ -194,7 +197,7 @@ const MultiTopicSelect = ({
         ? topicsChild.find((t) => t.id === value)
         : topics.find((t) => t.id === value)
     );
-
+*/
   return (
     <Box>
       <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
@@ -207,7 +210,7 @@ const MultiTopicSelect = ({
         !loading && (editting && !toggleEdit) && (
           <Box mb={2}>
             <Button color="secondary" onClick={() => setToggleEdit(true)} size="small">
-              {selected?.name} &nbsp;&nbsp;<PencilIcon fontSize="small" />
+              {selectedTopicLabel} &nbsp;&nbsp;<PencilIcon fontSize="small" />
             </Button>
           </Box>
         )
