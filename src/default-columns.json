@@ -8,16 +8,16 @@
   ],
   "answers": [
     "text",
-    "fk_languageId",
     "fk_topicId",
     "fk_createdByUserId",
+    "status",
     "updatedAt"
   ],
   "questions": [
     "text",
     "fk_answerId",
     "fk_topicId",
-    "approved",
+    "fk_createdByUserId",
     "updatedAt",
     "feedbackPositiveCount",
     "feedbackNegativeCount"
