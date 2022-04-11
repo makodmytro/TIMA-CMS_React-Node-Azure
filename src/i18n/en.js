@@ -5,6 +5,8 @@ const english = {
   appbar: {
     languageSelect: 'Language',
   },
+  Test: 'Test',
+  Dashboard: 'Dashboard',
   'My profile': 'My profile',
   'Topic Sync Scheduled': 'Topic Sync Scheduled',
   required: 'Required',

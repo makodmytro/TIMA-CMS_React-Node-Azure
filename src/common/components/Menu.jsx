@@ -21,6 +21,7 @@ import { baseApi } from '../httpClient';
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 
 const Menu = ({ onMenuClick, logout }) => {
+  const [backend, setBackend] = React.useState(null);
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
   const syncStatus = useSelector((state) => state.custom.syncStatus);
@@ -30,6 +31,16 @@ const Menu = ({ onMenuClick, logout }) => {
   const locale = useLocale();
   const setLocale = useSetLocale();
   const dataProvider = useDataProvider();
+
+  const getBackendVersion = async () => {
+    const { data } = await dataProvider.backendVersion();
+
+    setBackend(data);
+  };
+
+  React.useEffect(() => {
+    getBackendVersion();
+  }, []);
 
   const onClick = (resource) => (e) => {
     const filter = {};
@@ -124,7 +135,7 @@ const Menu = ({ onMenuClick, logout }) => {
         <div>
           Backend Build:
           <span style={{ float: 'right' }}>
-            {dataProvider.backendVersion}
+            {backend}
           </span>
         </div>
         {baseApi}

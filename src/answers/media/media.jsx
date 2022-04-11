@@ -2,7 +2,6 @@ import React from 'react';
 import {
   useDataProvider,
   useNotify,
-  useRefresh,
   Confirm,
   FileInput,
   useTranslate,
@@ -23,6 +22,7 @@ import VideoIcon from '@material-ui/icons/Videocam';
 import ImageIcon from '@material-ui/icons/Image';
 import FilePreview from './file-preview';
 import PreviewDialog from './preview-dialog';
+import useAnswer from '../useAnswer';
 
 const Icon = ({ media }) => {
   if (media.type.startsWith('image')) {
@@ -46,7 +46,7 @@ const MediaList = ({ answer }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const notify = useNotify();
-  const refresh = useRefresh();
+  const { refresh } = useAnswer();
   const [media, setMedia] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [confirmation, setConfirmation] = React.useState({

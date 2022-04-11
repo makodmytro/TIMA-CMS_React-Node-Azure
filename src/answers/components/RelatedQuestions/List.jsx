@@ -4,18 +4,18 @@ import {
   Confirm,
   useNotify,
   useDataProvider,
-  useRefresh,
 } from 'react-admin';
 import {
   Box,
 } from '@material-ui/core';
 import Table from './Table';
+import useAnswer from '../../useAnswer';
 
 const List = ({ record }) => {
   const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const refresh = useRefresh();
+  const { refresh } = useAnswer();
   const [confirmations, setConfirmations] = React.useState({
     id: null,
     unlink: false,

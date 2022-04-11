@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   useDataProvider,
-  useRefresh,
   useNotify,
 } from 'react-admin';
 import QuestionsSearchCreateDialog from '../../../questions/components/SearchCreateDialog';
+import useAnswer from '../../useAnswer';
 
 const SearchCreateDialog = ({ record, open, onClose }) => {
-  const refresh = useRefresh();
+  const { refresh } = useAnswer();
   const notify = useNotify();
   const dataProvider = useDataProvider();
 

@@ -13,7 +13,6 @@ import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
-import StatusInput from './StatusInput';
 import { useDisabledEdit, useDisabledCreate } from '../../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
@@ -162,11 +161,6 @@ const Form = ({
         )
       }
       <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
-      {
-        edit && USE_WORKFLOW && (
-          <StatusInput source="status" disabled={disableEditRule} record={record} />
-        )
-      }
     </>
   );
 };

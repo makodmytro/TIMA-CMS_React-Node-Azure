@@ -6,7 +6,7 @@ import {
   TextField,
   FunctionField,
 } from 'react-admin';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -22,8 +22,13 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 const StatusHistory = ({ record }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const dispatch = useDispatch();
   const status = useSelector((state) => state.custom.workflowStatus);
-  const [history, setHistory] = React.useState(null);
+  const history = useSelector((state) => {
+    const _a = state.custom.answers?.statusHistory;
+
+    return _a[record?.id] || [];
+  });
 
   const fetch = async () => {
     try {
@@ -31,7 +36,13 @@ const StatusHistory = ({ record }) => {
         id: record.id,
       });
 
-      setHistory(data);
+      dispatch({
+        type: 'CUSTOM_ANSWER_STATUS_HISTORY',
+        payload: {
+          id: record.id,
+          data,
+        },
+      });
     } catch (err) { } // eslint-disable-line
   };
 

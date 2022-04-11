@@ -7,6 +7,10 @@ const defaultState = {
   syncStatus: 0,
   workflowRoles: [],
   workflowStatus: [],
+  answers: {
+    data: {},
+    statusHistory: {},
+  },
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -59,6 +63,30 @@ export default (state = defaultState, { type, payload }) => {
       return {
         ...state,
         syncStatus: payload,
+      };
+    }
+    case 'CUSTOM_ANSWER_STATUS_HISTORY': {
+      return {
+        ...state,
+        answers: {
+          ...state.answers,
+          statusHistory: {
+            ...state.answers.statusHistory,
+            [payload.id]: payload.data,
+          },
+        },
+      };
+    }
+    case 'CUSTOM_SET_ANSWER': {
+      return {
+        ...state,
+        answers: {
+          ...state.answers,
+          data: {
+            ...state.answers.data,
+            [payload.id]: payload.data,
+          },
+        },
       };
     }
     default: {
