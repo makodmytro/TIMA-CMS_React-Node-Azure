@@ -238,6 +238,9 @@ const german = {
         updatedAt: 'Aktualisiert',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Chat-Ansicht aktivieren',

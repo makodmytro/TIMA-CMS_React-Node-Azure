@@ -240,6 +240,9 @@ const english = {
         updatedAt: 'Updated',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Enable chat view',
