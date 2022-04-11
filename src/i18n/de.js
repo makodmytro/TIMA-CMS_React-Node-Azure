@@ -14,6 +14,7 @@ const german = {
   Weeks: 'Woche',
   Months: 'Monat',
   From: 'Von',
+  To: 'To',
   Until: 'Bis',
   'Questions / unanswered': 'Fragen / unbeantwortet',
   '# Questions': '# Fragen',
@@ -120,6 +121,8 @@ const german = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -292,6 +295,7 @@ const german = {
         email: 'Email',
         lastLogin: 'Letzter login',
         createdAt: 'Erstellt am',
+        updatedAt: 'Updated at',
         created_by: 'Erstellt von',
         isAdmin: 'Admin',
         isActive: 'Active',
@@ -328,6 +332,7 @@ const german = {
         entityName: 'Entity',
         actionType: 'Action',
         createdAt: 'Date',
+        updatedAt: 'Date',
       },
     },
   },

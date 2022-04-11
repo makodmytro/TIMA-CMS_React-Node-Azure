@@ -64,6 +64,10 @@ const UsersList = (props) => {
       key: 'createdAt',
       el: (<DateField source="createdAt" />),
     },
+    {
+      key: 'updatedAt',
+      el: (<DateField source="updatedAt" showTime />),
+    },
     { key: 'created_by', el: (<TextField source="created_by" />) },
     { key: 'isActive', el: (<BooleanField source="isActive" label="is active" />) },
     { key: 'isAdmin', el: (<BooleanField source="isAdmin" label="is admin" />) },
@@ -96,6 +100,7 @@ const UsersList = (props) => {
               createButtonLabel={AZURE_LOGIN ? translate('resources.users.add') : null}
             />
           )}
+          sort={{ field: 'updatedAt', order: 'DESC' }}
         >
           <Datagrid rowClick="edit">
             {columns.filter((col) => visibleColumns.includes(col.key))

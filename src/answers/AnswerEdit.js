@@ -87,6 +87,9 @@ const AnswerEdit = () => {
       <CustomTopToolbar />
       <StatusWarning record={answer} />
       <RelatedQuestionsActionsRow record={answer} />
+      <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
+        {translate('misc.editing_answer')}
+      </Typography>
       <Box boxShadow={3} borderRadius={5}>
         <Form
           onSubmit={onSubmit}

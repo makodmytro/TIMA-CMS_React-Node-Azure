@@ -38,7 +38,6 @@ import styles from './styles';
 import Filters from './Filters';
 import AnswerField from '../components/AnswerField';
 import EditDialog from '../components/EditDialog';
-import { useDisabledEdit, useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
@@ -72,8 +71,8 @@ const CustomGridItem = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
-  const disableEdit = useDisabledEdit(record?.fk_topicId);
-  const disableApprove = useDisabledApprove(record?.fk_topicId);
+  const disableEdit = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
+  const disableApprove = record?.allowEdit === false; // useDisabledApprove(record?.fk_topicId);
   const classes = styles();
 
   const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
@@ -356,6 +355,7 @@ const QuestionList = ({
         )}
         filters={<Filters languages={languages} topics={topics} />}
         filterDefaultValues={{ ignored: [false, null], topLevelOnly: '1' }}
+        sort={{ field: 'updatedAt', order: 'DESC' }}
       >
         <CustomGrid
           visibleColumns={visibleColumns}

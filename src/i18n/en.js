@@ -14,6 +14,7 @@ const english = {
   Weeks: 'Weeks',
   Months: 'Months',
   From: 'From',
+  To: 'To',
   Until: 'Until',
   'Questions / unanswered': 'Questions / unanswered',
   '# Questions': '# Questions',
@@ -121,6 +122,8 @@ const english = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -294,6 +297,7 @@ const english = {
         email: 'Email',
         lastLogin: 'Last login',
         createdAt: 'Created at',
+        updatedAt: 'Updated at',
         created_by: 'Created by',
         isAdmin: 'Admin',
         isActive: 'Active',
@@ -330,6 +334,7 @@ const english = {
         entityName: 'Entity',
         actionType: 'Action',
         createdAt: 'Date',
+        updatedAt: 'Date',
       },
     },
   },
