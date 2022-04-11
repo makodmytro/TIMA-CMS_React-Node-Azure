@@ -22,13 +22,12 @@ import AnswerTextField from '../../answers/components/TextField';
 import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
 import Filters from './filters-form';
 import CreateForm from './answer-create-form';
-import { useDisabledEdit } from '../../hooks';
 
 const LinksDialog = ({
   record,
   languages,
 }) => {
-  const disabled = useDisabledEdit(record?.fk_topicId);
+  const disabled = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const notify = useNotify();

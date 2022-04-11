@@ -119,6 +119,8 @@ const english = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -238,6 +240,9 @@ const english = {
         updatedAt: 'Updated',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Enable chat view',
@@ -327,7 +332,6 @@ const english = {
         createdAt: 'Date',
       },
     },
-    'stats/sessions': 'Sessions'
   },
 };
 

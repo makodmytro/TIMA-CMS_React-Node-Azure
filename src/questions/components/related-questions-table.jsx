@@ -15,7 +15,6 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
-import { useDisabledEdit } from '../../hooks';
 
 const RelatedQuestionsTable = ({
   record,
@@ -24,7 +23,7 @@ const RelatedQuestionsTable = ({
   languages,
 }) => {
   const translate = useTranslate();
-  const disabled = useDisabledEdit(record?.fk_topicId);
+  const disabled = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
 
   const dataProvider = useDataProvider();
   const notify = useNotify();

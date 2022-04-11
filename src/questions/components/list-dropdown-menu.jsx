@@ -12,9 +12,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
-import IgnoreButton from './ignore-button';
 import EditDialog from './EditDialog';
-import { useDisabledEdit, useDisabledDelete } from '../../hooks';
+import { useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
@@ -25,7 +24,7 @@ const DropdownMenu = ({
   const translate = useTranslate();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const disableEdit = useDisabledEdit(record?.fk_topicId) || disabled;
+  const disableEdit = record?.allowEdit === false || disabled;
   const disableDelete = useDisabledDelete(record?.fk_topicId) || disabled;
 
   const handleClick = (event) => {

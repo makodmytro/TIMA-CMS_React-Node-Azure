@@ -48,6 +48,7 @@ const TopicList = () => {
         topLevelOnly: TOPICS_ENABLE_TREE_LIST,
       },
       pagination: paging,
+      sort: { field: 'updatedAt', order: 'DESC' },
     });
 
     setResults(data);

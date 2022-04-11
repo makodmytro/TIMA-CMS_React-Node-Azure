@@ -14,7 +14,7 @@ import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
 import StatusInput from './StatusInput';
-import { useDisabledEdit, useDisabledCreate } from '../../hooks';
+import { useDisabledCreate } from '../../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
@@ -57,9 +57,7 @@ const Form = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
-  const disableEditRule = edit
-    ? useDisabledEdit(fkTopicId)
-    : useDisabledCreate();
+  const disableEditRule = edit ? false : useDisabledCreate();
   const disableEditProp = (record && record.allowEdit === false);
   const disableEdit = disableEditRule || disableEditProp;
 

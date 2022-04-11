@@ -11,6 +11,7 @@ import {
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import { DateTimeInput } from '../common/components/datetime-picker';
 import DetailDialog from './DetailDialog';
 
@@ -29,8 +30,13 @@ const ActionTypeField = ({ record }) => {
 };
 
 const Filters = (props) => {
+  const translate = useTranslate();
+
   return (
     <Box pt={2}>
+      <Box flex="0 0 100%">
+        <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
+      </Box>
       <Filter {...props}>
         <DateTimeInput
           label="resources.sessions.fields.from"
@@ -120,6 +126,7 @@ const LogsList = (props) => {
         actions={null}
         filters={<Filters />}
         bulkActionButtons={false}
+        sort={{ field: 'updatedAt', order: 'DESC' }}
       >
         <Datagrid rowClick={null}>
           {columns.map((col) => cloneElement(col.el, { key: col.key }))}

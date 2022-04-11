@@ -96,6 +96,7 @@ const UsersList = (props) => {
               createButtonLabel={AZURE_LOGIN ? translate('resources.users.add') : null}
             />
           )}
+          sort={{ field: 'updatedAt', order: 'DESC' }}
         >
           <Datagrid rowClick="edit">
             {columns.filter((col) => visibleColumns.includes(col.key))

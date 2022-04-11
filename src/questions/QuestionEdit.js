@@ -28,7 +28,6 @@ import { PlayableTextInput } from '../common/components/playable-text';
 import RelatedQuestionsTable from './components/related-questions-table';
 import SearchQuestionsAnswers from './search-questions-answers';
 import IgnoreButton from './components/ignore-button';
-import { useDisabledEdit, useDisabledDelete } from '../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 

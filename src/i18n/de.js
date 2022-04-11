@@ -118,6 +118,8 @@ const german = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -236,6 +238,9 @@ const german = {
         updatedAt: 'Aktualisiert',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Chat-Ansicht aktivieren',
@@ -325,7 +330,6 @@ const german = {
         createdAt: 'Date',
       },
     },
-    'stats/sessions': 'Sessions'
   },
 };
 
