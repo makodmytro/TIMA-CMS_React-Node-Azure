@@ -118,6 +118,8 @@ const german = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -236,6 +238,9 @@ const german = {
         updatedAt: 'Aktualisiert',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Chat-Ansicht aktivieren',
@@ -287,6 +292,7 @@ const german = {
         email: 'Email',
         lastLogin: 'Letzter login',
         createdAt: 'Erstellt am',
+        updatedAt: 'Updated at',
         created_by: 'Erstellt von',
         isAdmin: 'Admin',
         isActive: 'Active',
@@ -323,9 +329,9 @@ const german = {
         entityName: 'Entity',
         actionType: 'Action',
         createdAt: 'Date',
+        updatedAt: 'Date',
       },
     },
-    'stats/sessions': 'Sessions'
   },
 };
 

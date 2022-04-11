@@ -7,6 +7,7 @@ import {
   useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 const Filters = ({ onSubmit, initialValues }) => {
   const translate = useTranslate();
@@ -21,6 +22,9 @@ const Filters = ({ onSubmit, initialValues }) => {
       render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
+            <Box flex="0 0 100%">
+              <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
+            </Box>
             <Box display="inline-block" px={1}>
               <TextInput
                 label="misc.text"

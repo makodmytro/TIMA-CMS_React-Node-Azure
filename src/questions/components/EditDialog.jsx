@@ -17,11 +17,10 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextInput } from '../../common/components/playable-text';
-import { useDisabledEdit } from '../../hooks';
 
 const EditDialog = ({ record, open, onClose }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
-  const disableEdit = useDisabledEdit(record?.fk_topicId) || record?.allowEdit === false;
+  const disableEdit = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();

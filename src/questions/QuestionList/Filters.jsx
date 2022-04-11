@@ -8,6 +8,7 @@ import {
   useTranslate,
 } from 'react-admin';
 import { Form } from 'react-final-form';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import DoneIcon from '@material-ui/icons/Done';
@@ -86,6 +87,9 @@ const Filters = ({ languages, topics, ...props }) => {
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>
+          <Box flex="0 0 100%">
+            <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
+          </Box>
           <TextInput label="misc.text" source="q" alwaysOn onChange={() => handleSubmit()} />
           <ReferenceInput
             onChange={() => handleSubmit()}

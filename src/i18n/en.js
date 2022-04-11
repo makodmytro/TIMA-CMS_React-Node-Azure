@@ -119,6 +119,8 @@ const english = {
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
+    editing_answer: 'Editing answer',
+    filters: 'Filters',
   },
   resources: {
     topics: {
@@ -238,6 +240,9 @@ const english = {
         updatedAt: 'Updated',
       },
     },
+    'stats/sessions': {
+      name: 'Session |||| Sessions',
+    },
     sessions: {
       name: 'Session |||| Sessions',
       chat_view: 'Enable chat view',
@@ -289,6 +294,7 @@ const english = {
         email: 'Email',
         lastLogin: 'Last login',
         createdAt: 'Created at',
+        updatedAt: 'Updated at',
         created_by: 'Created by',
         isAdmin: 'Admin',
         isActive: 'Active',
@@ -325,9 +331,9 @@ const english = {
         entityName: 'Entity',
         actionType: 'Action',
         createdAt: 'Date',
+        updatedAt: 'Date',
       },
     },
-    'stats/sessions': 'Sessions'
   },
 };
 

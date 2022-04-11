@@ -90,6 +90,7 @@ const GroupsList = (props) => {
               columns={columns}
             />
           )}
+          sort={{ field: 'updatedAt', order: 'DESC' }}
         >
           <Datagrid rowClick="edit">
             {columns.filter((col) => visibleColumns.includes(col.key))

@@ -113,6 +113,9 @@ const AnswerEdit = (props) => {
       <CustomTopToolbar />
       <StatusWarning record={answer} />
       <RelatedQuestionsActionsRow record={answer} />
+      <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
+        {translate('misc.editing_answer')}
+      </Typography>
       <Edit
         {...props}
         undoable={false}

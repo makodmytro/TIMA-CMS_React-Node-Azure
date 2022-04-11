@@ -35,7 +35,7 @@ import AnswerTextField from '../components/TextField';
 import AnswerField from '../../questions/components/AnswerField';
 import Filters from './Filters';
 import styles from './styles';
-import { useDisabledEdit, useDisabledApprove } from '../../hooks';
+import { useDisabledApprove } from '../../hooks';
 
 const QUESTIONS_TREE_CHILD_COLOR = process.env.REACT_APP_QUESTIONS_TREE_CHILD_COLOR || '498ca752';
 const QUESTIONS_ENABLE_TREE_LIST = process.env.REACT_APP_QUESTIONS_ENABLE_TREE_LIST || '1';
@@ -76,7 +76,7 @@ const mapStateToProps = (state) => {
 
 const WrapTopicSelect = (props) => {
   return (
-    <TopicSelectCell source="fk_topicId" label="resources.answers.fields.fk_topicId" sortBy="fk_topicId" {...props} disabled={useDisabledEdit(props?.record?.fk_topicId)} />
+    <TopicSelectCell source="fk_topicId" label="resources.answers.fields.fk_topicId" sortBy="fk_topicId" {...props} disabled={props?.record?.allowEdit === false} />
   );
 };
 const WrapApprovedSwitch = (props) => {
@@ -350,6 +350,7 @@ const AnswerList = ({
         )}
         filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}
+        sort={{ field: 'updatedAt', order: 'DESC' }}
       >
         <CustomGrid visibleColumns={visibleColumns} />
       </List>

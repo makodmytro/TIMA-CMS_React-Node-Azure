@@ -25,7 +25,6 @@ import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import AnswerTextField from '../../answers/components/TextField';
-import { useDisabledEdit } from '../../hooks';
 
 const Filters = ({
   onSubmit,
@@ -113,7 +112,7 @@ const AnswerLinkDialog = ({ record }) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [answers, setAnswers] = React.useState(null);
-  const disabled = useDisabledEdit(record.fk_topicId);
+  const disabled = record?.allowEdit === false; // useDisabledEdit(record.fk_topicId);
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
   const notify = useNotify();
