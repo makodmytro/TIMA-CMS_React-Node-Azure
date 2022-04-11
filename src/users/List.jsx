@@ -64,6 +64,10 @@ const UsersList = (props) => {
       key: 'createdAt',
       el: (<DateField source="createdAt" />),
     },
+    {
+      key: 'updatedAt',
+      el: (<DateField source="updatedAt" showTime />),
+    },
     { key: 'created_by', el: (<TextField source="created_by" />) },
     { key: 'isActive', el: (<BooleanField source="isActive" label="is active" />) },
     { key: 'isAdmin', el: (<BooleanField source="isAdmin" label="is admin" />) },

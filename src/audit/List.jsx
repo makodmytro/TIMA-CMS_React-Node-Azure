@@ -111,8 +111,8 @@ const LogsList = (props) => {
       el: <TextField source="userName" label="resources.audit.fields.fk_userId" />,
     },
     {
-      key: 'createdAt',
-      el: <DateField source="createdAt" showTime />,
+      key: 'updatedAt',
+      el: <DateField source="updatedAt" showTime />,
     },
   ];
 
