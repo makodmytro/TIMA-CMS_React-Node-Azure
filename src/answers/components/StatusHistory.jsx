@@ -89,7 +89,7 @@ const StatusHistory = ({ record }) => {
 
   return (
     <Box width="100%">
-      <Accordion>
+      <Accordion expanded>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"

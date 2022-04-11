@@ -12,7 +12,7 @@ import SearchCreateDialog from './SearchCreateDialog';
 
 const ActionsRow = ({ record }) => {
   const translate = useTranslate();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
   const [createOpen, setCreateOpen] = React.useState(false);
   const disabled = record && record.allowEdit === false;
 
