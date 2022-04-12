@@ -86,9 +86,7 @@ const LinksDialog = ({
       refresh();
       window.scroll(0, 0);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
 
       throw err;
     }
@@ -157,9 +155,7 @@ const LinksDialog = ({
       notify('The question was set as child');
       onSubmit(form);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
 
       throw err;
     }
@@ -198,9 +194,7 @@ const LinksDialog = ({
       linkAnswer(data.id, data.fk_topicId);
       start();
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 

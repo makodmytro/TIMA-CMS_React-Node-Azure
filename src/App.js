@@ -7,6 +7,7 @@ import {
   AdminContext,
   AdminUI,
   useDataProvider,
+  Login,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -33,6 +34,8 @@ import theme from './common/theme';
 import AzureLogin from './auth/azure';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
+const BACKDOOR_LOGIN = process.env.REACT_APP_USE_BACKDOOR_LOGIN === '1';
+console.log(BACKDOOR_LOGIN, process.env.REACT_APP_USE_BACKDOOR_LOGIN);
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -50,6 +53,7 @@ const AsyncResources = () => {
   const timeout = React.useRef(null);
   const topicsStatusTimeout = React.useRef(null);
 
+  const isLoginScreen = () => location.pathname.includes('/login') || location.pathname.includes('/backdoor-login');
   const refreshSession = async () => {
     setTic(false);
 
@@ -85,7 +89,7 @@ const AsyncResources = () => {
   };
 
   const check = async () => {
-    const a = async () => (location.pathname.includes('/login') || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
+    const a = async () => (isLoginScreen() || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
 
     try {
       await Promise.all([
@@ -117,26 +121,26 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!location.pathname.includes('/login') && tac) {
+    if (!isLoginScreen() && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
       }, 1000 * 60 * 5);
     }
 
-    if (location.pathname.includes('/login')) {
+    if (isLoginScreen()) {
       clearTimeout(topicsStatusTimeout.current);
       topicsStatusTimeout.current = null;
     }
   }, [location.pathname, tac]);
 
   React.useEffect(() => {
-    if (!location.pathname.includes('/login') && tic) {
+    if (!isLoginScreen() && tic) {
       timeout.current = setTimeout(() => {
         refreshSession();
       }, 1000 * 60 * 10);
     }
 
-    if (location.pathname.includes('/login')) {
+    if (isLoginScreen()) {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
@@ -187,6 +191,13 @@ const AsyncResources = () => {
           path="/test-ask"
           component={TestAsk}
         />,
+        <Route
+          exact
+          key={2}
+          path="/backdoor-login"
+          component={BACKDOOR_LOGIN ? Login : null}
+          noLayout
+        />
       ]}
     >
       {

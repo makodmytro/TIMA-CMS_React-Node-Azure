@@ -2,6 +2,7 @@ import React from 'react';
 import {
   useDataProvider,
   useTranslate,
+  useNotify,
   DateField,
   TextField,
   FunctionField,
@@ -23,6 +24,7 @@ const StatusHistory = ({ record }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const dispatch = useDispatch();
+  const notify = useNotify();
   const status = useSelector((state) => state.custom.workflowStatus);
   const history = useSelector((state) => {
     const _a = state.custom.answers?.statusHistory;
@@ -43,7 +45,9 @@ const StatusHistory = ({ record }) => {
           data,
         },
       });
-    } catch (err) { } // eslint-disable-line
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+    }
   };
 
   React.useEffect(() => {

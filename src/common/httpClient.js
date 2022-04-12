@@ -15,7 +15,6 @@ const httpClient = async (url, options = {}, omitToken = false) => {
     const result = await fetchUtils.fetchJson(url, options);
     return result;
   } catch (err) {
-    console.error(err);
     if (err?.status && err?.body?.message) {
       return Promise.reject(new HttpError(err.body.message, err.status, err.body)); //TODO - use resources err?.body?.code
     }

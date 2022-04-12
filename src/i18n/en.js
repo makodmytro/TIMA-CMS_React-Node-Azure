@@ -22,7 +22,9 @@ const english = {
   'Questions answered': 'Questions answered',
   'Session average duration': 'Session average duration',
   Duration: 'Duration',
+  Required: 'Required',
   // notifications
+  'We could not execute the action': 'We could not execute the action',
   'The answer and its related questions were updated': 'The answer and its related questions were updated',
   'The answer was updated': 'The answer was updated',
   'The related questions were approved': 'The related questions were approved',

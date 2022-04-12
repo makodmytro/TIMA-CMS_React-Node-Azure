@@ -46,7 +46,9 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
 
       notify('Comment added successfully');
       onClose();
-    } catch (err) {} // eslint-disable-line
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+    }
   };
 
   return (
@@ -129,7 +131,7 @@ const StatusInput = ({ record, disabled }) => {
       notify('The record has been updated');
     } catch (err) {
       refresh();
-      notify(err.message, 'error');//'Failed to change the status', 'error');
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 

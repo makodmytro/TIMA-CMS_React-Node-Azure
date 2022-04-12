@@ -6,6 +6,7 @@ import {
   useTranslate,
   required,
   ReferenceInput,
+  useNotify,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import PencilIcon from '@material-ui/icons/Edit';
@@ -26,6 +27,7 @@ const MultiTopicSelect = ({
 }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const notify = useNotify();
   const [toggleEdit, setToggleEdit] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [filteredTopics, setFilteredTopics] = React.useState([]);
@@ -109,7 +111,9 @@ const MultiTopicSelect = ({
       });
 
       setTopics(data);
-    } catch (e) {} // eslint-disable-line
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+    }
 
     setLoading(false);
   };

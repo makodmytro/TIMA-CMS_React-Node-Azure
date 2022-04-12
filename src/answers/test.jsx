@@ -61,11 +61,7 @@ const TestAsk = ({ topics, languages }) => {
 
       setResponse(res.data);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
-
-      console.log(err); // eslint-disable-line
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
 
     setLoading(false);
