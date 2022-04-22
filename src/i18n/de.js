@@ -320,7 +320,7 @@ const german = {
       },
     },
     audit: {
-      name: 'Prüfung |||| Prüfung',
+      name: 'Audit |||| Audit',
       actions: {
         1: 'Hinzugefügt',
         2: 'Aktualisiert',
