@@ -35,7 +35,6 @@ import AzureLogin from './auth/azure';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 const BACKDOOR_LOGIN = process.env.REACT_APP_USE_BACKDOOR_LOGIN === '1';
-console.log(BACKDOOR_LOGIN, process.env.REACT_APP_USE_BACKDOOR_LOGIN);
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {

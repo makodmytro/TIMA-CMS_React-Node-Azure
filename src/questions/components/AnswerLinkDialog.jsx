@@ -160,7 +160,6 @@ const AnswerLinkDialog = ({ record }) => {
           fk_languageId: record?.fk_languageId,
         },
       });
-      console.log(data);
       onSelect(data.id);
     } catch (e) {
       notify('Unexpected error', 'error');

@@ -77,7 +77,6 @@ const authProvider = {
         }, {}),
       });
     } catch (e) {
-      console.log('eeeeeeeeeeeeeee', e);
       return Promise.reject();
     }
   },

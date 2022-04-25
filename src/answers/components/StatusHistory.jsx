@@ -86,7 +86,6 @@ const StatusHistory = ({ record }) => {
 
       return translate(`resources.users.workflow.status.${_new?.name}`);
     } catch (err) {
-      console.log(err); // eslint-disable-line
       return '';
     }
   };

@@ -127,7 +127,7 @@ const AnswerEdit = () => {
       </Box>
 
       <Box pt={2}>
-        <StatusInputSection record={answer} disabled={disableEdit} />
+        <StatusInputSection record={answer} />
       </Box>
       <Box pt={2}>
         <StatusHistory record={answer} />
