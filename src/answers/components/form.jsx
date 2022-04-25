@@ -13,7 +13,6 @@ import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
-import StatusInput from './StatusInput';
 import { useDisabledCreate } from '../../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';

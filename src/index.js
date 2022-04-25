@@ -8,25 +8,23 @@ import {
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { msalConfig } from './azure-auth-config';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
-const BACKDOOR_LOGIN = process.env.REACT_APP_USE_BACKDOOR_LOGIN === '1';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
+  integrations: [new BrowserTracing()],
+  tracesSampleRate: 1.0,
 });
 
 const Wrapper = ({ children }) => {
-  if (window.location.href.includes('/backdoor-login') && BACKDOOR_LOGIN) {
-    return (<div>{children}</div>);
-  }
-
   if (USE_AZURE_LOGIN === '1') {
     return (
       <MsalProvider instance={msalInstance}>

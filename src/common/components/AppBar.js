@@ -76,7 +76,6 @@ const MyUserMenu = (props) => {
 
 const CustomLogout = () => {
   const { instance, accounts } = useMsal();
-  // console.log(accounts[0], instance.getAccountByHomeId(accounts[0]?.homeAccountId));
 
   const onClick = () => {
     instance.logoutRedirect({

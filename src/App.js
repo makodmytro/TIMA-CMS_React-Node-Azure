@@ -7,7 +7,6 @@ import {
   AdminContext,
   AdminUI,
   useDataProvider,
-  Login,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -34,7 +33,6 @@ import theme from './common/theme';
 import AzureLogin from './auth/azure';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
-const BACKDOOR_LOGIN = process.env.REACT_APP_USE_BACKDOOR_LOGIN === '1';
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -190,13 +188,6 @@ const AsyncResources = () => {
           path="/test-ask"
           component={TestAsk}
         />,
-        <Route
-          exact
-          key={2}
-          path="/backdoor-login"
-          component={BACKDOOR_LOGIN ? Login : null}
-          noLayout
-        />
       ]}
     >
       {
