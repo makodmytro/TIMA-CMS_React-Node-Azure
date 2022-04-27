@@ -89,9 +89,7 @@ const MediaList = ({ answer }) => {
       notify('The media was deleted');
       deleteMediaClosed();
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 
@@ -108,9 +106,7 @@ const MediaList = ({ answer }) => {
 
       return Promise.resolve();
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 

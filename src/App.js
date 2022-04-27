@@ -50,6 +50,7 @@ const AsyncResources = () => {
   const timeout = React.useRef(null);
   const topicsStatusTimeout = React.useRef(null);
 
+  const isLoginScreen = () => location.pathname.includes('/login') || location.pathname.includes('/backdoor-login');
   const refreshSession = async () => {
     setTic(false);
 
@@ -85,7 +86,7 @@ const AsyncResources = () => {
   };
 
   const check = async () => {
-    const a = async () => (location.pathname.includes('/login') || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
+    const a = async () => (isLoginScreen() || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
 
     try {
       await Promise.all([
@@ -117,26 +118,26 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!location.pathname.includes('/login') && tac) {
+    if (!isLoginScreen() && tac) {
       topicsStatusTimeout.current = setTimeout(() => {
         refreshTopicStatus();
       }, 1000 * 60 * 5);
     }
 
-    if (location.pathname.includes('/login')) {
+    if (isLoginScreen()) {
       clearTimeout(topicsStatusTimeout.current);
       topicsStatusTimeout.current = null;
     }
   }, [location.pathname, tac]);
 
   React.useEffect(() => {
-    if (!location.pathname.includes('/login') && tic) {
+    if (!isLoginScreen() && tic) {
       timeout.current = setTimeout(() => {
         refreshSession();
       }, 1000 * 60 * 10);
     }
 
-    if (location.pathname.includes('/login')) {
+    if (isLoginScreen()) {
       clearTimeout(timeout.current);
       timeout.current = null;
     }

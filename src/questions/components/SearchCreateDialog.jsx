@@ -20,6 +20,7 @@ import {
   TableRow,
   TableHead,
   Checkbox,
+  CircularProgress,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
@@ -164,6 +165,7 @@ const SearchCreateDialog = ({
   selectedButtonText,
   selectedButtonOnClick,
 }) => {
+  const [loading, setLoading] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
   const [enableCreate, setEnableCreate] = React.useState(false);
   const [questions, setQuestions] = React.useState(null);
@@ -194,6 +196,7 @@ const SearchCreateDialog = ({
 
       return;
     }
+    setLoading(true);
 
     try {
       const filter = { ...values };
@@ -216,6 +219,7 @@ const SearchCreateDialog = ({
     } catch (err) {
       notify('Unexpected error', 'error');
     }
+    setLoading(false);
   }, 500);
 
   const toggleSelect = (question) => {
@@ -267,6 +271,13 @@ const SearchCreateDialog = ({
           selectedButtonText={selectedButtonText}
         />
         <hr />
+        {
+          loading && (
+            <Box textAlign="center" p={2}>
+              <CircularProgress color="primary" />
+            </Box>
+          )
+        }
         <ResultsList
           {...{
             questions,

@@ -22,7 +22,9 @@ const german = {
   'Questions answered': 'Fragen beantwortet',
   'Session average duration': 'Durchschnittliche Session Dauer',
   Duration: 'Dauer',
+  Required: 'Required',
   // notifications
+  'We could not execute the action': 'We could not execute the action',
   'The answer and its related questions were updated': 'Die Antwort und die zugehörigen Fragen wurden aktualisiert',
   'The answer was updated': 'Die Antwort wurde aktualisiert',
   'The related questions were approved': 'Die zugehörigen Fragen wurden bestätigt',

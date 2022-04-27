@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   useDataProvider,
+  useNotify,
 } from 'react-admin';
 
 const useAnswer = () => {
@@ -10,6 +11,7 @@ const useAnswer = () => {
   const [loading, setLoading] = React.useState(false);
   const dataProvider = useDataProvider();
   const dispatch = useDispatch();
+  const notify = useNotify();
   const answer = useSelector((state) => {
     return state.custom?.answers?.data[id];
   });
@@ -30,7 +32,9 @@ const useAnswer = () => {
           id, data,
         },
       });
-    } catch (e) {} // eslint-disable-line
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+    }
 
     setLoading(false);
   };

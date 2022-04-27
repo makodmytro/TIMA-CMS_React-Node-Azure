@@ -84,12 +84,11 @@ const GroupsCreate = (props) => {
     try {
       const { data } = await dataProvider.getList('users', {
         pagination: { page: 1, perPage: 1000 },
+        filter: { a: 1 },
       });
 
       setUsers(data);
-    } catch (e) {
-      console.log(e); // eslint-disable-line
-    }
+    } catch (e) {} // eslint-disable-line
   };
 
   const putUsersIntoGroup = async () => {
@@ -102,9 +101,7 @@ const GroupsCreate = (props) => {
         id,
         data: { userIds: selected },
       });
-    } catch (e) {
-      console.log(e); // eslint-disable-line
-    }
+    } catch (e) {} // eslint-disable-line
 
     return redirect('/groups');
   };

@@ -8,6 +8,7 @@ import {
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -19,6 +20,8 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
+  integrations: [new BrowserTracing()],
+  tracesSampleRate: 1.0,
 });
 
 const Wrapper = ({ children }) => {

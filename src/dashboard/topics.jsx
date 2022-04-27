@@ -79,9 +79,7 @@ const PastSessions = () => {
       setTopics(data);
       setCount(total);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 

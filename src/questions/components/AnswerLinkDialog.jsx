@@ -28,13 +28,14 @@ import AnswerTextField from '../../answers/components/TextField';
 
 const Filters = ({
   onSubmit,
+  onCreateSubmit,
 }) => {
   const translate = useTranslate();
 
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit, form }) => {
+      render={({ handleSubmit, form, values }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
@@ -43,6 +44,22 @@ const Filters = ({
                   {translate('misc.search_answers_link')}
                 </Typography>
                 <TextInput label="misc.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
+              </Box>
+              <Box flex={1} ml={1} pt={5}>
+                {
+                  !!values?.q?.length && (
+                    <Button
+                      type="button"
+                      color="primary"
+                      variant="contained"
+                      size="small"
+                      onClick={() => onCreateSubmit({ text: values.q })}
+                      fullWidth
+                    >
+                      {translate('resources.answers.create')}
+                    </Button>
+                  )
+                }
               </Box>
             </Box>
           </form>
@@ -134,6 +151,21 @@ const AnswerLinkDialog = ({ record }) => {
     }
   };
 
+  const onCreateSubmit = async (values) => {
+    try {
+      const { data } = await dataProvider.create('answers', {
+        data: {
+          ...values,
+          fk_topicId: record?.fk_topicId,
+          fk_languageId: record?.fk_languageId,
+        },
+      });
+      onSelect(data.id);
+    } catch (e) {
+      notify('Unexpected error', 'error');
+    }
+  };
+
   const onFiltersSubmit = debounce(async (values) => {
     if (!values.q) {
       setAnswers(null);
@@ -174,7 +206,7 @@ const AnswerLinkDialog = ({ record }) => {
               </Box>
             </Box>
             <Box p={2}>
-              <Filters onSubmit={onFiltersSubmit} />
+              <Filters onSubmit={onFiltersSubmit} onCreateSubmit={onCreateSubmit} />
               {
                 loading && (
                   <Box textAlign="center" p={2}>

@@ -9,6 +9,7 @@ import {
   BooleanInput,
   useDataProvider,
   useTranslate,
+  useNotify,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -55,6 +56,7 @@ export const GroupsSelection = ({ disabled }) => {
   const [groups, setGroups] = React.useState([]);
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const notify = useNotify();
 
   const fetch = async () => {
     try {
@@ -63,7 +65,9 @@ export const GroupsSelection = ({ disabled }) => {
       });
 
       setGroups(data);
-    } catch (e) {} // eslint-disable-line
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+    }
   };
 
   React.useEffect(() => {
