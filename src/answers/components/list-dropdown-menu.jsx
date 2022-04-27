@@ -31,6 +31,14 @@ const DropdownMenu = ({
     setAnchorEl(null);
   };
 
+  /*
+  TODO: batch approve should be enabled for non workflow modes only
+          <MenuItem
+          onClick={(e) => e.stopPropagation()}
+        >
+          <BatchApproveButton answerId={record.id} disabled={disableEdit} />
+        </MenuItem>
+*/
   return (
     <div>
       <Button
@@ -64,11 +72,6 @@ const DropdownMenu = ({
             style={{ justifyContent: 'flex-start' }}
             disabled={disableEdit}
           />
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
-          <BatchApproveButton answerId={record.id} disabled={disableEdit} />
         </MenuItem>
         <MenuItem
           onClick={(e) => e.stopPropagation()}
