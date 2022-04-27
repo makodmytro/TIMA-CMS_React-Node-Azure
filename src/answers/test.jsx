@@ -80,7 +80,9 @@ const TestAsk = ({ topics, languages }) => {
         validate={(values) => {
           const errors = {};
 
-          ['question', 'topicId', 'languageId'].forEach((field) => {
+          //TODO - only if using multi level topics
+          //also fix the section for topics selection (multie level) and make it optional
+          ['question', /*'topicId',*/ 'languageId'].forEach((field) => {
             if (!values[field]) {
               errors[field] = translate('Required');
             }
@@ -101,18 +103,6 @@ const TestAsk = ({ topics, languages }) => {
                     optionValue="id"
                     margin="dense"
                     fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <SelectInput
-                    source="topicId"
-                    label="resources.answers.fields.fk_topicId"
-                    choices={topics.filter((t) => t.fk_languageId === values.languageId)}
-                    optionText="name"
-                    optionValue="id"
-                    margin="dense"
-                    fullWidth
-                    disabled={!values.languageId}
                   />
                 </Grid>
                 <Grid item xs={12} sm={9} md={5}>
