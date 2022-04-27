@@ -18,7 +18,7 @@ variables:
   QUESTIONS_TREE_CHILD_COLOR : '498ca752'
   REACT_APP_QUESTIONS_ENABLE_TREE_LIST : '1'
   REACT_APP_HIDE_FIELDS_TOPICS : 'welcomeText,topicImageUrl,topicKey,topicImageUrl'
-  REACT_APP_HIDE_MENU_ITEMS : 'stats/sessions'
+  REACT_APP_HIDE_MENU_ITEMS : 'stats/sessions,languages'
   REACT_APP_HIDE_FIELDS_ANSWERS : 'spokenText,media'
   REACT_APP_HIDE_SPEECH_FIELD : '1'
   REACT_APP_USE_AZURE_LOGIN : '1'
