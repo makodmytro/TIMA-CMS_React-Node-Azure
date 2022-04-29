@@ -169,7 +169,7 @@ const MediaList = ({ answer }) => {
                         onClick={() => deleteMediaClicked(m.id)}
                         variant="outlined"
                       >
-                        {translate('ra.actions.delete')}
+                        {translate('ra.action.delete')}
                       </Button>
                     </TableCell>
                   </TableRow>

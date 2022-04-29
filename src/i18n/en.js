@@ -94,6 +94,7 @@ const english = {
     cancel: 'Cancel',
     un_ignore: 'Un-ignore',
     ignore: 'Ignore',
+    unlink: 'Unlink',
     unlink_answer: 'Unlink answer',
     link_answer: 'Link answer',
     view_related_answer: 'View related answer',

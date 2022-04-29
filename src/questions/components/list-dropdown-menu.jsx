@@ -19,6 +19,7 @@ const DropdownMenu = ({
   record,
   editInline,
   disabled,
+  deleteComponent,
 }) => {
   const refresh = useRefresh();
   const translate = useTranslate();
@@ -119,19 +120,27 @@ const DropdownMenu = ({
           )*/
         }
         <MenuItem onClick={handleClose}>
-          <ResourceContextProvider value="questions">
-            <DeleteButton
-              basePath="/questions"
-              record={record}
-              undoable={false}
-              onClick={handleClose}
-              resource="questions"
-              onSuccess={() => refresh()}
-              fullWidth
-              style={{ justifyContent: 'flex-start' }}
-              disabled={disableDelete}
-            />
-          </ResourceContextProvider>
+          {
+            !!deleteComponent && <>{deleteComponent}</>
+          }
+          {
+            !deleteComponent && (
+              <ResourceContextProvider value="questions">
+                <DeleteButton
+                  basePath="/questions"
+                  record={record}
+                  undoable={false}
+                  onClick={handleClose}
+                  resource="questions"
+                  onSuccess={() => refresh()}
+                  fullWidth
+                  style={{ justifyContent: 'flex-start' }}
+                  disabled={disableDelete}
+                />
+              </ResourceContextProvider>
+            )
+          }
+
         </MenuItem>
         {/*
         <MenuItem onClick={handleClose}>

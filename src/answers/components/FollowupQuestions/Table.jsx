@@ -1,14 +1,18 @@
 import React from 'react';
 import {
   useTranslate,
+  useDataProvider,
+  useNotify,
 } from 'react-admin';
 import { useSelector } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
 import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
@@ -16,6 +20,7 @@ import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
+import useAnswer from '../../useAnswer';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
@@ -24,8 +29,21 @@ const FollowupQuestionsTable = ({
 }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
+  const dataProvider = useDataProvider();
+  const { refresh } = useAnswer();
+  const notify = useNotify();
   const disabled = record && record.allowEdit === false; // useDisabledEdit(record?.fk_topicId) || ();
   const disabledApproved = useDisabledApprove(record?.fk_topicId) || (record && record.allowEdit === false);
+
+  const onDelete = async (id) => {
+    await dataProvider.answersRemoveFollowup(null, {
+      id: record?.id,
+      question_id: id,
+    });
+
+    notify('The question was unlinked');
+    refresh();
+  };
 
   if (!record || !record.FollowupQuestions || !record.FollowupQuestions.length) {
     return (
@@ -102,6 +120,17 @@ const FollowupQuestionsTable = ({
                     record={{ ...related }}
                     editInline
                     disabled={disabled}
+                    deleteComponent={(
+                      <Button
+                        onClick={() => onDelete(related.id)}
+                        type="button"
+                        size="small"
+                        style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                        fullWidth
+                      >
+                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.unlink')}
+                      </Button>
+                    )}
                   />
                 </TableCell>
               </TableRow>
