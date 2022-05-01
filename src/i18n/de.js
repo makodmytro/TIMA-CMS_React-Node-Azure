@@ -93,6 +93,7 @@ const german = {
     cancel: 'Abbrechen',
     un_ignore: 'Ignorieren aufheben',
     ignore: 'Ignorieren',
+    unlink: 'Verknüpfung aufheben',
     unlink_answer: 'Verlinkung der Antwort entfernen',
     link_answer: 'Antwort verlinken',
     view_related_answer: 'Zeige verlinkte Antwort',
