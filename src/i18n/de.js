@@ -163,7 +163,7 @@ const german = {
       },
     },
     questions: {
-      name: 'Frage |||| Fragen',
+      name: 'Frage |||| Training',
       create: 'Frage erstellen',
       edit: 'Fragen bearbeiten',
       link: 'Mit Antwort verbinden',
@@ -200,7 +200,7 @@ const german = {
       add_followup: 'Folgefrage hinzufügen',
     },
     answers: {
-      name: 'Antwort |||| Antworten',
+      name: 'Antwort |||| QnA',
       link_questions: 'Antwort mit %{val} Fragen verlinken',
       set_followup: '%{val} Fragen als Folgefragen festlegen',
       no_media: 'Es gibt keine Dateien für diese Antwort',
