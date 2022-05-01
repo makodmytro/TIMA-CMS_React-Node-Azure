@@ -214,7 +214,13 @@ const SearchCreateDialog = ({
         pagination: { perPage: 50, page: 1 },
       });
 
-      setQuestions(data);
+      setQuestions(data.filter((d) => {
+        if (!record) {
+          return true;
+        }
+
+        return record.id !== d.fk_answerId;
+      }));
       setEnableCreate(!data.length);
     } catch (err) {
       notify('Unexpected error', 'error');
