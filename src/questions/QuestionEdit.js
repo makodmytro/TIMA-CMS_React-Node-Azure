@@ -248,17 +248,6 @@ const FormFields = ({
         }}
         disabled={disableEdit}
       />
-      <ReferenceInput
-        label="resources.questions.fields.fk_parentQuestionId"
-        source="fk_parentQuestionId"
-        reference="questions"
-        filter={{ fk_topicId: fkTopicId }}
-        disabled={!fkTopicId}
-        fullWidth
-        allowEmpty
-      >
-        <SelectInput optionText="text" emptyText="None" />
-      </ReferenceInput>
     </>
   );
 };
