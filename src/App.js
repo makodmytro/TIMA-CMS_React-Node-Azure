@@ -212,12 +212,6 @@ const AsyncResources = () => {
 
           return ([
             <Resource
-              key="topics"
-              name="topics"
-              {...topic}
-            />,
-            languages,
-            <Resource
               key="answers"
               name="answers"
               {...answer}
@@ -227,6 +221,12 @@ const AsyncResources = () => {
               name="questions"
               {...question}
             />,
+            <Resource
+              key="topics"
+              name="topics"
+              {...topic}
+            />,
+            languages,
             <Resource
               key="stats/sessions"
               name="stats/sessions"
