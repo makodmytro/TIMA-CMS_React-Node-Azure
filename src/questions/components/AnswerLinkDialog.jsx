@@ -129,7 +129,7 @@ const AnswerLinkDialog = ({ record }) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [answers, setAnswers] = React.useState(null);
-  const disabled = record?.allowEdit === false; // useDisabledEdit(record.fk_topicId);
+  const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
   const notify = useNotify();

@@ -9,7 +9,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import TopicImage from './Image';
 import { PlayableTextInput } from '../../common/components/playable-text';
-import { useDisabledEdit, useIsAdmin } from '../../hooks';
+import { useIsAdmin } from '../../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_TOPICS ? process.env.REACT_APP_HIDE_FIELDS_TOPICS.split(',') : [];
 
@@ -95,7 +95,7 @@ export const Qna = (props) => {
 };
 
 const FormFields = (props) => {
-  const disabled = useDisabledEdit(props?.record?.id);
+  const disabled = props?.record?.allowEdit === false;
   const admin = useIsAdmin();
 
   const getLang = (r) => {

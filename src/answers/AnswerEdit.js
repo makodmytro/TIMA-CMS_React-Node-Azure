@@ -39,7 +39,8 @@ const AnswerEdit = () => {
   const dataProvider = useDataProvider();
   const { answer, refresh } = useAnswer();
 
-  const disableEdit = /*useDisabledEdit(answer?.fk_topicId) ||*/ (answer && answer.allowEdit === false);
+  const disableEdit = (answer && answer.allowEdit === false);
+  const disableDelete = (answer && answer.allowEdit === false);
 
   const onSubmit = async (values) => {
     try {
@@ -115,7 +116,7 @@ const AnswerEdit = () => {
                         basePath="answers"
                         record={answer}
                         undoable={false}
-                        disabled={disableEdit}
+                        disabled={disableDelete}
                       />
                     </Box>
                   </Box>

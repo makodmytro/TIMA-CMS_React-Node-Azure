@@ -9,14 +9,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import BatchApproveButton from './batch-approve-button';
-import { useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
 }) => {
   const translate = useTranslate();
-  const disableEdit = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
-  const disableDelete = useDisabledDelete(record?.fk_topicId);
+  const disableEdit = record?.allowEdit === false;
+  const disableDelete = record?.allowDelete === false;
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {

@@ -20,7 +20,7 @@ import { PlayableTextInput } from '../../common/components/playable-text';
 
 const EditDialog = ({ record, open, onClose }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
-  const disableEdit = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
+  const disableEdit = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
