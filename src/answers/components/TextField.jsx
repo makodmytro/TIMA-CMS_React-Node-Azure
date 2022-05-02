@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslate } from 'react-admin';
+import { useTranslate, TextField as RATextField } from 'react-admin';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import IconButton from '@material-ui/core/IconButton';
@@ -27,37 +28,42 @@ const TextField = ({ record }) => {
       </Box>
       {
         !!record.FollowupQuestions.length && (
-          <Box>
-            {
-              record.FollowupQuestions.map((q, i) => {
-                return (
-                  <Box key={i} pt={1} borderTop="1px solid #e5e5e5">
-                    <Box fontWeight="bold" fontSize="0.9rem" lineHeight="14px">
-                      {q.text}
+          <Box borderTop="1px solid #e5e5e5" mt={2} pt={2} pl={2}>
+            <Typography style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              {translate('resources.answers.followup_questions')}
+            </Typography>
+            <Box border="1px solid #eeeded">
+              {
+                record.FollowupQuestions.map((q, i) => {
+                  return (
+                    <Box key={i} pt={1} borderBottom="1px dashed #eeeded" p={1}>
+                      <Box fontWeight="bold" fontSize="0.9rem" lineHeight="14px">
+                        {q.text}
+                      </Box>
+                      <Box>
+                        {
+                          !q?.Answer && (<>-</>)
+                        }
+                        <ReactMarkdown source={q?.Answer?.text} />
+                        {
+                          !!q?.Answer && (
+                            <Box textAlign="right">
+                              <Link
+                                to={`/answers/${q?.Answer?.id}/edit`}
+                                style={{ fontSize: '0.7rem' }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                [{translate('misc.view_answer')}]
+                              </Link>
+                            </Box>
+                          )
+                        }
+                      </Box>
                     </Box>
-                    <Box>
-                      {
-                        !q?.Answer && (<>-</>)
-                      }
-                      <ReactMarkdown source={q?.Answer?.text} />
-                      {
-                        !!q?.Answer && (
-                          <Box textAlign="right">
-                            <Link
-                              to={`/answers/${q?.Answer?.id}/edit`}
-                              style={{ fontSize: '0.7rem' }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              [{translate('misc.view_answer')}]
-                            </Link>
-                          </Box>
-                        )
-                      }
-                    </Box>
-                  </Box>
-                );
-              })
-            }
+                  );
+                })
+              }
+            </Box>
           </Box>
         )
       }
@@ -73,22 +79,10 @@ export const AnswerRelatedQuestionField = ({ record }) => {
   }
 
   return (
-    <>
-      <Box>
-        <ReactMarkdown source={record.RelatedQuestions[0].text} />
-      </Box>
-      {
-        expanded && record.RelatedQuestions.map((rq, i) => {
-          if (i === 0) {
-            return null;
-          }
-
-          return <ReactMarkdown source={rq.text} key={i} />
-        })
-      }
-      {
-        record.RelatedQuestions.length > 1 && (
-          <Box textAlign="center">
+    <Box display="flex" alignItems="center">
+      <Box flex={1}>
+        {
+          record.RelatedQuestions.length > 1 && (
             <IconButton
               size="small"
               color="primary"
@@ -101,11 +95,31 @@ export const AnswerRelatedQuestionField = ({ record }) => {
               { !expanded && <ExpandMore fontSize="small" /> }
               { expanded && <ExpandLess fontSize="small" /> }
             </IconButton>
-          </Box>
-        )
-      }
-    </>
+          )
+        }
+        {
+          record.RelatedQuestions.length <= 1 && (<Box component="span" pl={3}>&nbsp;</Box>)
+        }
+      </Box>
+      <Box flex={11}>
+        <Box>
+          <RATextField record={record.RelatedQuestions[0]} source="text" />
+        </Box>
+        {
+          expanded && record.RelatedQuestions.map((rq, i) => {
+            if (i === 0) {
+              return null;
+            }
 
+            return (
+              <Box key={i}>
+                <RATextField record={rq} source="text" />
+              </Box>
+            );
+          })
+        }
+      </Box>
+    </Box>
   );
 };
 
