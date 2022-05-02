@@ -231,7 +231,7 @@ const german = {
         answer: 'Create the answer',
       },
       fields: {
-        text: 'Text',
+        text: 'Antwort Text',
         spokenText: 'Aussprache',
         fk_userId: 'Ersteller',
         fk_createdByUserId: 'Ersteller',
