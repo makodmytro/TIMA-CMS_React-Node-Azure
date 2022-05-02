@@ -13,7 +13,6 @@ import ExpandIcon from '@material-ui/icons/ExpandMore';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import EditDialog from './EditDialog';
-import { useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
@@ -26,7 +25,7 @@ const DropdownMenu = ({
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = record?.allowEdit === false || disabled;
-  const disableDelete = useDisabledDelete(record?.fk_topicId) || disabled;
+  const disableDelete = record?.allowDelete === false || disabled;
 
   const handleClick = (event) => {
     event.stopPropagation();

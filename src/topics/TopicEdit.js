@@ -11,12 +11,12 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import QrDialog from './components/qr-dialog';
 import FormFields from './components/FormFields';
 import ShowQuestions from './components/ShowQuestionsButton';
-import { useDisabledDelete, useDisabledEdit, useIsAdmin } from '../hooks';
+import { useIsAdmin } from '../hooks';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
 const CustomToolbar = (props) => {
-  const disableEdit = useDisabledEdit(props.record?.id);
-  const disableDelete = useDisabledDelete(props.record?.id);
+  const disableEdit = props?.record?.allowEdit === false;
+  const disableDelete = props?.record?.allowDelete === false;
   const admin = useIsAdmin();
 
   return (

@@ -32,7 +32,7 @@ const FollowupQuestionsTable = ({
   const dataProvider = useDataProvider();
   const { refresh } = useAnswer();
   const notify = useNotify();
-  const disabled = record && record.allowEdit === false; // useDisabledEdit(record?.fk_topicId) || ();
+  const disabled = record && record.allowEdit === false;
   const disabledApproved = useDisabledApprove(record?.fk_topicId) || (record && record.allowEdit === false);
 
   const onDelete = async (id) => {

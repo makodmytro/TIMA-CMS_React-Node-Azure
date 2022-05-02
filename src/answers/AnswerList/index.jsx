@@ -31,7 +31,7 @@ import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
 import StatusField from '../../common/components/StatusField';
 import DropDownMenu from '../components/list-dropdown-menu';
-import AnswerTextField from '../components/TextField';
+import AnswerTextField, { AnswerRelatedQuestionField } from '../components/TextField';
 import AnswerField from '../../questions/components/AnswerField';
 import Filters from './Filters';
 import styles from './styles';
@@ -51,6 +51,7 @@ if (!USE_WORKFLOW) {
 }
 
 const columns = [
+  { key: 'fk_questionId' },
   { key: 'text' },
   { key: 'spokenText' },
   { key: 'fk_languageId' },
@@ -160,7 +161,7 @@ const CustomGridItem = ({
         className={classes.cursor}
         onClick={link(record.id)}
       >
-        <TableCell>
+        {/*<TableCell>
           {
             !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
               <>
@@ -179,12 +180,18 @@ const CustomGridItem = ({
               </>
             )
           }
-        </TableCell>
-
+        </TableCell>*/}
+        {
+          visibleColumns.includes('fk_questionId') && (
+            <TableCell>
+              <AnswerRelatedQuestionField label="resources.answers.fields.fk_questionId" record={record} />
+            </TableCell>
+          )
+        }
         {
           visibleColumns.includes('text') && (
             <TableCell>
-              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} />
+              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} hideRelatedQuestions />
             </TableCell>
           )
         }
@@ -301,7 +308,7 @@ const CustomGrid = ({ visibleColumns }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>&nbsp;</TableCell>
+                <Th label="resources.answers.fields.fk_questionId" field="fk_questionId" />
                 <Th label="resources.answers.fields.text" field="text" />
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />

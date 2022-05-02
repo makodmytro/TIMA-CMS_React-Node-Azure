@@ -27,7 +27,7 @@ const LinksDialog = ({
   record,
   languages,
 }) => {
-  const disabled = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
+  const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const notify = useNotify();

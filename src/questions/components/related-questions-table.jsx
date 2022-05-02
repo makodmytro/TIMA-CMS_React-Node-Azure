@@ -23,7 +23,7 @@ const RelatedQuestionsTable = ({
   languages,
 }) => {
   const translate = useTranslate();
-  const disabled = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
+  const disabled = record?.allowEdit === false;
 
   const dataProvider = useDataProvider();
   const notify = useNotify();

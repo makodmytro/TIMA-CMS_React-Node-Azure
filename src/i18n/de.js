@@ -97,6 +97,7 @@ const german = {
     unlink_answer: 'Verlinkung der Antwort entfernen',
     link_answer: 'Antwort verlinken',
     view_related_answer: 'Zeige verlinkte Antwort',
+    view_answer: 'zeige antwort',
     unanswered_questions: 'Unbeantwortete Fragen',
     choose_one_option: 'Bitte wähle eine der Optionen',
     search_for: 'Suche nach',

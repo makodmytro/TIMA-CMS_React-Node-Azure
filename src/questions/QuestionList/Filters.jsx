@@ -18,6 +18,7 @@ import styles from './styles';
 
 const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const HIDE_IGNORED = process.env.REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS === '1';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
@@ -172,18 +173,25 @@ const Filters = ({ languages, topics, ...props }) => {
             )
           }
 
-          <BooleanInput
-            label="resources.questions.fields.ignored"
-            source="ignored"
-            alwaysOn
-            onChange={() => handleSubmit()}
-          />
-          <BooleanInput
-            label="misc.unanswered_questions"
-            source="unanswered"
-            alwaysOn
-            onChange={() => handleSubmit()}
-          />
+          {
+            !HIDE_IGNORED && (
+              <>
+                <BooleanInput
+                  label="resources.questions.fields.ignored"
+                  source="ignored"
+                  alwaysOn
+                  onChange={() => handleSubmit()}
+                />
+                <BooleanInput
+                  label="misc.unanswered_questions"
+                  source="unanswered"
+                  alwaysOn
+                  onChange={() => handleSubmit()}
+                />
+              </>
+            )
+          }
+
         </form>
       )}
     </Form>

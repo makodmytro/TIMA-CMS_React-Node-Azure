@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const HIDE_IGNORED = process.env.REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS === '1';
 
 const Filters = ({ onSubmit, initialValues }) => {
   const translate = useTranslate();
@@ -56,14 +57,19 @@ const Filters = ({ onSubmit, initialValues }) => {
                         </Grid>
                       )
                     }
-                    <Grid item xs={12} sm={4} md={3}>
-                      <BooleanInput
-                        label="resources.questions.fields.ignored"
-                        source="ignored"
-                        alwaysOn
-                        onChange={() => handleSubmit()}
-                      />
-                    </Grid>
+                    {
+                      !HIDE_IGNORED && (
+                        <Grid item xs={12} sm={4} md={3}>
+                          <BooleanInput
+                            label="resources.questions.fields.ignored"
+                            source="ignored"
+                            alwaysOn
+                            onChange={() => handleSubmit()}
+                          />
+                        </Grid>
+                      )
+                    }
+
                   </>
                 )
               }

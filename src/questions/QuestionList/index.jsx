@@ -71,8 +71,8 @@ const CustomGridItem = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
-  const disableEdit = record?.allowEdit === false; // useDisabledEdit(record?.fk_topicId);
-  const disableApprove = record?.allowEdit === false; // useDisabledApprove(record?.fk_topicId);
+  const disableEdit = record?.allowEdit === false;
+  const disableApprove = record?.allowEdit === false;
   const classes = styles();
 
   const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;

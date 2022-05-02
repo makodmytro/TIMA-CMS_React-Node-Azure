@@ -33,6 +33,8 @@ import theme from './common/theme';
 import AzureLogin from './auth/azure';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
+const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
+const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -167,6 +169,25 @@ const AsyncResources = () => {
     );
   }
 
+  let customRoutes = [
+    <Route
+      exact
+      key={0}
+      path="/"
+      component={dashboard}
+    />,
+    <Route
+      exact
+      key={1}
+      path="/test-ask"
+      component={TestAsk}
+    />
+  ];
+
+  if (HIDE_MENU_ITEMS.includes('dashboard')) {
+    customRoutes = [customRoutes[1]];
+  }
+
   return (
     <AdminUI
       title="TIMA Management"
@@ -175,20 +196,7 @@ const AsyncResources = () => {
       {...(
         USE_AZURE_LOGIN === '1' ? { loginPage: AzureLogin } : {}
       )}
-      customRoutes={[
-        <Route
-          exact
-          key={0}
-          path="/"
-          component={dashboard}
-        />,
-        <Route
-          exact
-          key={1}
-          path="/test-ask"
-          component={TestAsk}
-        />,
-      ]}
+      customRoutes={customRoutes}
     >
       {
         (permissions) => {
@@ -248,7 +256,13 @@ const AsyncResources = () => {
               name="audit"
               {...audit}
             />,
-          ]);
+          ].sort((a, b) => {
+            if (!DEFAULT_HOMEPAGE || !a) {
+              return 0;
+            }
+
+            return a?.key.toLowerCase() === DEFAULT_HOMEPAGE ? -1 : 0;
+          }));
         }
       }
 

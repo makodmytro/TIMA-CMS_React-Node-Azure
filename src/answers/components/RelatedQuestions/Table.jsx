@@ -25,7 +25,7 @@ const RelatedQuestionsTable = ({
 }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
-  const disabled = record && record.allowEdit === false; // useDisabledEdit(record?.fk_topicId) || ();
+  const disabled = record && record.allowEdit === false;
   const disabledApproved = useDisabledApprove(record?.fk_topicId) || (record && record.allowEdit === false);
 
   if (!record || !record.RelatedQuestions || !record.RelatedQuestions.length) {
