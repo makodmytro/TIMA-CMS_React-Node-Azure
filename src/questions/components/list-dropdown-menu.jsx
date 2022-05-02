@@ -19,6 +19,7 @@ const DropdownMenu = ({
   editInline,
   disabled,
   deleteComponent,
+  onEditCallback,
 }) => {
   const refresh = useRefresh();
   const translate = useTranslate();
@@ -81,7 +82,12 @@ const DropdownMenu = ({
           {
             editInline && (
               <>
-                <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
+                <EditDialog
+                  record={record}
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  afterEdit={onEditCallback}
+                />
                 <Button
                   disabled={disableEdit}
                   onClick={() => {

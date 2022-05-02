@@ -98,7 +98,15 @@ const AnswerEdit = () => {
             ...answer,
           }}
           enableReinitialize
-          render={({ handleSubmit, valid }) => {
+          render={({ handleSubmit, valid, values }) => {
+            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text'].every((key) => {
+              if (!answer) {
+                return false;
+              }
+
+              return answer && values[key] === answer[key];
+            });
+
             return (
               <Box>
                 <form onSubmit={handleSubmit}>
@@ -107,7 +115,7 @@ const AnswerEdit = () => {
                   </Box>
                   <Box display="flex" p={2} bgcolor="#f5f5f5">
                     <Box flex={1}>
-                      <Button type="submit" variant="contained" color="primary" disabled={disableEdit || !valid}>
+                      <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
                         <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                       </Button>
                     </Box>

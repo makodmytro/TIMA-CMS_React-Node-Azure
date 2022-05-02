@@ -120,6 +120,7 @@ const FollowupQuestionsTable = ({
                     record={{ ...related }}
                     editInline
                     disabled={disabled}
+                    onEditCallback={refresh}
                     deleteComponent={(
                       <Button
                         onClick={() => onDelete(related.id)}
