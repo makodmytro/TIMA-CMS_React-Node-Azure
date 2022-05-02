@@ -16,6 +16,7 @@ import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
+import useAnswer from '../../useAnswer';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
@@ -25,6 +26,7 @@ const RelatedQuestionsTable = ({
 }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
+  const { refresh } = useAnswer();
   const disabled = record && record.allowEdit === false;
   const disabledApproved = useDisabledApprove(record?.fk_topicId) || (record && record.allowEdit === false);
 
@@ -113,6 +115,7 @@ const RelatedQuestionsTable = ({
                     record={{ ...related }}
                     editInline
                     disabled={disabled}
+                    onEditCallback={refresh}
                   />
                 </TableCell>
               </TableRow>

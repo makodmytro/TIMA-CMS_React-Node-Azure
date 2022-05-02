@@ -82,6 +82,14 @@ const SteppedForm = ({
     setStep(2);
   };
 
+  const createQuestion = async (_data) => {
+    try {
+      await dataProvider.create('questions', {
+        data: _data,
+      })
+    } catch (e) {} // eslint-disable-line
+  };
+
   const onStepThreeSubmit = async (values) => {
     const merged = {
       ...state,
@@ -102,11 +110,9 @@ const SteppedForm = ({
       });
 
       await Promise.all(
-        questions.map((q) => dataProvider.create('questions', {
-          data: {
-            fk_languageId, fk_topicId, text: q.text, fk_answerId: data.id,
-          },
-        }))
+        questions.map((q) => createQuestion({
+          fk_languageId, fk_topicId, text: q.text, fk_answerId: data.id,
+        })),
       );
 
       setLoading(false);
@@ -114,6 +120,7 @@ const SteppedForm = ({
       redirect(`/answers/${data.id}/edit`);
     } catch (e) {
       setLoading(false);
+      notify(e?.body?.message, 'error');
     }
   };
 

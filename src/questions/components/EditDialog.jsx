@@ -18,7 +18,12 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextInput } from '../../common/components/playable-text';
 
-const EditDialog = ({ record, open, onClose }) => {
+const EditDialog = ({
+  record,
+  open,
+  onClose,
+  afterEdit,
+}) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const disableEdit = record?.allowEdit === false;
   const dataProvider = useDataProvider();
@@ -36,7 +41,12 @@ const EditDialog = ({ record, open, onClose }) => {
       });
 
       notify('The question was updated');
-      refresh();
+
+      if (afterEdit) {
+        afterEdit();
+      } else {
+        refresh();
+      }
       onClose();
     } catch (e) {
       notify('Could not update');
