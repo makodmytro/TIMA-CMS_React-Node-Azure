@@ -24,6 +24,7 @@ const german = {
   Duration: 'Dauer',
   Required: 'Required',
   // notifications
+  'The answer was created successfully': 'The answer was created successfully',
   'We could not execute the action': 'We could not execute the action',
   'The answer and its related questions were updated': 'Die Antwort und die zugehörigen Fragen wurden aktualisiert',
   'The answer was updated': 'Die Antwort wurde aktualisiert',
@@ -59,6 +60,7 @@ const german = {
     save: 'Speichern',
     advanced: 'Erweitert',
     qna: 'QNA',
+    next: 'Next',
     actions: 'Aktionen',
     schedule_sync: 'Schedule sync',
     manage_permissions: 'Berechtigungen verwalten',
@@ -222,6 +224,11 @@ const german = {
         updatedBy: 'Editor',
         status: 'Status',
         comment: 'Kommentar',
+      },
+      steps: {
+        topic: 'Select topic',
+        questions: 'Create questions',
+        answer: 'Create the answer',
       },
       fields: {
         text: 'Text',

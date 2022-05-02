@@ -54,6 +54,7 @@
     "no-useless-return": "off",
     "semi": "warn",
     "no-use-before-define": "off",
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "object-curly-newline": "off"
   }
 }
