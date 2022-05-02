@@ -224,7 +224,7 @@ const german = {
         comment: 'Kommentar',
       },
       fields: {
-        text: 'Text',
+        text: 'Antwort Text',
         spokenText: 'Aussprache',
         fk_userId: 'Ersteller',
         fk_createdByUserId: 'Ersteller',

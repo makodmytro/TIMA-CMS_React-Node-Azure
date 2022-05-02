@@ -226,7 +226,7 @@ const english = {
         comment: 'Comment',
       },
       fields: {
-        text: 'Text',
+        text: 'Answer Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Created By',
         fk_createdByUserId: 'Created By',
