@@ -71,13 +71,18 @@ const Menu = ({ onMenuClick, logout }) => {
   return (
     <>
       <Box py={2}>
-        <MenuItemLink
-          to="/"
-          primaryText={translate('Dashboard')}
-          leftIcon={<HomeIcon />}
-          onClick={onMenuClick}
-          sidebarIsOpen={open}
-        />
+        {
+          !HIDE_MENU_ITEMS.includes('dashboard') && (
+            <MenuItemLink
+              to="/"
+              primaryText={translate('Dashboard')}
+              leftIcon={<HomeIcon />}
+              onClick={onMenuClick}
+              sidebarIsOpen={open}
+            />
+          )
+        }
+
         {
           resources
             .filter((r) => r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name))

@@ -30,3 +30,4 @@
 | REACT_APP_AZURE_LOGOUT_REDIRECT_URI | Azure redirect URL after logout. | http://localhost:3000 | When REACT_APP_USER_AZURE_LOGIN=1 |
 | REACT_APP_USE_WORKFLOW | Enable the Workflow for answers (instead of simple Approved) | "1" | undefined | N |
 | REACT_APP_USE_BACKDOOR_LOGIN | Enable the regular login in a different route | "1" | undefined | N |
+| REACT_APP_DEFAULT_HOMEPAGE | Defines the page that will be "homepage" | "answers", "questions", "topics", etc | undefined | N |
