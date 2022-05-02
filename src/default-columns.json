@@ -8,9 +8,7 @@
   "answers": [
     "text",
     "fk_topicId",
-    "fk_createdByUserId",
-    "status",
-    "updatedAt"
+    "status"
   ],
   "questions": [
     "text",
