@@ -55,6 +55,7 @@
     "semi": "warn",
     "no-use-before-define": "off",
     "no-await-in-loop": "off",
-    "react/jsx-indent": "warn"
+    "react/jsx-indent": "warn",
+    "object-curly-newline": "off"
   }
 }
