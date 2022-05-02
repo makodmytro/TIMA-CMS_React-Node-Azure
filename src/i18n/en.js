@@ -24,6 +24,7 @@ const english = {
   Duration: 'Duration',
   Required: 'Required',
   // notifications
+  'The answer was created successfully': 'The answer was created successfully',
   'We could not execute the action': 'We could not execute the action',
   'The answer and its related questions were updated': 'The answer and its related questions were updated',
   'The answer was updated': 'The answer was updated',
@@ -60,6 +61,7 @@ const english = {
     add: 'Add',
     advanced: 'Advanced',
     qna: 'QNA',
+    next: 'Next',
     actions: 'Actions',
     schedule_sync: 'Schedule sync',
     manage_permissions: 'Manage permissions',
@@ -219,6 +221,11 @@ const english = {
       status_can_not_change: 'The status can not be changed',
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
+      steps: {
+        topic: 'Select topic',
+        questions: 'Create questions',
+        answer: 'Create the answer',
+      },
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
