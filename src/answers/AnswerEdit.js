@@ -1,5 +1,6 @@
 import React from 'react';
 import omit from 'lodash/omit';
+import isString from 'lodash/isString';
 import { Form } from 'react-final-form';
 import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -104,6 +105,10 @@ const AnswerEdit = () => {
                 return false;
               }
 
+              if (isString(values[key]) && isString(answer[key])) {
+                return values[key].trim() === answer[key].trim();
+              }
+
               return answer && values[key] === answer[key];
             });
 
@@ -111,7 +116,7 @@ const AnswerEdit = () => {
               <Box>
                 <form onSubmit={handleSubmit}>
                   <Box p={2}>
-                    <FormFields edit />
+                    <FormFields edit record={answer} />
                   </Box>
                   <Box display="flex" p={2} bgcolor="#f5f5f5">
                     <Box flex={1}>

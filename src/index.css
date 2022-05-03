@@ -72,17 +72,17 @@ code {
 .disabled-markdown-editor .rdw-option-wrapper,
 .disabled-markdown-editor .rdw-dropdown-wrapper {
   cursor: default;
-  background-color: #dcdcdc;
+  background-color: #dcdcde;
 }
 
 .disabled-markdown-editor .rdw-dropdown-wrapper:hover,
 .disabled-markdown-editor .rdw-option-wrapper:hover {
   box-shadow: none;
-  background-color: #dcdcdc;
+  background-color: #dcdcde;
 }
 
 .disabled-markdown-editor .rdw-editor-toolbar {
-  background-color: #dcdcdc;
+  background-color: #dcdcde;
 }
 
 .public-DraftEditor-content {
@@ -90,7 +90,7 @@ code {
 }
 
 .public-DraftEditor-content[contenteditable=false] {
-  background-color: #dcdcdc;
+  background-color: #dcdcde;
 }
 
 .rdw-editor-toolbar {
@@ -109,7 +109,6 @@ code {
 .rdw-option-wrapper[title="Subscript"],
 .rdw-remove-wrapper,
 .rdw-image-wrapper,
-.rdw-emoji-wrapper,
 .rdw-fontsize-wrapper,
 .rdw-fontfamily-wrapper,
 .rdw-colorpicker-wrapper,

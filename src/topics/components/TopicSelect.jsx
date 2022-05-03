@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as TopicsLogic from '../logic'
 
 const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
+const TOPICS_LEVEL_LABELS = process.env.REACT_APP_TOPICS_LEVEL_LABELS ? process.env.REACT_APP_TOPICS_LEVEL_LABELS.split(',') : ['', '', ''];
 
 const MultiTopicSelect = ({
   source,
@@ -204,9 +205,6 @@ const MultiTopicSelect = ({
 */
   return (
     <Box>
-      <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
-        {translate(label)}
-      </Typography>
       {
         loading && <Box mb={2}><CircularProgress size={20} /></Box>
       }
@@ -228,7 +226,7 @@ const MultiTopicSelect = ({
                 choices={filteredTopics}
                 optionText="name"
                 optionValue="id"
-                label=""
+                label={TOPICS_LEVEL_LABELS[0]}
                 fullWidth
                 style={{ marginTop: '0px' }}
                 disabled={disabled}
@@ -243,7 +241,7 @@ const MultiTopicSelect = ({
                     choices={topicsChild}
                     optionText="name"
                     optionValue="id"
-                    label=""
+                    label={TOPICS_LEVEL_LABELS[1]}
                     fullWidth
                     style={{ marginTop: '0px' }}
                     disabled={disabled}
@@ -260,7 +258,7 @@ const MultiTopicSelect = ({
                     choices={topicsGrandchild}
                     optionText="name"
                     optionValue="id"
-                    label=""
+                    label={TOPICS_LEVEL_LABELS[2]}
                     fullWidth
                     style={{ marginTop: '0px' }}
                     disabled={disabled}
