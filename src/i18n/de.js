@@ -129,6 +129,7 @@ const german = {
     search_users: 'Hier tippen um Nutzer zu suchen',
     editing_answer: 'Antwort bearbeiten',
     filters: 'Filter',
+    already_linked: 'Already linked',
   },
   resources: {
     topics: {
@@ -181,6 +182,7 @@ const german = {
       update: 'Frage aktualisieren',
       set_as_child: 'Set as child',
       no_results: 'Keine Fragen gefunden, klicke "Erstellen" um eine neue Frage hinzuzufügen',
+      duplicated: 'Duplicated question',
       fields: {
         text: 'Text',
         fk_userId: 'Ersteller',
@@ -313,6 +315,7 @@ const german = {
         related_groups: 'Related groups',
         password: 'Passwort',
         password_confirm: 'Passwort bestätigen',
+        roles: 'Roles',
       },
     },
     groups: {

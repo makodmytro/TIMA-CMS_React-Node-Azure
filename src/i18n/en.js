@@ -130,6 +130,7 @@ const english = {
     search_users: 'Type to search for users',
     editing_answer: 'Editing answer',
     filters: 'Filters',
+    already_linked: 'Already linked to this Answer',
   },
   resources: {
     topics: {
@@ -182,6 +183,7 @@ const english = {
       update: 'Update the question',
       set_as_child: 'Set as child',
       no_results: 'No questions were found, click "Create" to add a new question',
+      duplicated: 'Duplicated question',
       fields: {
         text: 'Text',
         fk_userId: 'Created By',
@@ -315,6 +317,7 @@ const english = {
         related_groups: 'Related groups',
         password: 'Password',
         password_confirm: 'Password confirm',
+        roles: 'Roles',
       },
     },
     groups: {

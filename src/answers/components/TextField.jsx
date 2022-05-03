@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTranslate, TextField as RATextField } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/Add';
+import ExpandLess from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton';
 import ReactMarkdown from 'react-markdown';
 import PlayableText from '../../common/components/playable-text';
@@ -26,38 +26,16 @@ const TextField = ({ record }) => {
           />
         </Box>
       </Box>
-      {/*
+      {
         !!record.FollowupQuestions.length && (
-          <Box borderTop="1px solid #e5e5e5" mt={2} pt={2} pl={2}>
-            <Typography style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
-              {translate('resources.answers.followup_questions')}
-            </Typography>
-            <Box border="1px solid #eeeded">
+          <Box borderTop="1px solid #e5e5e5">
+            <Box component="ul" mt={0}>
               {
                 record.FollowupQuestions.map((q, i) => {
                   return (
-                    <Box key={i} pt={1} borderBottom="1px dashed #eeeded" p={1}>
-                      <Box fontWeight="bold" fontSize="0.9rem" lineHeight="14px">
+                    <Box key={i} pt={0.5} component="li">
+                      <Box fontSize="0.9rem" lineHeight="14px">
                         {q.text}
-                      </Box>
-                      <Box>
-                        {
-                          !q?.Answer && (<>-</>)
-                        }
-                        <ReactMarkdown source={q?.Answer?.text} />
-                        {
-                          !!q?.Answer && (
-                            <Box textAlign="right">
-                              <Link
-                                to={`/answers/${q?.Answer?.id}/edit`}
-                                style={{ fontSize: '0.7rem' }}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                [{translate('misc.view_answer')}]
-                              </Link>
-                            </Box>
-                          )
-                        }
                       </Box>
                     </Box>
                   );
@@ -66,7 +44,7 @@ const TextField = ({ record }) => {
             </Box>
           </Box>
         )
-            */}
+      }
     </Box>
   );
 };
@@ -94,15 +72,16 @@ export const AnswerRelatedQuestionField = ({ record }) => {
             >
               { !expanded && <ExpandMore fontSize="small" /> }
               { expanded && <ExpandLess fontSize="small" /> }
+              &nbsp;
             </IconButton>
           )
         }
         {
-          record.RelatedQuestions.length <= 1 && (<Box component="span" pl={3}>&nbsp;</Box>)
+          record.RelatedQuestions.length <= 1 && (<Box component="span" pl={4}>&nbsp;</Box>)
         }
       </Box>
       <Box flex={11}>
-        <Box>
+        <Box pb={1}>
           <RATextField record={record.RelatedQuestions[0]} source="text" />
         </Box>
         {
@@ -112,7 +91,7 @@ export const AnswerRelatedQuestionField = ({ record }) => {
             }
 
             return (
-              <Box key={i}>
+              <Box key={i} py={1} borderTop="1px solid #f1f1f1">
                 <RATextField record={rq} source="text" />
               </Box>
             );

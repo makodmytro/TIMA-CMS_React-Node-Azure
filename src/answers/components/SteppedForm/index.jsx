@@ -135,7 +135,7 @@ const SteppedForm = ({
             <StepOne
               initialValues={{
                 fk_languageId: state.fk_languageId,
-                fk_topicId: state.fk_topicId
+                fk_topicId: state.fk_topicId,
               }}
               onSubmit={onStepOneSubmit}
             />
@@ -150,6 +150,8 @@ const SteppedForm = ({
             <StepTwo
               initialValues={{
                 questions: state.questions,
+                fk_languageId: state.fk_languageId,
+                fk_topicId: state.fk_topicId,
               }}
               onSubmit={onStepTwoSubmit}
               onBack={back}
