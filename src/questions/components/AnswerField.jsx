@@ -53,8 +53,6 @@ const AnswerField = ({ record }) => {
       <AnswerTextField
         record={{
           ...record.Answer,
-          Language: record.Language,
-          relatedQuestions: record.relatedQuestionsForAnswerCount || 0,
         }}
       />
     </span>

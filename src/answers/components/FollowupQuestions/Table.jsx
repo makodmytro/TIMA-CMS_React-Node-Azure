@@ -18,6 +18,7 @@ import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
+import ContextOnlySwitchField from '../../../questions/components/ContextOnlySwitchField';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
 import useAnswer from '../../useAnswer';
@@ -57,6 +58,7 @@ const FollowupQuestionsTable = ({
     <Table>
       <TableHead>
         <TableRow>
+          <TableCell>&nbsp;</TableCell>
           <TableCell>{translate('resources.questions.fields.text')}</TableCell>
           {
             !USE_WORKFLOW && (
@@ -67,6 +69,7 @@ const FollowupQuestionsTable = ({
             )
           }
           <TableCell>&nbsp;</TableCell>
+          <TableCell>{translate('resources.questions.fields.contextOnly')}</TableCell>
           <TableCell>&nbsp;</TableCell>
         </TableRow>
       </TableHead>
@@ -114,6 +117,9 @@ const FollowupQuestionsTable = ({
                 }
                 <TableCell>
                   <AnswerField record={related} />
+                </TableCell>
+                <TableCell>
+                  <ContextOnlySwitchField record={related} afterEdit={refresh} />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu

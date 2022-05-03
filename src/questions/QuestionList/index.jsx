@@ -88,7 +88,9 @@ const CustomGridItem = ({
             e.preventDefault();
             e.stopPropagation();
 
-            setOpen(true);
+            if (record?.allowEdit) {
+              setOpen(true);
+            }
           }}
         >
           <TableCell>
@@ -150,7 +152,9 @@ const CustomGridItem = ({
           e.preventDefault();
           e.stopPropagation();
 
-          setOpen(true);
+          if (record?.allowEdit) {
+            setOpen(true);
+          }
         }}
       >
         <TableCell>
