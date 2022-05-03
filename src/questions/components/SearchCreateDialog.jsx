@@ -132,7 +132,7 @@ const ResultsList = ({
                     checked={isSelected(question)}
                     value={isSelected(question)}
                     onClick={() => toggleSelect(question)}
-                    disabled={boolDisabledEdit(permissions, question?.fk_topicId) || record?.id === question?.fk_answerId}
+                    disabled={record?.id === question?.fk_answerId}
                   />
                 </TableCell>
                 <TableCell>
