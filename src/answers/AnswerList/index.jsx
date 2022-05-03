@@ -89,9 +89,7 @@ const WrapApprovedSwitch = (props) => {
 const CustomGridItem = ({
   record,
   visibleColumns,
-  level,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
   const classes = styles();
   const redirect = useRedirect();
 
@@ -100,59 +98,8 @@ const CustomGridItem = ({
     redirect(`/answers/${id}`);
   };
 
-  const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
-
-  if (level) {
-    return (
-      <>
-        <TableRow
-          className={classes.cursor}
-          style={{ backgroundColor: bg }}
-          onClick={(e) => {
-            e.stopPropagation();
-            redirect(`/questions/${record.id}`);
-          }}
-        >
-          <TableCell>
-            {
-              !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && (
-                <>
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-
-                      setExpanded(!expanded);
-                    }}
-                  >
-                    { !expanded && <AddIcon fontSize="small" /> }
-                    { expanded && <MinusIcon fontSize="small" /> }
-                  </IconButton>
-                </>
-              )
-            }
-          </TableCell>
-          <TableCell style={{ paddingLeft: `${30 * level}px` }}>
-            <PlayableText
-              text={record.text}
-              fkLanguageId={record.fk_languageId}
-            />
-          </TableCell>
-          <TableCell style={{ width: '25%' }}>
-            <AnswerField label="Answer" record={record} />
-          </TableCell>
-          {
-            (Array.from(Array(visibleColumns.length - 2).keys())).map((v, i) => (
-              <TableCell key={i}>&nbsp;</TableCell>
-            ))
-          }
-          <TableCell>
-            &nbsp;
-          </TableCell>
-        </TableRow>
-      </>
-    );
+  if (!record) {
+    return null;
   }
 
   return (
@@ -161,26 +108,6 @@ const CustomGridItem = ({
         className={classes.cursor}
         onClick={link(record.id)}
       >
-        {/*<TableCell>
-          {
-            !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-
-                    setExpanded(!expanded);
-                  }}
-                >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
-          }
-        </TableCell>*/}
         {
           visibleColumns.includes('fk_questionId') && (
             <TableCell>
@@ -257,22 +184,6 @@ const CustomGridItem = ({
           <DropDownMenu record={record} />
         </TableCell>
       </TableRow>
-      {
-        expanded && record.FollowupQuestions && !!record.FollowupQuestions.length && (
-          <>
-            {
-              record.FollowupQuestions.map((child, iii) => (
-                <CustomGridItem
-                  record={child}
-                  visibleColumns={visibleColumns}
-                  key={iii}
-                  level={(level || 0) + 1}
-                />
-              ))
-            }
-          </>
-        )
-      }
     </>
   );
 };
@@ -308,7 +219,7 @@ const CustomGrid = ({ visibleColumns }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <Th label="resources.answers.fields.fk_questionId" field="text" />
+                <Th label="resources.answers.fields.fk_questionId" field="fk_questionId" />
                 <Th label="resources.answers.fields.text" field="text" />
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />

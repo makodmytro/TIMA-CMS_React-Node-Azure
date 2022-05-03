@@ -34,7 +34,6 @@ const Menu = ({ onMenuClick, logout }) => {
   const setLocale = useSetLocale();
   const dataProvider = useDataProvider();
   const isAdmin = useIsAdmin();
-  console.log(isAdmin, 'isadmin');
 
   const getBackendVersion = async () => {
     const { data } = await dataProvider.backendVersion();
