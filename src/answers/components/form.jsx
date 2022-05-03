@@ -131,6 +131,8 @@ const Form = ({
         lang={getLang()}
         disabled={disableEdit}
       />
+
+      {_languages.length > 1 && (
       <ReferenceInput
         source="fk_languageId"
         label="resources.answers.fields.fk_languageId"
@@ -145,6 +147,7 @@ const Form = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
+      )}
       <TopicSelect
         source="fk_topicId"
         isRequired
