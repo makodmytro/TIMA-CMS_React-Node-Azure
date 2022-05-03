@@ -200,6 +200,7 @@ const german = {
         all_topics: 'Alle Themen',
         ignored: 'Ignored',
         status: 'Status',
+        contextOnly: 'Context only',
       },
       add_related: 'Frage hinzufügen',
       add_followup: 'Folgefrage hinzufügen',

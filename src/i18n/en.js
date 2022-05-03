@@ -201,6 +201,7 @@ const english = {
         all_topics: 'All topics',
         ignored: 'Ignored',
         status: 'Status',
+        contextOnly: 'Context only',
       },
       add_related: 'Add Question',
       add_followup: 'Add Followup',
