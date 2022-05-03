@@ -6,7 +6,7 @@
     "lastSyncAt"
   ],
   "answers": [
-    "question",
+    "fk_questionId",
     "text",
     "fk_topicId",
     "status"
