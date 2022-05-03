@@ -125,7 +125,7 @@ const ResultsList = ({
   );
 };
 
-const AnswerLinkDialog = ({ record }) => {
+const AnswerLinkDialog = ({ record, afterLink }) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [answers, setAnswers] = React.useState(null);
@@ -144,7 +144,13 @@ const AnswerLinkDialog = ({ record }) => {
         },
       });
       notify('The record has been updated');
-      refresh();
+
+      if (afterLink) {
+        afterLink();
+      } else {
+        refresh();
+      }
+
       setOpen(false);
     } catch (e) {
       notify('Unexpected error', 'error');
