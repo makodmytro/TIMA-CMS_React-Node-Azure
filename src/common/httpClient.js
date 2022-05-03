@@ -16,12 +16,12 @@ const httpClient = async (url, options = {}, omitToken = false) => {
     const result = await fetchUtils.fetchJson(url, options);
     return result;
   } catch (err) {
-    if (err?.status && err?.body?.message) {
-      return Promise.reject(new HttpError(err.body.message, err.status, err.body)); //TODO - use resources err?.body?.code
-    }
-
     if (err?.status && err?.status !== 401) {
       Sentry.captureException(err);
+    }
+
+    if (err?.status && err?.body?.message) {
+      return Promise.reject(new HttpError(err.body.message, err.status, err.body)); //TODO - use resources err?.body?.code
     }
 
     //otherwise continue as standard error
