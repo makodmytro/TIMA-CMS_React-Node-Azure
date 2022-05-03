@@ -26,7 +26,7 @@ const TextField = ({ record }) => {
           />
         </Box>
       </Box>
-      {
+      {/*
         !!record.FollowupQuestions.length && (
           <Box borderTop="1px solid #e5e5e5" mt={2} pt={2} pl={2}>
             <Typography style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
@@ -66,7 +66,7 @@ const TextField = ({ record }) => {
             </Box>
           </Box>
         )
-      }
+            */}
     </Box>
   );
 };
