@@ -137,7 +137,13 @@ const DropdownMenu = ({
                   undoable={false}
                   onClick={handleClose}
                   resource="questions"
-                  onSuccess={() => refresh()}
+                  onSuccess={() => {
+                    if (onEditCallback) {
+                      onEditCallback();
+                    } else {
+                      refresh();
+                    }
+                  }}
                   fullWidth
                   style={{ justifyContent: 'flex-start' }}
                   disabled={disableDelete}
