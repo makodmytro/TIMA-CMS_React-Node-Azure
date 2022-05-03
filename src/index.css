@@ -69,8 +69,52 @@ code {
   margin-left: 0px !important;
 }
 
+.disabled-markdown-editor .rdw-option-wrapper,
+.disabled-markdown-editor .rdw-dropdown-wrapper {
+  cursor: default;
+  background-color: #dcdcdc;
+}
+
+.disabled-markdown-editor .rdw-dropdown-wrapper:hover,
+.disabled-markdown-editor .rdw-option-wrapper:hover {
+  box-shadow: none;
+  background-color: #dcdcdc;
+}
+
+.disabled-markdown-editor .rdw-editor-toolbar {
+  background-color: #dcdcdc;
+}
+
+.public-DraftEditor-content {
+  padding: 8px;
+}
+
+.public-DraftEditor-content[contenteditable=false] {
+  background-color: #dcdcdc;
+}
+
+.rdw-editor-toolbar {
+  margin-bottom: -2px !important;
+}
+
+.rdw-editor-wrapper {
+  border-left: 1px solid rgb(224, 224, 224);
+  border-right: 1px solid rgb(224, 224, 224);
+}
 .public-DraftEditor-content {
   height: 30vh !important;
+}
+
+.rdw-option-wrapper[title="Superscript"],
+.rdw-option-wrapper[title="Subscript"],
+.rdw-remove-wrapper,
+.rdw-image-wrapper,
+.rdw-emoji-wrapper,
+.rdw-fontsize-wrapper,
+.rdw-fontfamily-wrapper,
+.rdw-colorpicker-wrapper,
+.rdw-embedded-wrapper {
+  display: none !important;
 }
 
 .arrow-right {
