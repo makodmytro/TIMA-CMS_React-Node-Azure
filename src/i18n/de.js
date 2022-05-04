@@ -74,7 +74,7 @@ const german = {
     back: 'Zurück',
     none: 'None',
     all: 'Alle',
-    text: 'Frage',
+    text: 'Text',
     both: 'Beides',
     batch_approve: 'Fragen bestätigen',
     change_language: 'Sprache ändern',
