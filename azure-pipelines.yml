@@ -29,8 +29,9 @@ variables:
   REACT_APP_USE_WORKFLOW : '1'
   REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS : '1'
   REACT_APP_SENTRY_DSN : 'https://560794f5761945a4b4b4b80413a81297@o285657.ingest.sentry.io/5652139'
-  REACT_APP_TOPICS_LEVEL_LABELS: 'Fachbereich','Themengruppe','Thema'
-
+  REACT_APP_TOPICS_LEVEL_LABELS: 'Fachbereich,Themengruppe,Thema'
+  REACT_APP_IDLE_TIMEOUT_SECONDS: '1200'
+  REACT_APP_IDLE_TIMEOUT_URL: 'https://myenbw.sharepoint.com'
 pool:
   vmImage: ubuntu-latest
 
