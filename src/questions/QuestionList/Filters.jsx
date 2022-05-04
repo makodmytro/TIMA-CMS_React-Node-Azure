@@ -92,22 +92,27 @@ const Filters = ({ languages, topics, ...props }) => {
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
           <TextInput label="misc.text" source="q" alwaysOn onChange={() => handleSubmit()} />
-          <ReferenceInput
-            onChange={() => handleSubmit()}
-            label="resources.questions.fields.fk_languageId"
-            source="fk_languageId"
-            reference="languages"
-            alwaysOn
-            allowEmpty
-          >
-            <SelectInput
-              disabled={Boolean(filterValues.fk_topicId)}
-              optionText="name"
-              className={classes.select}
-              allowEmpty
-              emptyText={translate('misc.all')}
-            />
-          </ReferenceInput>
+          {
+            languages?.length > 1 && (
+              <ReferenceInput
+                onChange={() => handleSubmit()}
+                label="resources.questions.fields.fk_languageId"
+                source="fk_languageId"
+                reference="languages"
+                alwaysOn
+                allowEmpty
+              >
+                <SelectInput
+                  disabled={Boolean(filterValues.fk_topicId)}
+                  optionText="name"
+                  className={classes.select}
+                  allowEmpty
+                  emptyText={translate('misc.all')}
+                />
+              </ReferenceInput>
+            )
+          }
+
           <ReferenceInput
             onChange={() => handleSubmit()}
             label="resources.questions.fields.fk_createdByUserId"
