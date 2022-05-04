@@ -60,9 +60,9 @@ const german = {
     save: 'Speichern',
     advanced: 'Erweitert',
     qna: 'QNA',
-    next: 'Next',
+    next: 'Weiter',
     actions: 'Aktionen',
-    schedule_sync: 'Schedule sync',
+    schedule_sync: 'Synchronisieren planen',
     manage_permissions: 'Berechtigungen verwalten',
     show_questions: 'Zeige Fragen',
     show_qr_code: 'Zeige QR Code',
@@ -74,7 +74,7 @@ const german = {
     back: 'Zurück',
     none: 'None',
     all: 'Alle',
-    text: 'Text',
+    text: 'Frage',
     both: 'Beides',
     batch_approve: 'Fragen bestätigen',
     change_language: 'Sprache ändern',
@@ -129,7 +129,7 @@ const german = {
     search_users: 'Hier tippen um Nutzer zu suchen',
     editing_answer: 'Antwort bearbeiten',
     filters: 'Filter',
-    already_linked: 'Already linked',
+    already_linked: 'Bereits verlinkt',
   },
   resources: {
     topics: {
@@ -234,7 +234,7 @@ const german = {
         answer: 'Antwort erstellen',
       },
       fields: {
-        text: 'Antwort Text',
+        text: 'Antwort',
         spokenText: 'Aussprache',
         fk_userId: 'Ersteller',
         fk_createdByUserId: 'Ersteller',
