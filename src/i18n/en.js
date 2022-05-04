@@ -213,6 +213,7 @@ const english = {
       no_media: 'There is no media for this answer',
       upload_media: 'Upload new file',
       related_questions: 'Related questions',
+      related_questions_no_remove: 'The answer can not be unlinked',
       followup_questions: 'Followup questions',
       search_questions: 'Search questions to create link',
       media: 'Media',

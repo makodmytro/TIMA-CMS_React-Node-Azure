@@ -8,6 +8,7 @@ import {
   AdminUI,
   useDataProvider,
 } from 'react-admin';
+import IdleTracker from 'idle-tracker';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import authProvider from './common/providers/authProvider';
@@ -35,12 +36,25 @@ import AzureLogin from './auth/azure';
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
+const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
+const IDLE_TIMEOUT_URL = process.env.REACT_APP_IDLE_TIMEOUT_URL;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
     return r();
   }, ms);
 });
+let idleTracker;
+
+if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+  idleTracker = new IdleTracker({
+    timeout: parseInt(IDLE_TIMEOUT_SECONDS, 10) * 1000,
+    onIdleCallback: () => {
+      sessionStorage.clear();
+      window.location.href = IDLE_TIMEOUT_URL;
+    },
+  });
+}
 
 const AsyncResources = () => {
   const store = useStore();
@@ -186,6 +200,14 @@ const AsyncResources = () => {
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
     customRoutes = [customRoutes[1]];
+  }
+
+  if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+    if (!isLoginScreen()) {
+      idleTracker.start();
+    } else {
+      idleTracker.end();
+    }
   }
 
   return (
