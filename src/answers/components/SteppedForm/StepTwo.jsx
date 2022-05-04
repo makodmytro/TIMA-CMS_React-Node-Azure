@@ -1,4 +1,4 @@
-import React, { Children, cloneElement } from 'react';
+import React from 'react';
 import { Form } from 'react-final-form';
 import isEmpty from 'lodash/isEmpty';
 import debounce from 'lodash/debounce';
@@ -23,11 +23,7 @@ const StepTwo = ({
   const dataProvider = useDataProvider();
 
   const tryToValidate = async (value) => {
-    if (!value) {
-      return 'Required';
-    }
-
-    if (value.length < 3) {
+    if (!value || value.length < 3) {
       return null;
     }
 
@@ -51,7 +47,9 @@ const StepTwo = ({
 
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={({ questions }) => {
+        return onSubmit({ questions: questions.filter((q) => q && q.text) });
+      }}
       mutators={{
         ...arrayMutators
       }}
@@ -59,11 +57,11 @@ const StepTwo = ({
       validate={async (values) => {
         const errors = {};
 
-        (values.questions || []).forEach((q, i) => {
-          if (!q || !q.text) {
-            errors[`questions.${i}.text`] = translate('Required');
-          }
-        });
+        const some = (values.questions || []).some((q) => q && q.text);
+
+        if (!some) {
+          errors['questions.0.text'] = translate('Required');
+        }
 
         return errors;
       }}
@@ -71,7 +69,7 @@ const StepTwo = ({
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <ArrayInput source="questions" label="">
-              <SimpleFormIterator disableRemove={(values.questions.length === 3)}>
+              <SimpleFormIterator disableRemove={(values.questions.length === 1)}>
                 <TextInput label="resources.questions.fields.text" source="text" validate={tryToValidate} fullWidth />
               </SimpleFormIterator>
             </ArrayInput>

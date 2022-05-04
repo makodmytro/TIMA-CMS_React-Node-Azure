@@ -21,6 +21,7 @@
     "draftjs-to-markdown": "^0.6.0",
     "highcharts": "^8.2.2",
     "highcharts-react-official": "^3.0.0",
+    "idle-tracker": "^0.1.2",
     "lodash": "^4.17.20",
     "markdown-draft-js": "^2.4.0",
     "material-ui-chip-input": "^2.0.0-beta.2",

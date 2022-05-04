@@ -6384,6 +6384,11 @@ identity-obj-proxy@3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
+idle-tracker@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/idle-tracker/-/idle-tracker-0.1.2.tgz#8de140b742bc784b4a993abe5361c24dda18e7e5"
+  integrity sha512-URauJa+928JRSpzh+jwBXue+zGNcrONPzaruLvwWGXCmceXcU/lHpAQ3Kw6WRHHOxq6YG1WIZsWiDD9E85vlaQ==
+
 ieee754@^1.1.12, ieee754@^1.1.4:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"

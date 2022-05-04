@@ -18,6 +18,7 @@ const DropdownMenu = ({
   record,
   editInline,
   disabled,
+  disabledDelete,
   deleteComponent,
   onEditCallback,
 }) => {
@@ -26,7 +27,7 @@ const DropdownMenu = ({
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = record?.allowEdit === false || disabled;
-  const disableDelete = record?.allowDelete === false || disabled;
+  const disableDelete = record?.allowDelete === false || disabled || disabledDelete;
 
   const handleClick = (event) => {
     event.stopPropagation();
