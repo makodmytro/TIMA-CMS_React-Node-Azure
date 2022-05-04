@@ -185,8 +185,8 @@ const german = {
       duplicated: 'Duplicated question',
       fields: {
         text: 'Frage',
-        fk_userId: 'Ersteller',
-        fk_createdByUserId: 'Ersteller',
+        fk_userId: 'Editor',
+        fk_createdByUserId: 'Editor',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_answerId: 'Antwort',
@@ -236,8 +236,8 @@ const german = {
       fields: {
         text: 'Antwort',
         spokenText: 'Aussprache',
-        fk_userId: 'Ersteller',
-        fk_createdByUserId: 'Ersteller',
+        fk_userId: 'Editor',
+        fk_createdByUserId: 'Editor',
         fk_languageId: 'Sprache',
         fk_topicId: 'Thema',
         fk_questionId: 'Frage',
