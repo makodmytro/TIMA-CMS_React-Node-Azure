@@ -27,7 +27,7 @@ const TextField = ({ record }) => {
         </Box>
       </Box>
       {
-        record.FollowupQuestions && !!record.FollowupQuestions.length && (
+        record.FollowupQuestions?.length > 0 && (
           <Box borderTop="1px solid #e5e5e5">
             <Box component="ul" mt={0}>
               {
