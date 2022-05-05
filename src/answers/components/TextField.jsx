@@ -8,7 +8,23 @@ import ExpandMore from '@material-ui/icons/Add';
 import ExpandLess from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import PlayableText from '../../common/components/playable-text';
+
+const allowedTypes = [
+  'paragraph',
+  'text',
+  'bold',
+  'strikethrough',
+  'strike',
+  'delete',
+  'emphasis',
+  'strong',
+  'blockquote',
+  'image',
+  'link',
+  'linkReference',
+];
 
 const TextField = ({ record }) => {
   const translate = useTranslate();
@@ -17,7 +33,7 @@ const TextField = ({ record }) => {
     <Box>
       <Box display="flex" alignContent="flex-end">
         <Box flex={5}>
-          <ReactMarkdown source={record.text} />
+          <ReactMarkdown source={record.text} allowedTypes={allowedTypes} plugins={[remarkGfm]} />
         </Box>
         <Box flex={1}>
           <PlayableText
