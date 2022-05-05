@@ -45,11 +45,11 @@ const AnswerField = ({ record, afterLink }) => {
     e.stopPropagation();
     e.preventDefault();
 
-    redirect(`/answers/${record.Answer.id}/edit`);
+    redirect(`/answers/${record.Answer.id}/edit`, '/answers', record.Answer.id, { key: 'asdasd' });
   };
 
   return (
-    <span onClick={goToAnswer}>
+    <span>
       <AnswerTextField
         record={{
           ...record.Answer,

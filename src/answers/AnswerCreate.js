@@ -178,7 +178,7 @@ const AnswerCreate = (props) => {
                   <TagsInput source="tags" label="resources.answers.fields.tags" />
                 )
               }
-              <Button variant="contained" color="primary" type="submit" disabled={submitting || !valid}>
+              <Button variant="contained" color="primary" type="submit" disabled={submitting}>
                 {translate('misc.create')}
               </Button>
             </form>

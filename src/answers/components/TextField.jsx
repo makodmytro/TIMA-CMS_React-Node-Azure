@@ -47,7 +47,7 @@ const TextField = ({ record }) => {
       <Box display="flex" alignContent="flex-end">
         <Box flex={5}>
           <Link
-            to={`/answers/${record.id}/edit`}
+            to={{ pathname: `/answers/${record.id}/edit`, key: '123123123123123', state: { applied: true } }}
             onClick={(e) => e.stopPropagation()}
             className={classes.link}
           >

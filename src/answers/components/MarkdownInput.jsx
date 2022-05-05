@@ -33,7 +33,7 @@ const DraftInput = ({
 }) => {
   const translate = useTranslate();
   const [state, setState] = React.useState(EditorState.createEmpty());
-  const { input: { value: spokenText } } = useField('spokenText');
+  const { input: { value: spokenText, onBlur }, } = useField('spokenText');
   const {
     input: { onChange, value },
     meta: {
@@ -63,6 +63,7 @@ const DraftInput = ({
             onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
             setState(v);
           }}
+          onBlur={() => onBlur()}
           disabled={disabled === true}
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
