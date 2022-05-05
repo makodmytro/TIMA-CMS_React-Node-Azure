@@ -107,6 +107,9 @@ code {
 
 .rdw-option-wrapper[title="Superscript"],
 .rdw-option-wrapper[title="Subscript"],
+.rdw-option-wrapper[title="Underline"],
+.rdw-option-wrapper[title="Strikethrough"],
+.rdw-option-wrapper[title="Monospace"],
 .rdw-remove-wrapper,
 .rdw-image-wrapper,
 .rdw-fontsize-wrapper,

@@ -14,8 +14,8 @@ import MdEditor from 'react-markdown-editor-lite';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import draftToMarkdown from 'draftjs-to-markdown';
-import { markdownToDraft } from 'markdown-draft-js';
+// import draftToMarkdown from 'draftjs-to-markdown';
+import { markdownToDraft, draftToMarkdown } from 'markdown-draft-js';
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -58,6 +58,8 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
+            console.log(convertToRaw(v.getCurrentContent()));
+
             onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
             setState(v);
           }}
