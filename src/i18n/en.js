@@ -63,7 +63,7 @@ const english = {
     qna: 'QNA',
     next: 'Next',
     actions: 'Actions',
-    schedule_sync: 'Schedule sync',
+    schedule_sync: 'Request sync',
     manage_permissions: 'Manage permissions',
     show_questions: 'Show questions',
     show_qr_code: 'Show QR code',
