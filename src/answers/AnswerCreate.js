@@ -14,7 +14,7 @@ import {
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { Form, useField } from 'react-final-form';
+import { Form } from 'react-final-form';
 import memoize from 'lodash/memoize';
 import arrayMutators from 'final-form-arrays'; // eslint-disable-line
 import { useSelector } from 'react-redux';
@@ -22,10 +22,12 @@ import ApprovedInput from './components/ApprovedInput';
 import TopicSelect from '../topics/components/TopicSelect';
 import MarkdownInput from './components/MarkdownInput';
 import TagsInput from './components/tags-input';
+import { useIsAdmin } from '../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const AnswerCreate = (props) => {
+  const admin = useIsAdmin();
   const translate = useTranslate();
   const notify = useNotify();
   const dataProvider = useDataProvider();
@@ -171,7 +173,11 @@ const AnswerCreate = (props) => {
                   <ApprovedInput source="approved" label="resources.answers.fields.approved" />
                 )
               }
-              <TagsInput source="tags" label="resources.answers.fields.tags" />
+              {
+                admin && (
+                  <TagsInput source="tags" label="resources.answers.fields.tags" />
+                )
+              }
               <Button variant="contained" color="primary" type="submit" disabled={submitting || !valid}>
                 {translate('misc.create')}
               </Button>

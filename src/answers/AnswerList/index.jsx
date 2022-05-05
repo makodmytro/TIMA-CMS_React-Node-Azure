@@ -9,9 +9,6 @@ import {
   useTranslate,
   useListContext,
 } from 'react-admin';
-import AddIcon from '@material-ui/icons/Add';
-import MinusIcon from '@material-ui/icons/Remove';
-import IconButton from '@material-ui/core/IconButton';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,7 +18,6 @@ import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import PlayableText from '../../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
@@ -32,7 +28,6 @@ import { Language } from '../../common/components/fields-values-by-fk';
 import StatusField from '../../common/components/StatusField';
 import DropDownMenu from '../components/list-dropdown-menu';
 import AnswerTextField, { AnswerRelatedQuestionField } from '../components/TextField';
-import AnswerField from '../../questions/components/AnswerField';
 import Filters from './Filters';
 import styles from './styles';
 import { useDisabledApprove } from '../../hooks';

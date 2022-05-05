@@ -4,8 +4,6 @@ import {
   required,
   SelectInput,
   Confirm,
-  BooleanInput,
-  usePermissions,
   useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
@@ -14,7 +12,7 @@ import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
-import { useDisabledCreate } from '../../hooks';
+import { useDisabledCreate, useIsAdmin } from '../../hooks';
 import ApprovedInput from './ApprovedInput';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
@@ -23,6 +21,7 @@ const Form = ({
   languages, topics, edit, record,
 }) => {
   const _languages = useSelector((state) => state.custom.languages);
+  const admin = useIsAdmin();
 
   const translate = useTranslate();
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
@@ -140,7 +139,11 @@ const Form = ({
           <ApprovedInput source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
         )
       }
-      <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
+      {
+        admin && (
+          <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
+        )
+      }
     </>
   );
 };

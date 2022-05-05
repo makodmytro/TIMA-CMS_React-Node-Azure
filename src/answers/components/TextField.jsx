@@ -1,4 +1,5 @@
 import React from 'react';
+import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
 import { useTranslate, TextField as RATextField } from 'react-admin';
 import Box from '@material-ui/core/Box';
@@ -29,13 +30,39 @@ const TextField = ({ record }) => {
       {
         record.FollowupQuestions?.length > 0 && (
           <Box borderTop="1px solid #e5e5e5">
-            <Box component="ul" mt={0}>
+            <Box mt={0}>
               {
                 record.FollowupQuestions.map((q, i) => {
                   return (
-                    <Box key={i} pt={0.5} component="li">
-                      <Box fontSize="0.9rem" lineHeight="14px">
-                        {q.text}
+                    <Box key={i} pt={0.5} display="flex">
+                      <Box flex={1} pr={1}>
+                        {
+                          q.contextOnly && (
+                            <Chip
+                              label={translate('resources.questions.fields.contextOnly')}
+                              variant="outlined"
+                              size="small"
+                              style={{ fontSize: '0.5rem', textTransform: 'uppercase' }}
+                            />
+                          )
+                        }
+                      </Box>
+                      <Box fontSize="0.9rem" lineHeight="14px" flex={4}>
+                        &#8226;&nbsp;
+                        {
+                          q.fk_answerId && (
+                            <Link
+                              style={{ textDecoration: 'none', color: 'inherit' }}
+                              to={`/answers/${q.fk_answerId}/edit`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {q.text}
+                            </Link>
+                          )
+                        }
+                        {
+                          !q.fk_answerId && (<>{q.text}</>)
+                        }
                       </Box>
                     </Box>
                   );
