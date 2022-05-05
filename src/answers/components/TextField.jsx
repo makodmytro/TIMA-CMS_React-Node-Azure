@@ -3,7 +3,7 @@ import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
 import { useTranslate, TextField as RATextField } from 'react-admin';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/Add';
 import ExpandLess from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,15 +25,34 @@ const allowedTypes = [
   'link',
   'linkReference',
 ];
+const styles = makeStyles(() => ({
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
+
+    '&:hover': {
+      textDecoration: 'underline',
+      textDecorationColor: '#D5D5D5',
+    }
+  }
+}));
 
 const TextField = ({ record }) => {
   const translate = useTranslate();
+  const classes = styles();
 
   return (
     <Box>
       <Box display="flex" alignContent="flex-end">
         <Box flex={5}>
-          <ReactMarkdown source={record.text} allowedTypes={allowedTypes} plugins={[remarkGfm]} />
+          <Link
+            to={`/answers/${record.id}/edit`}
+            onClick={(e) => e.stopPropagation()}
+            className={classes.link}
+          >
+            <ReactMarkdown source={record.text} allowedTypes={allowedTypes} plugins={[remarkGfm]} />
+          </Link>
         </Box>
         <Box flex={1}>
           <PlayableText
@@ -68,7 +87,7 @@ const TextField = ({ record }) => {
                         {
                           q.fk_answerId && (
                             <Link
-                              style={{ textDecoration: 'none', color: 'inherit' }}
+                              className={classes.link}
                               to={`/answers/${q.fk_answerId}/edit`}
                               onClick={(e) => e.stopPropagation()}
                             >
