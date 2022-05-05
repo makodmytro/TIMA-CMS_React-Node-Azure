@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { useStore } from 'react-redux';
 import { Route, useLocation } from 'react-router-dom'; // eslint-disable-line
+import { createBrowserHistory } from 'history'; // eslint-disable-line
 import {
   Resource,
   AdminContext,
@@ -292,6 +293,11 @@ const AsyncResources = () => {
   );
 };
 
+const history = createBrowserHistory({
+  forceRefresh: true,
+  basename: '#/'
+});
+
 function App() {
   return (
     <AdminContext
@@ -299,6 +305,7 @@ function App() {
       authProvider={authProvider}
       dataProvider={resDataProvider}
       customReducers={{ lng: lngReducer, custom: customReducer }}
+      history={history}
     >
       <AsyncResources />
     </AdminContext>
