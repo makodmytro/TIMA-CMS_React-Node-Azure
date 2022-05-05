@@ -62,7 +62,7 @@ const german = {
     qna: 'QNA',
     next: 'Weiter',
     actions: 'Aktionen',
-    schedule_sync: 'Sync planen',
+    schedule_sync: 'Sync anfordern',
     manage_permissions: 'Berechtigungen verwalten',
     show_questions: 'Zeige Fragen',
     show_qr_code: 'Zeige QR Code',
