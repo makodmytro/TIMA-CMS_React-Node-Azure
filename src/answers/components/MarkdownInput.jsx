@@ -67,6 +67,17 @@ const DraftInput = ({
           disabled={disabled === true}
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
+          toolbar={{
+            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list'],
+            inline: {
+              options: ['bold', 'italic', 'strikethrough'],
+            },
+            emoji: {
+              emojis: [
+                '😀','😉','😎', '😠', '🙀','👏','👌','🤘', '👍', '👎'
+              ]
+            }
+          }}
         />
         <HiddenField fieldName="spokenText">
           <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
