@@ -105,19 +105,6 @@ code {
   height: 30vh !important;
 }
 
-.rdw-option-wrapper[title="Superscript"],
-.rdw-option-wrapper[title="Subscript"],
-.rdw-option-wrapper[title="Underline"],
-.rdw-option-wrapper[title="Monospace"],
-.rdw-remove-wrapper,
-.rdw-image-wrapper,
-.rdw-fontsize-wrapper,
-.rdw-fontfamily-wrapper,
-.rdw-colorpicker-wrapper,
-.rdw-embedded-wrapper {
-  display: none !important;
-}
-
 .arrow-right {
   transform: rotate(45deg);
   width: 0;
