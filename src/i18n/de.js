@@ -135,6 +135,7 @@ const german = {
     topics: {
       name: 'Thema |||| Themen',
       filter_by_topics: 'Nach Themen filtern',
+      create_child: 'Create child',
       fields: {
         name: 'Name',
         topicKey: 'Themen ID',

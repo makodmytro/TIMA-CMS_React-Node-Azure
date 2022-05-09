@@ -43,7 +43,7 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
   return (
     <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />} undoable={false}>
       <SimpleForm toolbar={<CustomToolbar />}>
-        <FormFields {...props} languages={languages} />
+        <FormFields {...props} languages={languages} editting />
       </SimpleForm>
     </Edit>
   );

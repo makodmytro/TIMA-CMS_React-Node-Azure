@@ -136,6 +136,7 @@ const english = {
     topics: {
       name: 'Topic |||| Topics',
       filter_by_topics: 'Filter by topics',
+      create_child: 'Create child',
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
