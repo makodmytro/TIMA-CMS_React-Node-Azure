@@ -213,7 +213,7 @@ const german = {
       no_media: 'Es gibt keine Dateien für diese Antwort',
       upload_media: 'Neue Datei hochladen',
       related_questions: 'Zugehörige Fragen',
-      related_questions_no_remove: 'The answer can not be unlinked',
+      related_questions_no_remove: 'Diese Verlinkung kann nicht entfernt werden',
       followup_questions: 'Folgefragen',
       search_questions: 'Fragen suchen, um sie zu verlinken',
       media: 'Dateien',
