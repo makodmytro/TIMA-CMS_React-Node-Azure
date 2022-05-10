@@ -299,12 +299,14 @@ const english = {
         },
         status: {
           EDITING: 'Editing',
-          READY_FOR_REVIEW: 'Ready for review',
-          REVIEWED: 'Reviewed',
+          READY_FOR_INTEGRATION: 'Ready for integration',
+          CONTENT_APPROVED: 'Content approved',
           REVIEWING: 'Reviewing',
           CONTENT_ERROR: 'Content error',
           INTEGRATION_ERROR: 'Integration error',
-          DEPLOYED: 'Deployed',
+          DEPLOYED_ON_TEST: 'Deployed on Test',
+          INTEGRATION_TESTS_OK: 'Integration tests passed',
+          DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
       },
       fields: {

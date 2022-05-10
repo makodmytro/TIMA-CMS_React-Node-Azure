@@ -297,12 +297,13 @@ const german = {
         },
         status: {
           EDITING: 'In Bearbeitung',
-          READY_FOR_REVIEW: 'Bereit zum Test',
-          REVIEWING: 'Überprüfung',
-          REVIEWED: 'Redaktionell abgenommen',
+          READY_FOR_INTEGRATION: 'Bereit zur Integration',
+          CONTENT_APPROVED: 'Redaktionell abgenommen',
           CONTENT_ERROR: 'Contentfehler',
           INTEGRATION_ERROR: 'Integrationsfehler',
-          DEPLOYED: 'QnA live',
+          DEPLOYED_ON_TEST: 'Deployed on Test',
+          INTEGRATION_TESTS_OK: 'Integration tests passed',
+          DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
       },
       fields: {
