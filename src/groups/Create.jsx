@@ -133,7 +133,7 @@ const GroupsCreate = (props) => {
         Users: [],
       }}
     >
-      <SimpleForm toolbar={<CustomToolbar />} warnWhenUnsavedChanges>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
         <WorkflowRole source="workflowRole" fullWidth disabled={disabled} />
         <UsersSelection users={users} />

@@ -8,7 +8,7 @@ const SourceTitle = ({ record }) => (record ? <span>{record.text}</span> : null)
 
 const SourceEdit = (props) => (
   <Edit title={<SourceTitle />} aside={<SourceKeywordEdit />} {...props}>
-    <SimpleForm warnWhenUnsavedChanges>
+    <SimpleForm>
       <ReferenceInput
         source="fk_languageId"
         reference="languages"

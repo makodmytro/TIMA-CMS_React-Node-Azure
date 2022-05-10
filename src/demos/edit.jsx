@@ -11,7 +11,7 @@ import {
 
 const EditDemo = ({ dispatch, topics, ...props }) => (
   <Edit {...props} undoable={false}>
-    <SimpleForm warnWhenUnsavedChanges>
+    <SimpleForm>
       <TextInput source="contact" fullWidth validate={required()} />
       <TextInput source="code" fullWidth disabled />
       <TextInput source="link" fullWidth validate={required()} />

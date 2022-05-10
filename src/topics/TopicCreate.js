@@ -9,7 +9,7 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 const TopicCreate = (props) => {
   return (
     <Create {...props} actions={<CustomTopToolbar />}>
-      <SimpleForm warnWhenUnsavedChanges>
+      <SimpleForm>
         <FormFields {...props} />
       </SimpleForm>
     </Create>

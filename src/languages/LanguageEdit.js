@@ -41,7 +41,7 @@ const LanguageEdit = (props) => {
       title={<LanguageTitle />}
       actions={<CustomTopToolbar />}
     >
-      <SimpleForm toolbar={<CustomToolbar />} warnWhenUnsavedChanges>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
         <TextInput source="code" validate={required()} fullWidth disabled={disabled} />
         <PlayableTextInput

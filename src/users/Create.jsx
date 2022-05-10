@@ -73,7 +73,7 @@ const UsersCreate = (props) => {
         setRecord(data);
       }}
     >
-      <SimpleForm toolbar={<CustomToolbar />} initialValues={{ groups: [] }} warnWhenUnsavedChanges>
+      <SimpleForm toolbar={<CustomToolbar />} initialValues={{ groups: [] }}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} autoComplete="no" />
         <TextInput source="email" validate={[required(), email()]} fullWidth disabled={disabled} autoComplete="no" />
         {

@@ -321,7 +321,7 @@ const QuestionEdit = ({
           refresh();
         }}
       >
-        <SimpleForm toolbar={<CustomToolbar />} warnWhenUnsavedChanges>
+        <SimpleForm toolbar={<CustomToolbar />}>
           <FormFields
             {...{
               languages,

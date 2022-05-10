@@ -5,7 +5,7 @@ import {
 
 const SourceCreate = (props) => (
   <Create {...props}>
-    <SimpleForm warnWhenUnsavedChanges>
+    <SimpleForm>
       <ReferenceInput
         source="fk_languageId"
         reference="languages"
