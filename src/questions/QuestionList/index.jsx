@@ -45,12 +45,18 @@ const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_QUESTIONS
   ? process.env.REACT_APP_HIDE_FIELDS_QUESTIONS.split(',')
   : [];
+const SHOW_QUESTION_FEEDBACK = process.env.REACT_APP_SHOW_QUESTION_FEEDBACK === '1';
 
 if (!USE_WORKFLOW) {
   HIDDEN_FIELDS.push('status');
 } else {
   HIDDEN_FIELDS.push('approved');
   HIDDEN_FIELDS.push('useAsSuggestion');
+}
+
+if (!SHOW_QUESTION_FEEDBACK) {
+  HIDDEN_FIELDS.push('feedbackPositiveCount');
+  HIDDEN_FIELDS.push('feedbackNegativeCount');
 }
 
 const columns = [
