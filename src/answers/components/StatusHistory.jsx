@@ -42,7 +42,7 @@ const StatusHistory = ({ record }) => {
         type: 'CUSTOM_ANSWER_STATUS_HISTORY',
         payload: {
           id: record.id,
-          data: data.reverse(),
+          data,
         },
       });
     } catch (err) {

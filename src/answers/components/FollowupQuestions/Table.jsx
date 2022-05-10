@@ -58,7 +58,6 @@ const FollowupQuestionsTable = ({
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>&nbsp;</TableCell>
           <TableCell>{translate('resources.questions.fields.text')}</TableCell>
           {
             !USE_WORKFLOW && (
@@ -85,15 +84,6 @@ const FollowupQuestionsTable = ({
             })
             .map((related, i) => (
               <TableRow key={i}>
-                <TableCell>
-                  {
-                    !!related.qna_promptDisplayOrder && (
-                      <span>
-                        <ForumTwoTone fontSize="small" />&nbsp;
-                      </span>
-                    )
-                  }
-                </TableCell>
                 <TableCell>
                   <PlayableTextField
                     source="text"
