@@ -11,7 +11,7 @@ import {
   AuthenticatedTemplate, useMsal,
   useIsAuthenticated,
 } from '@azure/msal-react';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
 import Logo from '../assets/TIMA_logo.png';
@@ -80,36 +80,21 @@ const Authenticated = () => {
   };
 
   React.useEffect(() => {
+    console.log('isAut', isAuthenticated);
     if (isAuthenticated) {
       requestProfileData();
     }
   }, [isAuthenticated]);
 
+  const login = () => {
+    instance.loginRedirect();
+  };
+
   return (
-    <Box
-      textAlign="center"
-      alignContent="center"
-      style={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        paddingTop: '30vh',
-        boxSizing: 'border-box',
-        backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
-      }}
-    >
-      {
-        !error && (
-          <>
-            <Box py={2}>
-              <img src={Logo} alt="logo" width="135" />
-            </Box>
-            <Typography variant="body2" component="div" style={{ color: 'white' }}>
-              LOADING
-            </Typography>
-          </>
-        )
-      }
+    <Box>
+      <Button onClick={login}>
+        clo
+      </Button>
       {
         error && (
           <Box textAlign="center" mt={15} display="flex" justifyContent="center">
@@ -132,8 +117,6 @@ const Authenticated = () => {
 
 export default () => {
   return (
-    <AuthenticatedTemplate>
-      <Authenticated />
-    </AuthenticatedTemplate>
+    <Authenticated />
   );
 };

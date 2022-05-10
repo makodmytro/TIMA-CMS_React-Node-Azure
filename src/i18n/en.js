@@ -55,6 +55,8 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    login: 'login',
+    or: 'or',
     azure_403: 'Your user has not been activated for this application, please contact support',
     search_create_questions: 'Search for existing question and link or create a new question',
     save: 'Save',

@@ -8,6 +8,7 @@ import {
   AdminContext,
   AdminUI,
   useDataProvider,
+  LoginComponent
 } from 'react-admin';
 import IdleTracker from 'idle-tracker';
 import Box from '@material-ui/core/Box';
@@ -32,9 +33,8 @@ import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
-import AzureLogin from './auth/azure';
+import Login from './auth/login';
 
-const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
@@ -216,9 +216,7 @@ const AsyncResources = () => {
       title="TIMA Management"
       theme={theme}
       layout={MyLayout}
-      {...(
-        USE_AZURE_LOGIN === '1' ? { loginPage: AzureLogin } : {}
-      )}
+      loginPage={Login}
       customRoutes={customRoutes}
     >
       {

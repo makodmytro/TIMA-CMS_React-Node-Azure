@@ -55,6 +55,8 @@ const german = {
     change_language_confirmation: 'Das Ändern der Sprache einer Frage wirkt sich auch auf das Thema aus',
   },
   misc: {
+    login: 'login',
+    or: 'or',
     azure_403: 'Der Nutzer wurde nicht aktiviert für diese Anwendung, bitte den Support kontaktieren',
     search_create_questions: 'Suche nach bestehenden Fragen zum Verlinken oder erstelle eine neue Frage',
     save: 'Speichern',

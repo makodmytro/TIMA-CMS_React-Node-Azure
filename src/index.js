@@ -28,9 +28,7 @@ const Wrapper = ({ children }) => {
   if (USE_AZURE_LOGIN === '1') {
     return (
       <MsalProvider instance={msalInstance}>
-        <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
-          {children}
-        </MsalAuthenticationTemplate>
+        {children}
       </MsalProvider>
     );
   }
