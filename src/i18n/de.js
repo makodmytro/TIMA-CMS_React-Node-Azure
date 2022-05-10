@@ -135,7 +135,7 @@ const german = {
     topics: {
       name: 'Thema |||| Themen',
       filter_by_topics: 'Nach Themen filtern',
-      create_child: 'Create child',
+      create_child: 'Unterthema hinzufügen',
       fields: {
         name: 'Name',
         topicKey: 'Themen ID',
@@ -150,7 +150,7 @@ const german = {
         qnaApiVersion: 'QNA API version',
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         qnaSubscriptionKey: 'QNA Subscription key',
-        fk_parentTopicId: 'Parent topic',
+        fk_parentTopicId: 'Übergeordnetes Thema',
         syncScheduled: 'Sync geplant',
         lastSyncAt: 'Letztes Sync am',
         qnaMetadataKey: 'Metadata key',
