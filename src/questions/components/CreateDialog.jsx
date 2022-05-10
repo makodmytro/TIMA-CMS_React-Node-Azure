@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {
   useDataProvider,
   useNotify,
-  useRefresh,
   useTranslate,
   required,
+  TextInput,
 } from 'react-admin';
 import { Form } from 'react-final-form';
 import {
@@ -16,49 +15,30 @@ import {
   Button,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { PlayableTextInput } from '../../common/components/playable-text';
 
-const EditDialog = ({
-  record,
+const CreateDialog = ({
   open,
   onClose,
-  afterEdit,
+  onSuccess,
+  initialValues,
 }) => {
-  const languages = useSelector((state) => state.admin.resources?.languages?.data);
-  const disableEdit = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const notify = useNotify();
-  const refresh = useRefresh();
   const translate = useTranslate();
 
   const onSubmit = async (values) => {
     try {
-      await dataProvider.update('questions', {
-        id: record.id,
+      const { data } = await dataProvider.create('questions', {
         data: {
           ...values,
         },
       });
 
-      notify('The question was updated');
-
-      if (afterEdit) {
-        afterEdit();
-      } else {
-        refresh();
-      }
+      onSuccess(data);
       onClose();
     } catch (e) {
-      notify(e?.body?.message || 'Could not update', 'error');
+      notify(e?.body?.message || 'Could not create', 'error');
     }
-  };
-
-  const getLang = () => {
-    if (!record.fkLanguageId || !languages[record.fkLanguageId]) {
-      return null;
-    }
-
-    return languages[record.fkLanguageId].code;
   };
 
   if (!open) {
@@ -70,7 +50,7 @@ const EditDialog = ({
       <Box display="flex" p={2}>
         <Box flex={5}>
           <Typography>
-            {translate('resources.questions.edit')}
+            {translate('misc.create')} {translate('resources.answers.followup_questions')}
           </Typography>
         </Box>
         <Box flex={1} textAlign="right">
@@ -85,35 +65,24 @@ const EditDialog = ({
         <Form
           onSubmit={onSubmit}
           initialValues={{
-            text: record.text,
+            text: '',
+            ...initialValues,
           }}
           render={({ handleSubmit }) => {
             return (
               <form onSubmit={handleSubmit} autoComplete="off">
-                <PlayableTextInput
+                <TextInput
                   label="resources.questions.fields.text"
                   source="text"
                   validate={required()}
-                  lang={getLang}
                   fullWidth
-                  disabled={disableEdit}
                 />
                 <Box textAlign="right" py={2}>
-                  <Button
-                    variant="contained"
-                    type="button"
-                    size="small"
-                    onClick={() => onClose()}
-                  >
-                    {translate('misc.cancel')}
-                  </Button>
-                  &nbsp;
                   <Button
                     variant="contained"
                     color="primary"
                     type="submit"
                     size="small"
-                    disabled={record?.allowEdit === false}
                   >
                     {translate('misc.save')}
                   </Button>
@@ -127,4 +96,4 @@ const EditDialog = ({
   );
 };
 
-export default EditDialog;
+export default CreateDialog;

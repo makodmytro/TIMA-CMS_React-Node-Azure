@@ -190,7 +190,7 @@ const SearchCreateDialog = ({
 
       afterCreate(data);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -223,7 +223,7 @@ const SearchCreateDialog = ({
       setQuestions(data);
       setEnableCreate(!data.length);
     } catch (err) {
-      notify('Unexpected error', 'error');
+      notify(err?.body?.message || 'Unexpected error', 'error');
     }
     setLoading(false);
   }, 500);

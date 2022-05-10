@@ -108,7 +108,7 @@ const LanguageEdit = (props) => {
       actions={<CustomTopToolbar />}
       undoable={false}
     >
-      <SimpleForm toolbar={<CustomToolbar />}>
+      <SimpleForm toolbar={<CustomToolbar />} warnWhenUnsavedChanges>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} />
         <WorkflowRole source="workflowRole" fullWidth disabled={disabled} />
         <UsersList />

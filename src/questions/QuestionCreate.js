@@ -94,7 +94,7 @@ const QuestionCreate = ({ dispatch, languages, ...props }) => {
           return rest;
         }}
       >
-        <SimpleForm redirect="list">
+        <SimpleForm redirect="list" warnWhenUnsavedChanges>
           <FormFields languages={languages} />
         </SimpleForm>
       </Create>

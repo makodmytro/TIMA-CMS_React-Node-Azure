@@ -39,7 +39,9 @@ const AnswerCreate = (props) => {
       await dataProvider.create('questions', {
         data: _data,
       })
-    } catch (e) {} // eslint-disable-line
+    } catch (e) {
+      notify(e?.body?.message || 'Unexpected error', 'error');
+    }
   };
 
   const onSubmit = async (values) => {

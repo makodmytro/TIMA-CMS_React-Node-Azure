@@ -153,7 +153,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
 
       setOpen(false);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -168,7 +168,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
       });
       onSelect(data.id);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -191,7 +191,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
 
       setAnswers(data);
     } catch (err) {
-      notify('Unexpected error', 'error');
+      notify(err?.body?.message || 'Unexpected error', 'error');
     }
     setLoading(false);
   }, 500);

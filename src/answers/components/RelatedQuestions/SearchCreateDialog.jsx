@@ -35,7 +35,7 @@ const SearchCreateDialog = ({ record, open, onClose }) => {
       refresh();
       onClose();
     } catch (err) {
-      notify(`Failed to link questions: ${err.message}`, 'error');
+      notify(err?.body?.message || 'Unexpected error', 'error');
     }
   };
 

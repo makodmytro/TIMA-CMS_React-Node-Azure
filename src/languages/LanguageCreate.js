@@ -6,7 +6,7 @@ import CustomTopToolbar from '../common/components/custom-top-toolbar';
 
 const LanguageCreate = (props) => (
   <Create {...props} actions={<CustomTopToolbar />}>
-    <SimpleForm>
+    <SimpleForm warnWhenUnsavedChanges>
       <TextInput source="name" validate={required()} />
       <TextInput source="code" validate={required()} />
       <TextInput source="welcomeText" validate={required()} />

@@ -57,7 +57,7 @@ const AnswerEdit = () => {
       notify('The answer was updated');
       return refresh();
     } catch (err) {
-      return notify('Failed to update', 'error');
+      return notify(err?.body?.message || 'Failed to update', 'error');
     }
   };
 
