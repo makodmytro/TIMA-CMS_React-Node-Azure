@@ -223,7 +223,7 @@ const german = {
       status_history: 'Statusverlauf',
       status_can_not_change: 'Der Status kann nicht geändert werden',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
-      allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status wieder auf Bearbeitung',
+      allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
       status: {
         createdAt: 'Datum',
         updatedBy: 'Editor',
