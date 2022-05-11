@@ -27,7 +27,7 @@ const Row = ({ label, value }) => (
   </Box>
 );
 
-const TestAsk = ({ topics, languages }) => {
+const TestAsk = ({ languages }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const notify = useNotify();
@@ -90,7 +90,7 @@ const TestAsk = ({ topics, languages }) => {
 
           return errors;
         }}
-        render={({ handleSubmit, valid, values }) => {
+        render={({ handleSubmit, valid }) => {
           return (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>

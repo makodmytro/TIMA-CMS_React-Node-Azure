@@ -43,7 +43,7 @@ const Filters = ({
                 <Typography variant="body2">
                   {translate('misc.search_answers_link')}
                 </Typography>
-                <TextInput label="misc.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
+                <TextInput label="resources.answers.fields.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
               <Box flex={1} ml={1} pt={5}>
                 {

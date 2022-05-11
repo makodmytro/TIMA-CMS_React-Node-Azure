@@ -26,7 +26,7 @@ import { useIsAdmin } from '../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
-const AnswerCreate = (props) => {
+const AnswerCreate = () => {
   const admin = useIsAdmin();
   const translate = useTranslate();
   const notify = useNotify();
@@ -38,7 +38,7 @@ const AnswerCreate = (props) => {
     try {
       await dataProvider.create('questions', {
         data: _data,
-      })
+      });
     } catch (e) {
       notify(e?.body?.message || 'Unexpected error', 'error');
     }
@@ -126,7 +126,7 @@ const AnswerCreate = (props) => {
           return errors;
         }}
         validateOnBlur
-        render={({ handleSubmit, submitting, values, valid }) => {
+        render={({ handleSubmit, submitting, values }) => {
           return (
             <form onSubmit={handleSubmit} autoComplete="off">
               {

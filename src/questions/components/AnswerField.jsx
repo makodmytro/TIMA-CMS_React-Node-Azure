@@ -41,13 +41,6 @@ const AnswerField = ({ record, afterLink }) => {
     return link;
   }
 
-  const goToAnswer = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    redirect(`/answers/${record.Answer.id}/edit`, '/answers', record.Answer.id, { key: 'asdasd' });
-  };
-
   return (
     <span>
       <AnswerTextField

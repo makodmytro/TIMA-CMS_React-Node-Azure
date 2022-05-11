@@ -34,5 +34,4 @@
 | REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS | Hides the Ignored and Unaswnered filters for questions | "1" | undefined | N |
 | REACT_APP_TOPICS_LEVEL_LABELS | Labels to be displayed in the Topics inputs. Comma separated | "One,Two,Three" | undefined | N |
 | REACT_APP_IDLE_TIMEOUT_SECONDS | Timeout in seconds to log the user out when he is idle | 30 | undefined | N |
-| REACT_APP_IDLE_TIMEOUT_URL | Absolute Url to redirect the user after we log him out | https://google.com | N |
 | REACT_APP_SHOW_QUESTION_FEEDBACK | Shows the question feedback columns in the table | "1" | N | undefined |

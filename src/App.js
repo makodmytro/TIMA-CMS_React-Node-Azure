@@ -8,7 +8,6 @@ import {
   AdminContext,
   AdminUI,
   useDataProvider,
-  LoginComponent
 } from 'react-admin';
 import IdleTracker from 'idle-tracker';
 import Box from '@material-ui/core/Box';
@@ -38,7 +37,6 @@ import Login from './auth/login';
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
-const IDLE_TIMEOUT_URL = process.env.REACT_APP_IDLE_TIMEOUT_URL;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -47,12 +45,12 @@ const delay = (ms) => new Promise((r) => { // eslint-disable-line
 });
 let idleTracker;
 
-if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+if (IDLE_TIMEOUT_SECONDS) {
   idleTracker = new IdleTracker({
     timeout: parseInt(IDLE_TIMEOUT_SECONDS, 10) * 1000,
     onIdleCallback: () => {
       sessionStorage.clear();
-      window.location.href = IDLE_TIMEOUT_URL;
+      window.location.reload();
     },
   });
 }
@@ -196,14 +194,14 @@ const AsyncResources = () => {
       key={1}
       path="/test-ask"
       component={TestAsk}
-    />
+    />,
   ];
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
     customRoutes = [customRoutes[1]];
   }
 
-  if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+  if (IDLE_TIMEOUT_SECONDS) {
     if (!isLoginScreen()) {
       idleTracker.start();
     } else {
@@ -277,7 +275,7 @@ const AsyncResources = () => {
               name="audit"
               {...audit}
             />,
-          ].sort((a, b) => {
+          ].sort((a) => {
             if (!DEFAULT_HOMEPAGE || !a) {
               return 0;
             }
@@ -293,7 +291,7 @@ const AsyncResources = () => {
 
 const history = createBrowserHistory({
   forceRefresh: true,
-  basename: '#/'
+  basename: '#/',
 });
 
 function App() {

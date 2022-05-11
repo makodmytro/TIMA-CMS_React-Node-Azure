@@ -7,19 +7,16 @@ import {
   useTranslate,
 } from 'react-admin';
 import { useStore } from 'react-redux';
-import {
-  AuthenticatedTemplate, useMsal,
-  useIsAuthenticated,
-} from '@azure/msal-react';
+import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { Typography, Box, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
-import Logo from '../assets/TIMA_logo.png';
+import Logo from '../assets/microsoft-logo.png';
 
 const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
-const Authenticated = () => {
+const Authenticated = ({ setLoading }) => {
   const [error, setError] = React.useState(false);
   const { instance, accounts } = useMsal();
   const dataProvider = useDataProvider();
@@ -31,6 +28,8 @@ const Authenticated = () => {
   const translate = useTranslate();
 
   const requestProfileData = async () => {
+    setLoading(true);
+
     try {
       // Silently acquires an access token which is then attached to a request for MS Graph data
       console.log('requestProfileData called');
@@ -55,11 +54,14 @@ const Authenticated = () => {
           } catch (e) {} // eslint-disable-line
         }
 
+        sessionStorage.setItem('azure-login', 1);
+        setLoading(false);
         redirect('/');
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
       console.error(err);
+      setLoading(false);
       if (err?.subError === 'consent_required') {
         const url = `${process.env.REACT_APP_AZURE_AUTHORITY}/adminconsent?client_id=${process.env.REACT_APP_AZURE_CLIENT_ID}&state=1&redirect_uri=${process.env.REACT_APP_AZURE_REDIRECT_URI}`;
         window.location.href = url;
@@ -80,7 +82,6 @@ const Authenticated = () => {
   };
 
   React.useEffect(() => {
-    console.log('isAut', isAuthenticated);
     if (isAuthenticated) {
       requestProfileData();
     }
@@ -92,8 +93,8 @@ const Authenticated = () => {
 
   return (
     <Box>
-      <Button onClick={login}>
-        clo
+      <Button onClick={login} fullWidth variant="outlined">
+        <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
       </Button>
       {
         error && (
@@ -115,8 +116,8 @@ const Authenticated = () => {
   );
 };
 
-export default () => {
+export default ({ setLoading }) => {
   return (
-    <Authenticated />
+    <Authenticated setLoading={setLoading} />
   );
 };

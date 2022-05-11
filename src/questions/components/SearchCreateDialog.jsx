@@ -26,7 +26,7 @@ import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextField } from '../../common/components/playable-text';
 import AnswerField from './AnswerField';
-import { useDisabledCreate, boolDisabledEdit } from '../../hooks';
+import { useDisabledCreate } from '../../hooks';
 
 const Filters = ({
   onSubmit,
@@ -50,7 +50,7 @@ const Filters = ({
                 <Typography variant="body2">
                   {translate('misc.search_create_questions')}
                 </Typography>
-                <TextInput label="misc.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
+                <TextInput label="resources.questions.fields.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
               <Box flex={1} px={2} pt={5}>
                 {
@@ -97,8 +97,6 @@ const ResultsList = ({
   toggleSelect,
 }) => {
   const translate = useTranslate();
-  const { permissions } = usePermissions();
-
   const isSelected = (question) => selected.includes(question.id);
 
   if (!questions) {

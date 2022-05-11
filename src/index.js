@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
+import { PublicClientApplication } from '@azure/msal-browser';
 import {
   MsalProvider,
-  MsalAuthenticationTemplate,
 } from '@azure/msal-react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';

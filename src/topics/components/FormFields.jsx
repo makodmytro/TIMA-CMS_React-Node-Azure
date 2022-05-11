@@ -7,7 +7,6 @@ import {
   useTranslate,
   useDataProvider,
 } from 'react-admin';
-import qs from 'querystring';
 import { useLocation } from 'react-router-dom';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
