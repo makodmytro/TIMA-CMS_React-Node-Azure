@@ -77,6 +77,16 @@ export default () => {
               <Box py={2} textAlign="center">
                 <img src={Logo} alt="logo" width="135" />
               </Box>
+              {
+                AZURE_LOGIN && (
+                  <Box textAlign="center" mb={2}>
+                    <Box textAlign="center" py={2}>
+                      <Azure setLoading={setAzureLoading} />
+                    </Box>
+                    <Typography variant="body2" style={{ textTransform: 'uppercase' }}>{translate('misc.or')}</Typography>
+                  </Box>
+                )
+              }
               <Form
                 autoComplete="off"
                 autoFill="off"
@@ -110,16 +120,6 @@ export default () => {
                   </form>
                 )}
               />
-              {
-                AZURE_LOGIN && (
-                  <Box textAlign="center" mt={2}>
-                    <Typography variant="body2" style={{ textTransform: 'uppercase' }}>{translate('misc.or')}</Typography>
-                    <Box textAlign="center" pt={2}>
-                      <Azure setLoading={setAzureLoading} />
-                    </Box>
-                  </Box>
-                )
-              }
             </Box>
           </Grid>
         </Grid>
