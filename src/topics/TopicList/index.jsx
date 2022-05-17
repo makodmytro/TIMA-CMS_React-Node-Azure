@@ -41,18 +41,22 @@ const TopicList = () => {
   const onSubmit = async (values = form, paging = pagination) => {
     setForm(values);
 
-    const { data, total } = await dataProvider.topicTree('topics', {
-      filter: {
-        ...(values.q ? { q: values.q } : {}),
-        ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),
-        topLevelOnly: TOPICS_ENABLE_TREE_LIST,
-      },
-      pagination: paging,
-      sort: { field: 'updatedAt', order: 'DESC' },
-    });
+    try {
+      const { data, total } = await dataProvider.topicTree('topics', {
+        filter: {
+          ...(values.q ? { q: values.q } : {}),
+          ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),
+          topLevelOnly: TOPICS_ENABLE_TREE_LIST,
+        },
+        pagination: paging,
+        sort: { field: 'updatedAt', order: 'DESC' },
+      });
 
-    setResults(data);
-    setCount(total);
+      setResults(data);
+      setCount(total);
+    } catch (e) {
+      notify(e?.body?.message || 'Unexpected error', 'error');
+    }
   };
 
   const setPage = (page, submit = true) => {
