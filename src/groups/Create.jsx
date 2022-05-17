@@ -84,7 +84,7 @@ const GroupsCreate = (props) => {
     try {
       const { data } = await dataProvider.getList('users', {
         pagination: { page: 1, perPage: 1000 },
-        filter: { a: 1 },
+        // filter: { a: 1 },
       });
 
       setUsers(data);
