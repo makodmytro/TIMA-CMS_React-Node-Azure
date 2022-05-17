@@ -72,6 +72,9 @@ const PermissionForm = ({
                 <BooleanInput source="edit" label="Edit" />
               </Box>
               <Box px={1} flex="1">
+                <BooleanInput source="manage" label="Manage" />
+              </Box>
+              <Box px={1} flex="1">
                 <BooleanInput source="delete" label="Delete" />
               </Box>
 
@@ -217,6 +220,7 @@ const PermissionsDialog = ({
                 <Box flex="1">Group</Box>
                 <Box textAlign="center" flex="1">View</Box>
                 <Box textAlign="center" flex="1">Edit</Box>
+                <Box textAlign="center" flex="1">Manage</Box>
                 <Box textAlign="center" flex="1">Delete</Box>
                 <Box flex="1">&nbsp;</Box>
               </Box>
@@ -231,6 +235,7 @@ const PermissionsDialog = ({
                           edit: ps.edit,
                           delete: ps.delete,
                           view: ps.view,
+                          manage: ps.manage,
                         }}
                         onSubmit={onSubmit}
                         groups={allGroups}
@@ -244,6 +249,7 @@ const PermissionsDialog = ({
                       <Box flex="1">{ps.Group.name}</Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.view} /></Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.edit} /></Box>
+                      <Box flex="1" textAlign="center"><Bool v={ps.manage} /></Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.delete} /></Box>
                       <Box flex="1" textAlign="center">
                         <IconButton size="small" color="secondary" onClick={() => setEditting(i)}>
@@ -283,6 +289,7 @@ const PermissionsDialog = ({
                     edit: false,
                     delete: false,
                     view: false,
+                    manage: false,
                   }}
                   onSubmit={onSubmit}
                   groups={groups}
