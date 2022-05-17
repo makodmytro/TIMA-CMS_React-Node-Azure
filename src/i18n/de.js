@@ -86,7 +86,7 @@ const german = {
     no_records: 'Keine Einträge gefunden',
     undo_change: 'Änderung rückgängig machen',
     delete_media: 'Datei löschen',
-    type: 'Typ',
+    type: 'Type',
     view: 'Ansicht',
     uploading: 'Hochladen',
     upload: 'Hochladen',
