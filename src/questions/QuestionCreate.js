@@ -59,17 +59,6 @@ const FormFields = (props) => {
         disabled={!value}
       />
       <AutocompleteInput />
-      <ReferenceInput
-        label="resources.questions.fields.fk_parentQuestionId"
-        source="fk_parentQuestionId"
-        reference="questions"
-        filter={{ fk_topicId }}
-        disabled={!fk_topicId}
-        fullWidth
-        allowEmpty
-      >
-        <SelectInput optionText="text" emptyText="None" />
-      </ReferenceInput>
       {
         !USE_WORKFLOW && (
           <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" />

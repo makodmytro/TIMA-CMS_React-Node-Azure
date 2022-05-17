@@ -125,11 +125,11 @@ const ResultsList = ({
   );
 };
 
-const AnswerLinkDialog = ({ record }) => {
+const AnswerLinkDialog = ({ record, afterLink }) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [answers, setAnswers] = React.useState(null);
-  const disabled = record?.allowEdit === false; // useDisabledEdit(record.fk_topicId);
+  const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
   const notify = useNotify();
@@ -144,10 +144,16 @@ const AnswerLinkDialog = ({ record }) => {
         },
       });
       notify('The record has been updated');
-      refresh();
+
+      if (afterLink) {
+        afterLink();
+      } else {
+        refresh();
+      }
+
       setOpen(false);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -162,7 +168,7 @@ const AnswerLinkDialog = ({ record }) => {
       });
       onSelect(data.id);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -185,7 +191,7 @@ const AnswerLinkDialog = ({ record }) => {
 
       setAnswers(data);
     } catch (err) {
-      notify('Unexpected error', 'error');
+      notify(err?.body?.message || 'Unexpected error', 'error');
     }
     setLoading(false);
   }, 500);

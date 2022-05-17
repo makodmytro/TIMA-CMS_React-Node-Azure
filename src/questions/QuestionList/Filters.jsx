@@ -18,6 +18,7 @@ import styles from './styles';
 
 const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const HIDE_IGNORED = process.env.REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS === '1';
 
 const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
@@ -91,22 +92,27 @@ const Filters = ({ languages, topics, ...props }) => {
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
           <TextInput label="misc.text" source="q" alwaysOn onChange={() => handleSubmit()} />
-          <ReferenceInput
-            onChange={() => handleSubmit()}
-            label="resources.questions.fields.fk_languageId"
-            source="fk_languageId"
-            reference="languages"
-            alwaysOn
-            allowEmpty
-          >
-            <SelectInput
-              disabled={Boolean(filterValues.fk_topicId)}
-              optionText="name"
-              className={classes.select}
-              allowEmpty
-              emptyText={translate('misc.all')}
-            />
-          </ReferenceInput>
+          {
+            languages?.length > 1 && (
+              <ReferenceInput
+                onChange={() => handleSubmit()}
+                label="resources.questions.fields.fk_languageId"
+                source="fk_languageId"
+                reference="languages"
+                alwaysOn
+                allowEmpty
+              >
+                <SelectInput
+                  disabled={Boolean(filterValues.fk_topicId)}
+                  optionText="name"
+                  className={classes.select}
+                  allowEmpty
+                  emptyText={translate('misc.all')}
+                />
+              </ReferenceInput>
+            )
+          }
+
           <ReferenceInput
             onChange={() => handleSubmit()}
             label="resources.questions.fields.fk_createdByUserId"
@@ -172,18 +178,25 @@ const Filters = ({ languages, topics, ...props }) => {
             )
           }
 
-          <BooleanInput
-            label="resources.questions.fields.ignored"
-            source="ignored"
-            alwaysOn
-            onChange={() => handleSubmit()}
-          />
-          <BooleanInput
-            label="misc.unanswered_questions"
-            source="unanswered"
-            alwaysOn
-            onChange={() => handleSubmit()}
-          />
+          {
+            !HIDE_IGNORED && (
+              <>
+                <BooleanInput
+                  label="resources.questions.fields.ignored"
+                  source="ignored"
+                  alwaysOn
+                  onChange={() => handleSubmit()}
+                />
+                <BooleanInput
+                  label="misc.unanswered_questions"
+                  source="unanswered"
+                  alwaysOn
+                  onChange={() => handleSubmit()}
+                />
+              </>
+            )
+          }
+
         </form>
       )}
     </Form>

@@ -11,6 +11,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import ReactMarkdown from 'react-markdown';
 import RichTextEditor from 'react-rte';
 import MdEditor from 'react-markdown-editor-lite';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// import draftToMarkdown from 'draftjs-to-markdown';
+import { markdownToDraft, draftToMarkdown } from 'markdown-draft-js';
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -21,6 +26,68 @@ const HiddenField = ({ children, fieldName }) => {
   }
 
   return children;
+};
+
+const DraftInput = ({
+  source, label, lang, disabled,
+}) => {
+  const translate = useTranslate();
+  const [state, setState] = React.useState(EditorState.createEmpty());
+  const { input: { value: spokenText, onBlur }, } = useField('spokenText');
+  const {
+    input: { onChange, value },
+    meta: {
+      touched, dirty, error, submitFailed,
+    },
+  } = useField(source, { validate: required() });
+  const invalid = !!error && (touched || dirty || submitFailed);
+
+  React.useEffect(() => {
+    if (value && !touched && !dirty) {
+      const rawData = markdownToDraft(value);
+      const contentState = convertFromRaw(rawData);
+
+      setState(EditorState.createWithContent(contentState));
+    }
+  }, [value]);
+
+  return (
+    <>
+      <InputLabel error={invalid}>{translate(label)}</InputLabel>
+      <FormControl fullWidth error={invalid}>
+        <Editor
+          editorState={state}
+          onEditorStateChange={(v) => {
+            console.log(convertToRaw(v.getCurrentContent()));
+
+            onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
+            setState(v);
+          }}
+          onBlur={() => onBlur()}
+          disabled={disabled === true}
+          readOnly={disabled === true}
+          wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
+          toolbar={{
+            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list'],
+            inline: {
+              options: ['bold', 'italic', 'strikethrough'],
+            },
+            emoji: {
+              emojis: [
+                '😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎'
+              ]
+            }
+          }}
+        />
+        <HiddenField fieldName="spokenText">
+          <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
+            <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />
+            <PlayableText text={spokenText || value} lang={lang} hideText disabled={disabled === true} />
+          </Box>
+        </HiddenField>
+      </FormControl>
+    </>
+  );
 };
 
 const MarkdownInput = ({
@@ -104,4 +171,4 @@ export const MarkdownInputOld = ({
   );
 };
 
-export default MarkdownInput;
+export default DraftInput;

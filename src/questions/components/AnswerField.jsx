@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import AnswerTextField from '../../answers/components/TextField';
 import AnswerLinkDialog from './AnswerLinkDialog';
 
-const AnswerField = ({ record }) => {
+const AnswerField = ({ record, afterLink }) => {
   const translate = useTranslate();
   const redirect = useRedirect();
 
@@ -15,7 +15,7 @@ const AnswerField = ({ record }) => {
 
   if (!record.fk_answerId) {
     return (
-      <AnswerLinkDialog record={record} />
+      <AnswerLinkDialog record={record} afterLink={afterLink} />
     );
   }
 
@@ -45,16 +45,14 @@ const AnswerField = ({ record }) => {
     e.stopPropagation();
     e.preventDefault();
 
-    redirect(`/answers/${record.Answer.id}/edit`);
+    redirect(`/answers/${record.Answer.id}/edit`, '/answers', record.Answer.id, { key: 'asdasd' });
   };
 
   return (
-    <span onClick={goToAnswer}>
+    <span>
       <AnswerTextField
         record={{
           ...record.Answer,
-          Language: record.Language,
-          relatedQuestions: record.relatedQuestionsForAnswerCount || 0,
         }}
       />
     </span>

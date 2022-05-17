@@ -9,9 +9,6 @@ import {
   useTranslate,
   useListContext,
 } from 'react-admin';
-import AddIcon from '@material-ui/icons/Add';
-import MinusIcon from '@material-ui/icons/Remove';
-import IconButton from '@material-ui/core/IconButton';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,7 +18,6 @@ import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import PlayableText from '../../common/components/playable-text';
 import ListActions, {
   getVisibleColumns,
   handleColumnsChange,
@@ -31,8 +27,7 @@ import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
 import StatusField from '../../common/components/StatusField';
 import DropDownMenu from '../components/list-dropdown-menu';
-import AnswerTextField from '../components/TextField';
-import AnswerField from '../../questions/components/AnswerField';
+import AnswerTextField, { AnswerRelatedQuestionField } from '../components/TextField';
 import Filters from './Filters';
 import styles from './styles';
 import { useDisabledApprove } from '../../hooks';
@@ -51,6 +46,7 @@ if (!USE_WORKFLOW) {
 }
 
 const columns = [
+  { key: 'fk_questionId' },
   { key: 'text' },
   { key: 'spokenText' },
   { key: 'fk_languageId' },
@@ -88,9 +84,7 @@ const WrapApprovedSwitch = (props) => {
 const CustomGridItem = ({
   record,
   visibleColumns,
-  level,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
   const classes = styles();
   const redirect = useRedirect();
 
@@ -99,59 +93,8 @@ const CustomGridItem = ({
     redirect(`/answers/${id}`);
   };
 
-  const bg = !level ? 'initial' : `#${(parseInt(QUESTIONS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
-
-  if (level) {
-    return (
-      <>
-        <TableRow
-          className={classes.cursor}
-          style={{ backgroundColor: bg }}
-          onClick={(e) => {
-            e.stopPropagation();
-            redirect(`/questions/${record.id}`);
-          }}
-        >
-          <TableCell>
-            {
-              !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && (
-                <>
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-
-                      setExpanded(!expanded);
-                    }}
-                  >
-                    { !expanded && <AddIcon fontSize="small" /> }
-                    { expanded && <MinusIcon fontSize="small" /> }
-                  </IconButton>
-                </>
-              )
-            }
-          </TableCell>
-          <TableCell style={{ paddingLeft: `${30 * level}px` }}>
-            <PlayableText
-              text={record.text}
-              fkLanguageId={record.fk_languageId}
-            />
-          </TableCell>
-          <TableCell style={{ width: '25%' }}>
-            <AnswerField label="Answer" record={record} />
-          </TableCell>
-          {
-            (Array.from(Array(visibleColumns.length - 2).keys())).map((v, i) => (
-              <TableCell key={i}>&nbsp;</TableCell>
-            ))
-          }
-          <TableCell>
-            &nbsp;
-          </TableCell>
-        </TableRow>
-      </>
-    );
+  if (!record) {
+    return null;
   }
 
   return (
@@ -160,31 +103,17 @@ const CustomGridItem = ({
         className={classes.cursor}
         onClick={link(record.id)}
       >
-        <TableCell>
-          {
-            !!record.FollowupQuestions && record.FollowupQuestions.length > 0 && QUESTIONS_ENABLE_TREE_LIST === '1' && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-
-                    setExpanded(!expanded);
-                  }}
-                >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
-          }
-        </TableCell>
-
+        {
+          visibleColumns.includes('fk_questionId') && (
+            <TableCell>
+              <AnswerRelatedQuestionField label="resources.answers.fields.fk_questionId" record={record} />
+            </TableCell>
+          )
+        }
         {
           visibleColumns.includes('text') && (
             <TableCell>
-              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} />
+              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} hideRelatedQuestions />
             </TableCell>
           )
         }
@@ -250,22 +179,6 @@ const CustomGridItem = ({
           <DropDownMenu record={record} />
         </TableCell>
       </TableRow>
-      {
-        expanded && record.FollowupQuestions && !!record.FollowupQuestions.length && (
-          <>
-            {
-              record.FollowupQuestions.map((child, iii) => (
-                <CustomGridItem
-                  record={child}
-                  visibleColumns={visibleColumns}
-                  key={iii}
-                  level={(level || 0) + 1}
-                />
-              ))
-            }
-          </>
-        )
-      }
     </>
   );
 };
@@ -301,7 +214,7 @@ const CustomGrid = ({ visibleColumns }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>&nbsp;</TableCell>
+                <Th label="resources.answers.fields.fk_questionId" field="fk_questionId" />
                 <Th label="resources.answers.fields.text" field="text" />
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />

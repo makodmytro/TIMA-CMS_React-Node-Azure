@@ -1,5 +1,6 @@
 import React from 'react';
 import omit from 'lodash/omit';
+import isString from 'lodash/isString';
 import { Form } from 'react-final-form';
 import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -39,7 +40,8 @@ const AnswerEdit = () => {
   const dataProvider = useDataProvider();
   const { answer, refresh } = useAnswer();
 
-  const disableEdit = /*useDisabledEdit(answer?.fk_topicId) ||*/ (answer && answer.allowEdit === false);
+  const disableEdit = (answer && answer.allowEdit === false);
+  const disableDelete = (answer && answer.allowEdit === false);
 
   const onSubmit = async (values) => {
     try {
@@ -55,13 +57,15 @@ const AnswerEdit = () => {
       notify('The answer was updated');
       return refresh();
     } catch (err) {
-      return notify('Failed to update', 'error');
+      return notify(err?.body?.message || 'Failed to update', 'error');
     }
   };
 
   React.useEffect(() => {
-    refresh();
-  }, []);
+    if (!answer || answer?.id !== parseInt(id, 10)) {
+      refresh();
+    }
+  }, [id]);
 
   const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
     let i = 0;
@@ -97,16 +101,28 @@ const AnswerEdit = () => {
             ...answer,
           }}
           enableReinitialize
-          render={({ handleSubmit, valid }) => {
+          render={({ handleSubmit, valid, values }) => {
+            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text'].every((key) => {
+              if (!answer) {
+                return false;
+              }
+
+              if (isString(values[key]) && isString(answer[key])) {
+                return values[key].trim() === answer[key].trim();
+              }
+
+              return answer && values[key] === answer[key];
+            });
+
             return (
               <Box>
                 <form onSubmit={handleSubmit}>
                   <Box p={2}>
-                    <FormFields edit />
+                    <FormFields edit record={answer} />
                   </Box>
                   <Box display="flex" p={2} bgcolor="#f5f5f5">
                     <Box flex={1}>
-                      <Button type="submit" variant="contained" color="primary" disabled={disableEdit || !valid}>
+                      <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
                         <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                       </Button>
                     </Box>
@@ -115,7 +131,7 @@ const AnswerEdit = () => {
                         basePath="answers"
                         record={answer}
                         undoable={false}
-                        disabled={disableEdit}
+                        disabled={disableDelete}
                       />
                     </Box>
                   </Box>

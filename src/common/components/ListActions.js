@@ -30,7 +30,7 @@ const config = {
 };
 
 export const getVisibleColumns = (columns, resource, defaults = []) => {
-  const savedConfig = sessionStorage.getItem(`columns-${resource}`);
+  const savedConfig = localStorage.getItem(`tima-cms-columns-${resource}`);
 
   if (savedConfig) {
     return JSON.parse(savedConfig);
@@ -52,7 +52,7 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 };
 
 export const handleColumnsChange = (resource, callback) => (columns) => {
-  sessionStorage.setItem(`columns-${resource}`, JSON.stringify(columns));
+  localStorage.setItem(`tima-cms-columns-${resource}`, JSON.stringify(columns));
   callback(columns);
 };
 

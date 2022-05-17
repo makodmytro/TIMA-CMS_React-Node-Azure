@@ -13,19 +13,21 @@ import ExpandIcon from '@material-ui/icons/ExpandMore';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import EditDialog from './EditDialog';
-import { useDisabledDelete } from '../../hooks';
 
 const DropdownMenu = ({
   record,
   editInline,
   disabled,
+  disabledDelete,
+  deleteComponent,
+  onEditCallback,
 }) => {
   const refresh = useRefresh();
   const translate = useTranslate();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = record?.allowEdit === false || disabled;
-  const disableDelete = useDisabledDelete(record?.fk_topicId) || disabled;
+  const disableDelete = record?.allowDelete === false || disabled || disabledDelete;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -81,7 +83,12 @@ const DropdownMenu = ({
           {
             editInline && (
               <>
-                <EditDialog record={record} open={open} onClose={() => setOpen(false)} />
+                <EditDialog
+                  record={record}
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  afterEdit={onEditCallback}
+                />
                 <Button
                   disabled={disableEdit}
                   onClick={() => {
@@ -119,19 +126,33 @@ const DropdownMenu = ({
           )*/
         }
         <MenuItem onClick={handleClose}>
-          <ResourceContextProvider value="questions">
-            <DeleteButton
-              basePath="/questions"
-              record={record}
-              undoable={false}
-              onClick={handleClose}
-              resource="questions"
-              onSuccess={() => refresh()}
-              fullWidth
-              style={{ justifyContent: 'flex-start' }}
-              disabled={disableDelete}
-            />
-          </ResourceContextProvider>
+          {
+            !!deleteComponent && <>{deleteComponent}</>
+          }
+          {
+            !deleteComponent && (
+              <ResourceContextProvider value="questions">
+                <DeleteButton
+                  basePath="/questions"
+                  record={record}
+                  undoable={false}
+                  onClick={handleClose}
+                  resource="questions"
+                  onSuccess={() => {
+                    if (onEditCallback) {
+                      onEditCallback();
+                    } else {
+                      refresh();
+                    }
+                  }}
+                  fullWidth
+                  style={{ justifyContent: 'flex-start' }}
+                  disabled={disableDelete}
+                />
+              </ResourceContextProvider>
+            )
+          }
+
         </MenuItem>
         {/*
         <MenuItem onClick={handleClose}>

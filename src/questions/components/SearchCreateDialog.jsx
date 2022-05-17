@@ -91,6 +91,7 @@ const Filters = ({
 };
 
 const ResultsList = ({
+  record,
   questions,
   selected,
   toggleSelect,
@@ -131,7 +132,7 @@ const ResultsList = ({
                     checked={isSelected(question)}
                     value={isSelected(question)}
                     onClick={() => toggleSelect(question)}
-                    disabled={boolDisabledEdit(permissions, question?.fk_topicId)}
+                    disabled={record?.id === question?.fk_answerId}
                   />
                 </TableCell>
                 <TableCell>
@@ -139,8 +140,13 @@ const ResultsList = ({
                 </TableCell>
                 <TableCell style={{ width: '50%' }}>
                   {
-                    question.fk_answerId && (
+                    question.fk_answerId && question?.fk_answerId !== record?.id && (
                       <AnswerField record={question} />
+                    )
+                  }
+                  {
+                    question?.fk_answerId === record?.id && (
+                      <>{translate('misc.already_linked')}</>
                     )
                   }
                   {
@@ -184,7 +190,7 @@ const SearchCreateDialog = ({
 
       afterCreate(data);
     } catch (e) {
-      notify('Unexpected error', 'error');
+      notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
@@ -217,7 +223,7 @@ const SearchCreateDialog = ({
       setQuestions(data);
       setEnableCreate(!data.length);
     } catch (err) {
-      notify('Unexpected error', 'error');
+      notify(err?.body?.message || 'Unexpected error', 'error');
     }
     setLoading(false);
   }, 500);
@@ -283,6 +289,7 @@ const SearchCreateDialog = ({
             questions,
             selected,
             toggleSelect,
+            record,
           }}
         />
       </Box>

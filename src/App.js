@@ -2,12 +2,14 @@ import React from 'react';
 import './App.css';
 import { useStore } from 'react-redux';
 import { Route, useLocation } from 'react-router-dom'; // eslint-disable-line
+import { createBrowserHistory } from 'history'; // eslint-disable-line
 import {
   Resource,
   AdminContext,
   AdminUI,
   useDataProvider,
 } from 'react-admin';
+import IdleTracker from 'idle-tracker';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import authProvider from './common/providers/authProvider';
@@ -33,12 +35,27 @@ import theme from './common/theme';
 import AzureLogin from './auth/azure';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
+const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
+const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
+const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
+const IDLE_TIMEOUT_URL = process.env.REACT_APP_IDLE_TIMEOUT_URL;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
     return r();
   }, ms);
 });
+let idleTracker;
+
+if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+  idleTracker = new IdleTracker({
+    timeout: parseInt(IDLE_TIMEOUT_SECONDS, 10) * 1000,
+    onIdleCallback: () => {
+      sessionStorage.clear();
+      window.location.href = IDLE_TIMEOUT_URL;
+    },
+  });
+}
 
 const AsyncResources = () => {
   const store = useStore();
@@ -167,6 +184,33 @@ const AsyncResources = () => {
     );
   }
 
+  let customRoutes = [
+    <Route
+      exact
+      key={0}
+      path="/"
+      component={dashboard}
+    />,
+    <Route
+      exact
+      key={1}
+      path="/test-ask"
+      component={TestAsk}
+    />
+  ];
+
+  if (HIDE_MENU_ITEMS.includes('dashboard')) {
+    customRoutes = [customRoutes[1]];
+  }
+
+  if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+    if (!isLoginScreen()) {
+      idleTracker.start();
+    } else {
+      idleTracker.end();
+    }
+  }
+
   return (
     <AdminUI
       title="TIMA Management"
@@ -175,20 +219,7 @@ const AsyncResources = () => {
       {...(
         USE_AZURE_LOGIN === '1' ? { loginPage: AzureLogin } : {}
       )}
-      customRoutes={[
-        <Route
-          exact
-          key={0}
-          path="/"
-          component={dashboard}
-        />,
-        <Route
-          exact
-          key={1}
-          path="/test-ask"
-          component={TestAsk}
-        />,
-      ]}
+      customRoutes={customRoutes}
     >
       {
         (permissions) => {
@@ -212,12 +243,6 @@ const AsyncResources = () => {
 
           return ([
             <Resource
-              key="topics"
-              name="topics"
-              {...topic}
-            />,
-            languages,
-            <Resource
               key="answers"
               name="answers"
               {...answer}
@@ -227,6 +252,12 @@ const AsyncResources = () => {
               name="questions"
               {...question}
             />,
+            <Resource
+              key="topics"
+              name="topics"
+              {...topic}
+            />,
+            languages,
             <Resource
               key="stats/sessions"
               name="stats/sessions"
@@ -248,13 +279,24 @@ const AsyncResources = () => {
               name="audit"
               {...audit}
             />,
-          ]);
+          ].sort((a, b) => {
+            if (!DEFAULT_HOMEPAGE || !a) {
+              return 0;
+            }
+
+            return a?.key.toLowerCase() === DEFAULT_HOMEPAGE ? -1 : 0;
+          }));
         }
       }
 
     </AdminUI>
   );
 };
+
+const history = createBrowserHistory({
+  forceRefresh: true,
+  basename: '#/'
+});
 
 function App() {
   return (
@@ -263,6 +305,7 @@ function App() {
       authProvider={authProvider}
       dataProvider={resDataProvider}
       customReducers={{ lng: lngReducer, custom: customReducer }}
+      history={history}
     >
       <AsyncResources />
     </AdminContext>

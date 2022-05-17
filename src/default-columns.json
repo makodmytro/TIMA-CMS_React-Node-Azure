@@ -1,26 +1,20 @@
 {
   "topics": [
     "name",
-    "welcomeText",
     "updatedAt",
     "syncScheduled",
     "lastSyncAt"
   ],
   "answers": [
+    "fk_questionId",
     "text",
     "fk_topicId",
-    "fk_createdByUserId",
-    "status",
-    "updatedAt"
+    "status"
   ],
   "questions": [
     "text",
     "fk_answerId",
-    "fk_topicId",
-    "fk_createdByUserId",
-    "updatedAt",
-    "feedbackPositiveCount",
-    "feedbackNegativeCount"
+    "fk_topicId"
   ],
   "languages": [
     "code",

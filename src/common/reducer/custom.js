@@ -1,6 +1,7 @@
 const defaultState = {
   topics: [],
   topicsTree: [],
+  topicsLabels: [],
   topicsTreeTimestamp: null,
   loading: false,
   languages: [],
@@ -15,6 +16,12 @@ const defaultState = {
 
 export default (state = defaultState, { type, payload }) => {
   switch (type) {
+    case 'CUSTOM_TOPICS_LABELS_SUCCESS': {
+      return {
+        ...state,
+        topicsLabels: payload,
+      };
+    }
     case 'CUSTOM_LANGUAGES_FETCH_SUCCESS': {
       return {
         ...state,

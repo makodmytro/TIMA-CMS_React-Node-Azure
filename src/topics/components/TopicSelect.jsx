@@ -16,14 +16,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as TopicsLogic from '../logic'
 
 const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
+const TOPICS_LEVEL_LABELS = process.env.REACT_APP_TOPICS_LEVEL_LABELS ? process.env.REACT_APP_TOPICS_LEVEL_LABELS.split(',') : ['', '', ''];
 
 const MultiTopicSelect = ({
   source,
-  label,
+  depth,
   isRequired,
   disabled,
   filter,
   editting,
+  allowEmpty,
+  label,
+  anyLevelSelectable,
 }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -67,6 +71,10 @@ const MultiTopicSelect = ({
       onTopicOneChange(child.fk_parentTopicId);
 
       setTimeout(() => onTopicTwoChange(child.id), 500);
+    }
+
+    if (depth && depth === 2) {
+      return;
     }
 
     // try to match to level 2 ChildTopics
@@ -135,7 +143,9 @@ const MultiTopicSelect = ({
         onChange(null);
 
         setTopicsChild(topic.ChildTopics);
-      } else {
+      }
+
+      if (!topic.ChildTopics?.length || anyLevelSelectable) {
         onChange(topicOne);
       }
     }
@@ -152,7 +162,7 @@ const MultiTopicSelect = ({
         return;
       }
 
-      if (topic.ChildTopics?.length > 0) {
+      if (topic.ChildTopics?.length > 0 && (!depth || depth > 2)) {
         onChange(null);
 
         setTopicsGrandchild(topic.ChildTopics);
@@ -175,6 +185,17 @@ const MultiTopicSelect = ({
     }
   }, [value, topicOne, topics]);
 
+  const clear = () => {
+    onChange(null);
+    setTimeout(() => {
+      onTopicOneChange(null);
+      onTopicTwoChange(null);
+      onTopicThreeChange(null);
+      setTopicsChild([]);
+      setTopicsGrandchild([]);
+    }, 200);
+  };
+
   const error = (errors[source] && sourceDirty) || (errors.topicOne && topicOneDirty)
     || (errors.topicTwo && topicTwoDirty) || (errors.topicThree && topicThreeDirty);
 
@@ -185,7 +206,7 @@ const MultiTopicSelect = ({
   }, []);
 
   React.useEffect(() => {
-    if (filter.fk_languageId) {
+    if (filter && filter.fk_languageId) {
       setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
     } else {
       setFilteredTopics(topics);
@@ -193,20 +214,23 @@ const MultiTopicSelect = ({
   }, [filter, topics]);
 
   const selectedTopicLabel = TopicsLogic.getTreeLabel(value, topics);
-/*
-  const selected = topicsGrandchild.length
-    ? topicsGrandchild.find((t) => t.id === value)
-    : (
-      topicsChild.length
-        ? topicsChild.find((t) => t.id === value)
-        : topics.find((t) => t.id === value)
-    );
-*/
+
   return (
     <Box>
-      <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
-        {translate(label)}
-      </Typography>
+      {
+        !!label && (
+          <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
+            {translate(label)}&nbsp;
+            {
+              allowEmpty && (
+                <small onClick={() => clear()} style={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'lowercase' }}>
+                  ({translate('misc.clear')})
+                </small>
+              )
+            }
+          </Typography>
+        )
+      }
       {
         loading && <Box mb={2}><CircularProgress size={20} /></Box>
       }
@@ -214,62 +238,64 @@ const MultiTopicSelect = ({
         !loading && (editting && !toggleEdit) && (
           <Box mb={2}>
             <Button color="secondary" onClick={() => setToggleEdit(true)} size="small">
-              {selectedTopicLabel} &nbsp;&nbsp;<PencilIcon fontSize="small" />
+              {selectedTopicLabel || translate('misc.none')} &nbsp;&nbsp;<PencilIcon fontSize="small" />
             </Button>
           </Box>
         )
       }
       {
         !loading && (!editting || (editting && toggleEdit)) && (
-          <Box display="flex">
-            <Box flex={1} mr={1}>
-              <SelectInput
-                source="topicOne"
-                choices={filteredTopics}
-                optionText="name"
-                optionValue="id"
-                label=""
-                fullWidth
-                style={{ marginTop: '0px' }}
-                disabled={disabled}
-                validate={isRequired ? required() : null}
-              />
+          <>
+            <Box display="flex">
+              <Box flex={1} mr={1}>
+                <SelectInput
+                  source="topicOne"
+                  choices={filteredTopics}
+                  optionText="name"
+                  optionValue="id"
+                  label={TOPICS_LEVEL_LABELS[0]}
+                  fullWidth
+                  style={{ marginTop: '0px' }}
+                  disabled={disabled}
+                  validate={isRequired ? required() : null}
+                />
+              </Box>
+              {
+                !!topicsChild.length && (
+                  <Box flex={1} mr={1}>
+                    <SelectInput
+                      source="topicTwo"
+                      choices={topicsChild}
+                      optionText="name"
+                      optionValue="id"
+                      label={TOPICS_LEVEL_LABELS[1]}
+                      fullWidth
+                      style={{ marginTop: '0px' }}
+                      disabled={disabled}
+                      validate={isRequired ? required() : null}
+                    />
+                  </Box>
+                )
+              }
+              {
+                !!topicsGrandchild.length && (!depth || depth > 2) && (
+                  <Box flex={1}>
+                    <SelectInput
+                      source="topicThree"
+                      choices={topicsGrandchild}
+                      optionText="name"
+                      optionValue="id"
+                      label={TOPICS_LEVEL_LABELS[2]}
+                      fullWidth
+                      style={{ marginTop: '0px' }}
+                      disabled={disabled}
+                      validate={isRequired ? required() : null}
+                    />
+                  </Box>
+                )
+              }
             </Box>
-            {
-              !!topicsChild.length && (
-                <Box flex={1} mr={1}>
-                  <SelectInput
-                    source="topicTwo"
-                    choices={topicsChild}
-                    optionText="name"
-                    optionValue="id"
-                    label=""
-                    fullWidth
-                    style={{ marginTop: '0px' }}
-                    disabled={disabled}
-                    validate={isRequired ? required() : null}
-                  />
-                </Box>
-              )
-            }
-            {
-              !!topicsGrandchild.length && (
-                <Box flex={1}>
-                  <SelectInput
-                    source="topicThree"
-                    choices={topicsGrandchild}
-                    optionText="name"
-                    optionValue="id"
-                    label=""
-                    fullWidth
-                    style={{ marginTop: '0px' }}
-                    disabled={disabled}
-                    validate={isRequired ? required() : null}
-                  />
-                </Box>
-              )
-            }
-          </Box>
+          </>
         )
       }
     </Box>
@@ -283,6 +309,9 @@ const TopicSelect = ({
   isRequired,
   editting,
   filter,
+  depth,
+  allowEmpty,
+  anyLevelSelectable,
 }) => {
   if (!SELECT_TOPIC_LEVELS || SELECT_TOPIC_LEVELS === '0') {
     return (
@@ -306,7 +335,15 @@ const TopicSelect = ({
   return (
     <MultiTopicSelect
       {...{
-        disabled, source, label, isRequired, editting, filter,
+        disabled,
+        source,
+        isRequired,
+        editting,
+        filter,
+        depth,
+        allowEmpty,
+        label,
+        anyLevelSelectable,
       }}
     />
   );

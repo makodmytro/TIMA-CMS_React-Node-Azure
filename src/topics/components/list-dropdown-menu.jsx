@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslate } from 'react-admin';
+import { useTranslate, useRedirect } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
@@ -12,8 +12,10 @@ const DropdownMenu = ({
   record,
   onSync,
   onPermissionsClick,
+  showCreateChild,
 }) => {
   const admin = useIsAdmin();
+  const redirect = useRedirect();
   const translate = useTranslate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -97,6 +99,23 @@ const DropdownMenu = ({
                 fullWidth
               >
                 {translate('misc.manage_permissions')}
+              </Button>
+            </MenuItem>
+          )
+        }
+        {
+          showCreateChild && (
+            <MenuItem
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button
+                variant="outlined"
+                onClick={(e) => {
+                  redirect(`/topics/create?fk_parentTopicId=${record?.id}`);
+                }}
+                fullWidth
+              >
+                {translate('resources.topics.create_child')}
               </Button>
             </MenuItem>
           )

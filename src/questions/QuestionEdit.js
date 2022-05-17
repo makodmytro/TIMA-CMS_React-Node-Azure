@@ -32,8 +32,8 @@ import IgnoreButton from './components/ignore-button';
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const CustomToolbar = (props) => {
-  const disableEdit = /*useDisabledEdit(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
-  const disableDelete = /*useDisabledDelete(props?.record?.fk_topicId) ||*/ props?.record?.allowEdit === false;
+  const disableEdit = props?.record?.allowEdit === false;
+  const disableDelete = props?.record?.allowDelete === false;
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -125,7 +125,7 @@ const FormFields = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
-  const disableEdit =/* useDisabledEdit(record?.fk_topicId);*/ record?.allowEdit === false;
+  const disableEdit = record?.allowEdit === false;
 
   let fetching = false;
 
@@ -248,17 +248,6 @@ const FormFields = ({
         }}
         disabled={disableEdit}
       />
-      <ReferenceInput
-        label="resources.questions.fields.fk_parentQuestionId"
-        source="fk_parentQuestionId"
-        reference="questions"
-        filter={{ fk_topicId: fkTopicId }}
-        disabled={!fkTopicId}
-        fullWidth
-        allowEmpty
-      >
-        <SelectInput optionText="text" emptyText="None" />
-      </ReferenceInput>
     </>
   );
 };

@@ -7,7 +7,7 @@ import {
   useLocale,
   useSetLocale,
   useTranslate,
-  useDataProvider
+  useDataProvider,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -17,8 +17,10 @@ import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 import DemoIcon from '@material-ui/icons/AddToQueue';
 import { baseApi } from '../httpClient';
+import { useIsAdmin } from '../../hooks';
 
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
+const ADMIN_MENUS = ['users', 'audit'];
 
 const Menu = ({ onMenuClick, logout }) => {
   const [backend, setBackend] = React.useState(null);
@@ -31,6 +33,7 @@ const Menu = ({ onMenuClick, logout }) => {
   const locale = useLocale();
   const setLocale = useSetLocale();
   const dataProvider = useDataProvider();
+  const isAdmin = useIsAdmin();
 
   const getBackendVersion = async () => {
     const { data } = await dataProvider.backendVersion();
@@ -71,16 +74,23 @@ const Menu = ({ onMenuClick, logout }) => {
   return (
     <>
       <Box py={2}>
-        <MenuItemLink
-          to="/"
-          primaryText={translate('Dashboard')}
-          leftIcon={<HomeIcon />}
-          onClick={onMenuClick}
-          sidebarIsOpen={open}
-        />
+        {
+          !HIDE_MENU_ITEMS.includes('dashboard') && (
+            <MenuItemLink
+              to="/"
+              primaryText={translate('Dashboard')}
+              leftIcon={<HomeIcon />}
+              onClick={onMenuClick}
+              sidebarIsOpen={open}
+            />
+          )
+        }
+
         {
           resources
-            .filter((r) => r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name))
+            .filter((r) => {
+              return (r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name)) && (!ADMIN_MENUS.includes(r.name) || isAdmin);
+            })
             .map((resource) => (
               <MenuItemLink
                 key={resource.name}
@@ -94,14 +104,17 @@ const Menu = ({ onMenuClick, logout }) => {
               />
             ))
         }
-        <MenuItemLink
-          to="/test-ask"
-          primaryText={translate('Test')}
-          leftIcon={<DemoIcon />}
-          onClick={onMenuClick}
-          sidebarIsOpen={open}
-        />
-
+        {
+          isAdmin && (
+            <MenuItemLink
+              to="/test-ask"
+              primaryText={translate('Test')}
+              leftIcon={<DemoIcon />}
+              onClick={onMenuClick}
+              sidebarIsOpen={open}
+            />
+          )
+        }
         {isXSmall && logout}
       </Box>
       <div

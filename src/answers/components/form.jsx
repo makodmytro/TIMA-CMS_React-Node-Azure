@@ -4,49 +4,24 @@ import {
   required,
   SelectInput,
   Confirm,
-  BooleanInput,
-  usePermissions,
   useTranslate,
 } from 'react-admin';
+import Box from '@material-ui/core/Box';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
-import { useDisabledCreate } from '../../hooks';
+import { useDisabledCreate, useIsAdmin } from '../../hooks';
+import ApprovedInput from './ApprovedInput';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
-
-const Approved = (props) => {
-  const { permissions } = usePermissions();
-
-  const { input: { onChange: changeApprovedAt } } = useField('approvedAt');
-  const { input: { onChange: changeApprovedBy } } = useField('approvedBy_editorId');
-
-  const afterChange = (checked) => {
-    if (checked) {
-      changeApprovedAt((new Date()).toISOString());
-      changeApprovedBy(permissions?.editorId);
-    } else {
-      changeApprovedAt(null);
-      changeApprovedBy(null);
-    }
-  };
-
-  return (
-    <BooleanInput
-      source={props.source}
-      label={props.label}
-      onChange={afterChange}
-      disabled={props.disabled === true}
-    />
-  );
-};
 
 const Form = ({
   languages, topics, edit, record,
 }) => {
   const _languages = useSelector((state) => state.custom.languages);
+  const admin = useIsAdmin();
 
   const translate = useTranslate();
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
@@ -131,6 +106,8 @@ const Form = ({
         lang={getLang()}
         disabled={disableEdit}
       />
+
+      {_languages.length > 1 && (
       <ReferenceInput
         source="fk_languageId"
         label="resources.answers.fields.fk_languageId"
@@ -145,20 +122,28 @@ const Form = ({
           disabled={disableEdit}
         />
       </ReferenceInput>
-      <TopicSelect
-        source="fk_topicId"
-        isRequired
-        label="resources.answers.fields.fk_topicId"
-        editting={edit}
-        disabled={disableEdit}
-        filter={{ fk_languageId: fkLanguageId }}
-      />
+      )}
+      <Box pt={2}>
+        <TopicSelect
+          source="fk_topicId"
+          isRequired
+          label="resources.answers.fields.fk_topicId"
+          editting={edit}
+          disabled={disableEdit}
+          filter={{ fk_languageId: fkLanguageId }}
+        />
+      </Box>
+
       {
         !USE_WORKFLOW && (
-          <Approved source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
+          <ApprovedInput source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
         )
       }
-      <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
+      {
+        admin && (
+          <TagsInput source="tags" label="resources.answers.fields.tags" disabled={disableEdit} />
+        )
+      }
     </>
   );
 };
