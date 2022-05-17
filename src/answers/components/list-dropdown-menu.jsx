@@ -8,7 +8,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import BatchApproveButton from './batch-approve-button';
 
 const DropdownMenu = ({
   record,
@@ -30,14 +29,6 @@ const DropdownMenu = ({
     setAnchorEl(null);
   };
 
-  /*
-  TODO: batch approve should be enabled for non workflow modes only
-          <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
-          <BatchApproveButton answerId={record.id} disabled={disableEdit} />
-        </MenuItem>
-*/
   return (
     <div>
       <Button

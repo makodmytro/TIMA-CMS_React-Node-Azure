@@ -82,8 +82,7 @@ const CustomLogout = () => {
       account: accounts[0],
       postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI,
     });
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
+    sessionStorage.clear();
   };
 
   return (
@@ -101,7 +100,7 @@ const MyAppBar = (props) => {
       {...rest}
       userMenu={<MyUserMenu {...rest} />}
       style={{ backgroundColor: '#fafafa' }}
-      logout={USE_AZURE_LOGIN === '1' ? <CustomLogout /> : <Logout />}
+      logout={USE_AZURE_LOGIN === '1' && sessionStorage.getItem('azure-login') === '1' ? <CustomLogout /> : <Logout />}
     >
       <Typography
         variant="h6"

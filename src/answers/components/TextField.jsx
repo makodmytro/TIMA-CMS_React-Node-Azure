@@ -34,8 +34,8 @@ const styles = makeStyles(() => ({
     '&:hover': {
       textDecoration: 'underline',
       textDecorationColor: '#D5D5D5',
-    }
-  }
+    },
+  },
 }));
 
 const TextField = ({ record }) => {

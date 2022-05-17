@@ -7,19 +7,16 @@ import {
   useTranslate,
 } from 'react-admin';
 import { useStore } from 'react-redux';
-import {
-  AuthenticatedTemplate, useMsal,
-  useIsAuthenticated,
-} from '@azure/msal-react';
-import { Typography, Box } from '@material-ui/core';
+import { useMsal, useIsAuthenticated } from '@azure/msal-react';
+import { Typography, Box, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { loginRequest } from '../azure-auth-config';
-import Logo from '../assets/TIMA_logo.png';
+import Logo from '../assets/microsoft-logo.png';
 
 const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
-const Authenticated = () => {
+const Authenticated = ({ setLoading }) => {
   const [error, setError] = React.useState(false);
   const { instance, accounts } = useMsal();
   const dataProvider = useDataProvider();
@@ -31,6 +28,8 @@ const Authenticated = () => {
   const translate = useTranslate();
 
   const requestProfileData = async () => {
+    setLoading(true);
+
     try {
       // Silently acquires an access token which is then attached to a request for MS Graph data
       console.log('requestProfileData called');
@@ -55,11 +54,14 @@ const Authenticated = () => {
           } catch (e) {} // eslint-disable-line
         }
 
+        sessionStorage.setItem('azure-login', 1);
+        setLoading(false);
         redirect('/');
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
       console.error(err);
+      setLoading(false);
       if (err?.subError === 'consent_required') {
         const url = `${process.env.REACT_APP_AZURE_AUTHORITY}/adminconsent?client_id=${process.env.REACT_APP_AZURE_CLIENT_ID}&state=1&redirect_uri=${process.env.REACT_APP_AZURE_REDIRECT_URI}`;
         window.location.href = url;
@@ -85,31 +87,15 @@ const Authenticated = () => {
     }
   }, [isAuthenticated]);
 
+  const login = () => {
+    instance.loginRedirect();
+  };
+
   return (
-    <Box
-      textAlign="center"
-      alignContent="center"
-      style={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        paddingTop: '30vh',
-        boxSizing: 'border-box',
-        backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
-      }}
-    >
-      {
-        !error && (
-          <>
-            <Box py={2}>
-              <img src={Logo} alt="logo" width="135" />
-            </Box>
-            <Typography variant="body2" component="div" style={{ color: 'white' }}>
-              LOADING
-            </Typography>
-          </>
-        )
-      }
+    <Box>
+      <Button onClick={login} fullWidth variant="outlined">
+        <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
+      </Button>
       {
         error && (
           <Box textAlign="center" mt={15} display="flex" justifyContent="center">
@@ -130,10 +116,8 @@ const Authenticated = () => {
   );
 };
 
-export default () => {
+export default ({ setLoading }) => {
   return (
-    <AuthenticatedTemplate>
-      <Authenticated />
-    </AuthenticatedTemplate>
+    <Authenticated setLoading={setLoading} />
   );
 };

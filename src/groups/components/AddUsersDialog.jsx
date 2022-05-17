@@ -36,7 +36,7 @@ const Filters = ({
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit, form, values }) => {
+      render={({ handleSubmit, form }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
@@ -131,7 +131,6 @@ const AddUsersDialog = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
-  const [enableCreate, setEnableCreate] = React.useState(false);
   const [users, setUsers] = React.useState(null);
   const translate = useTranslate();
   const dataProvider = useDataProvider();

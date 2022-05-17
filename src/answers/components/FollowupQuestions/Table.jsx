@@ -13,7 +13,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
 import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';

@@ -32,13 +32,11 @@ import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
 import theme from './common/theme';
-import AzureLogin from './auth/azure';
+import Login from './auth/login';
 
-const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
-const IDLE_TIMEOUT_URL = process.env.REACT_APP_IDLE_TIMEOUT_URL;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -47,12 +45,12 @@ const delay = (ms) => new Promise((r) => { // eslint-disable-line
 });
 let idleTracker;
 
-if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+if (IDLE_TIMEOUT_SECONDS) {
   idleTracker = new IdleTracker({
     timeout: parseInt(IDLE_TIMEOUT_SECONDS, 10) * 1000,
     onIdleCallback: () => {
       sessionStorage.clear();
-      window.location.href = IDLE_TIMEOUT_URL;
+      window.location.reload();
     },
   });
 }
@@ -196,14 +194,14 @@ const AsyncResources = () => {
       key={1}
       path="/test-ask"
       component={TestAsk}
-    />
+    />,
   ];
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
     customRoutes = [customRoutes[1]];
   }
 
-  if (IDLE_TIMEOUT_SECONDS && IDLE_TIMEOUT_URL) {
+  if (IDLE_TIMEOUT_SECONDS) {
     if (!isLoginScreen()) {
       idleTracker.start();
     } else {
@@ -216,9 +214,7 @@ const AsyncResources = () => {
       title="TIMA Management"
       theme={theme}
       layout={MyLayout}
-      {...(
-        USE_AZURE_LOGIN === '1' ? { loginPage: AzureLogin } : {}
-      )}
+      loginPage={Login}
       customRoutes={customRoutes}
     >
       {
@@ -279,7 +275,7 @@ const AsyncResources = () => {
               name="audit"
               {...audit}
             />,
-          ].sort((a, b) => {
+          ].sort((a) => {
             if (!DEFAULT_HOMEPAGE || !a) {
               return 0;
             }
@@ -295,7 +291,7 @@ const AsyncResources = () => {
 
 const history = createBrowserHistory({
   forceRefresh: true,
-  basename: '#/'
+  basename: '#/',
 });
 
 function App() {

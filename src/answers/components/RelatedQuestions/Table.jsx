@@ -10,7 +10,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
-import ForumTwoTone from '@material-ui/icons/ForumTwoTone';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import AlertDialog from '../../../common/components/Alert';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
@@ -19,7 +18,6 @@ import UseAsSuggestionSwitchField from '../../../questions/components/use-as-sug
 import useAnswer from '../../useAnswer';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
-const Empty = (<span>&nbsp;</span>);
 
 const RelatedQuestionsTable = ({
   record,

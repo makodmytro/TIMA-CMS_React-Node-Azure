@@ -13,7 +13,7 @@ import PencilIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import * as TopicsLogic from '../logic'
+import * as TopicsLogic from '../logic';
 
 const SELECT_TOPIC_LEVELS = process.env.REACT_APP_SELECT_TOPIC_LEVELS;
 const TOPICS_LEVEL_LABELS = process.env.REACT_APP_TOPICS_LEVEL_LABELS ? process.env.REACT_APP_TOPICS_LEVEL_LABELS.split(',') : ['', '', ''];
