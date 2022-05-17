@@ -46,6 +46,7 @@ const english = {
   'Failed to sync': 'Failed to sync',
   'The questions were set as follow up': 'The questions were set as follow up',
   'Comment added successfully': 'Comment added successfully',
+  'Deleted successfully': 'Deleted successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -134,12 +135,18 @@ const english = {
     editing_answer: 'Editing answer',
     filters: 'Filters',
     already_linked: 'Already linked to this Answer',
+    to_confirm: 'to confirm',
+    you_will_lose: 'You will permanently lose',
   },
   resources: {
     topics: {
       name: 'Topic |||| Topics',
       filter_by_topics: 'Filter by topics',
       create_child: 'Create child',
+      delete_cascade_one: 'all related questions',
+      delete_cascade_two: 'all related answers',
+      delete_cascade_three: 'all related permissions',
+      delete: 'Delete topic',
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',

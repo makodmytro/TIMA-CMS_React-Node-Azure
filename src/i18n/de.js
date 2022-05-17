@@ -46,6 +46,7 @@ const german = {
   'Failed to sync': 'Sync nicht möglich',
   'The questions were set as follow up': 'Die Fragen wurden als Folgefragen erstellt',
   'Comment added successfully': 'Kommentar erfolgreich hinzugefügt',
+  'Deleted successfully': 'Deleted successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Bist du sicher, dass du die mit dieser Antwort verlinkten Fragen bestätigen möchtest?',
@@ -133,12 +134,18 @@ const german = {
     editing_answer: 'Antwort bearbeiten',
     filters: 'Filter',
     already_linked: 'Bereits verlinkt',
+    to_confirm: 'to confirm',
+    you_will_lose: 'You will permanently lose',
   },
   resources: {
     topics: {
       name: 'Thema |||| Themen',
       filter_by_topics: 'Nach Themen filtern',
       create_child: 'Unterthema hinzufügen',
+      delete_cascade_one: 'all related questions',
+      delete_cascade_two: 'all related answers',
+      delete_cascade_three: 'all related permissions',
+      delete: 'Delete topic',
       fields: {
         name: 'Name',
         topicKey: 'Themen ID',
@@ -226,7 +233,7 @@ const german = {
       status_history: 'Statusverlauf',
       status_can_not_change: 'Der Status kann nicht geändert werden',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
-      allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status wieder auf Bearbeitung',
+      allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
       status: {
         createdAt: 'Datum',
         updatedBy: 'Editor',
