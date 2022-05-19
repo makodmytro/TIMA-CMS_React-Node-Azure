@@ -104,17 +104,13 @@ const Menu = ({ onMenuClick, logout }) => {
               />
             ))
         }
-        {
-          isAdmin && (
-            <MenuItemLink
-              to="/test-ask"
-              primaryText={translate('Test')}
-              leftIcon={<DemoIcon />}
-              onClick={onMenuClick}
-              sidebarIsOpen={open}
-            />
-          )
-        }
+        <MenuItemLink
+          to="/test-ask"
+          primaryText={translate('Test')}
+          leftIcon={<DemoIcon />}
+          onClick={onMenuClick}
+          sidebarIsOpen={open}
+        />
         {isXSmall && logout}
       </Box>
       <div

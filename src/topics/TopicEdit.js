@@ -28,7 +28,7 @@ const CustomToolbar = (props) => {
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const disableEdit = props?.record?.allowEdit === false;
-  const disableDelete = props?.record?.allowDelete === false;
+  const disableDelete = props?.record?.allowDelete !== true;
   const admin = useIsAdmin();
 
   return (
@@ -45,7 +45,7 @@ const CustomToolbar = (props) => {
         <Button
           className="error-btn"
           variant="outlined"
-          disabled={disableDelete && !admin}
+          disabled={disableDelete || !admin}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
