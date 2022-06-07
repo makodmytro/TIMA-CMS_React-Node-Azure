@@ -351,6 +351,9 @@ const english = {
           INTEGRATION_TESTS_OK: 'Integration tests passed',
           DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
+        errors: {
+          MIN_3_QUESTIONS: 'At least 3 questions are required when creating a new answer',
+        },
       },
       fields: {
         id: 'ID',
