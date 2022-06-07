@@ -53,7 +53,15 @@ export default () => {
         <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
           <Grid container justify="center" alignItems="center">
             <Grid item xs={12} sm={4} md={3}>
-              <Box mt={10} p={2} boxShadow={3} bgcolor="white" borderRadius={3} textAlign="center">
+              <Box
+                mt={10}
+                p={2}
+                boxShadow={3}
+                bgcolor="white"
+                borderRadius={3}
+                textAlign="center"
+                style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
+              >
                 <Box py={2} textAlign="center">
                   <img src={Logo} alt="logo" width="135" />
                 </Box>
@@ -73,7 +81,15 @@ export default () => {
       <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
         <Grid container justify="center" alignItems="center">
           <Grid item xs={12} sm={4} md={3}>
-            <Box mt={10} p={2} boxShadow={3} bgcolor="white" borderRadius={3} textAlign="center">
+            <Box
+              mt={10}
+              p={2}
+              boxShadow={3}
+              bgcolor="white"
+              borderRadius={3}
+              textAlign="center"
+              style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
+            >
               <Box py={2} textAlign="center">
                 <img src={Logo} alt="logo" width="135" />
               </Box>
@@ -83,7 +99,9 @@ export default () => {
                     <Box textAlign="center" py={2}>
                       <Azure setLoading={setAzureLoading} />
                     </Box>
-                    <Typography variant="body2" style={{ textTransform: 'uppercase' }}>{translate('misc.or')}</Typography>
+                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: 'white' }}>
+                      {translate('misc.or')}
+                    </Typography>
                   </Box>
                 )
               }
@@ -103,8 +121,9 @@ export default () => {
                       type="submit"
                       variant="outlined"
                       fullWidth
-                      color="primary"
+                      color="secondary"
                       disabled={submitting || loading || azureLoading}
+                      style={{ color: 'white' }}
                     >
                       {
                         l && (

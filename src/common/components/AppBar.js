@@ -99,7 +99,10 @@ const MyAppBar = (props) => {
       color="transparent"
       {...rest}
       userMenu={<MyUserMenu {...rest} />}
-      style={{ backgroundColor: '#1B1A20', color: 'white' }}
+      style={{
+        backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+        color: 'white'
+      }}
       logout={USE_AZURE_LOGIN === '1' && sessionStorage.getItem('azure-login') === '1' ? <CustomLogout /> : <Logout />}
     >
       <Typography

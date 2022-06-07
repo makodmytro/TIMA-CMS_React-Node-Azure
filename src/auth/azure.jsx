@@ -93,7 +93,7 @@ const Authenticated = ({ setLoading }) => {
 
   return (
     <Box>
-      <Button onClick={login} fullWidth variant="outlined">
+      <Button onClick={login} fullWidth variant="outlined" style={{ color: 'white' }} color="secondary">
         <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
       </Button>
       {
