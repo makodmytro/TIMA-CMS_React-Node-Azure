@@ -44,6 +44,7 @@ const english = {
   'Saved successfully': 'Saved successfully',
   'Sync scheduled': 'Sync scheduled',
   'Failed to sync': 'Failed to sync',
+  'Topic created successfully': 'Topic created successfully',
   'The questions were set as follow up': 'The questions were set as follow up',
   'Comment added successfully': 'Comment added successfully',
   'Deleted successfully': 'Deleted successfully',
@@ -70,6 +71,7 @@ const english = {
     schedule_sync: 'Request sync',
     manage_permissions: 'Manage permissions',
     show_questions: 'Show questions',
+    show_answers: 'Show answers',
     show_qr_code: 'Show QR code',
     print: 'Print',
     qr_code: 'QR code',
@@ -137,6 +139,8 @@ const english = {
     already_linked: 'Already linked to this Answer',
     to_confirm: 'to confirm',
     you_will_lose: 'You will permanently lose',
+    processing: 'Processing',
+    done: 'Done',
   },
   resources: {
     topics: {
@@ -147,6 +151,17 @@ const english = {
       delete_cascade_two: 'all related answers',
       delete_cascade_three: 'all related permissions',
       delete: 'Delete topic',
+      steps: {
+        basic: 'Basic information',
+        parent: 'Parent topic',
+        kb_integration: 'KG integration',
+        qna: 'QNA knowledge keys',
+      },
+      kbIntegration: {
+        microsoft_qna_maker: 'Microsoft QnA Maker',
+        amazon_lex: 'Amazon Lex (not enabled)',
+        gpt3: 'GPT3 Questions API (not enabled)',
+      },
       fields: {
         name: 'Name',
         topicKey: 'Topic Key',
@@ -162,10 +177,13 @@ const english = {
         qnaKnowledgeBaseId: 'QNA Knowledgebase ID',
         qnaSubscriptionKey: 'QNA Subscription key',
         fk_parentTopicId: 'Parent topic',
+        has_fk_parentTopicId: 'Has parent',
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
         qnaMetadataKey: 'Metadata key',
         qnaMetadataValue: 'Metadata value',
+        kbIntegration: 'KB Integration',
+        startSync: 'Pull data from QNA now?',
       },
     },
     languages: {
