@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Logo from '../../assets/QnA Manager Logo Simple LQ.png';
+import Logo from '../../assets/QnA Manager Logo Horizontal.png';
 import { baseApi } from '../httpClient';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
@@ -101,7 +101,7 @@ const MyAppBar = (props) => {
       userMenu={<MyUserMenu {...rest} />}
       style={{
         backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
-        color: 'white'
+        color: 'white',
       }}
       logout={USE_AZURE_LOGIN === '1' && sessionStorage.getItem('azure-login') === '1' ? <CustomLogout /> : <Logout />}
     >
@@ -112,7 +112,7 @@ const MyAppBar = (props) => {
         id="react-admin-title"
       />
       <div className={classes.logo}>
-        <img src={Logo} alt="logo" width={80} />
+        <img src={Logo} alt="logo" height={45} />
       </div>
     </AppBar>
   );

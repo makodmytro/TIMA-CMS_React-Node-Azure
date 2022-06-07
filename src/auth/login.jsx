@@ -18,17 +18,27 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  makeStyles,
 } from '@material-ui/core';
 import Azure from './azure';
 import Logo from '../assets/QnA Manager Logo.png';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 
+const styles = makeStyles(() => ({
+  input: {
+    '& input': {
+      backgroundColor: '#f1f1f1',
+    },
+  },
+}));
+
 export default () => {
   const redirect = useRedirect();
   const translate = useTranslate();
   const [azureLoading, setAzureLoading] = React.useState(false);
   const { loading, authenticated } = useAuthState();
+  const classes = styles();
 
   React.useEffect(() => {
     if (authenticated && !loading) {
@@ -115,8 +125,21 @@ export default () => {
                 }}
                 render={({ handleSubmit, submitting }) => (
                   <form onSubmit={handleSubmit}>
-                    <TextInput source="username" label={translate('resources.users.fields.email')} validate={required()} fullWidth />
-                    <TextInput source="password" label={translate('resources.users.fields.password')} type="password" validate={required()} fullWidth />
+                    <TextInput
+                      source="username"
+                      label={translate('resources.users.fields.email')}
+                      validate={required()}
+                      fullWidth
+                      className={classes.input}
+                    />
+                    <TextInput
+                      source="password"
+                      label={translate('resources.users.fields.password')}
+                      type="password"
+                      validate={required()}
+                      fullWidth
+                      className={classes.input}
+                    />
                     <Button
                       type="submit"
                       variant="outlined"
