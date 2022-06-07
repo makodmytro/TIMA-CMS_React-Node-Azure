@@ -227,6 +227,8 @@ const FormFields = (props) => {
           depth={2}
           editting={props?.editting}
           anyLevelSelectable
+          isRequired={!admin}
+          filterFunction={(topic) => topic?.allowCreateChild}
         />
       </HiddenField>
       <HiddenField fieldName="level">
@@ -235,9 +237,13 @@ const FormFields = (props) => {
       <HiddenField fieldName="topicKey">
         <Advanced source="topicKey" disabled={disabled && !admin} />
       </HiddenField>
-      <HiddenField fieldName="qna">
-        <Qna {...props} disabled={disabled && !admin} />
-      </HiddenField>
+      {
+        (!fkParentTopicId || admin) && (
+          <HiddenField fieldName="qna">
+            <Qna {...props} disabled={disabled && !admin} />
+          </HiddenField>
+        )
+      }
     </>
   );
 };

@@ -54,9 +54,7 @@ const TopicList = () => {
 
       setResults(data);
       setCount(total);
-    } catch (e) {
-      notify(e?.body?.message || 'Unexpected error', 'error');
-    }
+    } catch (e) {} // eslint-disable-line
   };
 
   const setPage = (page, submit = true) => {

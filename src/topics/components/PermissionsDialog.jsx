@@ -13,6 +13,7 @@ import {
   SelectInput,
   BooleanInput,
   Confirm,
+  useTranslate,
 } from 'react-admin';
 import CloseIcon from '@material-ui/icons/Close';
 import TrashIcon from '@material-ui/icons/Delete';
@@ -30,6 +31,8 @@ const Bool = ({ v }) => {
 const PermissionForm = ({
   initialValues, onSubmit, groups, isEdit,
 }) => {
+  const translate = useTranslate();
+
   return (
     <Form
       onSubmit={onSubmit}
@@ -56,7 +59,7 @@ const PermissionForm = ({
               <Box px={1} flex="4">
                 <SelectInput
                   source="group_id"
-                  label="Group"
+                  label={translate('resources.topics.permissions.group')}
                   choices={groups}
                   optionText="name"
                   optionValue="id"
@@ -66,16 +69,16 @@ const PermissionForm = ({
                 />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="view" label="View" />
+                <BooleanInput source="view" label={translate('resources.topics.permissions.view')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="edit" label="Edit" />
+                <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="manage" label="Manage" />
+                <BooleanInput source="manage" label={translate('resources.topics.permissions.manage')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="delete" label="Delete" />
+                <BooleanInput source="delete" label={translate('resources.topics.permissions.delete')} />
               </Box>
 
               <Box px={1} flex="1">
@@ -87,7 +90,7 @@ const PermissionForm = ({
                   disabled={!valid}
                   size="small"
                 >
-                  { isEdit ? 'Save' : 'Create' }
+                  { isEdit ? translate('misc.save') : translate('misc.create') }
                 </Button>
               </Box>
             </Box>
@@ -103,6 +106,7 @@ const PermissionsDialog = ({
   onClose,
   open,
 }) => {
+  const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const [topic, setTopic] = React.useState(null);
@@ -182,7 +186,7 @@ const PermissionsDialog = ({
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick>
       <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
         <Box flex="2">
-          <Typography>Manage permissions: <b>{topic?.name}</b></Typography>
+          <Typography>{translate('resources.topics.permissions.manage_permissions')}: <b>{topic?.name}</b></Typography>
         </Box>
         <Box flex="1" textAlign="right">
           <IconButton onClick={onClose} size="small">
@@ -196,32 +200,32 @@ const PermissionsDialog = ({
             <Confirm
               isOpen={!!deleting}
               loading={false}
-              title="Delete"
-              content="Are you sure you want to delete the permission?"
+              title={translate('misc.delete')}
+              content={translate('Are you sure you want to delete the permission?')}
               onConfirm={onDelete}
               onClose={onDeleteCancel}
-              confirm="Delete"
-              cancel="Cancel"
+              confirm={translate('misc.delete')}
+              cancel={translate('misc.cancel')}
             />
           )
         }
         {
-          !topic && (<Box textAlign="text-center"><Typography variant="body2">Loading...</Typography></Box>)
+          !topic && (<Box textAlign="text-center"><Typography variant="body2">{translate('misc.loading')}...</Typography></Box>)
         }
         {
           !!topic && !topic?.PermissionSets?.length && (
-            <Box py={2}><Typography variant="body2">This topic has no permissions yet</Typography></Box>
+            <Box py={2}><Typography variant="body2">{translate('resources.topics.permissions.no_permissions')}</Typography></Box>
           )
         }
         {
           !!topic && !!topic?.PermissionSets?.length && (
             <Box pt={2} pb={4} mb={2} boxShadow={3} px={2}>
               <Box display="flex" mb={2} borderBottom="1px solid #D5D5D5" pb={1}>
-                <Box flex="1">Group</Box>
-                <Box textAlign="center" flex="1">View</Box>
-                <Box textAlign="center" flex="1">Edit</Box>
-                <Box textAlign="center" flex="1">Manage</Box>
-                <Box textAlign="center" flex="1">Delete</Box>
+                <Box flex="1">{translate('resources.topics.permissions.group')}</Box>
+                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.view')}</Box>
+                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.edit')}</Box>
+                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.manage')}</Box>
+                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.delete')}</Box>
                 <Box flex="1">&nbsp;</Box>
               </Box>
               {
@@ -271,7 +275,7 @@ const PermissionsDialog = ({
           !groups.length && (
             <Box>
               <Typography variant="body2">
-                All the groups are already assigned
+                {translate('resources.topics.permissions.all_assigned')}
               </Typography>
             </Box>
           )
@@ -280,7 +284,7 @@ const PermissionsDialog = ({
           !!groups.length && (
             <>
               <Box borderBottom="1px solid #D5D5D5" mb={2}>
-                <Typography>Create new permission</Typography>
+                <Typography>{translate('resources.topics.permissions.create_new')}</Typography>
               </Box>
               <Box boxShadow={3}>
                 <PermissionForm
