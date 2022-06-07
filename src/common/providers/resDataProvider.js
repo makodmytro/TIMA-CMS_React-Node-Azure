@@ -435,6 +435,13 @@ const resDataProvider = {
 
     return { data: body };
   },
+  me: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/me`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;

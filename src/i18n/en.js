@@ -158,6 +158,7 @@ const english = {
         parent: 'Parent topic',
         kb_integration: 'KG integration',
         qna: 'QNA knowledge keys',
+        group: 'Group',
       },
       kbIntegration: {
         microsoft_qna_maker: 'Microsoft QnA Maker',
@@ -197,6 +198,7 @@ const english = {
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Pull data from QNA now?',
+        fk_managedByGroupId: 'Managed by group',
       },
     },
     languages: {

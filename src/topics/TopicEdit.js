@@ -90,7 +90,7 @@ const CustomToolbar = (props) => {
 const TopicEdit = ({ languages, dispatch, ...props }) => {
   return (
     <>
-      <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />} undoable={false}>
+      <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar to="/topics" />} undoable={false}>
         <SimpleForm toolbar={<CustomToolbar />}>
           <FormFields {...props} languages={languages} editting />
         </SimpleForm>
