@@ -48,6 +48,7 @@ const english = {
   'The questions were set as follow up': 'The questions were set as follow up',
   'Comment added successfully': 'Comment added successfully',
   'Deleted successfully': 'Deleted successfully',
+  'Are you sure you want to delete the permission?': 'Are you sure you want to delete the permission?',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -141,6 +142,7 @@ const english = {
     you_will_lose: 'You will permanently lose',
     processing: 'Processing',
     done: 'Done',
+    delete: 'Delete',
   },
   resources: {
     topics: {
@@ -161,6 +163,17 @@ const english = {
         microsoft_qna_maker: 'Microsoft QnA Maker',
         amazon_lex: 'Amazon Lex (not enabled)',
         gpt3: 'GPT3 Questions API (not enabled)',
+      },
+      permissions: {
+        group: 'Group',
+        view: 'View',
+        edit: 'Edit',
+        manage: 'Manage',
+        delete: 'Delete',
+        no_permissions: 'This topic has no permissions yet',
+        all_assigned: 'All the groups are already assigned',
+        create_new: 'Create new permission',
+        manage_permissions: 'Manage permissions',
       },
       fields: {
         name: 'Name',

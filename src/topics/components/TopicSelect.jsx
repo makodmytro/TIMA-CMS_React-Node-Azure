@@ -28,6 +28,7 @@ const MultiTopicSelect = ({
   allowEmpty,
   label,
   anyLevelSelectable,
+  filterFunction,
 }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -208,6 +209,8 @@ const MultiTopicSelect = ({
   React.useEffect(() => {
     if (filter && filter.fk_languageId) {
       setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+    } else if (filterFunction) {
+      setFilteredTopics(topics.filter((t) => filterFunction(t)));
     } else {
       setFilteredTopics(topics);
     }
@@ -309,6 +312,7 @@ const TopicSelect = ({
   isRequired,
   editting,
   filter,
+  filterFunction,
   depth,
   allowEmpty,
   anyLevelSelectable,
@@ -344,6 +348,7 @@ const TopicSelect = ({
         allowEmpty,
         label,
         anyLevelSelectable,
+        filterFunction,
       }}
     />
   );
