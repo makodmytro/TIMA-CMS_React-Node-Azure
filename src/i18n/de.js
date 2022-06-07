@@ -328,6 +328,9 @@ const german = {
           INTEGRATION_TESTS_OK: 'Tests erfolgreich',
           DEPLOYED_ON_PRODUCTION: 'Live',
         },
+        errors: {
+          MIN_3_QUESTIONS: 'Beim Erstellen einer neuen Antwort sind mindestens 3 Fragen erforderlich',
+        },
       },
       fields: {
         id: 'ID',

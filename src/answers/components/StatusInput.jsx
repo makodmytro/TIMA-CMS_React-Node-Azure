@@ -131,7 +131,8 @@ const StatusInput = ({ record, disabled }) => {
       notify('The record has been updated');
     } catch (err) {
       refresh();
-      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+      const msg = err?.body?.code ? translate(`resources.users.workflow.errors.${err.body.code}`) : err?.body?.message || 'We could not execute the action';
+      notify(msg, 'error');
     }
   };
 
