@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Logo from '../../assets/TIMA_logo.png';
+import Logo from '../../assets/QnA Manager Logo Simple LQ.png';
 import { baseApi } from '../httpClient';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
@@ -109,10 +109,7 @@ const MyAppBar = (props) => {
         id="react-admin-title"
       />
       <div className={classes.logo}>
-        <img src={Logo} alt="logo" />
-      </div>
-      <div className={classes.logo}>
-        <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="70" />
+        <img src={Logo} alt="logo" width={80} />
       </div>
     </AppBar>
   );

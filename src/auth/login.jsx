@@ -20,7 +20,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import Azure from './azure';
-import Logo from '../assets/TIMA_logo.png';
+import Logo from '../assets/QnA Manager Logo.png';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 

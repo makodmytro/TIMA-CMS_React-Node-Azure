@@ -30,7 +30,7 @@ import MyLayout from './common/components/Layout';
 import lngReducer from './common/reducer/lngReducer';
 import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
-import Logo from './assets/TIMA_logo.png';
+import Logo from './assets/QnA Manager Logo.png';
 import theme from './common/theme';
 import Login from './auth/login';
 
