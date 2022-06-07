@@ -19,6 +19,7 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
+import StepFive from './StepFive';
 
 const style = makeStyles(() => ({
   label: {
@@ -36,6 +37,7 @@ const SteppedForm = ({
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const [groups, setGroups] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [awaitingSync, setAwaitingSync] = React.useState(false);
   const [awaitingSyncFinished, setAwaitingSyncFinished] = React.useState(null);
@@ -51,8 +53,28 @@ const SteppedForm = ({
     qnaSubscriptionKey: '',
     qnaKnowledgeBaseId: '',
     startSync: false,
+    fk_managedByGroupId: null,
   });
   const _languages = useSelector((s) => s.custom.languages);
+
+  const f = async () => {
+    const { data } = await dataProvider.me();
+    console.log(data);
+    if (data && data.Groups) {
+      if (data.Groups.length === 1) {
+        setState({
+          ...state,
+          fk_managedByGroupId: data.Groups[0].id,
+        });
+      } else {
+        setGroups(data.Groups);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    f();
+  }, []);
 
   React.useEffect(() => {
     if (_languages.length && !state.fk_languageId) {
@@ -200,6 +222,23 @@ const SteppedForm = ({
             />
           </StepContent>
         </Step>
+        {
+          groups.length > 1 && (
+            <Step classes={{ root: classes.label }}>
+              <StepLabel>
+                {translate('resources.topics.steps.group')}
+              </StepLabel>
+              <StepContent>
+                <StepFive
+                  initialValues={{ fk_managedByGroupId: state.fk_managedByGroupId }}
+                  groups={groups}
+                  onSubmit={next}
+                  onBack={back}
+                />
+              </StepContent>
+            </Step>
+          )
+        }
         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.qna')}
