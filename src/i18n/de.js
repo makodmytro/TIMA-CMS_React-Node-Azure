@@ -230,7 +230,6 @@ const german = {
       add_followup: 'Folgefrage hinzufügen',
     },
     answers: {
-      filter: 'Antwort oder Frage',
       name: 'Antwort |||| QnA',
       link_questions: 'Antwort mit %{val} Fragen verlinken',
       set_followup: '%{val} Fragen als Folgefragen festlegen',
@@ -260,6 +259,7 @@ const german = {
         answer: 'Antwort erstellen',
       },
       fields: {
+        filter: 'Antwort oder Frage',
         text: 'Antwort',
         spokenText: 'Aussprache',
         fk_userId: 'Editor',

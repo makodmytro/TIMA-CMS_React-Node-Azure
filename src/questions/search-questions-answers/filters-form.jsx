@@ -33,7 +33,7 @@ const Filters = ({ onSubmit, initialValues }) => {
                   source="type"
                   choices={[
                     { id: 'questions', name: translate('misc.questions') },
-                    { id: 'answers', name: translate('resources.answers.filter') },
+                    { id: 'answers', name: translate('misc.answers') },
                   ]}
                   fullWidth
                 />

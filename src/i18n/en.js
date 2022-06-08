@@ -231,7 +231,6 @@ const english = {
       add_followup: 'Add Followup',
     },
     answers: {
-      filter: 'Answer or Question',
       name: 'Answer |||| Answers',
       link_questions: 'Link answer for %{val} questions',
       set_followup: 'Set %{val} questions as followup',
@@ -262,6 +261,7 @@ const english = {
         comment: 'Comment',
       },
       fields: {
+        filter: 'Answer or Question',
         text: 'Answer Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Created By',
