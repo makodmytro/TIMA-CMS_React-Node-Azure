@@ -37,6 +37,7 @@ import Login from './auth/login';
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
+const API_URL = process.env.REACT_APP_BASE_API;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -64,6 +65,7 @@ const AsyncResources = () => {
   const [tac, setTac] = React.useState(false);
   const timeout = React.useRef(null);
   const topicsStatusTimeout = React.useRef(null);
+  const [socket, setSocket] = React.useState(null);
 
   const isLoginScreen = () => location.pathname.includes('/login') || location.pathname.includes('/backdoor-login');
   const refreshSession = async () => {
@@ -72,19 +74,6 @@ const AsyncResources = () => {
     await dataProvider.refreshSession();
 
     setTic(true);
-  };
-
-  const refreshTopicStatus = async () => {
-    setTac(false);
-
-    try {
-      const { data } = await dataProvider.topicStatus();
-
-      store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data?.syncedTopics || 0 });
-    } catch (e) { // eslint-disable-line
-    }
-
-    setTac(true);
   };
 
   const fetchWorkflow = async () => {
@@ -133,17 +122,29 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!isLoginScreen() && tac) {
-      topicsStatusTimeout.current = setTimeout(() => {
-        refreshTopicStatus();
-      }, 1000 * 60 * 5);
+    if (!isLoginScreen() && !socket) {
+      const ws = new WebSocket(`${API_URL.replace('https', 'wss')}/topics/status`);
+
+      setSocket(ws);
     }
 
-    if (isLoginScreen()) {
-      clearTimeout(topicsStatusTimeout.current);
-      topicsStatusTimeout.current = null;
+    if (isLoginScreen() && socket) {
+      socket.close();
     }
-  }, [location.pathname, tac]);
+  }, [location.pathname]);
+
+  React.useEffect(() => {
+    if (socket) {
+      socket.onmessage = function ({ data }) {
+        try {
+          const d = JSON.parse(data);
+          if (d?.syncedTopics !== store.getState()?.custom?.syncStatus) {
+            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d?.syncedTopics || 0 });
+          }
+        } catch (e) {} // eslint-disable-line
+      };
+    }
+  }, [socket]);
 
   React.useEffect(() => {
     if (!isLoginScreen() && tic) {
