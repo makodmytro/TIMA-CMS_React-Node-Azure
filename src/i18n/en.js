@@ -231,6 +231,7 @@ const english = {
       add_followup: 'Add Followup',
     },
     answers: {
+      filter: 'Answer or Question',
       name: 'Answer |||| Answers',
       link_questions: 'Link answer for %{val} questions',
       set_followup: 'Set %{val} questions as followup',
