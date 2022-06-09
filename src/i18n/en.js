@@ -156,7 +156,7 @@ const english = {
       steps: {
         basic: 'Basic information',
         parent: 'Parent topic',
-        kb_integration: 'KG integration',
+        kb_integration: 'KB integration',
         qna: 'QNA knowledge keys',
         group: 'Group',
       },
@@ -281,6 +281,7 @@ const english = {
         comment: 'Comment',
       },
       fields: {
+        filter: 'Answer or Question',
         text: 'Answer Text',
         spokenText: 'Spoken txt',
         fk_userId: 'Created By',

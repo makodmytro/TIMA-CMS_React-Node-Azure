@@ -155,7 +155,7 @@ const german = {
       steps: {
         basic: 'Basic information',
         parent: 'Parent topic',
-        kb_integration: 'KG integration',
+        kb_integration: 'KB integration',
         qna: 'QNA knowledge keys',
       },
       kbIntegration: {
@@ -277,6 +277,7 @@ const german = {
         answer: 'Antwort erstellen',
       },
       fields: {
+        filter: 'Antwort oder Frage',
         text: 'Antwort',
         spokenText: 'Aussprache',
         fk_userId: 'Editor',

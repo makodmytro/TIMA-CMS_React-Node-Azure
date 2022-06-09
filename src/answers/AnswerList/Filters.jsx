@@ -74,7 +74,7 @@ const Filters = ({ languages, topics, ...props }) => {
           <Box flex="0 0 100%">
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
-          <TextInput label="resources.answers.fields.text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <TextInput label="resources.answers.fields.filter" source="q" alwaysOn onChange={() => handleSubmit()} />
           {
             languages?.length > 1 && (
               <ReferenceInput
