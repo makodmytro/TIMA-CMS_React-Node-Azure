@@ -10,9 +10,11 @@ import {
   useDataProvider,
   useTranslate,
   useNotify,
+  useRedirect,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { useIsAdmin } from '../hooks';
 
@@ -128,19 +130,45 @@ const NullableBoolean = ({ record, source, ...rest }) => {
   );
 };
 
+const DeactivateWarning = () => {
+  const translate = useTranslate();
+
+  return (
+    <Box width="100%" mb={2}>
+      <Alert severity="warning" elevation={3}>
+        {translate('misc.self_deactivation')}
+      </Alert>
+    </Box>
+  );
+};
+
 const UsersEdit = (props) => {
   const { permissions } = props;
   const translate = useTranslate();
+  const dataProvider = useDataProvider();
+  const redirect = useRedirect();
+  const notify = useNotify();
   const { id } = useParams();
   const [passwordToggle, setPasswordToggle] = React.useState(false);
   const disabled = !useIsAdmin();
+  const disabledCheckbox = !useIsAdmin() || parseInt(id, 10) === parseInt(permissions?.userId, 10);
 
-  if (id === permissions?.userId && disabled) { // user is not admin and just looking at his profile
+  const onSuccess = async () => {
+    if (parseInt(id, 10) === parseInt(permissions?.userId, 10)) {
+      await dataProvider.me();
+    }
+
+    notify('Saved successfully');
+    redirect('/users');
+  };
+
+  if (parseInt(id, 10) === parseInt(permissions?.userId, 10) && disabled) { // user is not admin and just looking at his profile
     return (
       <Edit
         {...props}
         actions={<CustomTopToolbar />}
         undoable={false}
+        onSuccess={onSuccess}
       >
         <SimpleForm toolbar={<ProfileCustomToolbar />}>
           <TextInput label={translate('resources.users.change_password')} source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
@@ -179,6 +207,7 @@ const UsersEdit = (props) => {
       {...props}
       actions={<CustomTopToolbar />}
       undoable={false}
+      onSuccess={onSuccess}
     >
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled />
@@ -226,13 +255,18 @@ const UsersEdit = (props) => {
         <NullableBoolean
           source="isActive"
           label="resources.users.fields.isActive"
-          disabled={disabled}
+          disabled={disabledCheckbox}
         />
         <NullableBoolean
           source="isAdmin"
           label="resources.users.fields.isAdmin"
-          disabled={disabled}
+          disabled={disabledCheckbox}
         />
+        {
+          disabledCheckbox && (
+            <DeactivateWarning />
+          )
+        }
         <GroupsSelection disabled={disabled} />
       </SimpleForm>
     </Edit>

@@ -5,6 +5,16 @@ import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
 
 const dataProvider = simpleRestProvider(baseApi, httpClient);
+
+const updateSessionUser = (data) => {
+  const stored = JSON.parse(sessionStorage.getItem('user'));
+
+  sessionStorage.setItem('user', JSON.stringify({
+    ...stored,
+    ...data,
+  }));
+};
+
 const getResourceAssociations = (resource) => {
   switch (resource) {
     case 'questions': {
@@ -439,6 +449,8 @@ const resDataProvider = {
     const { json } = await httpClient(`${baseApi}/users/me`, {
       method: 'GET',
     });
+
+    updateSessionUser(json);
 
     return { data: json };
   },
