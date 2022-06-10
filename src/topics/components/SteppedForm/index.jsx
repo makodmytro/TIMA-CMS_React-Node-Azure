@@ -189,7 +189,7 @@ const SteppedForm = ({
             <StepOne
               initialValues={{
                 fk_languageId: state.fk_languageId,
-                name: '',
+                name: state.name,
               }}
               onSubmit={onStepSubmit}
             />
@@ -202,9 +202,7 @@ const SteppedForm = ({
           </StepLabel>
           <StepContent>
             <StepTwo
-              initialValues={{
-                fk_parentTopicId: state.fk_parentTopicId,
-              }}
+              initialValues={state}
               onSubmit={onStepSubmit}
               onBack={back}
             />

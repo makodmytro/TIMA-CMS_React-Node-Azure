@@ -143,7 +143,9 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        setTopicsChild(topic.ChildTopics);
+        setTopicsChild(
+          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
+        );
       }
 
       if (!topic.ChildTopics?.length || anyLevelSelectable) {
@@ -166,7 +168,9 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0 && (!depth || depth > 2)) {
         onChange(null);
 
-        setTopicsGrandchild(topic.ChildTopics);
+        setTopicsGrandchild(
+          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
+        );
       } else {
         onChange(topicTwo);
       }
