@@ -54,6 +54,7 @@ const StepTwo = ({
                     allowEmpty
                     depth={2}
                     anyLevelSelectable
+                    filterFunction={(t) => t.name.toLowerCase() !== values.name.toLowerCase()}
                   />
                 )
               }
