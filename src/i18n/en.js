@@ -143,6 +143,7 @@ const english = {
     processing: 'Processing',
     done: 'Done',
     delete: 'Delete',
+    self_deactivation: 'You can not deactivate / remove the admin status to yourself',
   },
   resources: {
     topics: {

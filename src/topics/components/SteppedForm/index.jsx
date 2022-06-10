@@ -59,7 +59,7 @@ const SteppedForm = ({
 
   const f = async () => {
     const { data } = await dataProvider.me();
-    console.log(data);
+
     if (data && data.Groups) {
       if (data.Groups.length === 1) {
         setState({
