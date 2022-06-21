@@ -164,6 +164,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
           ...values,
           fk_topicId: record?.fk_topicId,
           fk_languageId: record?.fk_languageId,
+          isFollowup: record?.isFollowup,
         },
       });
       onSelect(data.id);

@@ -44,6 +44,7 @@ const Row = ({
 
                     setExpanded(!expanded);
                   }}
+                  style={{ color: level ? 'white' : '#4EC2A8' }}
                 >
                   { !expanded && <AddIcon fontSize="small" /> }
                   { expanded && <MinusIcon fontSize="small" /> }
@@ -165,6 +166,9 @@ const TableView = ({
             const value = parseInt(e.target.value, 10);
             setPageSize(value);
           }}
+          labelRowsPerPage={translate('ra.navigation.page_rows_per_page')}
+          nextIconButtonText={translate('ra.navigation.next')}
+          labelDisplayedRows={({ from, to, count: total }) => translate('ra.navigation.page_range_info', { offsetBegin: from, offsetEnd: to, total })}
         />
       </Box>
     </>

@@ -27,7 +27,7 @@ const Row = ({ label, value }) => (
   </Box>
 );
 
-const TestAsk = ({ languages }) => {
+const TestAsk = ({ languages, topics }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
   const notify = useNotify();
@@ -75,7 +75,7 @@ const TestAsk = ({ languages }) => {
         initialValues={{
           question: '',
           topicId: '',
-          languageId: '',
+          languageId: languages && languages.length ? languages[0].id : '',
         }}
         validate={(values) => {
           const errors = {};
@@ -94,14 +94,31 @@ const TestAsk = ({ languages }) => {
           return (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>
+                {
+                  languages && languages.length > 1 && (
+                    <Grid item xs={12} sm={6} md={2}>
+                      <SelectInput
+                        source="languageId"
+                        label="resources.answers.fields.fk_languageId"
+                        choices={languages}
+                        optionText="name"
+                        optionValue="id"
+                        margin="dense"
+                        fullWidth
+                      />
+                    </Grid>
+                  )
+                }
                 <Grid item xs={12} sm={6} md={2}>
                   <SelectInput
-                    source="languageId"
-                    label="resources.answers.fields.fk_languageId"
-                    choices={languages}
+                    source="topicId"
+                    label="resources.answers.fields.fk_topicId"
+                    choices={topics.filter((t) => !t.fk_parentTopicId)}
                     optionText="name"
                     optionValue="id"
                     margin="dense"
+                    allowEmpty
+                    emptyText={translate('misc.none')}
                     fullWidth
                   />
                 </Grid>
