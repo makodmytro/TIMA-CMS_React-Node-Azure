@@ -33,6 +33,7 @@ const SearchCreateDialog = ({ record, open, onClose }) => {
       initialValues={{
         fk_languageId: record.fk_languageId,
         fk_topicId: record.fk_topicId,
+        isFollowup: true
       }}
       onSuccess={afterCreate}
     />

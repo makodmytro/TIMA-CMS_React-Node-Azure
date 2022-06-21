@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { makeStyles, Typography } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -42,9 +42,13 @@ const SteppedForm = ({
   const [awaitingSync, setAwaitingSync] = React.useState(false);
   const [awaitingSyncFinished, setAwaitingSyncFinished] = React.useState(null);
   const [step, setStep] = React.useState(0);
+  const { search } = useLocation();
+  const querystring = new URLSearchParams(search);
   const [state, setState] = React.useState({
     fk_languageId: null,
-    fk_parentTopicId: null,
+    fk_parentTopicId: querystring.get('fk_parentTopicId') && parseInt(querystring.get('fk_parentTopicId'), 10)
+      ? parseInt(querystring.get('fk_parentTopicId'), 10)
+      : null,
     name: '',
     qnaMetadataKey: '',
     qnaMetadataValue: '',

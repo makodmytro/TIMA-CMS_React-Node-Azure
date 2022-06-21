@@ -94,7 +94,7 @@ const AnswerCreate = () => {
 
   return (
     <Box boxShadow={3} p={2} borderRadius={3} mt={2}>
-      <Title title="Create answer" />
+      <Title title={translate('resources.answers.create')} />
       <Form
         onSubmit={onSubmit}
         mutators={{
