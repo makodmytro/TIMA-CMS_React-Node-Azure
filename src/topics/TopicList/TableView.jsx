@@ -81,7 +81,7 @@ const Row = ({
             onSync={onSync}
             onPermissionsClick={level > 0 ? null : (id) => setOpen(id)}
             record={record}
-            showCreateChild={!level || level < 2}
+            showCreateChild={(!level || level < 2) && record.allowCreateChild}
           />
         </TableCell>
       </TableRow>

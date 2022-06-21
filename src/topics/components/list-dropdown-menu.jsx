@@ -56,6 +56,19 @@ const DropdownMenu = ({
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
+          <Button
+            variant="outlined"
+            onClick={(e) => {
+              redirect(`/topics/${record?.id}/edit`);
+            }}
+            fullWidth
+          >
+            {translate('misc.edit_topic')}
+          </Button>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => e.stopPropagation()}
+        >
           <ShowQuestionsButton record={record} fullWidth />
         </MenuItem>
         {
