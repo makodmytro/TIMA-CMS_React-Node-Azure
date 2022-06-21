@@ -27,9 +27,9 @@ const CustomToolbar = (props) => {
   const notify = useNotify();
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
-  const disableEdit = props?.record?.allowEdit === false;
-  const disableDelete = props?.record?.allowDelete !== true;
   const admin = useIsAdmin();
+  const disableEdit = props?.record?.allowEdit === false;
+  const disableDelete = props?.record?.allowDelete !== true && !admin;
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>

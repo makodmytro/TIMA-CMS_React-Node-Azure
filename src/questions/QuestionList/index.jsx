@@ -74,6 +74,7 @@ const CustomGridItem = ({
   record,
   visibleColumns,
   level,
+  disabled,
 }) => {
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
@@ -141,7 +142,7 @@ const CustomGridItem = ({
             <DropdownMenu
               editInline
               record={record}
-              disabled={record.allowEdit === false}
+              disabled={disabled}
             />
           </TableCell>
         </TableRow>
@@ -272,6 +273,7 @@ const CustomGridItem = ({
                   visibleColumns={visibleColumns}
                   key={iii}
                   level={(level || 0) + 1}
+                  disabled={record.allowEdit === false}
                 />
               ))
             }
