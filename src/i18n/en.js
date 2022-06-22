@@ -144,6 +144,7 @@ const english = {
     done: 'Done',
     delete: 'Delete',
     self_deactivation: 'You can not deactivate / remove the admin status to yourself',
+    delete_kb: 'Remove content from QnA Maker Knowledge Base',
   },
   resources: {
     topics: {

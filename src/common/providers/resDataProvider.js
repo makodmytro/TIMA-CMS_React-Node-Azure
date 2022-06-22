@@ -185,7 +185,16 @@ const resDataProvider = {
     }
     return json;
   },
+  delete: async (resource, params) => {
+    const url = `${baseApi}/${resource}/${params.id}`;
 
+    const { json } = await httpClient(url, {
+      method: 'DELETE',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
   update: async (resource, params) => {
     const url = `${baseApi}/${resource}/${params.id}`;
 

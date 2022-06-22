@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import TextField from './components/TextField';
 
 const Row = ({ label, value }) => (
   <Box display="flex" pb={1} mb={2} style={{ borderBottom: '1px solid #00000042' }}>
@@ -162,7 +163,7 @@ const TestAsk = ({ languages, topics }) => {
                 value={
                   !response.answerId
                     ? '-'
-                    : <Link to={`/answers/${response.answerId}`} target="_blank">{response.answerId}</Link>
+                    : <Link to={`/answers/${response.answerId}`}>{response.answerId}</Link>
                 }
               />
               <Row
@@ -170,7 +171,7 @@ const TestAsk = ({ languages, topics }) => {
                 value={
                   !response.questionId
                     ? '-'
-                    : <Link to={`/questions/${response.questionId}`} target="_blank">{response.questionId}</Link>
+                    : <Link to={`/questions/${response.questionId}`}>{response.questionId}</Link>
                 }
               />
               <Row
@@ -178,11 +179,15 @@ const TestAsk = ({ languages, topics }) => {
                 value={
                   !response.topicId
                     ? '-'
-                    : <Link to={`/topics/${response.topicId}`} target="_blank">{response.topicId}</Link>
+                    : <Link to={`/topics/${response.topicId}`}>{response.topicId}</Link>
                 }
               />
               <Row label="Request time (seconds)" value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
-              <Row label="Text" value={response.text} />
+              <Box display="flex" mb={2} p={2}>
+                <Box flex={1}>
+                  <TextField record={{ id: response.answerId, text: response.text, FollowupQuestions: response.followupQuestions }} />
+                </Box>
+              </Box>
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
@@ -196,7 +201,7 @@ const TestAsk = ({ languages, topics }) => {
                             value={
                               !s.id || s.id === 'NO_SUGGESTION'
                                 ? '-'
-                                : <Link to={`/questions/${s.id}`} target="_blank">{s.id}</Link>
+                                : <Link to={`/questions/${s.id}`}>{s.id}</Link>
                             }
                           />
                           <Row label="Score" value={s.score} />
@@ -206,7 +211,7 @@ const TestAsk = ({ languages, topics }) => {
                             value={
                               !s.topicId
                                 ? '-'
-                                : <Link to={`/topics/${s.topicId}`} target="_blank">{s.topicId}</Link>
+                                : <Link to={`/topics/${s.topicId}`}>{s.topicId}</Link>
                             }
                           />
                         </Box>

@@ -36,3 +36,4 @@
 | REACT_APP_IDLE_TIMEOUT_SECONDS | Timeout in seconds to log the user out when he is idle | 30 | undefined | N |
 | REACT_APP_SHOW_QUESTION_FEEDBACK | Shows the question feedback columns in the table | "1" | N | undefined |
 | REACT_APP_HIDE_TAGS_INPUT | Hides the tags input from answers | "1" | N | undefined |
+| REACT_APP_HIDE_TOPICS_SHOW_QR | Hides the show QR button for topics | "1" | N | undefined |
