@@ -157,6 +157,16 @@ const TestAsk = ({ languages, topics }) => {
           !loading && (!!response) && (
             <Box>
               <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
+              {
+                !!response.answerId && (
+                  <Box display="flex" mb={2} p={2} boxShadow={3}>
+                    <Box flex={1}>
+                      <TextField record={{ id: response.answerId, text: response.text, FollowupQuestions: response.followupQuestions }} />
+                    </Box>
+                  </Box>
+                )
+              }
+
               <Row label="Score" value={response.score} />
               <Row
                 label="Answer ID"
@@ -183,11 +193,6 @@ const TestAsk = ({ languages, topics }) => {
                 }
               />
               <Row label="Request time (seconds)" value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
-              <Box display="flex" mb={2} p={2}>
-                <Box flex={1}>
-                  <TextField record={{ id: response.answerId, text: response.text, FollowupQuestions: response.followupQuestions }} />
-                </Box>
-              </Box>
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
