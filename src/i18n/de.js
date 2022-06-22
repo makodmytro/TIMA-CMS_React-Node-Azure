@@ -143,6 +143,7 @@ const german = {
     done: 'Erledigt',
     delete: 'Löschen',
     self_deactivation: 'Du kannst den Admin-Status nicht selber deaktivieren/ löschen',
+    delete_kb: 'Remove content from QnA Maker Knowledge Base',
   },
   resources: {
     topics: {

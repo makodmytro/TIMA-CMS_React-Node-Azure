@@ -212,7 +212,7 @@ const ChatView = ({ records }) => {
                 {
                   record.fk_questionId && (
                     <Typography align="right" className={classes.resourceLink}>
-                      <Link to={`/questions/${record.fk_questionId}`} target="_blank">
+                      <Link to={`/questions/${record.fk_questionId}`}>
                         [{translate('misc.view')}]
                       </Link>
                     </Typography>
@@ -234,7 +234,7 @@ const ChatView = ({ records }) => {
                 {
                   record.fk_answerId && (
                     <Typography className={classes.resourceLink}>
-                      <Link to={`/answers/${record.fk_answerId}`} target="_blank">
+                      <Link to={`/answers/${record.fk_answerId}`}>
                         [{translate('misc.view')}]
                       </Link>
                     </Typography>
@@ -249,7 +249,7 @@ const ChatView = ({ records }) => {
                         {
                           record.suggestedQuestions.map((sq, ii) => (
                             <span key={ii}>
-                              <Link to={`/questions/${sq.id}`} target="_blank">
+                              <Link to={`/questions/${sq.id}`}>
                                 {ii + 1}. {sq.text}
                               </Link>
                               <br />
