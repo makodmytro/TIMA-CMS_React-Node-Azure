@@ -199,8 +199,8 @@ const SteppedForm = ({
             />
           </StepContent>
         </Step>
-
-        <Step classes={{ root: classes.label }}>
+        {/*
+         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.parent')}
           </StepLabel>
@@ -211,7 +211,8 @@ const SteppedForm = ({
               onBack={back}
             />
           </StepContent>
-        </Step>
+        </Step>*/
+        }
         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.kb_integration')}
@@ -224,7 +225,7 @@ const SteppedForm = ({
             />
           </StepContent>
         </Step>
-        {
+        {/*
           groups.length > 1 && (
             <Step classes={{ root: classes.label }}>
               <StepLabel>
@@ -239,7 +240,7 @@ const SteppedForm = ({
                 />
               </StepContent>
             </Step>
-          )
+          )*/
         }
         <Step classes={{ root: classes.label }}>
           <StepLabel>

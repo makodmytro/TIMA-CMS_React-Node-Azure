@@ -158,8 +158,8 @@ const english = {
         basic: 'Basic information',
         parent: 'Parent topic',
         kb_integration: 'KB integration',
-        qna: 'QNA knowledge keys',
-        group: 'Group',
+        qna: 'Knowledge Base settings',
+        group: 'Related Group',
       },
       kbIntegration: {
         microsoft_qna_maker: 'Microsoft QnA Maker',

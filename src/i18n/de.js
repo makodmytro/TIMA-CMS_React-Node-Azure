@@ -157,7 +157,8 @@ const german = {
         basic: 'Thema',
         parent: 'Übergeordnetes Thema',
         kb_integration: 'KB Integration',
-        qna: 'QNA knowledge keys',
+        qna: 'Knowledge Base settings',
+        group: 'Related Group',
       },
       kbIntegration: {
         microsoft_qna_maker: 'Microsoft QnA Maker',
