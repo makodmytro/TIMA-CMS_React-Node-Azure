@@ -124,7 +124,7 @@ const FollowupQuestionsTable = ({
                         style={{ justifyContent: 'flex-start', color: '#d64242' }}
                         fullWidth
                       >
-                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.unlink')}
+                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
                       </Button>
                     )}
                   />
