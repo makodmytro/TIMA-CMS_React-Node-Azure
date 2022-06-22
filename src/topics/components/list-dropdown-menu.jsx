@@ -5,8 +5,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import QrDialog from './qr-dialog';
-import ShowQuestionsButton from './ShowQuestionsButton';
+import ShowAnswersButton from './ShowAnswersButton';
+import DeleteDialog from './DeleteDialog';
 import { useIsAdmin } from '../../hooks';
+
+const HIDE_SHOW_QR = process.env.REACT_APP_HIDE_TOPICS_SHOW_QR === '1';
 
 const DropdownMenu = ({
   record,
@@ -18,6 +21,7 @@ const DropdownMenu = ({
   const redirect = useRedirect();
   const translate = useTranslate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const disableDelete = record?.allowDelete !== true && !admin;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -69,10 +73,10 @@ const DropdownMenu = ({
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
-          <ShowQuestionsButton record={record} fullWidth />
+          <ShowAnswersButton record={record} fullWidth />
         </MenuItem>
         {
-          record?.globalTopic && (
+          record?.globalTopic && !HIDE_SHOW_QR && (
             <MenuItem
               onClick={(e) => e.stopPropagation()}
             >
@@ -130,6 +134,17 @@ const DropdownMenu = ({
               >
                 {translate('resources.topics.create_child')}
               </Button>
+            </MenuItem>
+          )
+        }
+        {
+          !disableDelete && (
+            <MenuItem
+              onClick={(e) => {
+                handleClose(e);
+              }}
+            >
+              <DeleteDialog record={record} button={{ fullWidth: true }} />
             </MenuItem>
           )
         }

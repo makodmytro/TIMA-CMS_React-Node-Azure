@@ -162,6 +162,7 @@ const UsersEdit = (props) => {
     redirect('/users');
   };
 
+  const T = ({ record }) => (<>{record?.name}</>);
   if (parseInt(id, 10) === parseInt(permissions?.userId, 10) && disabled) { // user is not admin and just looking at his profile
     return (
       <Edit
@@ -169,34 +170,43 @@ const UsersEdit = (props) => {
         actions={<CustomTopToolbar />}
         undoable={false}
         onSuccess={onSuccess}
+        title={<T />}
       >
         <SimpleForm toolbar={<ProfileCustomToolbar />}>
           <TextInput label={translate('resources.users.change_password')} source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
           <TextInput source="name" validate={required()} fullWidth disabled />
           <TextInput source="email" validate={required()} fullWidth disabled />
-          <TextInput
-            source="password"
-            type="password"
-            validate={required()}
-            fullWidth
-            helperText={translate('misc.password_must_change')}
-            autoComplete="new-password"
-            label="resources.users.fields.password"
-          />
-          <TextInput
-            type="password"
-            source="password_confirm"
-            validate={(value, allValues) => {
-              if (value !== allValues?.password) {
-                return translate('misc.password_mismatch');
-              }
+          {
+            !(AZURE_LOGIN && sessionStorage.getItem('azure-login') === '1') && (
+              <>
+                <TextInput
+                  source="password"
+                  type="password"
+                  validate={required()}
+                  fullWidth
+                  helperText={translate('misc.password_must_change')}
+                  autoComplete="new-password"
+                  label="resources.users.fields.password"
+                />
+                <TextInput
+                  type="password"
+                  source="password_confirm"
+                  validate={(value, allValues) => {
+                    if (value !== allValues?.password) {
+                      return translate('misc.password_mismatch');
+                    }
 
-              return undefined;
-            }}
-            fullWidth
-            autoComplete="new-password"
-            label="resources.users.fields.password_confirm"
-          />
+                    return undefined;
+                  }}
+                  fullWidth
+                  autoComplete="new-password"
+                  label="resources.users.fields.password_confirm"
+                />
+              </>
+            )
+          }
+
+          <GroupsSelection disabled />
         </SimpleForm>
       </Edit>
     );
@@ -208,6 +218,7 @@ const UsersEdit = (props) => {
       actions={<CustomTopToolbar />}
       undoable={false}
       onSuccess={onSuccess}
+      title={<T />}
     >
       <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput source="name" validate={required()} fullWidth disabled />

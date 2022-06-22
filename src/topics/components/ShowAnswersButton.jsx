@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-const ShowQuestions = ({
+const ShowAnswers = ({
   record, size, fullWidth, ml,
 }) => {
   const translate = useTranslate();
@@ -29,13 +29,13 @@ const ShowQuestions = ({
         size={size || 'small'}
         color="primary"
         variant="outlined"
-        to={`/questions?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: ids }))}`}
+        to={`/answers?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: ids }))}`}
         fullWidth={!!fullWidth}
       >
-        {translate('misc.show_questions')}
+        {translate('misc.show_answers')}
       </Button>
     </Box>
   );
 };
 
-export default ShowQuestions;
+export default ShowAnswers;

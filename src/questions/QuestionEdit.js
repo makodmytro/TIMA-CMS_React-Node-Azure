@@ -83,7 +83,7 @@ const Answer = ({
     <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
       <Typography variant="body2">
         {translate('misc.answer')}&nbsp;
-        <small><Link to={`/answers/${answer.id}`} target="_blank">{translate('misc.view')}</Link></small>
+        <small><Link to={`/answers/${answer.id}`}>{translate('misc.view')}</Link></small>
       </Typography>
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">

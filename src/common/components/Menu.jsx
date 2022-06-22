@@ -119,7 +119,7 @@ const Menu = ({ onMenuClick, logout }) => {
         }}
       >
         {
-          !!syncStatus && syncStatus > 0 && (
+          !!syncStatus && syncStatus > 0 && isAdmin && (
             <Box mb={2} textAlign="center">
               <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
                 {translate('Topic Sync Scheduled')}

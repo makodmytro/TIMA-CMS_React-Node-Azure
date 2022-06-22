@@ -5,6 +5,8 @@ import Dialog from '@material-ui/core/Dialog';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import {
   useTranslate,
@@ -41,6 +43,7 @@ const DeleteDialog = ({
   const translate = useTranslate();
   const classes = styles();
   const [confirmation, setConfirmation] = React.useState('');
+  const [kb, setKb] = React.useState(false);
 
   if (!open) {
     return null;
@@ -86,6 +89,18 @@ const DeleteDialog = ({
               />
             </Box>
           </Box>
+          <Box textAlign="center">
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={kb}
+                  onChange={(e) => setKb(e.target.checked)}
+                  name="kb"
+                />
+              )}
+              label={translate('misc.delete_kb')}
+            />
+          </Box>
         </Box>
         <Box p={2} bgcolor="#ececec">
           <Box display="flex">
@@ -101,7 +116,7 @@ const DeleteDialog = ({
             </Box>
             <Box flex={1} pl={1}>
               <Button
-                onClick={onConfirm}
+                onClick={() => onConfirm({ removeKB: kb })}
                 type="button"
                 variant="contained"
                 fullWidth
