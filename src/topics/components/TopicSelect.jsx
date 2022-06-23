@@ -229,7 +229,7 @@ const MultiTopicSelect = ({
           <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
             {translate(label)}&nbsp;
             {
-              allowEmpty && (
+              allowEmpty && !disabled && (
                 <small onClick={() => clear()} style={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'lowercase' }}>
                   ({translate('misc.clear')})
                 </small>
@@ -244,7 +244,7 @@ const MultiTopicSelect = ({
       {
         !loading && (editting && !toggleEdit) && (
           <Box mb={2}>
-            <Button color="secondary" onClick={() => setToggleEdit(true)} size="small">
+            <Button color="secondary" onClick={() => setToggleEdit(true)} size="small" disabled={disabled}>
               {selectedTopicLabel || translate('misc.none')} &nbsp;&nbsp;<PencilIcon fontSize="small" />
             </Button>
           </Box>
