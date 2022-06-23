@@ -63,8 +63,6 @@ const FormFields = (props) => {
     input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
   const { input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange } } = useField('fk_parentTopicId');
-  const { input: { onChange: qnaMetadataKeyChange } } = useField('qnaMetadataKey');
-  const { input: { onChange: qnaMetadataValueChange } } = useField('qnaMetadataValue');
   const { input: { onChange: qnaApiEndpointChange } } = useField('qnaApiEndpoint');
   const { input: { onChange: qnaApiVersionChange } } = useField('qnaApiVersion');
   const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
@@ -89,8 +87,6 @@ const FormFields = (props) => {
       });
 
       if (data) {
-        qnaMetadataKeyChange(data.qnaMetadataKey);
-        qnaMetadataValueChange(data.qnaMetadataValue);
         qnaApiEndpointChange(data.qnaApiEndpoint);
         qnaApiVersionChange(data.qnaApiVersion);
         qnaSubscriptionKeyChange(data.qnaSubscriptionKey);
@@ -147,7 +143,7 @@ const FormFields = (props) => {
       <HiddenField fieldName="fk_parentTopicId">
         <TopicSelect
           source="fk_parentTopicId"
-          disabled
+          disabled={props?.disableTopicSelection}
           label="resources.topics.fields.fk_parentTopicId"
           allowEmpty
           depth={2}

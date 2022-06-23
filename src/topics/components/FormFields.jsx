@@ -67,34 +67,41 @@ export const Qna = (props) => {
         fullWidth
         disabled={props.disabled === true}
       />
-      <TextInput
-        source="qnaApiEndpoint"
-        label="resources.topics.fields.qnaApiEndpoint"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-      />
-      <TextInput
-        source="qnaApiVersion"
-        label="resources.topics.fields.qnaApiVersion"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-      />
-      <TextInput
-        source="qnaSubscriptionKey"
-        label="resources.topics.fields.qnaSubscriptionKey"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-      />
-      <TextInput
-        source="qnaKnowledgeBaseId"
-        label="resources.topics.fields.qnaKnowledgeBaseId"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-      />
+      {
+        !props?.fkParentTopicId && (
+          <>
+            <TextInput
+              source="qnaApiEndpoint"
+              label="resources.topics.fields.qnaApiEndpoint"
+              record={props.record}
+              fullWidth
+              disabled={props.disabled === true}
+            />
+            <TextInput
+              source="qnaApiVersion"
+              label="resources.topics.fields.qnaApiVersion"
+              record={props.record}
+              fullWidth
+              disabled={props.disabled === true}
+            />
+            <TextInput
+              source="qnaSubscriptionKey"
+              label="resources.topics.fields.qnaSubscriptionKey"
+              record={props.record}
+              fullWidth
+              disabled={props.disabled === true}
+            />
+            <TextInput
+              source="qnaKnowledgeBaseId"
+              label="resources.topics.fields.qnaKnowledgeBaseId"
+              record={props.record}
+              fullWidth
+              disabled={props.disabled === true}
+            />
+          </>
+        )
+      }
+
     </>
   );
 };
@@ -112,8 +119,6 @@ const FormFields = (props) => {
     input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
   const { input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange } } = useField('fk_parentTopicId');
-  const { input: { onChange: qnaMetadataKeyChange } } = useField('qnaMetadataKey');
-  const { input: { onChange: qnaMetadataValueChange } } = useField('qnaMetadataValue');
   const { input: { onChange: qnaApiEndpointChange } } = useField('qnaApiEndpoint');
   const { input: { onChange: qnaApiVersionChange } } = useField('qnaApiVersion');
   const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
@@ -138,8 +143,6 @@ const FormFields = (props) => {
       });
 
       if (data) {
-        qnaMetadataKeyChange(data.qnaMetadataKey);
-        qnaMetadataValueChange(data.qnaMetadataValue);
         qnaApiEndpointChange(data.qnaApiEndpoint);
         qnaApiVersionChange(data.qnaApiVersion);
         qnaSubscriptionKeyChange(data.qnaSubscriptionKey);
@@ -221,7 +224,7 @@ const FormFields = (props) => {
       <HiddenField fieldName="fk_parentTopicId">
         <TopicSelect
           source="fk_parentTopicId"
-          disabled={props?.editting}
+          disabled={props?.editting || props?.disableTopicSelection}
           label="resources.topics.fields.fk_parentTopicId"
           allowEmpty
           depth={2}
@@ -231,16 +234,21 @@ const FormFields = (props) => {
           filterFunction={(topic) => topic?.allowCreateChild}
         />
       </HiddenField>
-      <HiddenField fieldName="level">
-        <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
-      </HiddenField>
+      {
+        /*
+          <HiddenField fieldName="level">
+            <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
+          </HiddenField>
+        */
+      }
+
       <HiddenField fieldName="topicKey">
         <Advanced source="topicKey" disabled={disabled && !admin} />
       </HiddenField>
       {
         (!fkParentTopicId || admin) && (
           <HiddenField fieldName="qna">
-            <Qna {...props} disabled={disabled && !admin} />
+            <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />
           </HiddenField>
         )
       }

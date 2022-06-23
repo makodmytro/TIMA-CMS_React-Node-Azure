@@ -268,7 +268,7 @@ const MultiTopicSelect = ({
                 />
               </Box>
               {
-                !!topicsChild.length && (
+                !!topicsChild.length && (!disabled || topicTwo) && (
                   <Box flex={1} mr={1}>
                     <SelectInput
                       source="topicTwo"
@@ -285,7 +285,7 @@ const MultiTopicSelect = ({
                 )
               }
               {
-                !!topicsGrandchild.length && (!depth || depth > 2) && (
+                !!topicsGrandchild.length && (!depth || depth > 2) && (!disabled || topicThree) && (
                   <Box flex={1}>
                     <SelectInput
                       source="topicThree"

@@ -37,11 +37,16 @@ export default (props) => {
         open={open}
         onClose={() => setOpen(false)}
         onConfirm={(values) => {
-          setOpen(false);
           dataProvider.delete('topics', { id: props?.record?.id, data: values }).then(() => {
             notify('Deleted successfully');
-            redirect('/topics');
-            refresh();
+
+            setOpen(false);
+
+            if (props.afterDelete === 'refresh') {
+              redirect('/topics?d=1');
+            } else {
+              redirect('/topics');
+            }
           });
         }}
         title={`${translate('resources.topics.delete')}?`}

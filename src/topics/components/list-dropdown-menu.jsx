@@ -85,7 +85,7 @@ const DropdownMenu = ({
           )
         }
         {
-          admin && (
+          admin && !record?.fk_parentTopicId && (
             <MenuItem
               onClick={(e) => e.stopPropagation()}
             >
@@ -144,7 +144,7 @@ const DropdownMenu = ({
                 handleClose(e);
               }}
             >
-              <DeleteDialog record={record} button={{ fullWidth: true }} />
+              <DeleteDialog record={record} button={{ fullWidth: true }} afterDelete="refresh" />
             </MenuItem>
           )
         }
