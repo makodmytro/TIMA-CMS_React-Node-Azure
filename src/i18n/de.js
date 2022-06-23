@@ -92,7 +92,7 @@ const german = {
     no_records: 'Keine Einträge gefunden',
     undo_change: 'Änderung rückgängig machen',
     delete_media: 'Datei löschen',
-    delete_user: 'Delete user',
+    delete_user: 'Benutzer löschen',
     type: 'Type',
     view: 'Ansicht',
     uploading: 'Hochladen',

@@ -33,6 +33,7 @@ variables:
   REACT_APP_IDLE_TIMEOUT_SECONDS: '1200'
   REACT_APP_IDLE_TIMEOUT_URL: 'https://myenbw.sharepoint.com'
   REACT_APP_HIDE_TAGS_INPUT: '1'
+  REACT_APP_HIDE_TOPICS_SHOW_QR: '1'
 pool:
   vmImage: ubuntu-latest
 
