@@ -22,6 +22,7 @@ const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 
 const CustomToolbar = (props) => {
   const disabled = !useIsAdmin();
+  const translate = useTranslate();
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -36,6 +37,7 @@ const CustomToolbar = (props) => {
         record={props.record}
         undoable={false}
         disabled={disabled}
+        label={translate('misc.delete_user')}
       />
     </Toolbar>
   );
@@ -177,7 +179,7 @@ const UsersEdit = (props) => {
           <TextInput source="name" validate={required()} fullWidth disabled />
           <TextInput source="email" validate={required()} fullWidth disabled />
           {
-            !(AZURE_LOGIN && sessionStorage.getItem('azure-login') === '1') && (
+            !AZURE_LOGIN && (
               <>
                 <TextInput
                   source="password"

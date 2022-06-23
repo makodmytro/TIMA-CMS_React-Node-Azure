@@ -221,7 +221,7 @@ const FormFields = (props) => {
       <HiddenField fieldName="fk_parentTopicId">
         <TopicSelect
           source="fk_parentTopicId"
-          disabled={disabled === true}
+          disabled={props?.editting}
           label="resources.topics.fields.fk_parentTopicId"
           allowEmpty
           depth={2}

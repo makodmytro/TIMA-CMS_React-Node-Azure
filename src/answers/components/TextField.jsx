@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/Add';
 import ExpandLess from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton';
+import QuestionAnswerOutlined from '@material-ui/icons/QuestionAnswerOutlined';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import PlayableText from '../../common/components/playable-text';
@@ -14,7 +15,6 @@ import PlayableText from '../../common/components/playable-text';
 const allowedTypes = [
   'paragraph',
   'text',
-  'bold',
   'strikethrough',
   'strike',
   'delete',
@@ -37,6 +37,20 @@ const styles = makeStyles(() => ({
     },
   },
 }));
+
+const FollowupIcon = () => {
+  const translate = useTranslate();
+
+  return (
+    <>
+      <QuestionAnswerOutlined
+        style={{ fontSize: '12px' }}
+        titleAccess={translate('resources.questions.followup')}
+      />
+      &nbsp;
+    </>
+  );
+};
 
 const TextField = ({ record }) => {
   const translate = useTranslate();
@@ -144,6 +158,11 @@ export const AnswerRelatedQuestionField = ({ record }) => {
       </Box>
       <Box flex={11}>
         <Box pb={1}>
+          {
+            record.RelatedQuestions[0].isFollowup && (
+              <FollowupIcon />
+            )
+          }
           <RATextField record={record.RelatedQuestions[0]} source="text" />
         </Box>
         {
@@ -154,6 +173,9 @@ export const AnswerRelatedQuestionField = ({ record }) => {
 
             return (
               <Box key={i} py={1} borderTop="1px solid #f1f1f1">
+                {
+                  rq.isFollowup && <FollowupIcon />
+                }
                 <RATextField record={rq} source="text" />
               </Box>
             );

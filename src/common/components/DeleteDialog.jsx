@@ -45,6 +45,12 @@ const DeleteDialog = ({
   const [confirmation, setConfirmation] = React.useState('');
   const [kb, setKb] = React.useState(false);
 
+  React.useEffect(() => {
+    if (open) {
+      setConfirmation('');
+    }
+  }, [open]);
+
   if (!open) {
     return null;
   }
