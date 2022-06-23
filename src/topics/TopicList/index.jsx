@@ -5,7 +5,9 @@ import {
   useNotify,
   Title,
   CreateButton,
+  useVersion,
 } from 'react-admin';
+import { useLocation } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Alert from '@material-ui/lab/Alert';
 import {
@@ -23,6 +25,7 @@ const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST ||
 
 const TopicList = () => {
   const admin = useIsAdmin();
+  const version = useVersion();
   const [open, setOpen] = React.useState(null);
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
@@ -37,6 +40,8 @@ const TopicList = () => {
     fk_languageId: null,
   });
   const [count, setCount] = React.useState(0);
+  const { search } = useLocation();
+  const querystring = new URLSearchParams(search);
 
   const onSubmit = async (values = form, paging = pagination) => {
     setForm(values);
@@ -78,6 +83,12 @@ const TopicList = () => {
   };
 
   React.useEffect(() => {
+    if (querystring.get('d')) {
+      onSubmit();
+    }
+  }, [querystring.get('d')]);
+
+  React.useEffect(() => {
     onSubmit(form);
   }, []);
 
@@ -101,7 +112,7 @@ const TopicList = () => {
   const columnsToDisplay = columns.filter((col) => visibleColumns.includes(col.key));
 
   return (
-    <Box>
+    <Box key={version}>
       <PermissionsDialog
         open={!!open}
         onClose={() => setOpen(null)}

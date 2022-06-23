@@ -22,7 +22,7 @@ const TopicCreate = (props) => {
       return (
         <Create {...props} actions={<CustomTopToolbar />}>
           <SimpleForm initialValues={{ fk_parentTopicId }}>
-            <NonAdminFormFields {...props} />
+            <NonAdminFormFields {...props} disableTopicSelection />
           </SimpleForm>
         </Create>
       );
@@ -31,7 +31,7 @@ const TopicCreate = (props) => {
     return (
       <Create {...props} actions={<CustomTopToolbar />}>
         <SimpleForm initialValues={{ fk_parentTopicId }}>
-          <FormFields {...props} />
+          <FormFields {...props} disableTopicSelection />
         </SimpleForm>
       </Create>
     );
