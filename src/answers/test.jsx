@@ -70,7 +70,7 @@ const TestAsk = ({ languages, topics }) => {
 
   return (
     <Box p={2} boxShadow={3}>
-      <Title title="Test ask" />
+      <Title title={translate('misc.test_ask')} />
       <Form
         onSubmit={onSubmit}
         initialValues={{
@@ -156,7 +156,7 @@ const TestAsk = ({ languages, topics }) => {
         {
           !loading && (!!response) && (
             <Box>
-              <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
+              <Row label={translate('misc.match_found')} value={response.matchFound ? translate('misc.yes') : translate('misc.no')} />
               {
                 !!response.answerId && (
                   <Box display="flex" mb={2} p={2} boxShadow={3}>
@@ -169,7 +169,7 @@ const TestAsk = ({ languages, topics }) => {
 
               <Row label="Score" value={response.score} />
               <Row
-                label="Answer ID"
+                label={translate('misc.answer_id')}
                 value={
                   !response.answerId
                     ? '-'
@@ -177,7 +177,7 @@ const TestAsk = ({ languages, topics }) => {
                 }
               />
               <Row
-                label="Question ID"
+                label={translate('misc.question_id')}
                 value={
                   !response.questionId
                     ? '-'
@@ -185,22 +185,22 @@ const TestAsk = ({ languages, topics }) => {
                 }
               />
               <Row
-                label="Topic ID"
+                label={translate('misc.topic_id')}
                 value={
                   !response.topicId
                     ? '-'
                     : <Link to={`/topics/${response.topicId}`}>{response.topicId}</Link>
                 }
               />
-              <Row label="Request time (seconds)" value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
+              <Row label={translate('misc.request_time_seconds')} value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
-                    <Typography variant="h6">Suggestions</Typography>
+                    <Typography variant="h6">{translate('misc.suggestions')}</Typography>
                     {
                       response.suggestions.map((s, i) => (
                         <Box key={i} boxShadow={3} p={2} mb={2}>
-                          <Row label="Answer" value={s.answer} />
+                          <Row label={translate('misc.answer')} value={s.answer} />
                           <Row
                             label="ID"
                             value={
@@ -209,10 +209,10 @@ const TestAsk = ({ languages, topics }) => {
                                 : <Link to={`/questions/${s.id}`}>{s.id}</Link>
                             }
                           />
-                          <Row label="Score" value={s.score} />
-                          <Row label="Text" value={s.text} />
+                          <Row label={translate('misc.score')} value={s.score} />
+                          <Row label={translate('misc.text')} value={s.text} />
                           <Row
-                            label="Topic ID"
+                            label={translate('misc.topic_id')}
                             value={
                               !s.topicId
                                 ? '-'
@@ -225,7 +225,7 @@ const TestAsk = ({ languages, topics }) => {
                   </>
                 )
               }
-              <Typography variant="h6">Steps</Typography>
+              <Typography variant="h6">{translate('misc.steps')}</Typography>
               <Box boxShadow={3} p={2} mb={2}>
                 {
                   response.flowSteps.map((step, i) => (
