@@ -29,7 +29,7 @@ const CustomToolbar = (props) => {
         submitOnEnter
         disabled={props.pristine || (disableEdit && !admin)}
       />
-      <ShowQuestions size="medium" ml={1} />
+      <ShowQuestions size="medium" ml={1} record={props?.record} />
       {props.record.globalTopic || HIDE_SHOW_QR ? null : <QrDialog ml={1} />}
       {
         !(disableDelete || !admin) && (
