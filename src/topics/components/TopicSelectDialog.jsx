@@ -3,6 +3,7 @@ import {
   useTranslate,
   TextField,
 } from 'react-admin';
+import isEqual from 'lodash/isEqual';
 import Checkbox from '@material-ui/core/Checkbox';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
@@ -182,6 +183,10 @@ export default function TopicSelectDialog({
   };
 
   React.useEffect(() => {
+    if (isEqual(selected, initialValues)) {
+      return;
+    }
+
     const ids = [];
     const idsToDeselect = [];
 
