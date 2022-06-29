@@ -62,9 +62,7 @@ const AnswerEdit = () => {
   };
 
   React.useEffect(() => {
-    if (!answer || answer?.id !== parseInt(id, 10)) {
-      refresh();
-    }
+    refresh();
   }, [id]);
 
   const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
