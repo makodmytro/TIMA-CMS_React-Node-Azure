@@ -1,21 +1,27 @@
 import React from 'react';
 import {
   useTranslate,
+  FunctionField,
+  TextField as RATextField,
 } from 'react-admin';
 import { useSelector } from 'react-redux';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Alert from '@material-ui/lab/Alert';
-import { PlayableTextField } from '../../../common/components/playable-text';
+import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
 import AlertDialog from '../../../common/components/Alert';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import useAnswer from '../../useAnswer';
+import { FollowupIcon } from '../TextField';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
@@ -45,6 +51,8 @@ const RelatedQuestionsTable = ({
     return setWarning(true);
   };
 
+  const isThereContext = record.RelatedQuestions.some((q) => q.fk_parentAnswerId);
+
   return (
     <>
       <AlertDialog
@@ -57,6 +65,11 @@ const RelatedQuestionsTable = ({
       <Table>
         <TableHead>
           <TableRow>
+            {
+              isThereContext && (
+                <TableCell>{translate('resources.questions.fields.context')}</TableCell>
+              )
+            }
             <TableCell>{translate('resources.questions.fields.text')}</TableCell>
             {
               !USE_WORKFLOW && (
@@ -82,14 +95,81 @@ const RelatedQuestionsTable = ({
               })
               .map((related, i) => (
                 <TableRow key={i}>
+                  {
+                    isThereContext && (
+                      <TableCell>
+                        <FunctionField
+                          record={related}
+                          render={() => {
+                            if (!related.fk_parentAnswerId) {
+                              return (
+                                <>-</>
+                              );
+                            }
+
+                            const _str = related.parentAnswerText || 'placeholder';
+
+                            return (
+                              <Box key={i} py={1}>
+                                <RATextField
+                                  record={{
+                                    text: _str.length > 20 ? `${_str.substr(0, 20)}...` : _str,
+                                  }}
+                                  source="text"
+                                />
+                                <Box pl={2}>
+                                  <SubdirectoryArrowRight fontSize="small" />
+                                  &nbsp;
+                                  {
+                                    related.isFollowup && <FollowupIcon />
+                                  }
+                                  <Typography component="span"><b>{related.text}</b></Typography>
+
+                                  {
+                                    i === 0 && (
+                                      <Box pl={2}>
+                                        {
+                                          record.FollowupQuestions.map((q, ii) => {
+                                            return (
+                                              <Box key={ii} pt={0.5} display="flex">
+                                                <Box flex={1} pr={1}>
+                                                  {
+                                                    q.contextOnly && (
+                                                      <Chip
+                                                        label={translate('resources.questions.fields.contextOnly')}
+                                                        variant="outlined"
+                                                        size="small"
+                                                        style={{ fontSize: '0.5rem', textTransform: 'uppercase' }}
+                                                      />
+                                                    )
+                                                  }
+                                                </Box>
+                                                <Box fontSize="0.9rem" lineHeight="14px" flex={4}>
+                                                  <SubdirectoryArrowRight fontSize="small" />
+                                                  &nbsp;
+                                                  <Typography component="span">
+                                                    {q.text}
+                                                  </Typography>
+                                                </Box>
+                                              </Box>
+                                            );
+                                          })
+                                        }
+                                      </Box>
+                                    )
+                                  }
+
+                                </Box>
+                              </Box>
+                            );
+                          }}
+                        />
+                      </TableCell>
+                    )
+                  }
+
                   <TableCell>
-                    <PlayableTextField
-                      source="text"
-                      getLanguageFromRecord={(r) => {
-                        return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
-                      }}
-                      record={{ ...related }}
-                    />
+                    <RATextField record={related} source="text" />
                   </TableCell>
                   {
                     !USE_WORKFLOW && (

@@ -38,7 +38,7 @@ const styles = makeStyles(() => ({
   },
 }));
 
-const FollowupIcon = () => {
+export const FollowupIcon = () => {
   const translate = useTranslate();
 
   return (

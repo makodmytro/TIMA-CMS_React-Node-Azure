@@ -261,6 +261,7 @@ const english = {
         ignored: 'Ignored',
         status: 'Status',
         contextOnly: 'Context only',
+        context: 'Context',
       },
       add_related: 'Add Question',
       add_followup: 'Add Followup',
