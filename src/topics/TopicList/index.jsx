@@ -6,6 +6,7 @@ import {
   Title,
   CreateButton,
   useVersion,
+  useTranslate,
 } from 'react-admin';
 import { useLocation } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -30,6 +31,7 @@ const TopicList = () => {
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
   const [records, setResults] = React.useState(null);
   const [pagination, setPagination] = React.useState({
     perPage: 10,
@@ -39,11 +41,12 @@ const TopicList = () => {
     q: '',
     fk_languageId: null,
   });
+  const [sort, setSort] = React.useState({ field: 'name', order: 'ASC' });
   const [count, setCount] = React.useState(0);
   const { search } = useLocation();
   const querystring = new URLSearchParams(search);
 
-  const onSubmit = async (values = form, paging = pagination) => {
+  const onSubmit = async (values = form, paging = pagination, _sort = sort) => {
     setForm(values);
 
     try {
@@ -54,12 +57,21 @@ const TopicList = () => {
           topLevelOnly: TOPICS_ENABLE_TREE_LIST,
         },
         pagination: paging,
-        sort: { field: 'updatedAt', order: 'DESC' },
+        sort: _sort,
       });
 
       setResults(data);
       setCount(total);
     } catch (e) {} // eslint-disable-line
+  };
+
+  const onSortClick = (field) => {
+    const order = field === sort.field
+      ? (sort.order === 'DESC' ? 'ASC' : 'DESC')
+      : sort.order;
+    setSort({ field, order });
+
+    onSubmit(form, pagination, { field, order });
   };
 
   const setPage = (page, submit = true) => {
@@ -118,7 +130,7 @@ const TopicList = () => {
         onClose={() => setOpen(null)}
         id={open}
       />
-      <Title title="Topics" />
+      <Title title={translate('resources.topics.name', { smart_count: 2 })} />
       <Box display="flex" my={1} alignItems="flex-start" justifyContent="space-between">
         <Box flex="2">
           <Filters onSubmit={onSubmit} initialValues={form} />
@@ -157,6 +169,8 @@ const TopicList = () => {
                   pagination,
                   setPage,
                   setPageSize,
+                  onSortClick,
+                  currentSort: sort,
                 }}
               />
             </>

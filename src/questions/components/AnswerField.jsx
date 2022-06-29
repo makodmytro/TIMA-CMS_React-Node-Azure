@@ -4,16 +4,22 @@ import { Link } from 'react-router-dom'; // eslint-disable-line
 import Button from '@material-ui/core/Button';
 import AnswerTextField from '../../answers/components/TextField';
 import AnswerLinkDialog from './AnswerLinkDialog';
+import AnswerCreateDialog from '../../answers/components/AnswerCreateDialog';
 
-const AnswerField = ({ record, afterLink }) => {
+const AnswerField = ({ record, afterLink, noLinkOnlyCreate }) => {
   const translate = useTranslate();
-  const redirect = useRedirect();
 
   if (!record) {
     return null;
   }
 
   if (!record.fk_answerId) {
+    if (noLinkOnlyCreate) {
+      return (
+        <AnswerCreateDialog record={record} afterLink={afterLink} />
+      );
+    }
+
     return (
       <AnswerLinkDialog record={record} afterLink={afterLink} />
     );

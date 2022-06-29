@@ -221,19 +221,24 @@ const FormFields = (props) => {
       <HiddenField fieldName="topicImageUrl">
         <TopicImage {...props} />
       </HiddenField>
-      <HiddenField fieldName="fk_parentTopicId">
-        <TopicSelect
-          source="fk_parentTopicId"
-          disabled={props?.editting || props?.disableTopicSelection}
-          label="resources.topics.fields.fk_parentTopicId"
-          allowEmpty
-          depth={2}
-          editting={props?.editting}
-          anyLevelSelectable
-          isRequired={!admin}
-          filterFunction={(topic) => topic?.allowCreateChild}
-        />
-      </HiddenField>
+      {
+        (!props?.editting || fkParentTopicId) && (
+          <HiddenField fieldName="fk_parentTopicId">
+            <TopicSelect
+              source="fk_parentTopicId"
+              disabled={props?.editting || props?.disableTopicSelection}
+              label="resources.topics.fields.fk_parentTopicId"
+              allowEmpty
+              depth={2}
+              editting={props?.editting}
+              anyLevelSelectable
+              isRequired={!admin}
+              filterFunction={(topic) => topic?.allowCreateChild}
+            />
+          </HiddenField>
+        )
+      }
+
       {
         /*
           <HiddenField fieldName="level">

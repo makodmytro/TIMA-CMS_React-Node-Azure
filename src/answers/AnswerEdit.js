@@ -128,7 +128,7 @@ const AnswerEdit = () => {
                     </Box>
                     <Box flex={1} textAlign="right">
                       <DeleteButton
-                        basePath="answers"
+                        basePath="/answers"
                         record={answer}
                         undoable={false}
                         disabled={disableDelete}
