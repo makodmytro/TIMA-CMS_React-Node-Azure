@@ -258,6 +258,7 @@ const german = {
         ignored: 'Ignoriert',
         status: 'Status',
         contextOnly: 'Nur im Kontext',
+        context: 'Kontext',
       },
       add_related: 'Frage hinzufügen',
       add_followup: 'Folgefrage hinzufügen',
