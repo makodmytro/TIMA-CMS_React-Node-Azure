@@ -105,7 +105,7 @@ const FollowupQuestionsTable = ({
                   )
                 }
                 <TableCell>
-                  <AnswerField record={related} afterLink={refresh} />
+                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate />
                 </TableCell>
                 <TableCell>
                   <ContextOnlySwitchField record={related} afterEdit={refresh} />
