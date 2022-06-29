@@ -10,6 +10,8 @@ import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { markdownToDraft, draftToMarkdown } from 'markdown-draft-js';
 import PlayableText from '../../common/components/playable-text';
@@ -23,6 +25,20 @@ const HiddenField = ({ children, fieldName }) => {
 
   return children;
 };
+
+const allowedTypes = [
+  'paragraph',
+  'text',
+  'strikethrough',
+  'strike',
+  'delete',
+  'emphasis',
+  'strong',
+  'blockquote',
+  'image',
+  'link',
+  'linkReference',
+];
 
 const DraftInput = ({
   source, label, lang, disabled,
@@ -73,6 +89,40 @@ const DraftInput = ({
             },
           }}
         />
+        {
+          disabled === true && (
+            <Box p={1} border="1px solid #D4D4D4" borderBottom="none">
+              <ReactMarkdown source={value} allowedTypes={allowedTypes} plugins={[remarkGfm]} />
+            </Box>
+          )
+        }
+        {
+          !disabled && (
+            <Editor
+              editorState={state}
+              onEditorStateChange={(v) => {
+                onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
+                setState(v);
+              }}
+              onBlur={() => onBlur()}
+              disabled={disabled === true}
+              readOnly={disabled === true}
+              wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
+              toolbar={{
+                options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
+                inline: {
+                  options: ['bold', 'italic', 'strikethrough'],
+                },
+                emoji: {
+                  emojis: [
+                    '😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎',
+                  ],
+                },
+              }}
+            />
+          )
+        }
+
         <HiddenField fieldName="spokenText">
           <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
             <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />

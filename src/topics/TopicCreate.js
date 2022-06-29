@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import {
   Create,
   SimpleForm,
+  Title,
+  useTranslate,
 } from 'react-admin';
 import { Box } from '@material-ui/core';
 import SteppedForm from './components/SteppedForm';
@@ -14,6 +16,7 @@ import { useIsAdmin } from '../hooks';
 const TopicCreate = (props) => {
   const isAdmin = useIsAdmin();
   const { search } = useLocation();
+  const translate = useTranslate();
   const querystring = new URLSearchParams(search);
   const fk_parentTopicId = parseInt(querystring.get('fk_parentTopicId'), 10);
 
@@ -39,6 +42,7 @@ const TopicCreate = (props) => {
 
   return (
     <Box>
+      <Title title={translate('resources.topics.name', { smart_count: 2 })} />
       <SteppedForm />
     </Box>
   );
