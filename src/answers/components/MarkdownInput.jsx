@@ -8,10 +8,11 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { markdownToDraft, draftToMarkdown } from 'markdown-draft-js';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
+import { stateToMarkdown } from 'draft-js-export-markdown';
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -40,10 +41,7 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const rawData = markdownToDraft(value);
-      const contentState = convertFromRaw(rawData);
-
-      setState(EditorState.createWithContent(contentState));
+      setState(EditorState.createWithContent(stateFromMarkdown(value)));
     }
   }, [value]);
 
@@ -54,7 +52,7 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
-            onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
+            onChange(stateToMarkdown(v.getCurrentContent()))
             setState(v);
           }}
           onBlur={() => onBlur()}
@@ -71,6 +69,10 @@ const DraftInput = ({
                 '😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎',
               ],
             },
+            image: {
+              uploadEnabled: false,
+              previewImage: true,
+            }
           }}
         />
         <HiddenField fieldName="spokenText">
