@@ -62,7 +62,7 @@ const DraftInput = ({
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },

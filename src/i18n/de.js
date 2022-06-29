@@ -165,7 +165,7 @@ const german = {
       delete_cascade_one: 'Alle verlinkten Fragen',
       delete_cascade_two: 'Alle verlinkten Antworten',
       delete_cascade_three: 'Alle zugehörigen Berechtigungen',
-      delete: 'Thema löschen',
+      delete: 'Löschen',
       steps: {
         basic: 'Fachbereich',
         kb_integration: 'KB Integration',
