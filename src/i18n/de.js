@@ -283,7 +283,7 @@ const german = {
       allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
       status: {
         createdAt: 'Datum',
-        updatedBy: 'Ersteller',
+        updatedBy: 'Editor',
         status: 'Status',
         comment: 'Kommentar',
       },
