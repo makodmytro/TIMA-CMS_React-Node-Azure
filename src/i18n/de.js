@@ -348,7 +348,7 @@ const german = {
       add: 'Nutzer hinzufügen',
       no_results: 'Keine Einträge gefunden',
       workflow: {
-        role: 'Workflow Berechtigungen',
+        role: 'Rolle',
         roles: {
           EDITOR: 'Editor',
           REVIEWER: 'Reviewer',
