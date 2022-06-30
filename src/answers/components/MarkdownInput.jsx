@@ -8,11 +8,13 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { stateToMarkdown } from 'draft-js-export-markdown';
+import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
+import createImagePlugin from '@draft-js-plugins/image';
+// import editorStyles from './editorStyles.module.css';
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -24,6 +26,9 @@ const HiddenField = ({ children, fieldName }) => {
 
   return children;
 };
+
+const imagePlugin = createImagePlugin();
+const plugins = [imagePlugin];
 
 const DraftInput = ({
   source, label, lang, disabled,
@@ -41,10 +46,12 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      setState(EditorState.createWithContent(stateFromMarkdown(value)));
+      const rawData = mdToDraftjs(value);
+      const contentState = convertFromRaw(rawData);
+
+      setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
-
   return (
     <>
       <InputLabel error={invalid}>{translate(label)}</InputLabel>
@@ -52,9 +59,10 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
-            onChange(stateToMarkdown(v.getCurrentContent()))
+            onChange(stateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
+          plugins={plugins}
           onBlur={() => onBlur()}
           disabled={disabled === true}
           readOnly={disabled === true}
