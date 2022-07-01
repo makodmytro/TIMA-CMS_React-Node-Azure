@@ -100,7 +100,7 @@ const AnswerEdit = () => {
           }}
           enableReinitialize
           render={({ handleSubmit, valid, values }) => {
-            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text'].every((key) => {
+            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
               if (!answer) {
                 return false;
               }

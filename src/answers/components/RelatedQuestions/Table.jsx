@@ -5,6 +5,8 @@ import {
   TextField as RATextField,
 } from 'react-admin';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -25,10 +27,24 @@ import { FollowupIcon } from '../TextField';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
+const styles = makeStyles(() => ({
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
+
+    '&:hover': {
+      textDecoration: 'underline',
+      textDecorationColor: '#D5D5D5',
+    },
+  },
+}));
+
 const RelatedQuestionsTable = ({
   record,
   onUnlinkClick,
 }) => {
+  const classes = styles();
   const [warning, setWarning] = React.useState(false);
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
@@ -111,12 +127,14 @@ const RelatedQuestionsTable = ({
 
                             return (
                               <Box key={i} py={1}>
-                                <RATextField
-                                  record={{
-                                    text: _str.length > 20 ? `${_str.substr(0, 20)}...` : _str,
-                                  }}
-                                  source="text"
-                                />
+                                <Typography
+                                  component={Link}
+                                  to={{ pathname: `/answers/${related.fk_parentAnswerId}/edit`, key: Math.random(), state: { applied: true } }}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={classes.link}
+                                >
+                                  {_str.length > 20 ? `${_str.substr(0, 20)}...` : _str}
+                                </Typography>
                                 <Box pl={2}>
                                   <SubdirectoryArrowRight fontSize="small" />
                                   &nbsp;

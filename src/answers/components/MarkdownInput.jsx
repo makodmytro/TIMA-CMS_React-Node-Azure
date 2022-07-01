@@ -12,8 +12,8 @@ import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
-import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
-import createImagePlugin from '@draft-js-plugins/image';
+import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
+import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
 import PlayableText from '../../common/components/playable-text';
 

@@ -72,7 +72,7 @@ const getListUrl = (initialUrl, resource, _params) => {
     const { field, order } = params.sort || {};
 
     const {
-      q, unanswered, groupRelated, topLevelOnly, ...restFilter
+      q, unanswered, groupRelated, topLevelOnly, isContextOnly, ...restFilter
     } = params.filter || {};
     const {
       from, to, active, search, ...filter
@@ -94,6 +94,10 @@ const getListUrl = (initialUrl, resource, _params) => {
 
     if (to && resource === 'audit') {
       params.filter.to = to;
+    }
+
+    if (isContextOnly && resource === 'answers') {
+      filter.isContextOnly = 1;
     }
 
     const query = {

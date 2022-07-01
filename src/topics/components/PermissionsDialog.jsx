@@ -48,7 +48,13 @@ const PermissionForm = ({
 
         return errors;
       }}
-      render={({ handleSubmit, valid, reset }) => {
+      render={({ handleSubmit, valid, reset, values, form }) => {
+        const t = (_v) => {
+          if (_v && !values.view) {
+            form.change('view', true);
+          }
+        };
+
         return (
           <form
             onSubmit={(event) => {
@@ -72,13 +78,13 @@ const PermissionForm = ({
                 <BooleanInput source="view" label={translate('resources.topics.permissions.view')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} />
+                <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} onChange={t} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="manage" label={translate('resources.topics.permissions.manage')} />
+                <BooleanInput source="delete" label={translate('resources.topics.permissions.delete')} onChange={t} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="delete" label={translate('resources.topics.permissions.delete')} />
+                <BooleanInput source="manage" label={translate('resources.topics.permissions.manage')} onChange={t} />
               </Box>
 
               <Box px={1} flex="1">

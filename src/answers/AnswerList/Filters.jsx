@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ReferenceInput,
   SelectInput,
+  BooleanInput,
   TextInput,
   useListContext,
   useTranslate,
@@ -175,6 +176,11 @@ const Filters = ({ languages, topics, ...props }) => {
               />
             )
           }
+          <BooleanInput
+            source="isContextOnly"
+            label="resources.answers.fields.isContextOnly"
+            onChange={() => handleSubmit()}
+          />
         </form>
       )}
     </Form>
