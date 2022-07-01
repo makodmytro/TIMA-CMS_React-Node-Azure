@@ -205,7 +205,7 @@ const german = {
         fk_parentTopicId: 'Fachbereich/Themengruppe übergeordnet',
         has_fk_parentTopicId: 'Fachbereich/Themengruppe übergeordnet',
         syncScheduled: 'Sync geplant',
-        lastSyncAt: 'Letztes Sync am',
+        lastSyncAt: 'Letztes Sync',
         qnaMetadataKey: 'Metadata key',
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
