@@ -3,6 +3,7 @@ import {
   useTranslate,
   useDataProvider,
   useNotify,
+  BooleanField,
 } from 'react-admin';
 import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -17,7 +18,6 @@ import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
-import ContextOnlySwitchField from '../../../questions/components/ContextOnlySwitchField';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
 import useAnswer from '../../useAnswer';
@@ -108,7 +108,11 @@ const FollowupQuestionsTable = ({
                   <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate />
                 </TableCell>
                 <TableCell>
-                  <ContextOnlySwitchField record={related} afterEdit={refresh} />
+                  <BooleanField
+                    record={{ ...related, contextOnly: record.isContextOnly }}
+                    source="contextOnly"
+                    label={translate('resources.questions.contextOnly')}
+                  />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu

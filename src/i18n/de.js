@@ -305,6 +305,7 @@ const german = {
         approved: 'Bestätigt',
         tags: 'Tags',
         status: 'Status',
+        isContextOnly: 'Nur im Kontext',
       },
     },
     sources: {

@@ -309,6 +309,7 @@ const english = {
         approved: 'Approved',
         tags: 'Tags',
         status: 'Status',
+        isContextOnly: 'Context only',
       },
     },
     sources: {

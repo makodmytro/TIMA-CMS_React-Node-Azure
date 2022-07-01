@@ -208,7 +208,7 @@ const CustomGrid = ({ visibleColumns }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Box my={1}>
+        <Box my={1} maxWidth="100%">
           <Table>
             <TableHead>
               <TableRow>
