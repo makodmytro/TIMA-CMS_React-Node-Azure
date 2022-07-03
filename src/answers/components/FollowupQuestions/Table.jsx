@@ -109,8 +109,8 @@ const FollowupQuestionsTable = ({
                 </TableCell>
                 <TableCell>
                   <BooleanField
-                    record={{ ...related, contextOnly: record.isContextOnly }}
-                    source="contextOnly"
+                    record={{ ...related, isContextOnly: record.isContextOnly }}
+                    source="isContextOnly"
                     label={translate('resources.questions.contextOnly')}
                   />
                 </TableCell>

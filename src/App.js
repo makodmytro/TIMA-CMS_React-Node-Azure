@@ -123,7 +123,7 @@ const AsyncResources = () => {
 
   React.useEffect(() => {
     if (!isLoginScreen() && !socket) {
-      const ws = new WebSocket(`${API_URL.replace('https', 'wss')}/topics/status`);
+      const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
 
       setSocket(ws);
     }

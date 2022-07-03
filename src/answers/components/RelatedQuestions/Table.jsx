@@ -152,7 +152,7 @@ const RelatedQuestionsTable = ({
                                               <Box key={ii} pt={0.5} display="flex">
                                                 <Box flex={1} pr={1}>
                                                   {
-                                                    q.contextOnly && (
+                                                    q.isContextOnly && (
                                                       <Chip
                                                         label={translate('resources.questions.fields.contextOnly')}
                                                         variant="outlined"
