@@ -229,7 +229,7 @@ const TestAsk = ({ languages, topics }) => {
               <Box boxShadow={3} p={2} mb={2}>
                 {
                   response.flowSteps.map((step, i) => (
-                    <Typography key={i}>{i + 1}. {step}</Typography>
+                    <Typography key={i} style={{ overflowWrap: 'break-word', display: 'block', wordBreak: 'break-all' }}>{i + 1}. {step}</Typography>
                   ))
                 }
               </Box>
