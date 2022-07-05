@@ -39,6 +39,8 @@ const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
 const API_URL = process.env.REACT_APP_BASE_API;
 
+let statusLoaded = false;
+
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
     return r();
@@ -77,7 +79,7 @@ const AsyncResources = () => {
   };
 
   const fetchWorkflow = async () => {
-    if (sessionStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
+    if (!statusLoaded && sessionStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
       try {
         const [roles, status] = await Promise.all([
           dataProvider.workflowRoles(),
@@ -85,6 +87,7 @@ const AsyncResources = () => {
         ]);
         store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
         store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+        statusLoaded = true;
       } catch (e) {} // eslint-disable-line
     }
   };
@@ -209,6 +212,8 @@ const AsyncResources = () => {
       idleTracker.end();
     }
   }
+
+  fetchWorkflow();
 
   return (
     <AdminUI
