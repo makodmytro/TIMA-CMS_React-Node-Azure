@@ -389,7 +389,7 @@ const german = {
       select_user: 'Gruppen auswählen, zu denen der Nutzer gehört',
       select_users_bis: 'Nutzer auswählen, die zu der Gruppe hinzugefügt werden sollen',
       remove_user: 'Nutzer aus der Gruppe entfernen?',
-      users: 'Nutzer ist in der Gruppe',
+      users: 'Folgende Nutzer gehören der Gruppe an',
       add_users: 'Nutzer hinzufügen',
       add_users_action: '%{n} Nutzer zu der Gruppe hinzufügen',
       fields: {
