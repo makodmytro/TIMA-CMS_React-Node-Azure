@@ -275,7 +275,7 @@ const german = {
       search_questions: 'Fragen suchen, um sie zu verlinken',
       media: 'Dateien',
       edit: 'Antwort bearbeiten',
-      create: 'Antwort erstellen',
+      create: 'QnA erstellen',
       duplicate: 'Antwort duplizieren',
       status_history: 'Statusverlauf',
       status_can_not_change: 'Der Status kann nicht geändert werden',
