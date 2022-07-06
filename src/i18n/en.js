@@ -166,6 +166,7 @@ const english = {
       delete_cascade_one: 'all related questions',
       delete_cascade_two: 'all related answers',
       delete_cascade_three: 'all related permissions',
+      delete_cascade_four: 'all content on the QnA Maker KB as well',
       delete: 'Delete topic',
       steps: {
         basic: 'Basic information',
