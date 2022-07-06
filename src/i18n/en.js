@@ -213,6 +213,7 @@ const english = {
         kbIntegration: 'KB Integration',
         startSync: 'Pull data from QNA now?',
         fk_managedByGroupId: 'Managed by group',
+        qnaEndpointKey: 'QNA endpoint key',
       },
     },
     languages: {

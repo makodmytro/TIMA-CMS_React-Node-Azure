@@ -210,6 +210,7 @@ const german = {
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Sollen die Daten jetzt synchronisiert werden?',
+        qnaEndpointKey: 'QNA endpoint key',
       },
     },
     languages: {

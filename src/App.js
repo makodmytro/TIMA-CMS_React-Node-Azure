@@ -199,10 +199,16 @@ const AsyncResources = () => {
       path="/test-ask"
       component={TestAsk}
     />,
+    <Route
+      exact
+      key={1}
+      path="/import-data"
+      component={topic.import}
+    />,
   ];
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
-    customRoutes = [customRoutes[1]];
+    customRoutes = [customRoutes[1], customRoutes[2]];
   }
 
   if (IDLE_TIMEOUT_SECONDS) {
