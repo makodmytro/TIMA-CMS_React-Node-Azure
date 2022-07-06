@@ -165,6 +165,7 @@ const german = {
       delete_cascade_one: 'Alle verlinkten Fragen',
       delete_cascade_two: 'Alle verlinkten Antworten',
       delete_cascade_three: 'Alle zugehörigen Berechtigungen',
+      delete_cascade_four: 'Alle Inhalte auch auf der QnA Maker Knowledge Base',
       delete: 'Löschen',
       steps: {
         basic: 'Fachbereich',

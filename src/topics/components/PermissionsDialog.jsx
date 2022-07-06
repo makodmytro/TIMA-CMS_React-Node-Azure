@@ -69,7 +69,7 @@ const PermissionForm = ({
         return (
           <form
             onSubmit={(event) => {
-              handleSubmit(event).then(reset);
+              handleSubmit(event)?.then(reset);
             }}
           >
             <Box display="flex" alignItems="center" justifyContent="center">

@@ -36,8 +36,8 @@ export default (props) => {
       <DeleteDialog
         open={open}
         onClose={() => setOpen(false)}
-        onConfirm={(values) => {
-          dataProvider.delete('topics', { id: props?.record?.id, data: values }).then(() => {
+        onConfirm={() => {
+          dataProvider.delete('topics', { id: props?.record?.id }).then(() => {
             notify('Deleted successfully');
 
             setOpen(false);
@@ -61,6 +61,7 @@ export default (props) => {
                 <Typography variant="body2">- {translate('resources.topics.delete_cascade_one')}</Typography>
                 <Typography variant="body2">- {translate('resources.topics.delete_cascade_two')}</Typography>
                 <Typography variant="body2">- {translate('resources.topics.delete_cascade_three')}</Typography>
+                <Typography variant="body2">- {translate('resources.topics.delete_cascade_four')}</Typography>
               </Box>
             </Box>
           </Box>
