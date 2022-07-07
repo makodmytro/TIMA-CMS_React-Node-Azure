@@ -14,7 +14,7 @@ const ActionsRow = ({ record }) => {
   const translate = useTranslate();
   const [expanded, setExpanded] = React.useState(true);
   const [createOpen, setCreateOpen] = React.useState(false);
-  const disabled = record && record.allowEdit === false;
+  const disabled = false; //always allow to open the edit layout //record && record.allowEdit === false;
 
   if (!record) {
     return null;
