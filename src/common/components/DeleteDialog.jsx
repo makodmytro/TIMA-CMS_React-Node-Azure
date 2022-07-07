@@ -43,7 +43,6 @@ const DeleteDialog = ({
   const translate = useTranslate();
   const classes = styles();
   const [confirmation, setConfirmation] = React.useState('');
-  const [kb, setKb] = React.useState(false);
 
   React.useEffect(() => {
     if (open) {
@@ -95,18 +94,6 @@ const DeleteDialog = ({
               />
             </Box>
           </Box>
-          <Box textAlign="center">
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={kb}
-                  onChange={(e) => setKb(e.target.checked)}
-                  name="kb"
-                />
-              )}
-              label={translate('misc.delete_kb')}
-            />
-          </Box>
         </Box>
         <Box p={2} bgcolor="#ececec">
           <Box display="flex">
@@ -122,7 +109,7 @@ const DeleteDialog = ({
             </Box>
             <Box flex={1} pl={1}>
               <Button
-                onClick={() => onConfirm({ removeKB: kb })}
+                onClick={() => onConfirm()}
                 type="button"
                 variant="contained"
                 fullWidth
