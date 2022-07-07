@@ -17,6 +17,8 @@ import {
 } from 'react-admin';
 import StepKB from './StepKB';
 import StepQNAData from './StepQNAData';
+import StepFetchKnowledgebases from './StepFetchKnowledgebases';
+import StepAnalyzeKB from './StepAnalyzeKB';
 
 const style = makeStyles(() => ({
   label: {
@@ -34,9 +36,6 @@ const ImportData = ({
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
-  const [error, setError] = React.useState(null);
-  const [jobId, setJobId] = React.useState(null);
-  const [analyzing, setAnalyzing] = React.useState(false);
 
   const [groups, setGroups] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -48,7 +47,7 @@ const ImportData = ({
     kbIntegration: '1',
     qnaApiEndpoint: 'https://qnaeditor-service-1.cognitiveservices.azure.com',
     qnaSubscriptionKey: '8618314189ce4e39872fc12bca40a603',
-    qnaKnowledgeBaseId: '36acd9e7-14ab-496b-b094-f442afa3ef0d',
+    qnaKnowledgeBaseId: '',
     qnaApiVersion: '4',
   });
 
@@ -87,38 +86,6 @@ const ImportData = ({
       ...values,
     });
     setStep((s) => s + 1);
-  };
-
-  const awaitJobID = async (id) => {
-    setTimeout(async () => {
-      const { data } = await dataProvider.jobStatus(null, {
-        jobId: id,
-      });
-
-      console.log(data);
-      awaitJobID(id);
-    }, 5000);
-  };
-
-  const analizeKB = async () => {
-    try {
-      setAnalyzing(true);
-
-      const { data } = await dataProvider.analizeKB(null, {
-        data: state,
-      });
-
-      if (!data.jobId) {
-        throw new Error('FAILED');
-      } else {
-        setJobId(data.jobId);
-        awaitJobID(data.jobId);
-      }
-    } catch (err) {
-      notify('Unexpected error', 'error');
-      setError(true);
-      setAnalyzing(false);
-    }
   };
 
   if (awaitingSync) {
@@ -162,7 +129,7 @@ const ImportData = ({
       <Stepper activeStep={step} orientation="vertical">
         <Step classes={{ root: classes.label }}>
           <StepLabel>
-            {translate('resources.import.step_kb')}
+            {translate('import.step_kb')}
           </StepLabel>
           <StepContent>
             <StepKB
@@ -173,7 +140,7 @@ const ImportData = ({
         </Step>
         <Step classes={{ root: classes.label }}>
           <StepLabel>
-            {translate('resources.import.step_qna')}
+            {translate('import.step_qna')}
           </StepLabel>
           <StepContent>
             <StepQNAData
@@ -185,30 +152,26 @@ const ImportData = ({
         </Step>
         <Step classes={{ root: classes.label }}>
           <StepLabel>
-            {translate('resources.import.step_analyze_submit')}
+            {translate('import.step_fetch_knowledgebases')}
           </StepLabel>
           <StepContent>
-            <Box textAlign="center">
-              {
-                !analyzing && (
-                  <Button onClick={analizeKB} variant="contained" color="primary">
-                    {translate('resources.import.step_analyze_submit_button')}
-                  </Button>
-                )
-              }
-              {
-                analyzing && (
-                  <Box>
-                    <Typography>
-                      {translate('resources.import.analyzing_kb')}
-                    </Typography>
-                    <Button component={Link} to="/topics" variant="outlined">
-                      {translate('misc.cancel')}
-                    </Button>
-                  </Box>
-                )
-              }
-            </Box>
+            <StepFetchKnowledgebases
+              initialValues={state}
+              onSubmit={onStepSubmit}
+              onBack={back}
+            />
+          </StepContent>
+        </Step>
+        <Step classes={{ root: classes.label }}>
+          <StepLabel>
+            {translate('import.step_analyze_submit')}
+          </StepLabel>
+          <StepContent>
+            <StepAnalyzeKB
+              initialValues={state}
+              onSubmit={onStepSubmit}
+              onBack={back}
+            />
           </StepContent>
         </Step>
       </Stepper>

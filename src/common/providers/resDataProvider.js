@@ -476,11 +476,11 @@ const resDataProvider = {
     return { data: json };
   },
   jobStatus: async (resource, params) => {
-    const { body } = await httpClient(`${baseApi}/jobs/${params.jobId}`, {
+    const { json } = await httpClient(`${baseApi}/jobs/${params.jobId}`, {
       method: 'GET',
     });
 
-    return { data: body };
+    return { data: json };
   },
 };
 

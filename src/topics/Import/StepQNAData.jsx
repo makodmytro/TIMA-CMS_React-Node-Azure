@@ -38,13 +38,6 @@ const StepFour = ({
                 validate={required()}
               />
               <TextInput
-                source="qnaKnowledgeBaseId"
-                label="resources.topics.fields.qnaKnowledgeBaseId"
-                autoComplete="new-password"
-                fullWidth
-                validate={required()}
-              />
-              <TextInput
                 source="qnaApiVersion"
                 label="resources.topics.fields.qnaApiVersion"
                 fullWidth
