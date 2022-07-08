@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   useTranslate,
   SelectInput,
@@ -17,6 +18,7 @@ const StepKB = ({
   const translate = useTranslate();
   const [options, setOptions] = React.useState([]);
   const [error, setError] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
   const f = async () => {
     let url = initialValues.qnaApiVersion === '4'
@@ -38,6 +40,9 @@ const StepKB = ({
       })
       .catch((e) => {
         setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -51,6 +56,14 @@ const StepKB = ({
         <Alert severity="error">
           {translate('import.error_fetching_knowledgebases')}
         </Alert>
+      </Box>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Box p={2} textAlign="center">
+        <CircularProgress />
       </Box>
     );
   }

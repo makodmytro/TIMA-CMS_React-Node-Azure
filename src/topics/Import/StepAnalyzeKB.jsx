@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-final-form';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -8,44 +7,20 @@ import Typography from '@material-ui/core/Typography';
 import {
   useTranslate,
   useNotify,
-  useRedirect,
   useDataProvider,
-  SelectInput,
-  required,
-  TextInput,
-  BooleanInput,
 } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
-const StepKB = ({
+const StepAnalyzeKB = ({
   initialValues,
-  onSubmit,
-  onBack,
+  onKBDataReady,
 }) => {
   const notify = useNotify();
-  const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
-  const [result, setResult] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [jobId, setJobId] = React.useState(null);
   const [analyzing, setAnalyzing] = React.useState(false);
-
-  const onSingleTopicSubmit = async (values) => {
-    try {
-      await dataProvider.create('topics', {
-        data: {
-          ...initialValues,
-          ...values,
-        },
-      });
-
-      notify('Topic created successfully');
-      redirect('/topics');
-    } catch (err) {
-      setError(true);
-    }
-  };
 
   const awaitJobID = async (id) => {
     setTimeout(async () => {
@@ -59,7 +34,7 @@ const StepKB = ({
         setError(true);
       } else if (data?.status === 2) {
         setAnalyzing(false);
-        setResult({ singleTopic: true });
+        onKBDataReady(data);
       }
     }, 5000);
   };
@@ -93,49 +68,11 @@ const StepKB = ({
         </Alert>
         <Typography>
           <a href={`mailto:support@tamerin.tech?subject=Problems while importing KB ${jobId}`}>
-            {translate('import_analyze_kb_contact_support')}
+            {translate('import.analyze_kb_contact_support')}
           </a>
         </Typography>
       </Box>
     );
-  }
-
-  if (!analyzing && !!result) {
-    if (result.singleTopic) {
-      return (
-        <Form
-          onSubmit={onSingleTopicSubmit}
-          initialValues={{
-            name: '',
-            startSync: true,
-          }}
-          render={({ handleSubmit, submitting, values, valid }) => {
-            return (
-              <form onSubmit={handleSubmit} autoComplete="off">
-                <Box>
-                  <TextInput
-                    source="name"
-                    label="resources.topics.fields.name"
-                    fullWidth
-                    validate={required()}
-                  />
-                  <BooleanInput source="startSync" label="resources.topics.fields.startSync" />
-                </Box>
-                <Box textAlign="right">
-                  <Button type="button" variant="outlined" color="primary" size="small" onClick={() => onBack(values)}>
-                    {translate('misc.back')}
-                  </Button>
-                  &nbsp;
-                  <Button type="submit" disabled={!valid || submitting} variant="contained" color="secondary" size="small">
-                    {translate('misc.next')}
-                  </Button>
-                </Box>
-              </form>
-            );
-          }}
-        />
-      )
-    }
   }
 
   return (
@@ -166,4 +103,4 @@ const StepKB = ({
   );
 };
 
-export default StepKB;
+export default StepAnalyzeKB;

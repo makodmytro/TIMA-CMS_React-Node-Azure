@@ -19,6 +19,7 @@ import StepKB from './StepKB';
 import StepQNAData from './StepQNAData';
 import StepFetchKnowledgebases from './StepFetchKnowledgebases';
 import StepAnalyzeKB from './StepAnalyzeKB';
+import StepProcessKBResult from './StepProcessKBResult';
 
 const style = makeStyles(() => ({
   label: {
@@ -37,6 +38,7 @@ const ImportData = ({
   const dataProvider = useDataProvider();
   const translate = useTranslate();
 
+  const [analyzeKBResult, setAnalyzeKBResult] = React.useState(null);
   const [groups, setGroups] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [awaitingSync, setAwaitingSync] = React.useState(false);
@@ -86,6 +88,11 @@ const ImportData = ({
       ...values,
     });
     setStep((s) => s + 1);
+  };
+
+  const onKBDataReady = (analyzeResult) => {
+    setAnalyzeKBResult(analyzeResult);
+    next();
   };
 
   if (awaitingSync) {
@@ -169,7 +176,19 @@ const ImportData = ({
           <StepContent>
             <StepAnalyzeKB
               initialValues={state}
-              onSubmit={onStepSubmit}
+              onKBDataReady={onKBDataReady}
+              onBack={back}
+            />
+          </StepContent>
+        </Step>
+        <Step classes={{ root: classes.label }}>
+          <StepLabel>
+            {translate('import.step_process_kb_result')}
+          </StepLabel>
+          <StepContent>
+            <StepProcessKBResult
+              initialValues={state}
+              analyzeKBResult={analyzeKBResult}
               onBack={back}
             />
           </StepContent>
