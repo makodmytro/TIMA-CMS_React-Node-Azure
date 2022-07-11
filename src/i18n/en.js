@@ -159,7 +159,7 @@ const english = {
     score: 'Score',
     steps: 'Steps',
     bug_report: 'Bug report',
-    bug_report_text: 'Describe the problem with as much detail was possible',
+    bug_report_text: 'Please describe the problem with as much details as possible',
     submit: 'Submit',
   },
   resources: {
