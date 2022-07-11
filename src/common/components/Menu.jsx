@@ -16,6 +16,7 @@ import Switch from '@material-ui/core/Switch';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 import DemoIcon from '@material-ui/icons/AddToQueue';
+import BugReport from './BugReport';
 import { baseApi } from '../httpClient';
 import { useIsAdmin } from '../../hooks';
 
@@ -150,6 +151,7 @@ const Menu = ({ onMenuClick, logout }) => {
               </span>
             </div>
             {baseApi}
+            <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
           </div>
         )
       }
