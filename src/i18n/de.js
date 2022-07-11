@@ -49,6 +49,7 @@ const german = {
   'Comment added successfully': 'Kommentar erfolgreich hinzugefügt',
   'Deleted successfully': 'Löschen erfolgreich',
   'Are you sure you want to delete the permission?': 'Bist du dir sicher, dass du diese Berechtigung löschen möchtest?',
+  'The error was reported successfully': 'The error was reported successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Bist du sicher, dass du die mit dieser Antwort verlinkten Fragen bestätigen möchtest?',
@@ -156,6 +157,9 @@ const german = {
     suggestions: 'Suggestions',
     score: 'Score',
     steps: 'Steps',
+    bug_report: 'Bug report',
+    bug_report_text: 'Describe the problem with as much detail was possible',
+    submit: 'Submit',
   },
   resources: {
     topics: {

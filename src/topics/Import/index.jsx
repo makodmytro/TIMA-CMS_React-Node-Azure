@@ -20,6 +20,7 @@ import StepQNAData from './StepQNAData';
 import StepFetchKnowledgebases from './StepFetchKnowledgebases';
 import StepAnalyzeKB from './StepAnalyzeKB';
 import StepProcessKBResult from './StepProcessKBResult';
+import StepKBSelectionEdit from './StepKBSelectionEdit';
 
 const style = makeStyles(() => ({
   label: {
@@ -39,6 +40,7 @@ const ImportData = ({
   const translate = useTranslate();
 
   const [analyzeKBResult, setAnalyzeKBResult] = React.useState(null);
+  const [kbSelectedKeys, setKBSelectedKeys] = React.useState([]);
   const [groups, setGroups] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [awaitingSync, setAwaitingSync] = React.useState(false);
@@ -94,6 +96,11 @@ const ImportData = ({
     setAnalyzeKBResult(analyzeResult);
     next();
   };
+
+  const onKBDataSelected = (selected) => {
+    setKBSelectedKeys(selected);
+    next();
+  }
 
   if (awaitingSync) {
     return (
@@ -190,6 +197,20 @@ const ImportData = ({
               initialValues={state}
               analyzeKBResult={analyzeKBResult}
               onBack={back}
+              onSubmit={onKBDataSelected}
+            />
+          </StepContent>
+        </Step>
+        <Step classes={{ root: classes.label }}>
+          <StepLabel>
+            {translate('import.step_kb_selection_edit')}
+          </StepLabel>
+          <StepContent>
+            <StepKBSelectionEdit
+              initialValues={state}
+              analyzeKBResult={analyzeKBResult}
+              onBack={back}
+              selectedKBKeys={kbSelectedKeys}
             />
           </StepContent>
         </Step>

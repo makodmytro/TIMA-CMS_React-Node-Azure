@@ -475,6 +475,14 @@ const resDataProvider = {
 
     return { data: json };
   },
+  bugReport: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/admin/bugs`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
   jobStatus: async (resource, params) => {
     const { json } = await httpClient(`${baseApi}/jobs/${params.jobId}`, {
       method: 'GET',

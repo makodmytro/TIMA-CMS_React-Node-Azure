@@ -49,6 +49,7 @@ const english = {
   'Comment added successfully': 'Comment added successfully',
   'Deleted successfully': 'Deleted successfully',
   'Are you sure you want to delete the permission?': 'Are you sure you want to delete the permission?',
+  'The error was reported successfully': 'The error was reported successfully',
   // end notifications
   dialogs: {
     batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
@@ -157,6 +158,9 @@ const english = {
     suggestions: 'Suggestions',
     score: 'Score',
     steps: 'Steps',
+    bug_report: 'Bug report',
+    bug_report_text: 'Describe the problem with as much detail was possible',
+    submit: 'Submit',
   },
   resources: {
     topics: {

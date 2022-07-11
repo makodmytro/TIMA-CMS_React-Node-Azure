@@ -24,25 +24,17 @@ const MetadataValues = ({ data }) => {
   const translate = useTranslate();
   const [open, setOpen] = React.useState(null);
 
-  if (open !== null) {
-    console.log(data);
-    console.log(data.values, open);
-    console.log(data.values[open]);
-
-    return null;
-  }
-
   return (
     <>
       <Typography>
         {translate('import.metadata_value_label')}:
       </Typography>
       {
-        data.values.map((value, i) => {
+        data.topQnaPairs.map((value, i) => {
           return (
             <Box key={i}>
               <Typography component="span">
-                <b>{value.metadataValue}</b> - {translate('import.metadata_value_total', { count: value.count })} -
+                <b>{value.metadataValue}</b>&nbsp;-&nbsp;
               </Typography>
               <Typography component="span" style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setOpen(i)}>
                 {translate('import.metadata_value_view_content')}
@@ -54,22 +46,22 @@ const MetadataValues = ({ data }) => {
       {
         open !== null && (
           <Dialog open={open !== null} onClose={() => setOpen(null)} size="md" maxWidth>
-            <Box textAlign="right">
+            <Box textAlign="right" p={2}>
               <IconButton onClick={() => setOpen(null)} size="small">
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Box>
             <Box p={2}>
-              <Typography>
-                {translate('import.metadata_value_total', { count: data.values[open].count })}
-              </Typography>
               {
-                data.values[open].topQnaPairs.map((qna, i) => {
+                data.topQnaPairs[open].qnaPairs.map((qna, i) => {
                   return (
-                    <Box key={i}>
+                    <Box key={i} boxShadow={3} p={2} mb={1}>
                       <Typography>
-                        <b>{qna.questions.join(', ')}</b>
+                        {
+                          qna.questions.map((q, ii) => (<div key={ii}><b>{q}</b></div>))
+                        }
                       </Typography>
+                      <br />
                       <Typography>
                         {qna.answer}
                       </Typography>
@@ -89,6 +81,7 @@ const StepProcessKBResult = ({
   initialValues,
   analyzeKBResult,
   onBack,
+  onSubmit,
 }) => {
   const notify = useNotify();
   const redirect = useRedirect();
@@ -171,7 +164,6 @@ const StepProcessKBResult = ({
 
   return (
     <Box>
-      {JSON.stringify(selected)}
       <Box>
         {
           analyzeKBResult.data.map((data, i) => {
@@ -200,6 +192,15 @@ const StepProcessKBResult = ({
             );
           })
         }
+        <Box textAlign="right">
+          <Button type="button" variant="outlined" color="primary" size="small" onClick={() => onBack()}>
+            {translate('misc.back')}
+          </Button>
+          &nbsp;
+          <Button disabled={!selected.length} variant="contained" color="secondary" size="small" onClick={() => onSubmit(selected)}>
+            {translate('misc.next')}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
