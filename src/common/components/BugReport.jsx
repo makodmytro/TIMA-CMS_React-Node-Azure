@@ -7,6 +7,7 @@ import {
   TextField,
   IconButton,
 } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import {
   useDataProvider,
   useNotify,
@@ -22,6 +23,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
   const notify = useNotify();
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState('');
+  const history = useSelector((s) => s.custom.navigatedRoutes);
 
   React.useEffect(() => {
     if (open) {
@@ -38,6 +40,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           cmsVersion,
           backendVersion,
           url: window.location.href,
+          history,
         },
       });
       notify('The error was reported successfully');
