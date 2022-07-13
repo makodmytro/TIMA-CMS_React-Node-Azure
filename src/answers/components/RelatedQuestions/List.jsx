@@ -61,7 +61,7 @@ const List = ({ record }) => {
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
       />
-      <Box p={2}>
+      <Box p={2} style={{ maxHeight: '400px', overflowY: 'auto' }}>
         <Table record={record} onUnlinkClick={onUnlinkClick} />
       </Box>
     </>
