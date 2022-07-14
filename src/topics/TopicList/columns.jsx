@@ -51,7 +51,7 @@ const columns = [
   },
   {
     key: 'updatedAt',
-    el: (<DateField source="contentLastUpdatedAt" showTime />),
+    el: (<DateField source="updatedAt" showTime />),
   },
   {
     key: 'lastSyncAt',
