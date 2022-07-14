@@ -161,6 +161,8 @@ const AsyncResources = () => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
+
+    store.dispatch({ type: 'CUSTOM_NAVIGATION_CHANGED', payload: location.pathname });
   }, [location.pathname, tic]);
 
   if (!ready) {
