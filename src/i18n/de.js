@@ -159,8 +159,8 @@ const german = {
     steps: 'Steps',
     bug_report: 'Bug report',
     bug_report_text: 'Bitte beschreibe das Problem so detailliert wie möglich',
-  submit: 'Submit',
-},
+    submit: 'Submit',
+  },
   resources: {
     topics: {
       name: 'Thema |||| Themen',
