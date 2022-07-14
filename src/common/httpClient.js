@@ -1,5 +1,6 @@
 import { fetchUtils, HttpError } from 'react-admin';
 import * as Sentry from '@sentry/react';
+import RequestTrack from '../request-track';
 
 const httpClient = async (url, options = {}, omitToken = false) => {
   if (!options.headers || !(options.headers instanceof Headers)) {
@@ -11,6 +12,8 @@ const httpClient = async (url, options = {}, omitToken = false) => {
   if (token && !omitToken) {
     options.headers.set('Authorization', `Bearer ${token}`);
   }
+
+  RequestTrack.set(url, options.method || 'GET');
 
   try {
     const result = await fetchUtils.fetchJson(url, options);

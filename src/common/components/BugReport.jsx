@@ -15,6 +15,7 @@ import {
   usePermissions,
 } from 'react-admin';
 import CloseIcon from '@material-ui/icons/Close';
+import RequestTrack from '../../request-track';
 
 const BugReport = ({ cmsVersion, backendVersion }) => {
   const translate = useTranslate();
@@ -41,6 +42,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           backendVersion,
           url: window.location.href,
           history,
+          endpoints: RequestTrack.get(),
         },
       });
       notify('The error was reported successfully');
