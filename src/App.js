@@ -10,6 +10,7 @@ import {
   useDataProvider,
 } from 'react-admin';
 import IdleTracker from 'idle-tracker';
+import * as Sentry from '@sentry/react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import authProvider from './common/providers/authProvider';
@@ -160,6 +161,8 @@ const AsyncResources = () => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
+
+    store.dispatch({ type: 'CUSTOM_NAVIGATION_CHANGED', payload: location.pathname });
   }, [location.pathname, tic]);
 
   if (!ready) {
@@ -309,7 +312,9 @@ function App() {
       customReducers={{ lng: lngReducer, custom: customReducer }}
       history={history}
     >
-      <AsyncResources />
+      <Sentry.ErrorBoundary fallback="An error has occurred">
+        <AsyncResources />
+      </Sentry.ErrorBoundary>
     </AdminContext>
   );
 }
