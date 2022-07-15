@@ -34,45 +34,21 @@ const ImportData = ({
   onSubmit,
 }) => {
   const classes = style();
-  const notify = useNotify();
-  const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
 
   const [analyzeKBResult, setAnalyzeKBResult] = React.useState(null);
   const [kbSelectedKeys, setKBSelectedKeys] = React.useState([]);
-  const [groups, setGroups] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [awaitingSync, setAwaitingSync] = React.useState(false);
-  const [awaitingSyncFinished, setAwaitingSyncFinished] = React.useState(null);
   const [step, setStep] = React.useState(0);
-  const history = useHistory();
   const [state, setState] = React.useState({
     kbIntegration: '1',
-    qnaApiEndpoint: 'https://qnaeditor-service-1.cognitiveservices.azure.com',
-    qnaSubscriptionKey: '8618314189ce4e39872fc12bca40a603',
+    qnaApiEndpoint: '',
+    qnaSubscriptionKey: '',
+    // qnaApiEndpoint: 'https://qnaeditor-service-1.cognitiveservices.azure.com',
+    // qnaSubscriptionKey: '8618314189ce4e39872fc12bca40a603',
     qnaKnowledgeBaseId: '',
     qnaApiVersion: '4',
   });
-
-  const f = async () => {
-    const { data } = await dataProvider.me();
-
-    if (data && data.Groups) {
-      if (data.Groups.length === 1) {
-        setState({
-          ...state,
-          fk_managedByGroupId: data.Groups[0].id,
-        });
-      } else {
-        setGroups(data.Groups);
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    f();
-  }, []);
 
   const back = (values) => {
     setState({
@@ -100,42 +76,6 @@ const ImportData = ({
   const onKBDataSelected = (selected) => {
     setKBSelectedKeys(selected);
     next();
-  }
-
-  if (awaitingSync) {
-    return (
-      <Box textAlign="center" py={2}>
-        <CircularProgress />
-        <Typography>{translate('misc.processing')}...</Typography>
-      </Box>
-    );
-  }
-
-  if (awaitingSyncFinished) {
-    return (
-      <Box textAlign="center" py={2}>
-        <Typography>{translate('misc.done')}</Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          size="small"
-          component={Link}
-          to="/topics"
-        >
-          {translate('misc.back')}
-        </Button>
-        &nbsp;
-        <Button
-          variant="contained"
-          color="secondary"
-          size="small"
-          component={Link}
-          to={`/answers?filter=${encodeURIComponent(JSON.stringify({ fk_topicId: [awaitingSyncFinished] }))}`}
-        >
-          {translate('misc.show_answers')}
-        </Button>
-      </Box>
-    );
   }
 
   return (

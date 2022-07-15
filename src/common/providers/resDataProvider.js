@@ -490,6 +490,14 @@ const resDataProvider = {
 
     return { data: json };
   },
+  bulkCreateTopic: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/bulk`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  }
 };
 
 export default resDataProvider;
