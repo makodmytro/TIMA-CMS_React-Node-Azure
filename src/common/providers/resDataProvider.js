@@ -451,6 +451,13 @@ const resDataProvider = {
 
     return { data: json };
   },
+  topicContentCounter: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/${params.id}/content`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
   backendVersion: async (resource, params) => {
     const { body } = await httpClient(`${baseApi}/admin/version`, {
       method: 'GET',

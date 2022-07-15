@@ -18,6 +18,21 @@ export default (props) => {
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
+  const [content, setContent] = React.useState(null);
+
+  const _fetch = async () => {
+    const { data } = await dataProvider.topicContentCounter(null, {
+      id: props?.record?.id,
+    });
+
+    setContent(data);
+  };
+
+  React.useEffect(() => {
+    if (open) {
+      _fetch();
+    }
+  }, [open]);
 
   return (
     <>
@@ -58,10 +73,24 @@ export default (props) => {
             </Typography>
             <Box display="flex" justifyContent="center" mt={2}>
               <Box>
-                <Typography variant="body2">- {translate('resources.topics.delete_cascade_one')}</Typography>
-                <Typography variant="body2">- {translate('resources.topics.delete_cascade_two')}</Typography>
-                <Typography variant="body2">- {translate('resources.topics.delete_cascade_three')}</Typography>
-                <Typography variant="body2">- {translate('resources.topics.delete_cascade_four')}</Typography>
+                <Typography variant="body2">
+                  - {translate('resources.topics.delete_cascade_one')}
+                  &nbsp;
+                  {!!content && <>({content.questions || 0})</>}
+                </Typography>
+                <Typography variant="body2">
+                  - {translate('resources.topics.delete_cascade_two')}
+                  &nbsp;
+                  {!!content && <>({content.answers || 0})</>}
+                </Typography>
+                <Typography variant="body2">
+                  - {translate('resources.topics.delete_cascade_three')}
+                  &nbsp;
+                  {!!content && <>({content.permissions || 0})</>}
+                </Typography>
+                <Typography variant="body2">
+                  - {translate('resources.topics.delete_cascade_four')}
+                </Typography>
               </Box>
             </Box>
           </Box>
