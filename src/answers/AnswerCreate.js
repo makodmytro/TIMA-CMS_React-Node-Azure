@@ -149,7 +149,7 @@ const AnswerCreate = () => {
                   source="fk_topicId"
                   isRequired
                   label="resources.answers.fields.fk_topicId"
-                  filter={{ fk_languageId: values.fk_languageId }}
+                  filterFunction={(t) => t.allowManage}
                 />
               </Box>
 

@@ -142,7 +142,7 @@ const SteppedForm = ({
         redirect(`/topics/${created.id}`);
       }
     } catch (err) {
-      notify('Failed to create the topic', 'error');
+      notify(err?.body?.message || 'Failed to create the topic', 'error');
     }
   };
 
