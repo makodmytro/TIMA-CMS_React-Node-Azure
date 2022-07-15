@@ -17,6 +17,8 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import RequestTrack from '../../request-track';
 
+const BUG_REPORT_BUTTON_COLOR = '#c3170a';
+
 const BugReport = ({ cmsVersion, backendVersion }) => {
   const translate = useTranslate();
   const dataProvider = useDataProvider();
@@ -54,7 +56,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
 
   return (
     <Box textAlign="center">
-      <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>
+      <Button variant="contained" color="secondary" onClick={() => setOpen(true)} style={{ backgroundColor: BUG_REPORT_BUTTON_COLOR }}>
         {translate('misc.bug_report')}
       </Button>
       <Dialog open={open} onClose={() => setOpen(false)} size="md" fullWidth>
