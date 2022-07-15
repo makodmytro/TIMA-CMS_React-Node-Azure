@@ -7,6 +7,7 @@ import {
   TextField,
   IconButton,
 } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import {
   useDataProvider,
   useNotify,
@@ -14,6 +15,7 @@ import {
   usePermissions,
 } from 'react-admin';
 import CloseIcon from '@material-ui/icons/Close';
+import RequestTrack from '../../request-track';
 
 const BugReport = ({ cmsVersion, backendVersion }) => {
   const translate = useTranslate();
@@ -22,6 +24,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
   const notify = useNotify();
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState('');
+  const history = useSelector((s) => s.custom.navigatedRoutes);
 
   React.useEffect(() => {
     if (open) {
@@ -38,6 +41,8 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           cmsVersion,
           backendVersion,
           url: window.location.href,
+          history,
+          endpoints: RequestTrack.get(),
         },
       });
       notify('The error was reported successfully');

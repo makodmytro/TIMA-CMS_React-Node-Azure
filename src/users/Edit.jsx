@@ -32,13 +32,6 @@ const CustomToolbar = (props) => {
         submitOnEnter
         disabled={props.pristine || disabled}
       />
-      <DeleteButton
-        basePath={props.basePath}
-        record={props.record}
-        undoable={false}
-        disabled={disabled}
-        label={translate('misc.delete_user')}
-      />
     </Toolbar>
   );
 };

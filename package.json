@@ -11,8 +11,8 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/pickers": "^3.2.10",
-    "@sentry/react": "^6.19.7",
-    "@sentry/tracing": "^6.19.7",
+    "@sentry/react": "^7.6.0",
+    "@sentry/tracing": "^7.6.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -54,7 +54,8 @@
     "start": "export REACT_APP_VERSION=$(git rev-parse --short=7 HEAD) && react-scripts start",
     "build": "export REACT_APP_VERSION=$(git rev-parse --short=7 HEAD) && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "license-report": "license-report --output=html > license-report.html"
   },
   "browserslist": {
     "production": [
@@ -74,6 +75,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "license-report": "5.0.2"
   }
 }

@@ -158,7 +158,7 @@ const german = {
     score: 'Score',
     steps: 'Steps',
     bug_report: 'Bug report',
-    bug_report_text: 'Describe the problem with as much detail was possible',
+    bug_report_text: 'Bitte beschreibe das Problem so detailliert wie möglich',
     submit: 'Submit',
   },
   resources: {

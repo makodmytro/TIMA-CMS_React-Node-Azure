@@ -12,10 +12,19 @@ const defaultState = {
     data: {},
     statusHistory: {},
   },
+  navigatedRoutes: [],
 };
 
 export default (state = defaultState, { type, payload }) => {
   switch (type) {
+    case 'CUSTOM_NAVIGATION_CHANGED': {
+      const n = state.navigatedRoutes.concat([payload]);
+
+      return {
+        ...state,
+        navigatedRoutes: n.slice(Math.max(n.length - 10, 0)),
+      };
+    }
     case 'CUSTOM_TOPICS_LABELS_SUCCESS': {
       return {
         ...state,
