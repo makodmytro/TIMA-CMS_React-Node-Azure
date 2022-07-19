@@ -151,7 +151,9 @@ const Menu = ({ onMenuClick, logout }) => {
               </span>
             </div>
             {baseApi}
-            <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
+            <Box mt={2}>
+              <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
+            </Box>
           </div>
         )
       }
