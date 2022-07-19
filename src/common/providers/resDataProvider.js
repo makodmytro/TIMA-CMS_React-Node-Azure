@@ -474,8 +474,31 @@ const resDataProvider = {
 
     return { data: json };
   },
+  analizeKB: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/analyzeKB`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
   bugReport: async (resource, params) => {
     const { json } = await httpClient(`${baseApi}/admin/bugs`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
+  jobStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/jobs/${params.jobId}`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
+  bulkCreateTopic: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/bulk`, {
       method: 'POST',
       body: JSON.stringify(params.data),
     });
