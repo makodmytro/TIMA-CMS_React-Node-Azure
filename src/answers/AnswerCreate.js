@@ -149,7 +149,7 @@ const AnswerCreate = () => {
                   source="fk_topicId"
                   isRequired
                   label="resources.answers.fields.fk_topicId"
-                  filterFunction={(t) => t.allowManage}
+                  filterFunction={(t) => t.allowCreateContent}
                 />
               </Box>
 
