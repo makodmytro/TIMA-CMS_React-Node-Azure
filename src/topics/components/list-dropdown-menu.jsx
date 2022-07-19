@@ -57,6 +57,7 @@ const DropdownMenu = ({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
+        { (admin || record?.allowManage) && (
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
@@ -70,6 +71,7 @@ const DropdownMenu = ({
             {translate('misc.edit_topic')}
           </Button>
         </MenuItem>
+        )}
         <MenuItem
           onClick={(e) => e.stopPropagation()}
         >
