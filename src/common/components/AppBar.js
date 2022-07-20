@@ -13,10 +13,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Logo from '../../assets/TIMA_logo.png';
+import AltLogo from '../../assets/QnA Manager Logo Horizontal.png';
 import { baseApi } from '../httpClient';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
+const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -94,12 +96,40 @@ const MyAppBar = (props) => {
   const classes = useStyles();
   const { onLanguageChange, language, ...rest } = props;
 
+  const style = USE_ALT_THEME
+    ? {
+      backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+      color: 'white',
+    }
+    : { backgroundColor: '#fafafa' };
+
+  const LogoElement = () => {
+    if (USE_ALT_THEME) {
+      return (
+        <div className={classes.logo}>
+          <img src={AltLogo} alt="logo" height={45} />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <div className={classes.logo}>
+          <img src={Logo} alt="logo" />
+        </div>
+        <div className={classes.logo}>
+          <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="70" />
+        </div>
+      </>
+    );
+  };
+
   return (
     <AppBar
       color="transparent"
       {...rest}
       userMenu={<MyUserMenu {...rest} />}
-      style={{ backgroundColor: '#fafafa' }}
+      style={style}
       logout={USE_AZURE_LOGIN === '1' && sessionStorage.getItem('azure-login') === '1' ? <CustomLogout /> : <Logout />}
     >
       <Typography
@@ -108,12 +138,7 @@ const MyAppBar = (props) => {
         className={classes.title}
         id="react-admin-title"
       />
-      <div className={classes.logo}>
-        <img src={Logo} alt="logo" />
-      </div>
-      <div className={classes.logo}>
-        <img src={`${baseApi}/resources/logo`} alt="logoBackend" height="70" />
-      </div>
+      <LogoElement />
     </AppBar>
   );
 };

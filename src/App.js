@@ -32,6 +32,7 @@ import lngReducer from './common/reducer/lngReducer';
 import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
+import AltLogo from './assets/QnA Manager Logo.png';
 import theme from './common/theme';
 import Login from './auth/login';
 
@@ -39,6 +40,7 @@ const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REAC
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
 const API_URL = process.env.REACT_APP_BASE_API;
+const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
 
 let statusLoaded = false;
 
@@ -180,7 +182,7 @@ const AsyncResources = () => {
         }}
       >
         <Box py={2}>
-          <img src={Logo} alt="logo" width="135" />
+          <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
         </Box>
         <Typography variant="body2" component="div" style={{ color: 'white' }}>
           LOADING
