@@ -201,7 +201,8 @@ const RelatedQuestionsTable = ({
                       </>
                     )
                   }
-                  <TableCell>
+                  <TableCell>&nbsp;</TableCell>
+                  {/*<TableCell>
                     <Button
                       className="error-btn btn-xs"
                       size="small"
@@ -212,6 +213,7 @@ const RelatedQuestionsTable = ({
                       {translate('misc.unlink_answer')}
                     </Button>
                   </TableCell>
+                */}
                   <TableCell>
                     <DropdownMenu
                       record={{ ...related }}

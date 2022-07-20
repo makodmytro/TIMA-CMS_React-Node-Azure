@@ -14,6 +14,7 @@ import {
   useTranslate,
   usePermissions,
 } from 'react-admin';
+import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import RequestTrack from '../../request-track';
 
@@ -26,6 +27,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
   const notify = useNotify();
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState('');
+  const [ticketId, setTicketId] = React.useState(null);
   const history = useSelector((s) => s.custom.navigatedRoutes);
 
   React.useEffect(() => {
@@ -36,7 +38,7 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
 
   const onSubmit = async () => {
     try {
-      await dataProvider.bugReport(null, {
+      const { data } = await dataProvider.bugReport(null, {
         data: {
           text,
           userId: permissions.userId,
@@ -47,8 +49,8 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           endpoints: RequestTrack.get(),
         },
       });
-      notify('The error was reported successfully');
-      setOpen(false);
+
+      setTicketId(data.ticketId);
     } catch (err) {
       notify('Unexpected error', 'error');
     }
@@ -71,20 +73,34 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           </Box>
         </Box>
         <Box p={2}>
-          <TextField
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            variant="outlined"
-            multiline
-            rows={5}
-            fullWidth
-            label={translate('misc.bug_report_text')}
-          />
-          <Box mt={2} textAlign="right">
-            <Button onClick={onSubmit} disabled={!text} variant="contained" color="primary">
-              {translate('misc.submit')}
-            </Button>
-          </Box>
+          {
+            !ticketId && (
+              <>
+                <TextField
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  variant="outlined"
+                  multiline
+                  rows={5}
+                  fullWidth
+                  label={translate('misc.bug_report_text')}
+                />
+                <Box mt={2} textAlign="right">
+                  <Button onClick={onSubmit} disabled={!text} variant="contained" color="primary">
+                    {translate('misc.submit')}
+                  </Button>
+                </Box>
+              </>
+            )
+          }
+          {
+            !!ticketId && (
+              <Alert severity="success" elevation={3}>
+                {translate('misc.bug_report_success')} #{ticketId}
+              </Alert>
+            )
+          }
+
         </Box>
       </Dialog>
     </Box>

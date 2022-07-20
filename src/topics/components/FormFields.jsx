@@ -90,6 +90,7 @@ export const Qna = (props) => {
               record={props.record}
               fullWidth
               disabled={props.disabled === true}
+              type={props.disabled ? 'password' : 'text'}
             />
             <TextInput
               source="qnaKnowledgeBaseId"
@@ -112,7 +113,7 @@ const FormFields = (props) => {
   const { search } = useLocation();
   const querystring = new URLSearchParams(search);
 
-  const disabled = props?.record?.allowEdit === false;
+  const disabled = props?.record?.allowEdit === false || props?.record?.allowManage === false;
   const admin = useIsAdmin();
 
   const {

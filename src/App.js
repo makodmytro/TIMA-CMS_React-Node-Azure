@@ -142,8 +142,8 @@ const AsyncResources = () => {
       socket.onmessage = function ({ data }) {
         try {
           const d = JSON.parse(data);
-          if (d?.syncedTopics !== store.getState()?.custom?.syncStatus) {
-            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d?.syncedTopics || 0 });
+          if (d?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
+            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d });
           }
         } catch (e) {} // eslint-disable-line
       };

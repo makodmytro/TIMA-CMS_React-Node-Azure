@@ -9,6 +9,7 @@ const english = {
   Dashboard: 'Dashboard',
   'My profile': 'My profile',
   'Topic Sync Scheduled': 'Topic Sync Scheduled',
+  'Topic sync in progress': 'Topic sync in progress',
   required: 'Required',
   Days: 'Days',
   Weeks: 'Weeks',
@@ -59,6 +60,7 @@ const english = {
     change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
   },
   misc: {
+    bug_report_success: 'Thank you for reporting this issue. A ticket was created with ID',
     azure_login: 'Login with Microsoft',
     login: 'login',
     or: 'or',
