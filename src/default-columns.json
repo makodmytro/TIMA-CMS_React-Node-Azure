@@ -2,7 +2,6 @@
   "topics": [
     "name",
     "updatedAt",
-    "syncScheduled",
     "lastSyncAt"
   ],
   "answers": [
