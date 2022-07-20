@@ -8,6 +8,7 @@ import {
   TextInput,
   required,
 } from 'react-admin';
+import { useSelector } from 'react-redux';
 import {
   Dialog,
   Button,
@@ -55,11 +56,12 @@ const Filters = ({
 
 const AnswerLinkDialog = ({ record, afterLink }) => {
   const [open, setOpen] = React.useState(false);
-  const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
   const notify = useNotify();
   const translate = useTranslate();
+  const topicsTree = useSelector((s) => s.custom.topics);
+  const disabled = record?.allowEdit === false || !topicsTree.some((t) => t.allowCreateContent);
 
   const onSelect = async (fk_answerId) => {
     try {

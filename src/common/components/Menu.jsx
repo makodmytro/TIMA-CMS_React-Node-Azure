@@ -27,7 +27,7 @@ const Menu = ({ onMenuClick, logout }) => {
   const [backend, setBackend] = React.useState(null);
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
-  const syncStatus = useSelector((state) => state.custom.syncStatus);
+  const { isSyncInProgress, nextSyncScheduled } = useSelector((state) => state.custom);
   const resources = useSelector(getResources);
   const translate = useTranslate();
   const dispatch = useDispatch();
@@ -122,12 +122,22 @@ const Menu = ({ onMenuClick, logout }) => {
             }}
           >
             {
-              !!syncStatus && syncStatus > 0 && isAdmin && (
+              isSyncInProgress && isAdmin && (
                 <Box mb={2} textAlign="center">
                   <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
                     {translate('Topic Sync Scheduled')}
                   </Typography>
                   &nbsp; <CircularProgress color="primary" size={15} />
+                </Box>
+              )
+            }
+            {
+              !isSyncInProgress && !!nextSyncScheduled && isAdmin && (
+                <Box mb={2} textAlign="center">
+                  <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                    {translate('Topic Sync Scheduled')}: <br />
+                    {(new Date(nextSyncScheduled)).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}
+                  </Typography>
                 </Box>
               )
             }

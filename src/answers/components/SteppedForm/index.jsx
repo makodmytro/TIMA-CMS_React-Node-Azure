@@ -49,6 +49,15 @@ const SteppedForm = ({
     tags: '',
   });
   const _languages = useSelector((s) => s.custom.languages);
+  const topicsThree = useSelector((s) => s.custom.topicsTree);
+
+  React.useEffect(() => {
+    if (topicsThree.length) {
+      if (topicsThree.some((t) => t.allowCreateContent)) {
+        redirect('/answers');
+      }
+    }
+  }, [topicsThree]);
 
   React.useEffect(() => {
     if (_languages.length && !state.fk_languageId) {

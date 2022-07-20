@@ -5,7 +5,8 @@ const defaultState = {
   topicsTreeTimestamp: null,
   loading: false,
   languages: [],
-  syncStatus: 0,
+  isSyncInProgress: undefined,
+  nextSyncScheduled: null,
   workflowRoles: [],
   workflowStatus: [],
   answers: {
@@ -78,7 +79,7 @@ export default (state = defaultState, { type, payload }) => {
     case 'CUSTOM_TOPICS_SYNC_STATUS': {
       return {
         ...state,
-        syncStatus: payload,
+        ...payload,
       };
     }
     case 'CUSTOM_ANSWER_STATUS_HISTORY': {
