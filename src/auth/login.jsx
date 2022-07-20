@@ -21,9 +21,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import Azure from './azure';
-import Logo from '../assets/QnA Manager Logo.png';
+import Logo from '../assets/TIMA_logo.png';
+import AltLogo from '../assets/QnA Manager Logo.png';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
+const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
 
 const styles = makeStyles(() => ({
   input: {
@@ -32,6 +34,30 @@ const styles = makeStyles(() => ({
     },
   },
 }));
+
+const Wrapper = ({ children }) => {
+  if (USE_ALT_THEME) {
+    return (
+      <Box
+        mt={10}
+        p={2}
+        boxShadow={3}
+        bgcolor="white"
+        borderRadius={3}
+        textAlign="center"
+        style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
+      >
+        {children}
+      </Box>
+    );
+  }
+
+  return (
+    <Box mt={10} p={2} boxShadow={3} bgcolor="white" borderRadius={3} textAlign="center">
+      {children}
+    </Box>
+  );
+}
 
 export default () => {
   const redirect = useRedirect();
@@ -63,22 +89,14 @@ export default () => {
         <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
           <Grid container justify="center" alignItems="center">
             <Grid item xs={12} sm={4} md={3}>
-              <Box
-                mt={10}
-                p={2}
-                boxShadow={3}
-                bgcolor="white"
-                borderRadius={3}
-                textAlign="center"
-                style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
-              >
+              <Wrapper>
                 <Box py={2} textAlign="center">
-                  <img src={Logo} alt="logo" width="135" />
+                  <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
                 </Box>
                 <Box py={2} textAlign="center">
                   <CircularProgress color="primary" />
                 </Box>
-              </Box>
+              </Wrapper>
             </Grid>
           </Grid>
         </div>
@@ -91,17 +109,9 @@ export default () => {
       <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
         <Grid container justify="center" alignItems="center">
           <Grid item xs={12} sm={4} md={3}>
-            <Box
-              mt={10}
-              p={2}
-              boxShadow={3}
-              bgcolor="white"
-              borderRadius={3}
-              textAlign="center"
-              style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
-            >
+            <Wrapper>
               <Box py={2} textAlign="center">
-                <img src={Logo} alt="logo" width="135" />
+                <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
               </Box>
               {
                 AZURE_LOGIN && (
@@ -109,7 +119,7 @@ export default () => {
                     <Box textAlign="center" py={2}>
                       <Azure setLoading={setAzureLoading} />
                     </Box>
-                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: 'white' }}>
+                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
                       {translate('misc.or')}
                     </Typography>
                   </Box>
@@ -130,7 +140,7 @@ export default () => {
                       label={translate('resources.users.fields.email')}
                       validate={required()}
                       fullWidth
-                      className={classes.input}
+                      className={USE_ALT_THEME ? classes.input : null}
                     />
                     <TextInput
                       source="password"
@@ -138,15 +148,15 @@ export default () => {
                       type="password"
                       validate={required()}
                       fullWidth
-                      className={classes.input}
+                      className={USE_ALT_THEME ? classes.input : null}
                     />
                     <Button
                       type="submit"
                       variant="outlined"
                       fullWidth
-                      color="secondary"
+                      color={USE_ALT_THEME ? 'secondary' : 'primary'}
                       disabled={submitting || loading || azureLoading}
-                      style={{ color: 'white' }}
+                      style={{ color: USE_ALT_THEME ? 'white' : 'default' }}
                     >
                       {
                         l && (
@@ -162,7 +172,7 @@ export default () => {
                   </form>
                 )}
               />
-            </Box>
+            </Wrapper>
           </Grid>
         </Grid>
       </div>
