@@ -33,6 +33,15 @@ const AnswerCreate = () => {
   const dataProvider = useDataProvider();
   const redirect = useRedirect();
   const _languages = useSelector((s) => s.custom.languages);
+  const topicsTree = useSelector((s) => s.custom.topics);
+
+  React.useEffect(() => {
+    if (topicsTree.length) {
+      if (!topicsTree.some((t) => t.allowCreateContent)) {
+        redirect('/answers');
+      }
+    }
+  }, [topicsTree]);
 
   const createQuestion = async (_data) => {
     try {
@@ -94,7 +103,7 @@ const AnswerCreate = () => {
 
   return (
     <Box boxShadow={3} p={2} borderRadius={3} mt={2}>
-      <Title title="Create answer" />
+      <Title title={translate('resources.answers.create')} />
       <Form
         onSubmit={onSubmit}
         mutators={{
@@ -149,7 +158,7 @@ const AnswerCreate = () => {
                   source="fk_topicId"
                   isRequired
                   label="resources.answers.fields.fk_topicId"
-                  filter={{ fk_languageId: values.fk_languageId }}
+                  filterFunction={(t) => t.allowCreateContent}
                 />
               </Box>
 

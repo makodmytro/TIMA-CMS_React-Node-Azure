@@ -5,6 +5,16 @@ import { stringify } from 'query-string';
 import httpClient, { baseApi } from '../httpClient';
 
 const dataProvider = simpleRestProvider(baseApi, httpClient);
+
+const updateSessionUser = (data) => {
+  const stored = JSON.parse(sessionStorage.getItem('user'));
+
+  sessionStorage.setItem('user', JSON.stringify({
+    ...stored,
+    ...data,
+  }));
+};
+
 const getResourceAssociations = (resource) => {
   switch (resource) {
     case 'questions': {
@@ -62,7 +72,7 @@ const getListUrl = (initialUrl, resource, _params) => {
     const { field, order } = params.sort || {};
 
     const {
-      q, unanswered, groupRelated, topLevelOnly, ...restFilter
+      q, unanswered, groupRelated, topLevelOnly, isContextOnly, ...restFilter
     } = params.filter || {};
     const {
       from, to, active, search, ...filter
@@ -84,6 +94,10 @@ const getListUrl = (initialUrl, resource, _params) => {
 
     if (to && resource === 'audit') {
       params.filter.to = to;
+    }
+
+    if (isContextOnly && resource === 'answers') {
+      filter.isContextOnly = 1;
     }
 
     const query = {
@@ -175,7 +189,16 @@ const resDataProvider = {
     }
     return json;
   },
+  delete: async (resource, params) => {
+    const url = `${baseApi}/${resource}/${params.id}`;
 
+    const { json } = await httpClient(url, {
+      method: 'DELETE',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
   update: async (resource, params) => {
     const url = `${baseApi}/${resource}/${params.id}`;
 
@@ -428,6 +451,13 @@ const resDataProvider = {
 
     return { data: json };
   },
+  topicContentCounter: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/${params.id}/content`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
   backendVersion: async (resource, params) => {
     const { body } = await httpClient(`${baseApi}/admin/version`, {
       method: 'GET',
@@ -435,6 +465,46 @@ const resDataProvider = {
 
     return { data: body };
   },
+  me: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/users/me`, {
+      method: 'GET',
+    });
+
+    updateSessionUser(json);
+
+    return { data: json };
+  },
+  analizeKB: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/analyzeKB`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
+  bugReport: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/admin/bugs`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  },
+  jobStatus: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/jobs/${params.jobId}`, {
+      method: 'GET',
+    });
+
+    return { data: json };
+  },
+  bulkCreateTopic: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/topics/bulk`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+
+    return { data: json };
+  }
 };
 
 export default resDataProvider;

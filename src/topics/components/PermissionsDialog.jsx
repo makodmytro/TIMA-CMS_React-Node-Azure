@@ -48,11 +48,28 @@ const PermissionForm = ({
 
         return errors;
       }}
-      render={({ handleSubmit, valid, reset }) => {
+      render={({ handleSubmit, valid, reset, values, form }) => {
+        const t = (name) => (_v) => {
+          if (name === 'manage' && _v) {
+            form.change('view', true);
+            form.change('edit', true);
+            form.change('delete', true);
+          }
+
+          if (name === 'delete' && _v) {
+            form.change('view', true);
+            form.change('edit', true);
+          }
+
+          if (name === 'edit' && _v) {
+            form.change('view', true);
+          }
+        };
+
         return (
           <form
             onSubmit={(event) => {
-              handleSubmit(event).then(reset);
+              handleSubmit(event)?.then(reset);
             }}
           >
             <Box display="flex" alignItems="center" justifyContent="center">
@@ -72,13 +89,13 @@ const PermissionForm = ({
                 <BooleanInput source="view" label={translate('resources.topics.permissions.view')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} />
+                <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} onChange={t('edit')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="manage" label={translate('resources.topics.permissions.manage')} />
+                <BooleanInput source="delete" label={translate('resources.topics.permissions.delete')} onChange={t('delete')} />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="delete" label={translate('resources.topics.permissions.delete')} />
+                <BooleanInput source="manage" label={translate('resources.topics.permissions.manage')} onChange={t('manage')} />
               </Box>
 
               <Box px={1} flex="1">

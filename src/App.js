@@ -10,6 +10,7 @@ import {
   useDataProvider,
 } from 'react-admin';
 import IdleTracker from 'idle-tracker';
+import * as Sentry from '@sentry/react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import authProvider from './common/providers/authProvider';
@@ -37,6 +38,9 @@ import Login from './auth/login';
 const HIDE_MENU_ITEMS = process.env.REACT_APP_HIDE_MENU_ITEMS ? process.env.REACT_APP_HIDE_MENU_ITEMS.split(',') : [];
 const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
+const API_URL = process.env.REACT_APP_BASE_API;
+
+let statusLoaded = false;
 
 const delay = (ms) => new Promise((r) => { // eslint-disable-line
   setTimeout(() => {
@@ -64,6 +68,7 @@ const AsyncResources = () => {
   const [tac, setTac] = React.useState(false);
   const timeout = React.useRef(null);
   const topicsStatusTimeout = React.useRef(null);
+  const [socket, setSocket] = React.useState(null);
 
   const isLoginScreen = () => location.pathname.includes('/login') || location.pathname.includes('/backdoor-login');
   const refreshSession = async () => {
@@ -74,21 +79,8 @@ const AsyncResources = () => {
     setTic(true);
   };
 
-  const refreshTopicStatus = async () => {
-    setTac(false);
-
-    try {
-      const { data } = await dataProvider.topicStatus();
-
-      store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data?.syncedTopics || 0 });
-    } catch (e) { // eslint-disable-line
-    }
-
-    setTac(true);
-  };
-
   const fetchWorkflow = async () => {
-    if (sessionStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
+    if (!statusLoaded && sessionStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
       try {
         const [roles, status] = await Promise.all([
           dataProvider.workflowRoles(),
@@ -96,6 +88,7 @@ const AsyncResources = () => {
         ]);
         store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
         store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
+        statusLoaded = true;
       } catch (e) {} // eslint-disable-line
     }
   };
@@ -133,17 +126,29 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!isLoginScreen() && tac) {
-      topicsStatusTimeout.current = setTimeout(() => {
-        refreshTopicStatus();
-      }, 1000 * 60 * 5);
+    if (!isLoginScreen() && !socket) {
+      const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
+
+      setSocket(ws);
     }
 
-    if (isLoginScreen()) {
-      clearTimeout(topicsStatusTimeout.current);
-      topicsStatusTimeout.current = null;
+    if (isLoginScreen() && socket) {
+      socket.close();
     }
-  }, [location.pathname, tac]);
+  }, [location.pathname]);
+
+  React.useEffect(() => {
+    if (socket) {
+      socket.onmessage = function ({ data }) {
+        try {
+          const d = JSON.parse(data);
+          if (d?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
+            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d });
+          }
+        } catch (e) {} // eslint-disable-line
+      };
+    }
+  }, [socket]);
 
   React.useEffect(() => {
     if (!isLoginScreen() && tic) {
@@ -156,6 +161,8 @@ const AsyncResources = () => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
+
+    store.dispatch({ type: 'CUSTOM_NAVIGATION_CHANGED', payload: location.pathname });
   }, [location.pathname, tic]);
 
   if (!ready) {
@@ -195,10 +202,16 @@ const AsyncResources = () => {
       path="/test-ask"
       component={TestAsk}
     />,
+    <Route
+      exact
+      key={1}
+      path="/import-data"
+      component={topic.import}
+    />,
   ];
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
-    customRoutes = [customRoutes[1]];
+    customRoutes = [customRoutes[1], customRoutes[2]];
   }
 
   if (IDLE_TIMEOUT_SECONDS) {
@@ -208,6 +221,8 @@ const AsyncResources = () => {
       idleTracker.end();
     }
   }
+
+  fetchWorkflow();
 
   return (
     <AdminUI
@@ -303,7 +318,9 @@ function App() {
       customReducers={{ lng: lngReducer, custom: customReducer }}
       history={history}
     >
-      <AsyncResources />
+      <Sentry.ErrorBoundary fallback="An error has occurred">
+        <AsyncResources />
+      </Sentry.ErrorBoundary>
     </AdminContext>
   );
 }

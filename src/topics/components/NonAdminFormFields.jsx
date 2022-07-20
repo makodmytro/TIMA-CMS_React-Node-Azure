@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
-import TopicImage from './Image';
 import TopicSelect from './TopicSelect';
 import { PlayableTextInput } from '../../common/components/playable-text';
 import { useIsAdmin } from '../../hooks';
@@ -24,25 +23,6 @@ const HiddenField = ({ children, fieldName }) => {
   }
 
   return children;
-};
-
-export const Advanced = (props) => {
-  const translate = useTranslate();
-
-  return (
-    <>
-      <Typography>
-        {translate('misc.advanced')}
-      </Typography>
-      <TextInput
-        source="topicKey"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-        label="resources.topics.fields.topicKey"
-      />
-    </>
-  );
 };
 
 export const Qna = (props) => {
@@ -67,42 +47,6 @@ export const Qna = (props) => {
         fullWidth
         disabled={props.disabled === true}
       />
-      {
-        !props?.fkParentTopicId && (
-          <>
-            <TextInput
-              source="qnaApiEndpoint"
-              label="resources.topics.fields.qnaApiEndpoint"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-            <TextInput
-              source="qnaApiVersion"
-              label="resources.topics.fields.qnaApiVersion"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-            <TextInput
-              source="qnaSubscriptionKey"
-              label="resources.topics.fields.qnaSubscriptionKey"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-              type={props.disabled ? 'password' : 'text'}
-            />
-            <TextInput
-              source="qnaKnowledgeBaseId"
-              label="resources.topics.fields.qnaKnowledgeBaseId"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-          </>
-        )
-      }
-
     </>
   );
 };
@@ -113,7 +57,6 @@ const FormFields = (props) => {
   const { search } = useLocation();
   const querystring = new URLSearchParams(search);
 
-  const disabled = props?.record?.allowEdit === false || props?.record?.allowManage === false;
   const admin = useIsAdmin();
 
   const {
@@ -176,21 +119,8 @@ const FormFields = (props) => {
           validate={required()}
           fullWidth
           lang={getLang}
-          disabled={disabled && !admin}
           record={props?.record}
           label="resources.topics.fields.name"
-        />
-      </HiddenField>
-      <HiddenField fieldName="welcomeText">
-        <PlayableTextInput
-          source="welcomeText"
-          fullWidth
-          rows="4"
-          multiline
-          lang={getLang}
-          disabled={disabled && !admin}
-          record={props?.record}
-          label="resources.topics.fields.welcomeText"
         />
       </HiddenField>
       {
@@ -202,7 +132,6 @@ const FormFields = (props) => {
               reference="languages"
               label="resources.topics.fields.language"
               fullWidth
-              disabled={disabled && !admin}
             >
               <SelectInput
                 optionText="name"
@@ -211,53 +140,22 @@ const FormFields = (props) => {
           </HiddenField>
         )
       }
-      <HiddenField fieldName="topicImageUrl">
-        <TextInput
-          source="topicImageUrl"
-          fullWidth
-          disabled={disabled && !admin}
-          label="resources.topics.fields.image"
+      <HiddenField fieldName="fk_parentTopicId">
+        <TopicSelect
+          source="fk_parentTopicId"
+          disabled={props?.disableTopicSelection}
+          label="resources.topics.fields.fk_parentTopicId"
+          allowEmpty
+          depth={2}
+          editting={props?.editting}
+          anyLevelSelectable
+          isRequired={!admin}
+          filterFunction={(topic) => topic?.allowCreateChild}
         />
       </HiddenField>
-      <HiddenField fieldName="topicImageUrl">
-        <TopicImage {...props} />
+      <HiddenField fieldName="qna">
+        <Qna {...props} />
       </HiddenField>
-      {
-        (!props?.editting || fkParentTopicId) && (
-          <HiddenField fieldName="fk_parentTopicId">
-            <TopicSelect
-              source="fk_parentTopicId"
-              disabled={props?.editting || props?.disableTopicSelection}
-              label="resources.topics.fields.fk_parentTopicId"
-              allowEmpty
-              depth={2}
-              editting={props?.editting}
-              anyLevelSelectable
-              isRequired={!admin}
-              filterFunction={(topic) => topic?.allowCreateChild}
-            />
-          </HiddenField>
-        )
-      }
-
-      {
-        /*
-          <HiddenField fieldName="level">
-            <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
-          </HiddenField>
-        */
-      }
-
-      <HiddenField fieldName="topicKey">
-        <Advanced source="topicKey" disabled={disabled && !admin} />
-      </HiddenField>
-      {
-        (!fkParentTopicId || admin) && (
-          <HiddenField fieldName="qna">
-            <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />
-          </HiddenField>
-        )
-      }
     </>
   );
 };

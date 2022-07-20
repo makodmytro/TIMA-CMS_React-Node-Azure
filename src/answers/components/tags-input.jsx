@@ -3,11 +3,17 @@ import { useTranslate } from 'react-admin';
 import { useField } from 'react-final-form';
 import ChipInput from 'material-ui-chip-input';
 
+const HIDE_TAGS_INPUT = process.env.REACT_APP_HIDE_TAGS_INPUT === '1';
+
 const TagsInput = (props) => {
   const translate = useTranslate();
   const { input: { value, onChange } } = useField(props.source);
 
   const asArray = (value || '').split(',').filter((s) => !!s);
+
+  if (HIDE_TAGS_INPUT) {
+    return null;
+  }
 
   return (
     <ChipInput

@@ -3,6 +3,7 @@ import {
   ReferenceInput,
   required,
   SelectInput,
+  BooleanInput,
   Confirm,
   useTranslate,
 } from 'react-admin';
@@ -129,11 +130,15 @@ const Form = ({
           isRequired
           label="resources.answers.fields.fk_topicId"
           editting={edit}
-          disabled={disableEdit}
+          disabled={disableEdit || (record && record.isContextOnly)}
           filter={{ fk_languageId: fkLanguageId }}
         />
       </Box>
-
+      <BooleanInput
+        source="isContextOnly"
+        label="resources.answers.fields.isContextOnly"
+        disabled={disableEdit || (record && !record.FollowupQuestions?.length)}
+      />
       {
         !USE_WORKFLOW && (
           <ApprovedInput source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />

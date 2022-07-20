@@ -11,7 +11,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { markdownToDraft, draftToMarkdown } from 'markdown-draft-js';
+import { stateToMarkdown } from 'draft-js-export-markdown';
+import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
+import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
+// import editorStyles from './editorStyles.module.css';
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -23,6 +26,9 @@ const HiddenField = ({ children, fieldName }) => {
 
   return children;
 };
+
+const imagePlugin = createImagePlugin();
+const plugins = [imagePlugin];
 
 const DraftInput = ({
   source, label, lang, disabled,
@@ -40,13 +46,12 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const rawData = markdownToDraft(value);
+      const rawData = mdToDraftjs(value);
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
-
   return (
     <>
       <InputLabel error={invalid}>{translate(label)}</InputLabel>
@@ -54,15 +59,16 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
-            onChange(draftToMarkdown(convertToRaw(v.getCurrentContent())));
+            onChange(stateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
+          plugins={plugins}
           onBlur={() => onBlur()}
           disabled={disabled === true}
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },
@@ -71,6 +77,10 @@ const DraftInput = ({
                 '😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎',
               ],
             },
+            image: {
+              uploadEnabled: false,
+              previewImage: true,
+            }
           }}
         />
         <HiddenField fieldName="spokenText">

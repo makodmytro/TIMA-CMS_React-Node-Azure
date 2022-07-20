@@ -47,6 +47,7 @@ const UsersList = (props) => {
       el: (
         <FunctionField
           source="userRoles"
+          label={translate('resources.users.fields.roles')}
           render={(record) => {
             return roles
               .filter((r) => (record.userRoles || []).includes(r.value))
@@ -69,8 +70,8 @@ const UsersList = (props) => {
       el: (<DateField source="updatedAt" showTime />),
     },
     { key: 'created_by', el: (<TextField source="created_by" />) },
-    { key: 'isActive', el: (<BooleanField source="isActive" label="is active" />) },
-    { key: 'isAdmin', el: (<BooleanField source="isAdmin" label="is admin" />) },
+    { key: 'isActive', el: (<BooleanField source="isActive" />) },
+    { key: 'isAdmin', el: (<BooleanField source="isAdmin" />) },
   ];
 
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'users'));

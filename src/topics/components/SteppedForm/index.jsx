@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { makeStyles, Typography } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -19,6 +19,7 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
+import StepFive from './StepFive';
 
 const style = makeStyles(() => ({
   label: {
@@ -36,13 +37,18 @@ const SteppedForm = ({
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
+  const [groups, setGroups] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [awaitingSync, setAwaitingSync] = React.useState(false);
   const [awaitingSyncFinished, setAwaitingSyncFinished] = React.useState(null);
   const [step, setStep] = React.useState(0);
+  const { search } = useLocation();
+  const querystring = new URLSearchParams(search);
   const [state, setState] = React.useState({
     fk_languageId: null,
-    fk_parentTopicId: null,
+    fk_parentTopicId: querystring.get('fk_parentTopicId') && parseInt(querystring.get('fk_parentTopicId'), 10)
+      ? parseInt(querystring.get('fk_parentTopicId'), 10)
+      : null,
     name: '',
     qnaMetadataKey: '',
     qnaMetadataValue: '',
@@ -51,8 +57,28 @@ const SteppedForm = ({
     qnaSubscriptionKey: '',
     qnaKnowledgeBaseId: '',
     startSync: false,
+    fk_managedByGroupId: null,
   });
   const _languages = useSelector((s) => s.custom.languages);
+
+  const f = async () => {
+    const { data } = await dataProvider.me();
+
+    if (data && data.Groups) {
+      if (data.Groups.length === 1) {
+        setState({
+          ...state,
+          fk_managedByGroupId: data.Groups[0].id,
+        });
+      } else {
+        setGroups(data.Groups);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    f();
+  }, []);
 
   React.useEffect(() => {
     if (_languages.length && !state.fk_languageId) {
@@ -116,7 +142,7 @@ const SteppedForm = ({
         redirect(`/topics/${created.id}`);
       }
     } catch (err) {
-      notify('Failed to create the topic', 'error');
+      notify(err?.body?.message || 'Failed to create the topic', 'error');
     }
   };
 
@@ -167,27 +193,26 @@ const SteppedForm = ({
             <StepOne
               initialValues={{
                 fk_languageId: state.fk_languageId,
-                name: '',
+                name: state.name,
               }}
               onSubmit={onStepSubmit}
             />
           </StepContent>
         </Step>
-
-        <Step classes={{ root: classes.label }}>
+        {/*
+         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.parent')}
           </StepLabel>
           <StepContent>
             <StepTwo
-              initialValues={{
-                fk_parentTopicId: state.fk_parentTopicId,
-              }}
+              initialValues={state}
               onSubmit={onStepSubmit}
               onBack={back}
             />
           </StepContent>
-        </Step>
+        </Step>*/
+        }
         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.kb_integration')}
@@ -200,6 +225,23 @@ const SteppedForm = ({
             />
           </StepContent>
         </Step>
+        {/*
+          groups.length > 1 && (
+            <Step classes={{ root: classes.label }}>
+              <StepLabel>
+                {translate('resources.topics.steps.group')}
+              </StepLabel>
+              <StepContent>
+                <StepFive
+                  initialValues={{ fk_managedByGroupId: state.fk_managedByGroupId }}
+                  groups={groups}
+                  onSubmit={next}
+                  onBack={back}
+                />
+              </StepContent>
+            </Step>
+          )*/
+        }
         <Step classes={{ root: classes.label }}>
           <StepLabel>
             {translate('resources.topics.steps.qna')}

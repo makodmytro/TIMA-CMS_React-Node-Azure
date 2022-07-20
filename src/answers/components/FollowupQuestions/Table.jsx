@@ -3,6 +3,7 @@ import {
   useTranslate,
   useDataProvider,
   useNotify,
+  BooleanField,
 } from 'react-admin';
 import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -17,7 +18,6 @@ import AnswerField from '../../../questions/components/AnswerField';
 import { PlayableTextField } from '../../../common/components/playable-text';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
 import ApprovedSwitchField from '../../../questions/components/approved-switch-field';
-import ContextOnlySwitchField from '../../../questions/components/ContextOnlySwitchField';
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
 import useAnswer from '../../useAnswer';
@@ -105,10 +105,14 @@ const FollowupQuestionsTable = ({
                   )
                 }
                 <TableCell>
-                  <AnswerField record={related} afterLink={refresh} />
+                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate />
                 </TableCell>
                 <TableCell>
-                  <ContextOnlySwitchField record={related} afterEdit={refresh} />
+                  <BooleanField
+                    record={{ ...related, isContextOnly: related.isContextOnly }}
+                    source="isContextOnly"
+                    label={translate('resources.questions.fields.contextOnly')}
+                  />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu
@@ -124,7 +128,7 @@ const FollowupQuestionsTable = ({
                         style={{ justifyContent: 'flex-start', color: '#d64242' }}
                         fullWidth
                       >
-                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.unlink')}
+                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
                       </Button>
                     )}
                   />

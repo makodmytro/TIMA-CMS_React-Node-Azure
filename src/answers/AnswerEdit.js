@@ -62,9 +62,7 @@ const AnswerEdit = () => {
   };
 
   React.useEffect(() => {
-    if (!answer || answer?.id !== parseInt(id, 10)) {
-      refresh();
-    }
+    refresh();
   }, [id]);
 
   const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
@@ -102,7 +100,7 @@ const AnswerEdit = () => {
           }}
           enableReinitialize
           render={({ handleSubmit, valid, values }) => {
-            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text'].every((key) => {
+            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
               if (!answer) {
                 return false;
               }
@@ -128,7 +126,7 @@ const AnswerEdit = () => {
                     </Box>
                     <Box flex={1} textAlign="right">
                       <DeleteButton
-                        basePath="answers"
+                        basePath="/answers"
                         record={answer}
                         undoable={false}
                         disabled={disableDelete}

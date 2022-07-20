@@ -40,8 +40,8 @@ export const getTopicLevels = (id, topics) => {
   return [parent, child, grandchild];
 };
 
-export const getTreeLabel = memoize((id, topics) => {
+export const getTreeLabel = (id, topics) => {
   const levels = getTopicLevels(id, topics);
 
   return levels.map((level) => level.name).join(' - ');
-});
+};

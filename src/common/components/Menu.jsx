@@ -16,6 +16,7 @@ import Switch from '@material-ui/core/Switch';
 import DefaultIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 import DemoIcon from '@material-ui/icons/AddToQueue';
+import BugReport from './BugReport';
 import { baseApi } from '../httpClient';
 import { useIsAdmin } from '../../hooks';
 
@@ -26,7 +27,7 @@ const Menu = ({ onMenuClick, logout }) => {
   const [backend, setBackend] = React.useState(null);
   const isXSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const open = useSelector((state) => state.admin.ui.sidebarOpen);
-  const syncStatus = useSelector((state) => state.custom.syncStatus);
+  const { isSyncInProgress, nextSyncScheduled } = useSelector((state) => state.custom);
   const resources = useSelector(getResources);
   const translate = useTranslate();
   const dispatch = useDispatch();
@@ -113,42 +114,60 @@ const Menu = ({ onMenuClick, logout }) => {
         />
         {isXSmall && logout}
       </Box>
-      <div
-        style={{
-          position: 'fixed', bottom: 5, left: 5, fontSize: 10,
-        }}
-      >
-        {
-          !!syncStatus && syncStatus > 0 && (
-            <Box mb={2} textAlign="center">
-              <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
-                {translate('Topic Sync Scheduled')}
-              </Typography>
-              &nbsp; <CircularProgress color="primary" size={15} />
+      {
+        open && (
+          <div
+            style={{
+              position: 'fixed', bottom: 5, left: 5, fontSize: 10,
+            }}
+          >
+            {
+              isSyncInProgress && isAdmin && (
+                <Box mb={2} textAlign="center">
+                  <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                    {translate('Topic Sync Scheduled')}
+                  </Typography>
+                  &nbsp; <CircularProgress color="primary" size={15} />
+                </Box>
+              )
+            }
+            {
+              !isSyncInProgress && !!nextSyncScheduled && isAdmin && (
+                <Box mb={2} textAlign="center">
+                  <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                    {translate('Topic Sync Scheduled')}: <br />
+                    {(new Date(nextSyncScheduled)).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}
+                  </Typography>
+                </Box>
+              )
+            }
+            <Box textAlign="center">
+              <Typography variant="body2" component="span">DE</Typography>
+              &nbsp;
+              <Switch size="small" checked={locale === 'en'} onChange={onLocaleChange} />
+              &nbsp;
+              <Typography variant="body2" component="span">EN</Typography>
             </Box>
-          )
-        }
-        <Box textAlign="center">
-          <Typography variant="body2" component="span">DE</Typography>
-          &nbsp;
-          <Switch size="small" checked={locale === 'en'} onChange={onLocaleChange} />
-          &nbsp;
-          <Typography variant="body2" component="span">EN</Typography>
-        </Box>
-        <div>
-          CMS Build:
-          <span style={{ float: 'right' }}>
-            {process.env.REACT_APP_VERSION}
-          </span>
-        </div>
-        <div>
-          Backend Build:
-          <span style={{ float: 'right' }}>
-            {backend}
-          </span>
-        </div>
-        {baseApi}
-      </div>
+            <div>
+              CMS Build:
+              <span style={{ float: 'right' }}>
+                {process.env.REACT_APP_VERSION}
+              </span>
+            </div>
+            <div>
+              Backend Build:
+              <span style={{ float: 'right' }}>
+                {backend}
+              </span>
+            </div>
+            {baseApi}
+            <Box mt={2}>
+              <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
+            </Box>
+          </div>
+        )
+      }
+
     </>
 
   );

@@ -5,17 +5,27 @@ const defaultState = {
   topicsTreeTimestamp: null,
   loading: false,
   languages: [],
-  syncStatus: 0,
+  isSyncInProgress: undefined,
+  nextSyncScheduled: null,
   workflowRoles: [],
   workflowStatus: [],
   answers: {
     data: {},
     statusHistory: {},
   },
+  navigatedRoutes: [],
 };
 
 export default (state = defaultState, { type, payload }) => {
   switch (type) {
+    case 'CUSTOM_NAVIGATION_CHANGED': {
+      const n = state.navigatedRoutes.concat([payload]);
+
+      return {
+        ...state,
+        navigatedRoutes: n.slice(Math.max(n.length - 10, 0)),
+      };
+    }
     case 'CUSTOM_TOPICS_LABELS_SUCCESS': {
       return {
         ...state,
@@ -69,7 +79,7 @@ export default (state = defaultState, { type, payload }) => {
     case 'CUSTOM_TOPICS_SYNC_STATUS': {
       return {
         ...state,
-        syncStatus: payload,
+        ...payload,
       };
     }
     case 'CUSTOM_ANSWER_STATUS_HISTORY': {

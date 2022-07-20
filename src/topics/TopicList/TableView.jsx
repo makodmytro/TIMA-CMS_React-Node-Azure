@@ -1,6 +1,7 @@
 import React, { cloneElement } from 'react';
 import { useHistory } from 'react-router-dom'; // eslint-disable-line
 import TablePagination from '@material-ui/core/TablePagination';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
@@ -10,9 +11,23 @@ import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
+import ArrowDown from '@material-ui/icons/ArrowDownward';
+import ArrowUp from '@material-ui/icons/ArrowUpward';
 import { useTranslate } from 'react-admin';
 import ListDropdownMenu from '../components/list-dropdown-menu';
 import columns from './columns';
+
+const styles = makeStyles((theme) => ({
+  thead: {
+    cursor: 'pointer',
+    fontWeight: 'bold',
+
+    '& svg': {
+      fontSize: '0.8rem',
+      verticalAlign: 'middle',
+    },
+  },
+}));
 
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
@@ -44,6 +59,7 @@ const Row = ({
 
                     setExpanded(!expanded);
                   }}
+                  style={{ color: level ? 'white' : '#4EC2A8' }}
                 >
                   { !expanded && <AddIcon fontSize="small" /> }
                   { expanded && <MinusIcon fontSize="small" /> }
@@ -81,7 +97,7 @@ const Row = ({
             onSync={onSync}
             onPermissionsClick={level > 0 ? null : (id) => setOpen(id)}
             record={record}
-            showCreateChild={!level || level < 2}
+            showCreateChild={(!level || level < 2) && record.allowCreateChild}
           />
         </TableCell>
       </TableRow>
@@ -116,8 +132,11 @@ const TableView = ({
   pagination,
   setPage,
   setPageSize,
+  onSortClick,
+  currentSort,
 }) => {
   const translate = useTranslate();
+  const classes = styles();
 
   return (
     <>
@@ -127,8 +146,18 @@ const TableView = ({
             <TableCell>&nbsp;</TableCell>
             {
               columnsToDisplay.map((c) => (
-                <TableCell key={c.key}>
+                <TableCell key={c.key} onClick={() => onSortClick(c.key)} className={classes.thead}>
                   {translate(`resources.topics.fields.${c.key}`)}
+                  {
+                    c.key === currentSort.field && currentSort.order === 'DESC' && (
+                      <ArrowUp size="small" />
+                    )
+                  }
+                  {
+                    c.key === currentSort.field && currentSort.order === 'ASC' && (
+                      <ArrowDown size="small" />
+                    )
+                  }
                 </TableCell>
               ))
             }
@@ -165,6 +194,9 @@ const TableView = ({
             const value = parseInt(e.target.value, 10);
             setPageSize(value);
           }}
+          labelRowsPerPage={translate('ra.navigation.page_rows_per_page')}
+          nextIconButtonText={translate('ra.navigation.next')}
+          labelDisplayedRows={({ from, to, count: total }) => translate('ra.navigation.page_range_info', { offsetBegin: from, offsetEnd: to, total })}
         />
       </Box>
     </>

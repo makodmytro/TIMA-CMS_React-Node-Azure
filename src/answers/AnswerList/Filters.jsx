@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ReferenceInput,
   SelectInput,
+  BooleanInput,
   TextInput,
   useListContext,
   useTranslate,
@@ -74,7 +75,7 @@ const Filters = ({ languages, topics, ...props }) => {
           <Box flex="0 0 100%">
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
-          <TextInput label="resources.answers.fields.text" source="q" alwaysOn onChange={() => handleSubmit()} />
+          <TextInput label="resources.answers.fields.filter" source="q" alwaysOn onChange={() => handleSubmit()} />
           {
             languages?.length > 1 && (
               <ReferenceInput
@@ -175,6 +176,11 @@ const Filters = ({ languages, topics, ...props }) => {
               />
             )
           }
+          <BooleanInput
+            source="isContextOnly"
+            label="resources.answers.fields.isContextOnly"
+            onChange={() => handleSubmit()}
+          />
         </form>
       )}
     </Form>

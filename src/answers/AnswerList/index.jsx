@@ -70,7 +70,13 @@ const mapStateToProps = (state) => {
 
 const WrapTopicSelect = (props) => {
   return (
-    <TopicSelectCell source="fk_topicId" label="resources.answers.fields.fk_topicId" sortBy="fk_topicId" {...props} disabled={props?.record?.allowEdit === false} />
+    <TopicSelectCell
+      source="fk_topicId"
+      label="resources.answers.fields.fk_topicId"
+      sortBy="fk_topicId"
+      {...props}
+      disabled={props?.record?.allowEdit === false || props?.record?.isContextOnly}
+    />
   );
 };
 const WrapApprovedSwitch = (props) => {
@@ -208,7 +214,7 @@ const CustomGrid = ({ visibleColumns }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Box my={1}>
+        <Box my={1} maxWidth="100%">
           <Table>
             <TableHead>
               <TableRow>

@@ -143,7 +143,9 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        setTopicsChild(topic.ChildTopics);
+        setTopicsChild(
+          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
+        );
       }
 
       if (!topic.ChildTopics?.length || anyLevelSelectable) {
@@ -166,7 +168,9 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0 && (!depth || depth > 2)) {
         onChange(null);
 
-        setTopicsGrandchild(topic.ChildTopics);
+        setTopicsGrandchild(
+          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
+        );
       } else {
         onChange(topicTwo);
       }
@@ -225,7 +229,7 @@ const MultiTopicSelect = ({
           <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
             {translate(label)}&nbsp;
             {
-              allowEmpty && (
+              allowEmpty && !disabled && (
                 <small onClick={() => clear()} style={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'lowercase' }}>
                   ({translate('misc.clear')})
                 </small>
@@ -240,7 +244,7 @@ const MultiTopicSelect = ({
       {
         !loading && (editting && !toggleEdit) && (
           <Box mb={2}>
-            <Button color="secondary" onClick={() => setToggleEdit(true)} size="small">
+            <Button color="secondary" onClick={() => setToggleEdit(true)} size="small" disabled={disabled}>
               {selectedTopicLabel || translate('misc.none')} &nbsp;&nbsp;<PencilIcon fontSize="small" />
             </Button>
           </Box>
@@ -264,7 +268,7 @@ const MultiTopicSelect = ({
                 />
               </Box>
               {
-                !!topicsChild.length && (
+                !!topicsChild.length && (!disabled || topicTwo) && (
                   <Box flex={1} mr={1}>
                     <SelectInput
                       source="topicTwo"
@@ -281,7 +285,7 @@ const MultiTopicSelect = ({
                 )
               }
               {
-                !!topicsGrandchild.length && (!depth || depth > 2) && (
+                !!topicsGrandchild.length && (!depth || depth > 2) && (!disabled || topicThree) && (
                   <Box flex={1}>
                     <SelectInput
                       source="topicThree"

@@ -1,26 +1,48 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Create,
   SimpleForm,
+  Title,
+  useTranslate,
 } from 'react-admin';
 import { Box } from '@material-ui/core';
-import FormFields from './components/FormFields';
-import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import SteppedForm from './components/SteppedForm';
+import CustomTopToolbar from '../common/components/custom-top-toolbar';
+import FormFields from './components/FormFields';
+import NonAdminFormFields from './components/NonAdminFormFields';
+import { useIsAdmin } from '../hooks';
 
-/*const TopicCreate = (props) => {
-  return (
-    <Create {...props} actions={<CustomTopToolbar />}>
-      <SimpleForm>
-        <FormFields {...props} />
-      </SimpleForm>
-    </Create>
-  );
-};*/
+const TopicCreate = (props) => {
+  const isAdmin = useIsAdmin();
+  const { search } = useLocation();
+  const translate = useTranslate();
+  const querystring = new URLSearchParams(search);
+  const fk_parentTopicId = parseInt(querystring.get('fk_parentTopicId'), 10);
 
-const TopicCreate = () => {
+  if (fk_parentTopicId) {
+    if (!isAdmin) {
+      return (
+        <Create {...props} actions={<CustomTopToolbar />}>
+          <SimpleForm initialValues={{ fk_parentTopicId }}>
+            <NonAdminFormFields {...props} disableTopicSelection />
+          </SimpleForm>
+        </Create>
+      );
+    }
+
+    return (
+      <Create {...props} actions={<CustomTopToolbar />}>
+        <SimpleForm initialValues={{ fk_parentTopicId }}>
+          <FormFields {...props} disableTopicSelection />
+        </SimpleForm>
+      </Create>
+    );
+  }
+
   return (
     <Box>
+      <Title title={translate('resources.topics.name', { smart_count: 2 })} />
       <SteppedForm />
     </Box>
   );

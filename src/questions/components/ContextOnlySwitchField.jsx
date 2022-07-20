@@ -15,7 +15,7 @@ const ContextOnlySwitchField = ({ record, disabled, afterEdit }) => {
     try {
       await dataProvider.update('questions', {
         id: record.id,
-        data: { contextOnly: checked },
+        data: { isContextOnly: checked },
       });
 
       notify('The question was updated');
@@ -45,7 +45,7 @@ const ContextOnlySwitchField = ({ record, disabled, afterEdit }) => {
 
         update(e.target.checked);
       }}
-      checked={!!record.contextOnly}
+      checked={!!record.isContextOnly}
       disabled={disabled === true}
     />
   );
