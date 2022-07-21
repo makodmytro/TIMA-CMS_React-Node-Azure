@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import React from 'react';
 import {
   Title,
@@ -38,6 +39,9 @@ const AnswerCreate = () => {
   React.useEffect(() => {
     if (topicsTree.length) {
       if (!topicsTree.some((t) => t.allowCreateContent)) {
+        console.warn('user not allowed to created content, redirecting...');
+        Sentry.captureException('user not allowed to created content, redirecting...');
+
         redirect('/answers');
       }
     }
