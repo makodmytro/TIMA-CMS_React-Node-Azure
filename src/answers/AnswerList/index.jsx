@@ -279,6 +279,7 @@ const AnswerList = ({
             disableCreate={disableCreate}
           />
         )}
+        empty={false}
         filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}
         sort={{ field: 'updatedAt', order: 'DESC' }}
