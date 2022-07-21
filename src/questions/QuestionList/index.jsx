@@ -379,6 +379,7 @@ const QuestionList = ({
             disableCreate={disableCreate}
           />
         )}
+        empty={false}
         filters={<Filters languages={languages} topics={topics} />}
         filterDefaultValues={{ ignored: [false, null], topLevelOnly: '1' }}
         sort={{ field: 'updatedAt', order: 'DESC' }}

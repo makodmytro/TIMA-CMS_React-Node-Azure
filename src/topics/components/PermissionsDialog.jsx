@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
   Typography,
+  CircularProgress,
 } from '@material-ui/core';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import {
@@ -29,7 +30,7 @@ const Bool = ({ v }) => {
 };
 
 const PermissionForm = ({
-  initialValues, onSubmit, groups, isEdit,
+  initialValues, onSubmit, groups, isEdit, loading,
 }) => {
   const translate = useTranslate();
 
@@ -104,7 +105,7 @@ const PermissionForm = ({
                   type="submit"
                   color="secondary"
                   variant="contained"
-                  disabled={!valid}
+                  disabled={!valid || loading}
                   size="small"
                 >
                   { isEdit ? translate('misc.save') : translate('misc.create') }
@@ -126,6 +127,7 @@ const PermissionsDialog = ({
   const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const [loading, setLoading] = React.useState(false);
   const [topic, setTopic] = React.useState(null);
   const [allGroups, setGroups] = React.useState([]);
   const [editting, setEditting] = React.useState(null);
@@ -147,6 +149,7 @@ const PermissionsDialog = ({
     try {
       setEditting(null);
       setDeleting(null);
+      setLoading(true);
 
       const { data } = await dataProvider.getOne('topics', {
         id,
@@ -155,11 +158,15 @@ const PermissionsDialog = ({
       setTopic(data);
     } catch (err) {
       notify('Failed to get permissions', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
   const onSubmit = async ({ group_id, ...values }) => {
     try {
+      setLoading(true);
+
       await dataProvider.topicCreatePermission('topics', {
         group_id,
         topic_id: topic?.id,
@@ -170,12 +177,15 @@ const PermissionsDialog = ({
       init();
     } catch (err) {
       notify('Failed to get groups', 'error');
+      setLoading(false);
     }
   };
 
   const onDeleteCancel = () => setDeleting(null);
   const onDelete = async () => {
     try {
+      setLoading(true);
+
       await dataProvider.topicDeletePermission('topics', {
         topic_id: topic?.id,
         group_id: deleting,
@@ -184,6 +194,7 @@ const PermissionsDialog = ({
       init();
     } catch (err) {
       notify('Failed to delete', 'error');
+      setLoading(false);
     }
   };
 
@@ -230,12 +241,19 @@ const PermissionsDialog = ({
           !topic && (<Box textAlign="text-center"><Typography variant="body2">{translate('misc.loading')}...</Typography></Box>)
         }
         {
-          !!topic && !topic?.PermissionSets?.length && (
+          !!topic && !topic?.PermissionSets?.length && !loading && (
             <Box py={2}><Typography variant="body2">{translate('resources.topics.permissions.no_permissions')}</Typography></Box>
           )
         }
         {
-          !!topic && !!topic?.PermissionSets?.length && (
+          loading && (
+            <Box textAlign="center">
+              <CircularProgress color="secondary" />
+            </Box>
+          )
+        }
+        {
+          !!topic && !!topic?.PermissionSets?.length && !loading && (
             <Box pt={2} pb={4} mb={2} boxShadow={3} px={2}>
               <Box display="flex" mb={2} borderBottom="1px solid #D5D5D5" pb={1}>
                 <Box flex="1">{translate('resources.topics.permissions.group')}</Box>
@@ -289,7 +307,7 @@ const PermissionsDialog = ({
           )
         }
         {
-          !groups.length && (
+          !groups.length && !loading && (
             <Box>
               <Typography variant="body2">
                 {translate('resources.topics.permissions.all_assigned')}
@@ -298,7 +316,7 @@ const PermissionsDialog = ({
           )
         }
         {
-          !!groups.length && (
+          !!groups.length && !loading && (
             <>
               <Box borderBottom="1px solid #D5D5D5" mb={2}>
                 <Typography>{translate('resources.topics.permissions.create_new')}</Typography>
@@ -314,6 +332,7 @@ const PermissionsDialog = ({
                   }}
                   onSubmit={onSubmit}
                   groups={groups}
+                  loading={loading}
                 />
               </Box>
             </>
