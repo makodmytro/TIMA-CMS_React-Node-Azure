@@ -8,6 +8,7 @@ import {
   useRedirect,
   useTranslate,
   useListContext,
+  useDataProvider,
 } from 'react-admin';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -252,7 +253,19 @@ const CustomGrid = ({ visibleColumns }) => {
 const AnswerList = ({
   languages, topics, dispatch, ...props
 }) => {
+  const [disableCreate, setDisableCreate] = React.useState(false);
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
+  const dataProvider = useDataProvider();
+
+  const _f = async () => {
+    const { data } = await dataProvider.contentPermission();
+
+    setDisableCreate(!data?.allowCreateContent);
+  };
+
+  React.useEffect(() => {
+    _f();
+  }, []);
 
   return (
     <>
@@ -263,6 +276,7 @@ const AnswerList = ({
             visibleColumns={visibleColumns}
             onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
             columns={columns}
+            disableCreate={disableCreate}
           />
         )}
         filters={<Filters languages={languages} topics={topics} />}

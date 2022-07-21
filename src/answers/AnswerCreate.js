@@ -33,15 +33,6 @@ const AnswerCreate = () => {
   const dataProvider = useDataProvider();
   const redirect = useRedirect();
   const _languages = useSelector((s) => s.custom.languages);
-  const topicsTree = useSelector((s) => s.custom.topics);
-
-  React.useEffect(() => {
-    if (topicsTree.length) {
-      if (!topicsTree.some((t) => t.allowCreateContent)) {
-        redirect('/answers');
-      }
-    }
-  }, [topicsTree]);
 
   const createQuestion = async (_data) => {
     try {
