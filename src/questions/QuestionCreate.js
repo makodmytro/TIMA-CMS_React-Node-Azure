@@ -8,7 +8,6 @@ import {
   BooleanInput,
   useRedirect,
 } from 'react-admin';
-import { useSelector } from 'react-redux';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 import TopicSelect from '../topics/components/TopicSelect';
@@ -72,15 +71,6 @@ const FormFields = (props) => {
 
 const QuestionCreate = ({ dispatch, languages, ...props }) => {
   const redirect = useRedirect();
-  const topicsTree = useSelector((s) => s.custom.topics);
-
-  React.useEffect(() => {
-    if (topicsTree.length) {
-      if (!topicsTree.some((t) => t.allowCreateContent)) {
-        redirect('/questions');
-      }
-    }
-  }, [topicsTree]);
 
   return (
     <>

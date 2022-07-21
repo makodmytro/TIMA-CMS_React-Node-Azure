@@ -15,6 +15,7 @@ import Logo from '../assets/microsoft-logo.png';
 
 const AZURE_LOGOUT_REDIRECT_URI = process.env.REACT_APP_AZURE_LOGOUT_REDIRECT_URI;
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
 
 const Authenticated = ({ setLoading }) => {
   const [error, setError] = React.useState(false);
@@ -93,7 +94,7 @@ const Authenticated = ({ setLoading }) => {
 
   return (
     <Box>
-      <Button onClick={login} fullWidth variant="outlined">
+      <Button onClick={login} fullWidth variant="outlined" {...USE_ALT_THEME ? { style: { color: 'white' }, color: 'secondary' } : {}}>
         <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
       </Button>
       {

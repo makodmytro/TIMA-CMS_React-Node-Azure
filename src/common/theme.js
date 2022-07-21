@@ -1,14 +1,32 @@
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
-const theme = createMuiTheme({
-  palette: {
+const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
+
+let palette = {
+  primary: {
+    main: '#4EC2A8',
+  },
+  secondary: {
+    main: '#498CA7',
+    dark: '#456B91',
+  },
+};
+
+if (USE_ALT_THEME) {
+  palette = {
     primary: {
-      main: '#4EC2A8',
+      main: '#50E6FF',
     },
     secondary: {
-      main: '#498CA7',
-      dark: '#456B91',
+      main: '#0078D4',
+      // dark: '#456B91',
     },
+  };
+}
+
+const theme = createMuiTheme({
+  palette: {
+    ...palette,
     text: {
       primary: '#000000DE',
       secondary: '#000000DE',
