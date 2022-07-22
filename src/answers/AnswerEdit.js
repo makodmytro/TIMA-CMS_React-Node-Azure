@@ -85,7 +85,7 @@ const AnswerEdit = () => {
   };
 
   if (answer) {
-    answer.allowEdit = false; // eslint-disable-line
+    answer.allowEdit = !!answer.allowEdit; // eslint-disable-line
   }
 
   return (
