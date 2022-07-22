@@ -40,12 +40,11 @@ const List = ({ record }) => {
   };
 
   const unlinkAnswerConfirmed = async () => {
-    await dataProvider.update('questions', {
+    await dataProvider.delete('questions', {
       id: confirmations.id,
-      data: { fk_answerId: null },
     });
 
-    notify('The answer has been unlinked');
+    notify('Deleted successfully');
     unlinkAnswerClosed();
     refresh();
     top();
