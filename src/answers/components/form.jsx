@@ -137,7 +137,7 @@ const Form = ({
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.FollowupQuestions?.length)}
+        disabled={disableEdit || (record && !record.isFollowupChild)}
       />
       {
         !USE_WORKFLOW && (
