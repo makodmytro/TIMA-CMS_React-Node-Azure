@@ -219,7 +219,7 @@ const RelatedQuestionsTable = ({
                       record={{ ...related }}
                       editInline
                       disabled={disabled}
-                      disabledDelete={record?.RelatedQuestions?.length < 2}
+                      disabledDelete={record?.allowDelete === false}
                       onEditCallback={refresh}
                     />
                   </TableCell>
