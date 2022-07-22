@@ -109,30 +109,36 @@ const Form = ({
       />
 
       {_languages.length > 1 && (
-      <ReferenceInput
-        source="fk_languageId"
-        label="resources.answers.fields.fk_languageId"
-        reference="languages"
-        validate={required()}
-        fullWidth
-        inputProps={inputProps}
-        disabled={disableEdit}
-      >
-        <SelectInput
-          optionText="name"
+        <ReferenceInput
+          source="fk_languageId"
+          label="resources.answers.fields.fk_languageId"
+          reference="languages"
+          validate={required()}
+          fullWidth
+          inputProps={inputProps}
           disabled={disableEdit}
-        />
-      </ReferenceInput>
+        >
+          <SelectInput
+            optionText="name"
+            disabled={disableEdit}
+          />
+        </ReferenceInput>
       )}
       <Box pt={2}>
-        <TopicSelect
-          source="fk_topicId"
-          isRequired
-          label="resources.answers.fields.fk_topicId"
-          editting={edit}
-          disabled={disableEdit || (record && record.isContextOnly)}
-          filter={{ fk_languageId: fkLanguageId }}
-        />
+        {
+          fkLanguageId && (
+            <TopicSelect
+              source="fk_topicId"
+              isRequired
+              label="resources.answers.fields.fk_topicId"
+              editting={edit}
+              disabled={disableEdit || (record && record.isContextOnly)}
+              filterFunction={(t) => {
+                return t.allowCreateContent && t.fk_languageId === fkLanguageId;
+              }}
+            />
+          )
+        }
       </Box>
       <BooleanInput
         source="isContextOnly"
