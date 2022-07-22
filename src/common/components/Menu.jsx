@@ -125,7 +125,7 @@ const Menu = ({ onMenuClick, logout }) => {
               isSyncInProgress && isAdmin && (
                 <Box mb={2} textAlign="center">
                   <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
-                    {translate('Topic Sync Scheduled')}
+                    {translate('Topic sync in progress')}
                   </Typography>
                   &nbsp; <CircularProgress color="primary" size={15} />
                 </Box>

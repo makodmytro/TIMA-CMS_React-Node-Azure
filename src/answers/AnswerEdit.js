@@ -84,6 +84,10 @@ const AnswerEdit = () => {
     refresh();
   };
 
+  if (answer) {
+    answer.allowEdit = false; // eslint-disable-line
+  }
+
   return (
     <>
       <CustomTopToolbar />
@@ -141,7 +145,7 @@ const AnswerEdit = () => {
       </Box>
 
       <Box pt={2}>
-        <StatusInputSection record={answer} />
+        <StatusInputSection record={answer} disabled={disableEdit} />
       </Box>
       <Box pt={2}>
         <StatusHistory record={answer} />

@@ -9,7 +9,7 @@ const german = {
   Dashboard: 'Dashboard',
   'My profile': 'Mein Profil',
   'Topic Sync Scheduled': 'Themen Sync geplant ',
-  'Topic sync in progress': 'Topic sync in progress',
+  'Topic sync in progress': 'Topic Sync läuft',
   required: 'Erforderlich',
   Days: 'Tag',
   Weeks: 'Woche',

@@ -5,6 +5,7 @@ import {
   List,
   useListContext,
   useTranslate,
+  useDataProvider,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -352,7 +353,19 @@ const CustomGrid = ({
 const QuestionList = ({
   languages, topics, dispatch, ...props
 }) => {
+  const [disableCreate, setDisableCreate] = React.useState(false);
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'questions'));
+  const dataProvider = useDataProvider();
+
+  const _f = async () => {
+    const { data } = await dataProvider.contentPermission();
+
+    setDisableCreate(!data?.allowCreateContent);
+  };
+
+  React.useEffect(() => {
+    _f();
+  }, []);
 
   return (
     <>
@@ -363,8 +376,10 @@ const QuestionList = ({
             visibleColumns={visibleColumns}
             onColumnsChange={handleColumnsChange('questions', setVisibleColumns)}
             columns={columns}
+            disableCreate={disableCreate}
           />
         )}
+        empty={false}
         filters={<Filters languages={languages} topics={topics} />}
         filterDefaultValues={{ ignored: [false, null], topLevelOnly: '1' }}
         sort={{ field: 'updatedAt', order: 'DESC' }}

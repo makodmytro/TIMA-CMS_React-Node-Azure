@@ -65,6 +65,7 @@ const ListActions = (props) => {
     columns,
     visibleColumns,
     onColumnsChange,
+    disableCreate,
     createButtonLabel,
     ...rest
   } = props;
@@ -80,7 +81,7 @@ const ListActions = (props) => {
   let disabled = false;
 
   if (resource === 'questions' || resource === 'answers') {
-    disabled = useDisabledCreate();
+    disabled = disableCreate;
   } else if (['topics', 'languages', 'users', 'groups', 'audit'].includes(resource)) {
     disabled = !useIsAdmin();
   }

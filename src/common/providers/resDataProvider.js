@@ -504,7 +504,12 @@ const resDataProvider = {
     });
 
     return { data: json };
-  }
+  },
+  contentPermission: async () => {
+    const { json } = await httpClient(`${baseApi}/answers/permissions`);
+
+    return { data: json };
+  },
 };
 
 export default resDataProvider;
