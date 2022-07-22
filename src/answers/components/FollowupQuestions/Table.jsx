@@ -126,6 +126,7 @@ const FollowupQuestionsTable = ({
                         type="button"
                         size="small"
                         style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                        disabled={record?.allowDelete === false}
                         fullWidth
                       >
                         <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}

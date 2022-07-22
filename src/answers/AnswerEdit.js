@@ -84,10 +84,6 @@ const AnswerEdit = () => {
     refresh();
   };
 
-  if (answer) {
-    answer.allowEdit = !!answer.allowEdit; // eslint-disable-line
-  }
-
   return (
     <>
       <CustomTopToolbar />
