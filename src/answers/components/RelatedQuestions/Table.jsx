@@ -61,7 +61,8 @@ const RelatedQuestionsTable = ({
   }
 
   const onPreUnlinkClick = (id) => {
-    if (record?.RelatedQuestions?.length > 3) {
+    const minQuestions = record?.isFollowupChild ? 1 : 3;
+    if (record?.RelatedQuestions?.length > minQuestions) {
       return onUnlinkClick(id);
     }
 
@@ -220,7 +221,8 @@ const RelatedQuestionsTable = ({
                       record={{ ...related }}
                       editInline
                       disabled={disabled}
-                      deleteComponent={(
+                      disabledDelete={record?.allowDelete === false}
+                      deleteComponent={record?.allowDelete ? (
                         <Button
                           onClick={() => onPreUnlinkClick(related.id)}
                           type="button"
@@ -231,7 +233,7 @@ const RelatedQuestionsTable = ({
                         >
                           <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
                         </Button>
-                      )}
+                      ) : null}
                       onEditCallback={refresh}
                     />
                   </TableCell>
