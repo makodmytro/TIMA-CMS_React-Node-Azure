@@ -17,6 +17,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Alert from '@material-ui/lab/Alert';
+import DeleteIcon from '@material-ui/icons/Delete';
 import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
 import AlertDialog from '../../../common/components/Alert';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
@@ -60,7 +61,7 @@ const RelatedQuestionsTable = ({
   }
 
   const onPreUnlinkClick = (id) => {
-    if (record?.RelatedQuestions?.length > 1) {
+    if (record?.RelatedQuestions?.length > 3) {
       return onUnlinkClick(id);
     }
 
@@ -219,7 +220,18 @@ const RelatedQuestionsTable = ({
                       record={{ ...related }}
                       editInline
                       disabled={disabled}
-                      disabledDelete={record?.RelatedQuestions?.length < 2}
+                      deleteComponent={(
+                        <Button
+                          onClick={() => onPreUnlinkClick(related.id)}
+                          type="button"
+                          size="small"
+                          style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                          disabled={record?.allowDelete === false}
+                          fullWidth
+                        >
+                          <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
+                        </Button>
+                      )}
                       onEditCallback={refresh}
                     />
                   </TableCell>
