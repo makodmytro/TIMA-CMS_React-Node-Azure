@@ -41,7 +41,7 @@ const AnswerEdit = () => {
   const { answer, refresh } = useAnswer();
 
   const disableEdit = (answer && answer.allowEdit === false);
-  const disableDelete = (answer && answer.allowEdit === false);
+  const disableDelete = (answer && answer.allowDelete === false);
 
   const onSubmit = async (values) => {
     try {
