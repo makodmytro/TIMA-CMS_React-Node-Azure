@@ -120,6 +120,7 @@ const StatusInput = ({ record, disabled }) => {
   const { refresh } = useAnswer();
   const translate = useTranslate();
   const statuses = useSelector((state) => state.custom.workflowStatus);
+  const disabledCombined = disabled && options && options.length === 0;
 
   const onSubmit = async ({ status }) => {
     try {
@@ -169,11 +170,11 @@ const StatusInput = ({ record, disabled }) => {
                       record={record}
                       source="status"
                       choices={options}
-                      disabled={disabled && options.length === 0}
+                      disabled={disabledCombined}
                       fullWidth
                     />
                     {
-                      (disabled && options.length === 0) && (
+                      (disabledCombined) && (
                         <Typography variant="body2">
                           {translate('misc.can_not_change_status')}
                         </Typography>
@@ -181,13 +182,13 @@ const StatusInput = ({ record, disabled }) => {
                     }
                   </Box>
                   <Box flex={1} textAlign="center" mt={2}>
-                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabled} size="small">
+                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
                       {translate('misc.add_comment')}
                     </Button>
                   </Box>
                 </Box>
 
-                <Button type="submit" variant="contained" color="primary" disabled={disabled || !valid || pristine}>
+                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>
               </form>
