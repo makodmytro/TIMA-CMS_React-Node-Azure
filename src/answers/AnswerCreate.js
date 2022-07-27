@@ -158,12 +158,12 @@ const AnswerCreate = () => {
 
               <Box pb={2} mb={2} borderBottom="1px dashed #D5D5D5">
                 <ArrayInput source="questions" label="misc.questions">
-                  <SimpleFormIterator disableRemove={(values.questions.length === 1)}>
+                  <SimpleFormIterator disableRemove={(values.questions.length === 3)}>
                     <TextInput
                       label="resources.questions.fields.text"
                       source="text"
                       fullWidth
-                      validate={questionExists(values.fk_languageId, values.fk_topicId)}
+                      validate={required() && questionExists(values.fk_languageId, values.fk_topicId)}
                     />
                   </SimpleFormIterator>
                 </ArrayInput>
