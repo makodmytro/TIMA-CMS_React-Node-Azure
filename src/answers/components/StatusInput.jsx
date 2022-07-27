@@ -173,7 +173,7 @@ const StatusInput = ({ record, disabled }) => {
                       fullWidth
                     />
                     {
-                      (disabled || !options.length) && (
+                      (disabled && options.length === 0) && (
                         <Typography variant="body2">
                           {translate('misc.can_not_change_status')}
                         </Typography>
