@@ -169,7 +169,7 @@ const StatusInput = ({ record, disabled }) => {
                       record={record}
                       source="status"
                       choices={options}
-                      disabled={disabled || !options.length}
+                      disabled={disabled && options.length === 0}
                       fullWidth
                     />
                     {
