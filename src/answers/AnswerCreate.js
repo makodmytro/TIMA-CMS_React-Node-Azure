@@ -118,12 +118,14 @@ const AnswerCreate = () => {
         validate={async (values) => {
           const errors = {};
 
-          const some = (values.questions || []).some((q) => q && q.text);
-
-          if (!some) {
-            errors['questions.0.text'] = translate('Required');
+          //for each question, if empty, add validation error
+          if (values.questions) {
+            values.questions.forEach((q, i) => {
+              if (q.text?.length < 1) {
+                errors[`questions[${i}].text`] = translate('Required');
+              }
+            });
           }
-
           return errors;
         }}
         validateOnBlur
