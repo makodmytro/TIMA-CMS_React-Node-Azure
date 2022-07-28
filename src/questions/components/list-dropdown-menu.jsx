@@ -145,9 +145,9 @@ const DropdownMenu = ({
                       refresh();
                     }
                   }}
-                  fullWidth
                   style={{ justifyContent: 'flex-start' }}
                   disabled={disableDelete}
+                  fullWidth
                 />
               </ResourceContextProvider>
             )
