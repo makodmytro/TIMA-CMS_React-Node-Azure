@@ -177,7 +177,7 @@ const StatusInput = ({ record, disabled }) => {
                     {
                       (disabledCombined || disabledContextOnly) && (
                         <Typography variant="body2">
-                          {disabledContextOnly ? translate('misc.can_not_change_status') : translate('misc.can_not_change_status_context')}
+                          {disabledContextOnly ? translate('misc.can_not_change_status_context') : translate('misc.can_not_change_status')}
                         </Typography>
                       )
                     }
