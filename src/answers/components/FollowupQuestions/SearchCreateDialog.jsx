@@ -3,7 +3,7 @@ import {
   useDataProvider,
   useNotify,
 } from 'react-admin';
-import QuestionsCreateDialog from '../../../questions/components/CreateDialog';
+import QuestionsSearchCreateDialog from '../../../questions/components/SearchCreateDialog';
 import useAnswer from '../../useAnswer';
 
 const SearchCreateDialog = ({ record, open, onClose }) => {
@@ -12,30 +12,47 @@ const SearchCreateDialog = ({ record, open, onClose }) => {
   const dataProvider = useDataProvider();
 
   const afterCreate = async (created) => {
-    try {
-      await dataProvider.answersAddFollowup('answers', {
-        id: record.id,
-        question_id: created.id,
-      });
+    await dataProvider.answersAddFollowup('answers', {
+      id: record.id,
+      question_id: created.id,
+    });
 
-      notify('The question was created and linked');
+    notify('The question was created and linked');
+    refresh();
+    onClose();
+  };
+
+  const selectedButtonOnClick = async (selected) => {
+    try {
+      await Promise.all(
+        selected.map((id) => {
+          return dataProvider.answersAddFollowup('answers', {
+            id: record.id,
+            question_id: id,
+          });
+        }),
+      );
+
+      notify('The questions were set as follow up');
       refresh();
       onClose();
     } catch (err) {
-      notify(err?.body?.message, 'error');
+      notify(`Failed to link questions: ${err.message}`, 'error');
     }
   };
 
   return (
-    <QuestionsCreateDialog
+    <QuestionsSearchCreateDialog
       open={open}
       onClose={onClose}
-      initialValues={{
+      record={record}
+      createInitialValues={{
         fk_languageId: record.fk_languageId,
         fk_topicId: record.fk_topicId,
-        isFollowup: true
       }}
-      onSuccess={afterCreate}
+      afterCreate={afterCreate}
+      selectedButtonText="resources.answers.set_followup"
+      selectedButtonOnClick={selectedButtonOnClick}
     />
   );
 };

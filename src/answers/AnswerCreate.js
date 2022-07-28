@@ -119,13 +119,12 @@ const AnswerCreate = () => {
           const errors = {};
 
           //for each question, if empty, add validation error
-          if (values.questions) {
-            values.questions.forEach((q, i) => {
-              if (q.text?.length < 1) {
-                errors[`questions[${i}].text`] = translate('Required');
-              }
-            });
+          const some = (values.questions || []).some((q) => q && q.text);
+
+          if (!some) {
+            errors['questions.0.text'] = translate('Required');
           }
+
           return errors;
         }}
         validateOnBlur
@@ -163,7 +162,7 @@ const AnswerCreate = () => {
                       label="resources.questions.fields.text"
                       source="text"
                       fullWidth
-                      validate={required() && questionExists(values.fk_languageId, values.fk_topicId)}
+                      validate={[required(), questionExists(values.fk_languageId, values.fk_topicId)]}
                     />
                   </SimpleFormIterator>
                 </ArrayInput>
