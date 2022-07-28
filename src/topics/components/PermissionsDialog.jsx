@@ -51,22 +51,41 @@ const PermissionForm = ({
       }}
       render={({ handleSubmit, valid, reset, values, form }) => {
         const t = (name) => (_v) => {
-          if (name === 'manage' && _v) {
-            form.change('view', true);
-            form.change('edit', true);
-            form.change('delete', true);
-          }
+          if (_v) {
+            switch (name) {
+              case 'manage':
+                form.change('view', true);
+                form.change('edit', true);
+                form.change('delete', true);
+                break;
 
-          if (name === 'delete' && _v) {
-            form.change('view', true);
-            form.change('edit', true);
-          }
+              case 'delete':
+                form.change('view', true);
+                form.change('edit', true);
+                break;
 
-          if (name === 'edit' && _v) {
-            form.change('view', true);
+              case 'edit':
+                form.change('view', true);
+                break;
+            }
+          } else {
+            switch (name) {
+              case 'view':
+                form.change('edit', false);
+                form.change('delete', false);
+                form.change('manage', false);
+                break;
+              case 'edit':
+                form.change('delete', false);
+                form.change('manage', false);
+                break;
+
+              case 'delete':
+                form.change('manage', false);
+                break;
+            }
           }
         };
-
         return (
           <form
             onSubmit={(event) => {
@@ -87,7 +106,7 @@ const PermissionForm = ({
                 />
               </Box>
               <Box px={1} flex="1">
-                <BooleanInput source="view" label={translate('resources.topics.permissions.view')} />
+                <BooleanInput source="view" label={translate('resources.topics.permissions.view')} onChange={t('view')} />
               </Box>
               <Box px={1} flex="1">
                 <BooleanInput source="edit" label={translate('resources.topics.permissions.edit')} onChange={t('edit')} />
@@ -259,8 +278,8 @@ const PermissionsDialog = ({
                 <Box flex="1">{translate('resources.topics.permissions.group')}</Box>
                 <Box textAlign="center" flex="1">{translate('resources.topics.permissions.view')}</Box>
                 <Box textAlign="center" flex="1">{translate('resources.topics.permissions.edit')}</Box>
-                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.manage')}</Box>
                 <Box textAlign="center" flex="1">{translate('resources.topics.permissions.delete')}</Box>
+                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.manage')}</Box>
                 <Box flex="1">&nbsp;</Box>
               </Box>
               {
@@ -288,8 +307,8 @@ const PermissionsDialog = ({
                       <Box flex="1">{ps.Group.name}</Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.view} /></Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.edit} /></Box>
-                      <Box flex="1" textAlign="center"><Bool v={ps.manage} /></Box>
                       <Box flex="1" textAlign="center"><Bool v={ps.delete} /></Box>
+                      <Box flex="1" textAlign="center"><Bool v={ps.manage} /></Box>
                       <Box flex="1" textAlign="center">
                         <IconButton size="small" color="secondary" onClick={() => setEditting(i)}>
                           <PencilIcon fontSize="small" />
