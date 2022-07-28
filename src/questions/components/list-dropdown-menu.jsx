@@ -50,7 +50,7 @@ const DropdownMenu = ({
         variant="contained"
         color="secondary"
         size="small"
-        disabled={disableEdit && disableDelete}
+        disabled={disableDelete}
       >
         {translate('misc.actions')} <ExpandIcon />
       </Button>
