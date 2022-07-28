@@ -121,6 +121,7 @@ const StatusInput = ({ record, disabled }) => {
   const translate = useTranslate();
   const statuses = useSelector((state) => state.custom.workflowStatus);
   const disabledCombined = disabled && options && options.length === 0;
+  const disabledContextOnly = record?.isContextOnly;
 
   const onSubmit = async ({ status }) => {
     try {
@@ -170,13 +171,13 @@ const StatusInput = ({ record, disabled }) => {
                       record={record}
                       source="status"
                       choices={options}
-                      disabled={disabledCombined}
+                      disabled={disabledCombined || disabledContextOnly}
                       fullWidth
                     />
                     {
-                      (disabledCombined) && (
+                      (disabledCombined || disabledContextOnly) && (
                         <Typography variant="body2">
-                          {translate('misc.can_not_change_status')}
+                          {disabledContextOnly ? translate('misc.can_not_change_status') : translate('misc.can_not_change_status_context')}
                         </Typography>
                       )
                     }
@@ -188,7 +189,7 @@ const StatusInput = ({ record, disabled }) => {
                   </Box>
                 </Box>
 
-                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
+                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || disabledContextOnly || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>
               </form>

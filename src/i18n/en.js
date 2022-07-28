@@ -137,6 +137,7 @@ const english = {
     edit_topic: 'Edit',
     view_topic: 'View',
     can_not_change_status: 'The status cannot be changed by your current role',
+    can_not_change_status_context: 'The status cannot be changed for context only content',
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',

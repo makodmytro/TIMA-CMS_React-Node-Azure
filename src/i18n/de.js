@@ -136,6 +136,7 @@ const german = {
     edit_topic: 'Bearbeiten',
     view_topic: 'Details',
     can_not_change_status: 'Du hast keine Berechtigung den Status zu ändern',
+    can_not_change_status_context: 'Der Status kann für Kontextinhalte nicht geändert werden',
     add_comment: 'Kommentar erstellen',
     remove: 'Entfernen',
     search_users: 'Hier tippen um Nutzer zu suchen',
