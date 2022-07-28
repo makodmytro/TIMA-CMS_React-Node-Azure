@@ -120,7 +120,7 @@ const FollowupQuestionsTable = ({
                     editInline
                     disabled={disabled}
                     onEditCallback={refresh}
-                    deleteComponent={(
+                    deleteComponent={record?.allowDelete !== false && (
                       <Button
                         onClick={() => onDelete(related.id)}
                         type="button"
