@@ -134,6 +134,7 @@ const german = {
     topics: 'Themen',
     sessions_map: 'Sessions Karte',
     edit_topic: 'Bearbeiten',
+    view_topic: 'Details',
     can_not_change_status: 'Du hast keine Berechtigung den Status zu ändern',
     add_comment: 'Kommentar erstellen',
     remove: 'Entfernen',

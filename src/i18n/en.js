@@ -135,6 +135,7 @@ const english = {
     topics: 'Topics',
     sessions_map: 'Sessions map',
     edit_topic: 'Edit',
+    view_topic: 'View',
     can_not_change_status: 'The status cannot be changed by your current role',
     add_comment: 'Add comment',
     remove: 'Remove',
