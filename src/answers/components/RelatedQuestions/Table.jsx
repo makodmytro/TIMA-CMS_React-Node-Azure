@@ -119,15 +119,15 @@ const RelatedQuestionsTable = ({
                         <FunctionField
                           record={related}
                           render={() => {
-                            // if (!related.fk_parentAnswerId) {
-                            //   return (
-                            //     <>-</>
-                            //   );
-                            // }
+                            if (!related.parentAnswers || related.parentAnswers?.length === 0) {
+                              return (
+                                <>-</>
+                              );
+                            }
 
                             return (
                               <Box key={i} py={1}>
-                                { related.parentAnswers.map((pa, idx) => (
+                                { related.parentAnswers && related.parentAnswers.map((pa, idx) => (
                                   <Box key={idx}>
                                     &#8226;&nbsp;
                                     <Typography
@@ -139,7 +139,7 @@ const RelatedQuestionsTable = ({
                                       {pa.text.length > 20 ? `${pa.text.substr(0, 20)}...` : pa.text}
                                     </Typography>
                                   </Box>
-                                ))}
+                                )) }
                                 <Box pl={2}>
                                   <SubdirectoryArrowRight fontSize="small" />
                                   &nbsp;
