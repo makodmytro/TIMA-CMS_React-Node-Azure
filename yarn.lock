@@ -10522,6 +10522,14 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-clear-browser-cache@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-clear-browser-cache/-/react-clear-browser-cache-0.2.3.tgz#4d809c97af04508a2e7dbe4ba97cdceb883a69b7"
+  integrity sha512-8C/G5V9pMDJm0wxLcKMJYKeQD7FSCf/YyemM02cAAmtq3wPRUA8GeXKkVEzMJPSzFj0N/gY3Evy0pu7odUWRgw==
+  dependencies:
+    minimist "^1.2.5"
+    uuid "^8.3.2"
+
 react-dev-utils@^11.0.1:
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.2.tgz#98aed16ef50f808ee17b32def75eb15f89655802"
@@ -12841,7 +12849,7 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0:
+uuid@^8.3.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
