@@ -58,6 +58,11 @@ const Authenticated = ({ setLoading }) => {
         sessionStorage.setItem('azure-login', 1);
         setLoading(false);
         redirect('/');
+      } else {
+        //handle exchangeToken error
+        setLoading(false);
+        setError(true);
+        notify('Failed to login, user might be disabled, please contact support');
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
