@@ -62,7 +62,7 @@ const Authenticated = ({ setLoading }) => {
         //handle exchangeToken error
         setLoading(false);
         setError(true);
-        notify('Failed to login, user might be disabled, please contact support');
+        notify('Failed to login, please check with your administrator whether your account has been enabled');
       }
     } catch (err) {
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
