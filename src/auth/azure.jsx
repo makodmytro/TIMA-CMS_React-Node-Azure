@@ -65,6 +65,7 @@ const Authenticated = ({ setLoading }) => {
         notify('Failed to login, please check with your administrator whether your account has been enabled');
       }
     } catch (err) {
+      sessionStorage.clear();
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
       console.error(err);
       setLoading(false);
@@ -85,6 +86,7 @@ const Authenticated = ({ setLoading }) => {
     });
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    sessionStorage.clear();
   };
 
   React.useEffect(() => {
