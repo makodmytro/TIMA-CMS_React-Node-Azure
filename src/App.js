@@ -162,10 +162,10 @@ const AsyncResources = () => {
           connectToWebSocket();
         }, 5000);
       }
-      socket.onmessage = ({ message }) => {
+      socket.onmessage = (message) => {
         try {
-          if (message?.length > 0) {
-            const data = JSON.parse(message);
+          if (message?.data?.length > 0) {
+            const data = JSON.parse(message.data);
             if (data?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
               store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data });
             }
