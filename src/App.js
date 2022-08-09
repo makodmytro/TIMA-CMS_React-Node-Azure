@@ -71,7 +71,6 @@ const AsyncResources = () => {
   const timeout = React.useRef(null);
   const topicsStatusTimeout = React.useRef(null);
   const [socket, setSocket] = React.useState(null);
-  const [socketTimeout, setSocketTimeout] = React.useState(null);
 
   const isLoginScreen = () => location.pathname.includes('/login') || location.pathname.includes('/backdoor-login');
   const refreshSession = async () => {
@@ -124,30 +123,6 @@ const AsyncResources = () => {
     setTac(true);
   };
 
-  function ping() {
-    if (socket) {
-      // to connection open server, if server no reply from web sockets in 1 minute then we consider it as a connection loss and create a new
-      socket.send('__ping__');
-      const tm = setTimeout(() => {
-        console.log('connection lost')
-        if (!isLoginScreen() && !socket && location.pathname) {
-          const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
-          ws.onopen = (args) => {
-            ping()
-          }
-          setSocket(ws);
-        }
-      }, 60000);
-      setSocketTimeout(tm)
-    }
-  }
-
-  function pong() {
-    // discarding existing server
-    if (socketTimeout) {
-      clearTimeout(socketTimeout);
-    }
-  }
   React.useEffect(() => {
     check();
   }, []);
@@ -155,10 +130,7 @@ const AsyncResources = () => {
   React.useEffect(() => {
     if (!isLoginScreen() && !socket) {
       const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
-      // if Websocket connection lost create a new connection for ping() function re-establish connection
-      ws.onopen = (args) => {
-        ping()
-      }
+
       setSocket(ws);
     }
 
@@ -170,7 +142,6 @@ const AsyncResources = () => {
   React.useEffect(() => {
     if (socket) {
       socket.onmessage = function ({ data }) {
-        pong()
         try {
           const d = JSON.parse(data);
           if (d?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
