@@ -74,7 +74,7 @@ const Authenticated = ({ setLoading }) => {
         window.location.href = url;
       } else {
         setError(true);
-        notify('Azure authentication failed', 'error');
+        notify('Failed to login, please check with your administrator whether your account has been enabled', 'error');
       }
     }
   };
