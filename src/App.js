@@ -123,31 +123,56 @@ const AsyncResources = () => {
     setTac(true);
   };
 
+  const connectToWebSocket = () => {
+    const url = `${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`;
+    try {
+      const ws = new WebSocket(url);
+      console.log(`websocket connected to ${url}`);
+
+      setSocket(ws);
+    } catch (e) {
+      console.error('`failed to connect to websocket, retrying', e);
+      setTimeout(() => {
+        connectToWebSocket();
+      }, 5000);
+    }
+  };
+
   React.useEffect(() => {
     check();
   }, []);
 
   React.useEffect(() => {
-    if (!isLoginScreen() && !socket) {
-      const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
-
-      setSocket(ws);
-    }
-
-    if (isLoginScreen() && socket) {
-      socket.close();
+    if (socket === null || socket === undefined) {
+      if (isLoginScreen()) {
+        socket.close();
+      } else {
+        connectToWebSocket();
+      }
     }
   }, [location.pathname]);
 
   React.useEffect(() => {
     if (socket) {
-      socket.onmessage = function ({ data }) {
+      socket.onopen = (e) => console.log('websocket open', e);
+      socket.onerror = console.error;
+      socket.onclose = (e) => {
+        console.warn('websocket closed, trying to reconnect', e);
+        setTimeout(() => {
+          connectToWebSocket();
+        }, 5000);
+      }
+      socket.onmessage = ({ message }) => {
         try {
-          const d = JSON.parse(data);
-          if (d?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
-            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d });
+          if (message?.length > 0) {
+            const data = JSON.parse(message);
+            if (data?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
+              store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data });
+            }
           }
-        } catch (e) {} // eslint-disable-line
+        } catch (e) {
+          console.warn(e);
+        } // eslint-disable-line
       };
     }
   }, [socket]);
