@@ -147,30 +147,39 @@ const resDataProvider = {
     return { data: json };
   },
   getList: async (resource, params) => {
-    const url = getListUrl(`${baseApi}/${resource}`, resource, params);
+    try {
+      const url = getListUrl(`${baseApi}/${resource}`, resource, params);
 
-    const { json } = await httpClient(url);
+      const { json } = await httpClient(url);
 
-    if (Array.isArray(json)) {
+      if (Array.isArray(json)) {
+        return {
+          data: json,
+          total: json.length,
+        };
+      }
+
+      if (resource === 'users') { // hack "Groups"
+        json.data = json.data.map((j) => {
+          return {
+            ...j,
+            groups: (j.Groups || []).map((g) => g.id),
+          };
+        });
+      }
+
       return {
-        data: json,
-        total: json.length,
+        data: json.data || [],
+        total: json.total || 0,
+      };
+    } catch (e) {
+      console.error(e);
+
+      return {
+        data: [],
+        total: 0,
       };
     }
-
-    if (resource === 'users') { // hack "Groups"
-      json.data = json.data.map((j) => {
-        return {
-          ...j,
-          groups: (j.Groups || []).map((g) => g.id),
-        };
-      });
-    }
-
-    return {
-      data: json.data || [],
-      total: json.total || 0,
-    };
   },
   getMany: async (resource, params) => {
     const query = {
