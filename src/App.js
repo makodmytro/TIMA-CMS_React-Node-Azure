@@ -166,7 +166,8 @@ const AsyncResources = () => {
         try {
           if (message?.data?.length > 0) {
             const data = JSON.parse(message.data);
-            if (data?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
+            const state = store.getState()?.custom;
+            if (data?.isSyncInProgress !== state?.isSyncInProgress || data?.nextSyncScheduled !== state?.nextSyncScheduled) {
               store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data });
             }
           }
