@@ -143,12 +143,12 @@ const AsyncResources = () => {
   }, []);
 
   React.useEffect(() => {
-    if (socket === null || socket === undefined) {
-      if (isLoginScreen()) {
-        socket.close();
-      } else {
+    if (!isLoginScreen()) {
+      if (socket === null || socket === undefined) {
         connectToWebSocket();
       }
+    } else if (socket) {
+      socket.close();
     }
   }, [location.pathname]);
 
