@@ -134,7 +134,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
   const refresh = useRefresh();
   const notify = useNotify();
   const translate = useTranslate();
-
+  const answersWithoutContextOnly = answers?.filter((ans) => !ans.isContextOnly);
   const onSelect = async (fk_answerId) => {
     try {
       await dataProvider.update('questions', {
@@ -221,7 +221,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
                   </Box>
                 )
               }
-              <ResultsList answers={answers} onSelect={onSelect} />
+              <ResultsList answers={answersWithoutContextOnly} onSelect={onSelect} />
             </Box>
           </Dialog>
         )
