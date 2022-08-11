@@ -105,7 +105,7 @@ const FollowupQuestionsTable = ({
                   )
                 }
                 <TableCell>
-                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate />
+                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
                 </TableCell>
                 <TableCell>
                   <BooleanField
