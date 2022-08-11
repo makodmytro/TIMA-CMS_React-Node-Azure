@@ -98,7 +98,7 @@ const ResultsList = ({
 }) => {
   const translate = useTranslate();
   const isSelected = (question) => selected.includes(question.id);
-
+  const questionsWithoutContextOnly = questions?.filter((question) => !question.isContextOnly);
   if (!questions) {
     return null;
   }
@@ -123,7 +123,7 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questions.map((question, i) => (
+            questionsWithoutContextOnly.map((question, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <Checkbox
