@@ -26,6 +26,7 @@ import AltLogo from '../assets/QnA Manager Logo.png';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
+const USER_AND_PASSWORD_LOGIN = process.env.REACT_APP_USE_USERNAME_AND_PASSWORD_LOGIN === '1';
 
 const styles = makeStyles(() => ({
   input: {
@@ -57,7 +58,7 @@ const Wrapper = ({ children }) => {
       {children}
     </Box>
   );
-}
+};
 
 export default () => {
   const redirect = useRedirect();
@@ -103,7 +104,6 @@ export default () => {
       </ThemeProvider>
     );
   }
-
   return (
     <ThemeProvider theme={createMuiTheme(defaultTheme)}>
       <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
@@ -119,12 +119,15 @@ export default () => {
                     <Box textAlign="center" py={2}>
                       <Azure setLoading={setAzureLoading} />
                     </Box>
-                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
-                      {translate('misc.or')}
-                    </Typography>
+                    {AZURE_LOGIN && USER_AND_PASSWORD_LOGIN ? (
+                      <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
+                        {translate('misc.or')}
+                      </Typography>
+                    ) : ''}
                   </Box>
                 )
               }
+              {USER_AND_PASSWORD_LOGIN && (
               <Form
                 autoComplete="off"
                 autoFill="off"
@@ -172,6 +175,7 @@ export default () => {
                   </form>
                 )}
               />
+              )}
             </Wrapper>
           </Grid>
         </Grid>
