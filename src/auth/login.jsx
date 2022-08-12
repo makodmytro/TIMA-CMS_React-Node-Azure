@@ -114,16 +114,18 @@ export default () => {
                 <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
               </Box>
               {
-                AZURE_LOGIN && USER_AND_PASSWORD_LOGIN ? (
+                AZURE_LOGIN && (
                   <Box textAlign="center" mb={2}>
                     <Box textAlign="center" py={2}>
                       <Azure setLoading={setAzureLoading} />
                     </Box>
-                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
-                      {translate('misc.or')}
-                    </Typography>
+                    {AZURE_LOGIN && USER_AND_PASSWORD_LOGIN ? (
+                      <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
+                        {translate('misc.or')}
+                      </Typography>
+                    ) : ''}
                   </Box>
-                ) : ''
+                )
               }
               {USER_AND_PASSWORD_LOGIN && (
               <Form
