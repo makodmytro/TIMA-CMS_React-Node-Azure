@@ -27,6 +27,7 @@ const Authenticated = ({ setLoading }) => {
   const redirect = useRedirect();
   const notify = useNotify();
   const translate = useTranslate();
+  const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 
   const requestProfileData = async () => {
     setLoading(true);
@@ -91,12 +92,13 @@ const Authenticated = ({ setLoading }) => {
   const login = () => {
     instance.loginRedirect();
   };
-
   return (
     <Box>
+      {AZURE_LOGIN && (
       <Button onClick={login} fullWidth variant="outlined" {...USE_ALT_THEME ? { style: { color: 'white' }, color: 'secondary' } : {}}>
         <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
       </Button>
+      )}
       {
         error && (
           <Box textAlign="center" mt={15} display="flex" justifyContent="center">
