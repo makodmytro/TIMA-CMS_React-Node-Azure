@@ -380,7 +380,10 @@ const english = {
           DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
         errors: {
-          MIN_3_QUESTIONS: 'At least 3 questions are required when creating a new answer',
+          MIN_3_QUESTIONS:
+            'At least 3 questions are required when creating a new answer',
+          MAX_1_PARENT_FOR_CONTEXT_ONLY:
+            'This follow up QnA has more than 1 parent and can´t be set to "context only"',
         },
       },
       fields: {

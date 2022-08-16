@@ -8,6 +8,7 @@ import {
   useTranslate,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
+import { Alert } from '@material-ui/lab';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect, useSelector } from 'react-redux';
 import TagsInput from './tags-input';
@@ -35,7 +36,7 @@ const Form = ({
   const disableEditRule = edit ? false : useDisabledCreate();
   const disableEditProp = (record && record.allowEdit === false);
   const disableEdit = disableEditRule || disableEditProp;
-
+  const followupParentQuestions = record && record.RelatedQuestions.map((question) => question.parentAnswers && question.parentAnswers.length);
   const getLang = () => {
     if (!fkLanguageId || !languages[fkLanguageId]) {
       return null;
@@ -143,8 +144,9 @@ const Form = ({
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.isFollowupChild)}
+        disabled={disableEdit || (record && !record.isFollowupChild) || followupParentQuestions > 1}
       />
+      {followupParentQuestions > 1 && <Alert severity="info">{translate('resources.users.workflow.errors.MAX_1_PARENT_FOR_CONTEXT_ONLY')}</Alert>}
       {
         !USE_WORKFLOW && (
           <ApprovedInput source="approved" label="resources.answers.fields.approved" disabled={disableEdit} />
