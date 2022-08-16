@@ -219,7 +219,7 @@ const CustomGrid = ({ visibleColumns }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <Th label="resources.answers.fields.fk_questionId" field="fk_questionId" />
+                <TableCell className={classes.thead}>{translate('resources.answers.fields.fk_questionId')}&nbsp;</TableCell>
                 <Th label="resources.answers.fields.text" field="text" />
                 <Th label="resources.answers.fields.spokenText" field="spokenText" />
                 <Th label="resources.answers.fields.fk_languageId" field="fk_languageId" />

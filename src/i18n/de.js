@@ -375,7 +375,10 @@ const german = {
           DEPLOYED_ON_PRODUCTION: 'Live',
         },
         errors: {
-          MIN_3_QUESTIONS: 'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
+          MIN_3_QUESTIONS:
+            'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
+          MAX_1_PARENT_FOR_CONTEXT_ONLY:
+            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort und kann deswegen nicht auf "Nur im Kontext" gesetzt werden',
         },
       },
       fields: {
