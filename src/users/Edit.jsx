@@ -13,32 +13,12 @@ import {
   useRedirect,
 } from 'react-admin';
 import Box from '@material-ui/core/Box';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { createMuiTheme, FormControlLabel, FormGroup, Switch } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { useIsAdmin } from '../hooks';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
-
-const theme = createMuiTheme({
-  overrides: {
-    MuiSwitch: {
-      colorSecondary: {
-        '&$checked': {
-          color: '#50E6FF',
-        },
-      },
-      track: {
-        '$checked$checked + &': {
-          opacity: 0.5,
-          backgroundColor: '#50E6FF',
-        },
-      },
-    },
-  },
-});
 
 const CustomToolbar = (props) => {
   const disabled = !useIsAdmin();
@@ -88,7 +68,7 @@ export const GroupsSelection = ({ disabled }) => {
   };
 
   React.useEffect(() => {
-    if (groups.length === 0) {
+    if (!groups.length) {
       fetch();
     }
   }, []);
@@ -115,26 +95,14 @@ export const GroupsSelection = ({ disabled }) => {
           groups.map((group) => {
             return (
               <Box key={group.id} flex="0 0 30%">
-                <ThemeProvider theme={theme}>
-                  <FormGroup style={{ paddingBottom: '25px' }}>
-                    <FormControlLabel
-                      control={(
-                        <Switch
-                          name={`u_${group.id}`}
-                          checked={value.includes(group.id)}
-                          record={{ [`u_${group.id}`]: value.includes(group.id) }}
-                          onChange={() => handleChange(group.id)}
-                          disabled={disabled}
-                        />
-                    )}
-                      label={(
-                        <Box fontSize={18}>
-                          {group.name}
-                        </Box>
-                      )}
-                    />
-                  </FormGroup>
-                </ThemeProvider>
+                <BooleanInput
+                  name={`u_${group.id}`}
+                  label={group.name}
+                  defaultValue={value.includes(group.id)}
+                  record={{ [`u_${group.id}`]: value.includes(group.id) }}
+                  onChange={() => handleChange(group.id)}
+                  disabled={disabled}
+                />
               </Box>
             );
           })
