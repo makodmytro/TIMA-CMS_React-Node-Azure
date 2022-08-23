@@ -14,7 +14,6 @@ const WorkflowRole = (props) => {
   if (!USE_WORKFLOW) {
     return null;
   }
-
   return (
     <AutocompleteInput
       choices={options.map((o) => ({
@@ -22,6 +21,15 @@ const WorkflowRole = (props) => {
       }))}
       allowEmpty
       emptyText={translate('misc.none')}
+      options={{
+        suggestionsContainerProps: {
+          modifiers: {
+            computeStyle: {
+              gpuAcceleration: false,
+            },
+          },
+        },
+      }}
       {...props}
     />
   );

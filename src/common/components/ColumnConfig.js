@@ -21,6 +21,8 @@ const ColumnConfig = ({
   columns, visible, onChange, resource,
 }) => {
   const translate = useTranslate();
+  const LANGUAGE_COLUMN = process.env.REACT_APP_HIDE_LANGUAGE_COLUMN === '1';
+  const TAGS_COLUMN = process.env.REACT_APP_HIDE_TAGS_COLUMN === '1';
 
   const [open, setOpen] = useState(false);
 
@@ -33,6 +35,9 @@ const ColumnConfig = ({
   };
 
   const isChecked = (col) => visible.includes(col.key);
+  const newColumns = columns
+    .map((el) => (el.key === 'fk_languageId' ? LANGUAGE_COLUMN && { key: el.key } : el))
+    .map((el) => (el.key === 'tags' ? TAGS_COLUMN && { key: el.key } : el));
 
   return (
     <>
@@ -50,7 +55,9 @@ const ColumnConfig = ({
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" alignItems="flex-start">
-            {columns.map((col) => (
+            {newColumns.map((col) => (
+              col
+              && (
               <FormControlLabel
                 key={col.key}
                 control={(
@@ -62,6 +69,7 @@ const ColumnConfig = ({
                 )}
                 label={translate(`resources.${cleanResourceName(resource)}.fields.${col.key}`)}
               />
+              )
             ))}
           </Box>
         </DialogContent>
