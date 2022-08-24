@@ -12,6 +12,8 @@ import {
   useNotify,
   useRedirect,
 } from 'react-admin';
+import { FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
@@ -82,7 +84,6 @@ export const GroupsSelection = ({ disabled }) => {
       onChange(value.concat([id]));
     }
   };
-
   return (
     <Box>
       <Box borderBottom="1px solid #D5D5D5" mb={2}>
@@ -95,14 +96,25 @@ export const GroupsSelection = ({ disabled }) => {
           groups.map((group) => {
             return (
               <Box key={group.id} flex="0 0 30%">
-                <BooleanInput
-                  name={`u_${group.id}`}
-                  label={group.name}
-                  defaultValue={value.includes(group.id)}
-                  record={{ [`u_${group.id}`]: value.includes(group.id) }}
-                  onChange={() => handleChange(group.id)}
-                  disabled={disabled}
-                />
+                <FormGroup style={{ paddingBottom: '25px' }}>
+                  <FormControlLabel
+                    control={(
+                      <Switch
+                        name={`u_${group.id}`}
+                        checked={value.includes(group.id)}
+                        record={{ [`u_${group.id}`]: value.includes(group.id) }}
+                        onChange={() => handleChange(group.id)}
+                        disabled={disabled}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <Box fontSize={18}>
+                        {group.name}
+                      </Box>
+                    )}
+                  />
+                </FormGroup>
               </Box>
             );
           })
