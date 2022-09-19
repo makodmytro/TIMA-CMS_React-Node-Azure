@@ -181,8 +181,8 @@ const UsersEdit = (props) => {
       >
         <SimpleForm toolbar={<ProfileCustomToolbar />}>
           <TextInput label={translate('resources.users.change_password')} source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
-          <TextInput source="name" validate={required()} fullWidth disabled />
-          <TextInput source="email" validate={required()} fullWidth disabled />
+          <TextInput source="name" validate={required()} fullWidth />
+          <TextInput source="email" validate={required()} fullWidth />
           {
             !AZURE_LOGIN && (
               <>
