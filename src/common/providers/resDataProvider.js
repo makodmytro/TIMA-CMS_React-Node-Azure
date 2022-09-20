@@ -47,8 +47,8 @@ const cleanBody = (body, resource) => {
   switch (resource) {
     case 'users': {
       const b = pick(body, [
-        'isAdmin',
-        'isActive',
+        'name',
+        'email',
         'groups',
       ]);
 
