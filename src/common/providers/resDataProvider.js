@@ -47,9 +47,11 @@ const cleanBody = (body, resource) => {
   switch (resource) {
     case 'users': {
       const b = pick(body, [
+        'isAdmin',
+        'isActive',
+        'groups',
         'name',
         'email',
-        'groups',
       ]);
 
       if (body.password && body.change_password) {
