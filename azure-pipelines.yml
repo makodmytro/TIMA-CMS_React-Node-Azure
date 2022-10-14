@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- demo1
+- release/enbw
 
 # define variables to use during the build
 variables:
