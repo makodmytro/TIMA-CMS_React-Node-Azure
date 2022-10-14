@@ -447,6 +447,9 @@ const german = {
       ready_to_process_single_topic: 'ready_to_process_single_topic',
       metadata_key_label: 'metadata_key_label',
     },
+    demos: {
+      name: 'Demo |||| Demos',
+    },
   },
 };
 
