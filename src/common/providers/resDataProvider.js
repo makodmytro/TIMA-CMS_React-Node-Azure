@@ -50,6 +50,8 @@ const cleanBody = (body, resource) => {
         'isAdmin',
         'isActive',
         'groups',
+        'name',
+        'email',
       ]);
 
       if (body.password && body.change_password) {

@@ -228,8 +228,8 @@ const UsersEdit = (props) => {
       title={<T />}
     >
       <SimpleForm toolbar={<CustomToolbar />}>
-        <TextInput source="name" validate={required()} fullWidth disabled />
-        <TextInput source="email" validate={required()} fullWidth disabled />
+        <TextInput source="name" validate={required()} fullWidth />
+        <TextInput source="email" validate={required()} fullWidth />
         {
           !AZURE_LOGIN && (
             <BooleanInput
