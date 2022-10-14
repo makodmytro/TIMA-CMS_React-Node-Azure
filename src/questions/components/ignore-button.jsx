@@ -1,14 +1,16 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import BlockIcon from "@material-ui/icons/RemoveCircleOutline";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import BlockIcon from '@material-ui/icons/RemoveCircleOutline';
 import {
   useDataProvider,
   useNotify,
   useRefresh,
   useTranslate,
-} from "react-admin";
+} from 'react-admin';
 
-const IgnoreButton = ({ record, justifyContent, onClick, disabled }) => {
+const IgnoreButton = ({
+  record, justifyContent, onClick, disabled,
+}) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -16,20 +18,15 @@ const IgnoreButton = ({ record, justifyContent, onClick, disabled }) => {
 
   const updateIgnored = async (ignored) => {
     try {
-      await dataProvider.update("questions", {
+      await dataProvider.update('questions', {
         id: record.id,
         data: { ignored },
       });
 
-      notify("The question was updated");
+      notify('The question was updated');
       refresh();
     } catch (err) {
-      notify(
-        err?.body?.code ||
-          err?.body?.message ||
-          "We could not execute the action",
-        "error"
-      );
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 
@@ -51,14 +48,16 @@ const IgnoreButton = ({ record, justifyContent, onClick, disabled }) => {
       size="small"
       fullWidth
       onClick={handleClick}
-      disabled={disabled}
-      style={{ justifyContent: justifyContent || "flex-start" }}
+      style={{ justifyContent: justifyContent || 'flex-start' }}
       disabled={disabled === true}
     >
-      <BlockIcon fontSize="small" />
-      &nbsp;
-      {record.ignored && <>{translate("misc.un_ignore")}</>}
-      {!record.ignored && <>{translate("misc.ignore")}</>}
+      <BlockIcon fontSize="small" />&nbsp;
+      {
+        record.ignored && (<>{translate('misc.un_ignore')}</>)
+      }
+      {
+        !record.ignored && (<>{translate('misc.ignore')}</>)
+      }
     </Button>
   );
 };
