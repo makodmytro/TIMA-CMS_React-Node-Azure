@@ -1,0 +1,17 @@
+name: Merge demo1 branch to feat/theme-colors
+on:
+  push:
+    branches:
+      - 'demo1'
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Merge demo1 -> feat/theme-colors
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: feat/theme-colors
+          github_token: ${{ github.token }}
