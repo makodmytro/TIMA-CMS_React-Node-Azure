@@ -1,6 +1,6 @@
 {
-  "name": "tima-cms",
-  "version": "0.1.0",
+  "name": "qna-manager",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^2.22.1",
