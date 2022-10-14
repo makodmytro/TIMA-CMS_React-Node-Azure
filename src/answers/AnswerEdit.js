@@ -1,66 +1,69 @@
 import React from 'react';
 import omit from 'lodash/omit';
+import isString from 'lodash/isString';
+import { Form } from 'react-final-form';
+import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
 import {
-  Edit,
-  SimpleForm,
-  useRefresh,
   useNotify,
   useDataProvider,
-  usePermissions,
-  Toolbar,
-  SaveButton,
   DeleteButton,
+  useTranslate,
 } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import Form from './form';
+import FormFields from './components/form';
 import AnswerMedia from './media/media';
-import RelatedQuestionsTable from '../questions/related-questions-table';
-import SearchQuestions from './search-questions';
-import BatchApproveButton from './batch-approve-button';
+import RelatedQuestionsActionsRow from './components/RelatedQuestions/ActionsRow';
+import FollowupQuestionsActionsRow from './components/FollowupQuestions/ActionsRow';
+import StatusHistory from './components/StatusHistory';
+import StatusWarning from './components/StatusWarning';
+import StatusInputSection from './components/StatusInput';
+import useAnswer from './useAnswer';
 
-const CustomToolbar = (props) => {
-  return (
-    <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="Save"
-        submitOnEnter
-        disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
-      />
-      <DeleteButton
-        basePath={props.basePath}
-        record={props.record}
-        undoable={false}
-        disabled={props.permissions && !props.permissions.allowDelete}
-      />
-    </Toolbar>
-  );
+const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
+
+const HiddenField = ({ children, fieldName }) => {
+  if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
+    return null;
+  }
+
+  return children;
 };
 
-const Fields = ({ setRecord, ...props }) => {
-  React.useEffect(() => {
-    setRecord(props.record);
-  }, [props.record]);
-
-  return (
-    <Form {...props} edit />
-  );
-};
-
-const AnswerEdit = (props) => {
-  const { permissions } = usePermissions();
+const AnswerEdit = () => {
+  const { id } = useParams();
+  const translate = useTranslate();
   const notify = useNotify();
-  const refresh = useRefresh();
   const dataProvider = useDataProvider();
-  const [answer, setAnswer] = React.useState(null);
-  const ref = React.useRef();
+  const { answer, refresh } = useAnswer();
+
+  const disableEdit = (answer && answer.allowEdit === false);
+  const disableDelete = (answer && answer.allowDelete === false);
+
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await dataProvider.update('answers', {
+        id,
+        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']),
+      });
+
+      if (data.fk_languageId !== answer.fk_languageId) {
+        return updateRelatedQuestions(data.RelatedQuestions, data);
+      }
+
+      notify('The answer was updated');
+      return refresh();
+    } catch (err) {
+      return notify(err?.body?.message || 'Failed to update', 'error');
+    }
+  };
 
   React.useEffect(() => {
-    if (!ref.current && answer) {
-      ref.current = answer;
-    }
-  }, [answer]);
+    refresh();
+  }, [id]);
 
   const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
     let i = 0;
@@ -77,70 +80,86 @@ const AnswerEdit = (props) => {
       i += 1;
     }
 
-    ref.current = null;
     notify('The answer and its related questions were updated');
     refresh();
   };
 
-  const onSucces = ({ data }) => {
-    if (data.fk_languageId !== ref.current.fk_languageId) {
-      return updateRelatedQuestions(data.Questions, data);
-    }
-
-    ref.current = null;
-    notify('The answer was updated');
-    return refresh();
-  };
-
   return (
     <>
-      <Edit
-        {...props}
-        actions={<CustomTopToolbar />}
-        undoable={false}
-        onSuccess={onSucces}
-        mutationMode="pessimistic"
-        transform={(data) => {
-          return omit(data, ['Questions', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']);
-        }}
-      >
-        <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
-          <Fields
-            setRecord={setAnswer}
-          />
-        </SimpleForm>
-      </Edit>
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>Related questions</Typography>
+      <CustomTopToolbar />
+      <StatusWarning record={answer} />
+      <RelatedQuestionsActionsRow record={answer} />
+      <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
+        {translate('misc.editing_answer')}
+      </Typography>
+      <Box boxShadow={3} borderRadius={5}>
+        <Form
+          onSubmit={onSubmit}
+          initialValues={{
+            ...answer,
+          }}
+          enableReinitialize
+          render={({ handleSubmit, valid, values }) => {
+            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
+              if (!answer) {
+                return false;
+              }
+
+              if (isString(values[key]) && isString(answer[key])) {
+                return values[key].trim() === answer[key].trim();
+              }
+
+              return answer && values[key] === answer[key];
+            });
+
+            return (
+              <Box>
+                <form onSubmit={handleSubmit}>
+                  <Box p={2}>
+                    <FormFields edit record={answer} />
+                  </Box>
+                  <Box display="flex" p={2} bgcolor="#f5f5f5">
+                    <Box flex={1}>
+                      <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
+                        <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
+                      </Button>
+                    </Box>
+                    <Box flex={1} textAlign="right">
+                      <DeleteButton
+                        basePath="/answers"
+                        record={answer}
+                        undoable={false}
+                        disabled={disableDelete}
+                      />
+                    </Box>
+                  </Box>
+                </form>
+              </Box>
+            );
+          }}
+        />
+      </Box>
+
+      <Box pt={2}>
+        <StatusInputSection record={answer} disabled={disableEdit} />
+      </Box>
+      <Box pt={2}>
+        <StatusHistory record={answer} />
+      </Box>
+      <Box pt={2}>
+        <FollowupQuestionsActionsRow record={answer} />
+      </Box>
+
+      <HiddenField fieldName="media">
         {
-          answer && answer.id && answer.Questions && !!answer.Questions.length && (
-            <Box textAlign="right">
-              <BatchApproveButton answerId={answer.id} variant="outlined" />
+          !disableEdit && (
+            <Box my={1} p={2} boxShadow={3}>
+              <Typography>{translate('resources.answers.media')}</Typography>
+              <AnswerMedia answer={answer} />
             </Box>
           )
         }
-        <Box my={2}>
-          <RelatedQuestionsTable
-            record={answer}
-            relatedQuestions={answer ? answer.Questions : []}
-            answerView
-          />
-        </Box>
-      </Box>
-      <Box my={1} p={2} boxShadow={3}>
-        <Typography>Search questions to create link</Typography>
-        <SearchQuestions
-          record={answer}
-        />
-      </Box>
-      {
-        permissions && permissions.allowMediaFiles && (
-          <Box my={1} p={2} boxShadow={3}>
-            <Typography>Media</Typography>
-            <AnswerMedia answer={answer} />
-          </Box>
-        )
-      }
+      </HiddenField>
     </>
   );
 };

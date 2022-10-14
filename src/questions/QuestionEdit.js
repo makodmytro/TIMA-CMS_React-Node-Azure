@@ -10,10 +10,10 @@ import {
   BooleanInput,
   useRefresh,
   Confirm,
-  usePermissions,
   Toolbar,
   SaveButton,
   DeleteButton,
+  useTranslate,
 } from 'react-admin';
 import { Link } from 'react-router-dom'; // eslint-disable-line
 import { useField } from 'react-final-form'; // eslint-disable-line
@@ -22,38 +22,43 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ReactMarkdown from 'react-markdown';
+import TopicSelect from '../topics/components/TopicSelect';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import { PlayableTextInput } from '../common/components/playable-text';
-import RelatedQuestionsTable from './related-questions-table';
+import RelatedQuestionsTable from './components/related-questions-table';
 import SearchQuestionsAnswers from './search-questions-answers';
-import IgnoreButton from './ignore-button';
+import IgnoreButton from './components/ignore-button';
+
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const CustomToolbar = (props) => {
+  const disableEdit = props?.record?.allowEdit === false;
+  const disableDelete = props?.record?.allowDelete === false;
+
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <SaveButton
-        label="Save"
+        label="ra.action.save"
         submitOnEnter
-        disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
+        disabled={props.pristine || disableEdit}
       />
       <Box flex={1}>
-        <IgnoreButton record={props.record} justifyContent="flex-end" disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)} />
+        <IgnoreButton record={props.record} justifyContent="flex-end" disabled={disableEdit} />
       </Box>
       <DeleteButton
         basePath={props.basePath}
         record={props.record}
         undoable={false}
-        disabled={props.permissions && !props.permissions.allowDelete}
+        disabled={disableDelete}
       />
     </Toolbar>
   );
 };
 
 const Answer = ({
-  record, answer, unlinkAnswer, scrollToSearch,
+  record, answer, unlinkAnswer, scrollToSearch, disabled,
 }) => {
-  const { permissions } = usePermissions();
-  const disabled = permissions && !permissions.allowEdit;
+  const translate = useTranslate();
 
   if (!record) {
     return null;
@@ -67,9 +72,9 @@ const Answer = ({
         type="button"
         size="small"
         onClick={scrollToSearch}
-        disabled={disabled}
+        disabled={disabled === true}
       >
-        Link answer
+        {translate('resources.questions.link')}
       </Button>
     );
   }
@@ -77,8 +82,8 @@ const Answer = ({
   return (
     <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
       <Typography variant="body2">
-        Answer&nbsp;
-        <small><Link to={`/answers/${answer.id}`} target="_blank">View</Link></small>
+        {translate('misc.answer')}&nbsp;
+        <small><Link to={`/answers/${answer.id}`}>{translate('misc.view')}</Link></small>
       </Typography>
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">
@@ -91,9 +96,9 @@ const Answer = ({
           variant="outlined"
           size="small"
           onClick={() => unlinkAnswer(record.id)}
-          disabled={disabled}
+          disabled={disabled === true}
         >
-          Unlink
+          {translate('misc.unlink_answer')}
         </Button>
       </Box>
     </Box>
@@ -112,6 +117,7 @@ const FormFields = ({
 }) => {
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const {
     input: { value: fkLanguageId, onChange: changeLanguage },
@@ -119,6 +125,7 @@ const FormFields = ({
   const {
     input: { value: fkTopicId, onChange: changeTopic },
   } = useField('fk_topicId');
+  const disableEdit = record?.allowEdit === false;
 
   let fetching = false;
 
@@ -163,9 +170,7 @@ const FormFields = ({
 
       setAnswer(data);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
     fetching = false;
   };
@@ -186,12 +191,12 @@ const FormFields = ({
       <Confirm
         isOpen={!!tmpLanguageValue}
         loading={false}
-        title="Change language"
-        content="Changing a question's language will also have an effect in the topic"
+        title={translate('misc.change_language')}
+        content={translate('dialogs.change_language_confirmation')}
         onConfirm={onLanguageChangeConfirm}
         onClose={onLanguageChangeCancel}
-        confirm="Proceed"
-        cancel="Undo change"
+        confirm={translate('misc.proceed')}
+        cancel={translate('misc.undo_change')}
       />
       <PlayableTextInput
         label="resources.questions.fields.text"
@@ -199,6 +204,7 @@ const FormFields = ({
         validate={required()}
         lang={getLang}
         fullWidth
+        disabled={disableEdit}
       />
       <ReferenceInput
         label="resources.questions.fields.fk_languageId"
@@ -214,29 +220,33 @@ const FormFields = ({
             setTmpLanguageValue(e.target.value);
           },
         }}
+        disabled={disableEdit}
       >
         <SelectInput
           optionText="name"
+          disabled={disableEdit}
         />
       </ReferenceInput>
-      <ReferenceInput
+      <TopicSelect
         label="resources.questions.fields.fk_topicId"
         source="fk_topicId"
-        reference="topics"
-        validate={required()}
-        fullWidth
+        isRequired
         filter={{ fk_languageId: fkLanguageId }}
-      >
-        <SelectInput
-          optionText="name"
-        />
-      </ReferenceInput>
-      <BooleanInput source="approved" />
-      <BooleanInput source="useAsSuggestion" />
+        disabled={disableEdit}
+      />
+      {
+        !USE_WORKFLOW && (
+          <>
+            <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
+            <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
+          </>
+        )
+      }
       <Answer
         {...{
           answer, unlinkAnswer, record, scrollToSearch,
         }}
+        disabled={disableEdit}
       />
     </>
   );
@@ -246,9 +256,9 @@ const QuestionEdit = ({
   dispatch, languages, topics,
   ...props
 }) => {
-  const { permissions } = usePermissions();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
   const refresh = useRefresh();
   const [answer, setAnswer] = React.useState(null);
   const [record, setRecord] = React.useState(null);
@@ -297,8 +307,8 @@ const QuestionEdit = ({
       <Confirm
         isOpen={confirmations.unlink}
         loading={false}
-        title="Unlink answer"
-        content="Are you sure you want to unlink the answer from the question?"
+        title={translate('misc.unlink_answer')}
+        content={translate('dialogs.unlink_confirmation')}
         onConfirm={unlinkAnswerConfirmed}
         onClose={unlinkAnswerClosed}
       />
@@ -311,7 +321,7 @@ const QuestionEdit = ({
           refresh();
         }}
       >
-        <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
+        <SimpleForm toolbar={<CustomToolbar />}>
           <FormFields
             {...{
               languages,
@@ -326,16 +336,16 @@ const QuestionEdit = ({
         </SimpleForm>
       </Edit>
       <Box my={1} p={2} boxShadow={3}>
-        <Typography>Related questions</Typography>
+        <Typography>{translate('resources.questions.fields.fk_questionId')}</Typography>
         <Box my={2}>
           <RelatedQuestionsTable
             record={record}
-            relatedQuestions={answer ? answer.Questions : []}
+            relatedQuestions={answer ? answer.RelatedQuestions : []}
           />
         </Box>
       </Box>
       <Box my={1} mb={6} p={2} boxShadow={3}>
-        <Typography>Search questions/answers to create link</Typography>
+        <Typography>{translate('misc.search_questions_answers_link')}</Typography>
         <SearchQuestionsAnswers
           record={record}
         />

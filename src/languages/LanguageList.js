@@ -46,8 +46,9 @@ const LanguageList = (props) => {
           onColumnsChange={handleColumnsChange('languages', setVisibleColumns)}
           columns={columns}
         />
-)}
+      )}
       bulkActionButtons={false}
+      sort={{ field: 'updatedAt', order: 'DESC' }}
     >
       <Datagrid rowClick="edit">
         {columns.filter((col) => visibleColumns.includes(col.key))

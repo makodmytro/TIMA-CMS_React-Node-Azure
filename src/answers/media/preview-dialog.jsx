@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   useDataProvider,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -39,6 +40,7 @@ const PreviewDialog = ({
   open,
   onClose,
 }) => {
+  const translate = useTranslate();
   const classes = styles();
   const notify = useNotify();
   const dataProvider = useDataProvider();
@@ -54,9 +56,7 @@ const PreviewDialog = ({
 
       setSrc(URL.createObjectURL(data));
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
 
     setLoading(false);
@@ -85,7 +85,7 @@ const PreviewDialog = ({
         <DialogContent dividers className={classes.content}>
           {
             loading && (
-              <div>Loading...</div>
+              <div>{translate('misc.loading')}...</div>
             )
           }
           {
@@ -117,7 +117,7 @@ const PreviewDialog = ({
             variant="contained"
             color="secondary"
           >
-            Close
+            {translate('misc.close')}
           </Button>
         </DialogActions>
       </Dialog>

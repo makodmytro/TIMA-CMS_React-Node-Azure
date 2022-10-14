@@ -4,12 +4,18 @@ import {
   SelectInput,
   TextInput,
   BooleanInput,
+  useTranslate,
 } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
+const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
+const HIDE_IGNORED = process.env.REACT_APP_HIDE_IGNORED_UNANSWERED_QUESTIONS === '1';
+
 const Filters = ({ onSubmit, initialValues }) => {
+  const translate = useTranslate();
+
   return (
     <Form
       onSubmit={onSubmit}
@@ -23,11 +29,11 @@ const Filters = ({ onSubmit, initialValues }) => {
               </Grid>
               <Grid item xs={12} sm={4} md={3}>
                 <SelectInput
-                  label="Search for"
+                  label={translate('misc.search_for')}
                   source="type"
                   choices={[
-                    { id: 'questions', name: 'Questions' },
-                    { id: 'answers', name: 'Answers' },
+                    { id: 'questions', name: translate('misc.questions') },
+                    { id: 'answers', name: translate('misc.answers') },
                   ]}
                   fullWidth
                 />
@@ -35,32 +41,41 @@ const Filters = ({ onSubmit, initialValues }) => {
               {
                 values.type === 'questions' && (
                   <>
-                    <Grid item xs={12} sm={4} md={3}>
-                      <SelectInput
-                        label="Approved"
-                        source="approved"
-                        choices={[
-                          { id: '__none__', name: 'Both' },
-                          { id: true, name: 'Only approved questions' },
-                          { id: false, name: 'Only not-approved questions' },
-                        ]}
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={4} md={3}>
-                      <BooleanInput
-                        label="Ignored"
-                        source="ignored"
-                        alwaysOn
-                        onChange={() => handleSubmit()}
-                      />
-                    </Grid>
+                    {
+                      !USE_WORKFLOW && (
+                        <Grid item xs={12} sm={4} md={3}>
+                          <SelectInput
+                            label="Approved"
+                            source="approved"
+                            choices={[
+                              { id: '__none__', name: translate('misc.both') },
+                              { id: true, name: translate('misc.only_approved_questions') },
+                              { id: false, name: translate('misc.only_not_approved_questions') },
+                            ]}
+                            fullWidth
+                          />
+                        </Grid>
+                      )
+                    }
+                    {
+                      !HIDE_IGNORED && (
+                        <Grid item xs={12} sm={4} md={3}>
+                          <BooleanInput
+                            label="resources.questions.fields.ignored"
+                            source="ignored"
+                            alwaysOn
+                            onChange={() => handleSubmit()}
+                          />
+                        </Grid>
+                      )
+                    }
+
                   </>
                 )
               }
               <Grid item xs={12} sm={4} md={3}>
                 <BooleanInput
-                  label="All topics"
+                  label="resources.questions.fields.all_topics"
                   source="all_topics"
                 />
               </Grid>
@@ -72,7 +87,7 @@ const Filters = ({ onSubmit, initialValues }) => {
                     variant="contained"
                     fullWidth
                   >
-                    Search
+                    {translate('misc.search')}
                   </Button>
                 </Box>
               </Grid>

@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch via NPM",
+            "name": "Launch via yarn",
             "request": "launch",
             "runtimeArgs": [
                 "start"
             ],
-            "runtimeExecutable": "npm",
+            "runtimeExecutable": "yarn",
             "skipFiles": [
                 "<node_internals>/**"
             ],

@@ -4,7 +4,7 @@ import {
   useNotify,
   useRefresh,
   Confirm,
-  usePermissions,
+  useTranslate,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -18,7 +18,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Alert from '@material-ui/lab/Alert';
 import WarningIcon from '@material-ui/icons/Warning';
 import { PlayableTextField } from '../../common/components/playable-text';
-import { Text } from '../../answers/AnswerList';
+import AnswerTextField from '../../answers/components/TextField';
 import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
 import Filters from './filters-form';
 import CreateForm from './answer-create-form';
@@ -27,8 +27,9 @@ const LinksDialog = ({
   record,
   languages,
 }) => {
-  const { permissions } = usePermissions();
+  const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
   const refresh = useRefresh();
   const [topics, setTopics] = React.useState({});
@@ -81,13 +82,11 @@ const LinksDialog = ({
         },
       });
 
-      notify('The answer has been linked');
+      notify('The answer was linked');
       refresh();
       window.scroll(0, 0);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
 
       throw err;
     }
@@ -144,6 +143,24 @@ const LinksDialog = ({
     setCount(total);
   };
 
+  const setAsChild = async (_selected) => {
+    try {
+      await dataProvider.update('questions', {
+        id: _selected.id,
+        data: {
+          fk_parentQuestionId: record.id,
+        },
+      });
+
+      notify('The question was set as child');
+      onSubmit(form);
+    } catch (err) {
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
+
+      throw err;
+    }
+  };
+
   const setPage = (page, submit = true) => {
     setPagination({
       ...pagination,
@@ -177,9 +194,7 @@ const LinksDialog = ({
       linkAnswer(data.id, data.fk_topicId);
       start();
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 
@@ -244,11 +259,11 @@ const LinksDialog = ({
       <Confirm
         isOpen={dialogs.confirmation}
         loading={false}
-        title="Link"
+        title={translate('misc.link')}
         content={
           selected
-            ? `The selected record is linked to topic "${topics[selected.fk_topicId].name}". Linking will change the question's topic. Proceed?`
-            : 'Confirm'
+            ? translate('resources.questions.topic_mismatch_bis', { a: topics[selected.fk_topicId].name })
+            : translate('misc.confirm')
         }
         onConfirm={onConfirm}
         onClose={onClose}
@@ -264,7 +279,7 @@ const LinksDialog = ({
         !results && (
           <Box py={2}>
             <Alert severity="info">
-              Use the filters to search for answers or questions
+              {translate('misc.search_questions_answers')}
             </Alert>
           </Box>
         )
@@ -273,7 +288,7 @@ const LinksDialog = ({
         results && !results.length && (
           <Box py={2}>
             <Alert severity="info">
-              No records were found
+              {translate('misc.no_records')}
             </Alert>
           </Box>
         )
@@ -284,14 +299,19 @@ const LinksDialog = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Text</TableCell>
-                  <TableCell>Topic</TableCell>
+                  <TableCell>{translate('resources.questions.fields.text')}</TableCell>
+                  <TableCell>{translate('resources.questions.fields.fk_topicId')}</TableCell>
                   {
                     form.type === 'questions' && (
-                      <TableCell>Answer</TableCell>
+                      <TableCell>{translate('resources.questions.fields.fk_answerId')}</TableCell>
                     )
                   }
                   <TableCell>&nbsp;</TableCell>
+                  {
+                    form.type === 'questions' && (
+                      <TableCell>&nbsp;</TableCell>
+                    )
+                  }
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -314,7 +334,7 @@ const LinksDialog = ({
                         }
                         {
                           form.type === 'answers' && (
-                            <Text
+                            <AnswerTextField
                               record={result}
                               hideRelatedQuestions
                             />
@@ -341,7 +361,7 @@ const LinksDialog = ({
                           <TableCell style={{ width: '25%' }}>
                             {
                               result.fk_answerId && (
-                                <Text
+                                <AnswerTextField
                                   record={result.Answer}
                                   hideRelatedQuestions
                                 />
@@ -358,11 +378,29 @@ const LinksDialog = ({
                           onClick={() => {
                             selectToLink(result);
                           }}
-                          disabled={permissions && !permissions.allowEdit}
+                          disabled={disabled}
                         >
-                          Link to answer
+                          {translate('resources.questions.link')}
                         </Button>
                       </TableCell>
+                      {
+                        form.type === 'questions' && (
+                          <TableCell>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              size="small"
+                              type="button"
+                              onClick={() => {
+                                setAsChild(result);
+                              }}
+                              disabled={disabled || result.fk_parentQuestionId === record.id}
+                            >
+                              {translate('resources.questions.set_as_child')}
+                            </Button>
+                          </TableCell>
+                        )
+                      }
                     </TableRow>
                   ))
                 }
@@ -390,6 +428,7 @@ const LinksDialog = ({
       <hr />
       <CreateForm
         onSubmit={(v) => createAnswer(v)}
+        disabled={disabled}
       />
     </>
   );

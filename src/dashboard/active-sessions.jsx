@@ -2,6 +2,7 @@ import React from 'react';
 import {
   useDataProvider,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,6 +23,7 @@ const time = () => {
 
 const ActiveSessions = () => {
   const classes = styles();
+  const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const [sessions, setSessions] = React.useState([]);
@@ -47,9 +49,7 @@ const ActiveSessions = () => {
 
       timeout = setTimeout(fetch, 30 * 1000);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 
@@ -66,7 +66,7 @@ const ActiveSessions = () => {
   return (
     <>
       <Typography variant="h5" className={classes.title}>
-        Active sessions ({sessions[sessions.length - 1].count})
+        {translate('misc.active_sessions')} ({sessions[sessions.length - 1].count})
       </Typography>
       <SessionCharts sessions={sessions} />
     </>

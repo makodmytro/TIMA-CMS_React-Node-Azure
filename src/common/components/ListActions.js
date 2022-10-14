@@ -9,9 +9,28 @@ import {
 } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
 import defaultColumns from '../../default-columns.json';
+import { useDisabledCreate, useIsAdmin } from '../../hooks';
+
+const DEFAULT_COLUMNS_ANSWERS = process.env.REACT_APP_DEFAULT_COLUMNS_ANSWERS || null;
+const DEFAULT_COLUMNS_QUESTIONS = process.env.REACT_APP_DEFAULT_COLUMNS_QUESTIONS || null;
+const DEFAULT_COLUMNS_TOPICS = process.env.REACT_APP_DEFAULT_COLUMNS_TOPICS || null;
+const DEFAULT_COLUMNS_LANGUAGES = process.env.REACT_APP_DEFAULT_COLUMNS_LANGUAGES || null;
+const DEFAULT_COLUMNS_SESSIONS = process.env.REACT_APP_DEFAULT_COLUMNS_SESSIONS || null;
+const DEFAULT_COLUMNS_USERS = process.env.REACT_APP_DEFAULT_COLUMNS_USERS || null;
+const DEFAULT_COLUMNS_GROUPS = process.env.REACT_APP_DEFAULT_COLUMNS_GROUPS || null;
+
+const config = {
+  answers: DEFAULT_COLUMNS_ANSWERS ? DEFAULT_COLUMNS_ANSWERS.split(',') : null,
+  questions: DEFAULT_COLUMNS_QUESTIONS ? DEFAULT_COLUMNS_QUESTIONS.split(',') : null,
+  topics: DEFAULT_COLUMNS_TOPICS ? DEFAULT_COLUMNS_TOPICS.split(',') : null,
+  languages: DEFAULT_COLUMNS_LANGUAGES ? DEFAULT_COLUMNS_LANGUAGES.split(',') : null,
+  sessions: DEFAULT_COLUMNS_SESSIONS ? DEFAULT_COLUMNS_SESSIONS.split(',') : null,
+  users: DEFAULT_COLUMNS_USERS ? DEFAULT_COLUMNS_USERS.split(',') : null,
+  groups: DEFAULT_COLUMNS_GROUPS ? DEFAULT_COLUMNS_GROUPS.split(',') : null,
+};
 
 export const getVisibleColumns = (columns, resource, defaults = []) => {
-  const savedConfig = localStorage.getItem(`columns-${resource}`);
+  const savedConfig = localStorage.getItem(`tima-cms-columns-${resource}`);
 
   if (savedConfig) {
     return JSON.parse(savedConfig);
@@ -19,6 +38,10 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 
   if (defaults.length > 0) {
     return columns.filter((c) => defaults.includes(c.key)).map((c) => c.key);
+  }
+
+  if (config[resource] && config[resource].length) {
+    return columns.filter((c) => config[resource].includes(c.key)).map((c) => c.key);
   }
 
   if (defaultColumns && defaultColumns[resource] && defaultColumns[resource].length) {
@@ -29,7 +52,7 @@ export const getVisibleColumns = (columns, resource, defaults = []) => {
 };
 
 export const handleColumnsChange = (resource, callback) => (columns) => {
-  localStorage.setItem(`columns-${resource}`, JSON.stringify(columns));
+  localStorage.setItem(`tima-cms-columns-${resource}`, JSON.stringify(columns));
   callback(columns);
 };
 
@@ -42,6 +65,8 @@ const ListActions = (props) => {
     columns,
     visibleColumns,
     onColumnsChange,
+    disableCreate,
+    createButtonLabel,
     ...rest
   } = props;
   const {
@@ -53,6 +78,14 @@ const ListActions = (props) => {
     showFilter,
     total,
   } = useListContext();
+  let disabled = false;
+
+  if (resource === 'questions' || resource === 'answers') {
+    disabled = disableCreate;
+  } else if (['topics', 'languages', 'users', 'groups', 'audit'].includes(resource)) {
+    disabled = !useIsAdmin();
+  }
+
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
       {filters && cloneElement(filters, {
@@ -62,9 +95,12 @@ const ListActions = (props) => {
         filterValues,
         context: 'button',
       })}
-      <CreateButton basePath={basePath} />
+      { /* some rendering bug probably */ }
+      { disabled && <CreateButton basePath={basePath} disabled {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
+      { !disabled && <CreateButton basePath={basePath} {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
+
       <ExportButton
-        disabled={total === 0}
+        disabled={total === 0 || disabled}
         resource={resource}
         sort={currentSort}
         filterValues={filterValues}

@@ -1,103 +1,61 @@
 import React from 'react';
 import {
   Edit,
-  ReferenceInput,
-  required,
-  SelectInput,
   SimpleForm,
-  TextInput,
   Toolbar,
   SaveButton,
-  DeleteButton,
-  usePermissions,
 } from 'react-admin';
 import { connect } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
-import { ShowQuestions, Img } from './TopicList';
-import { PlayableTextInput } from '../common/components/playable-text';
-import QrDialog from './qr-dialog';
+import QrDialog from './components/qr-dialog';
+import FormFields from './components/FormFields';
+import ShowQuestions from './components/ShowAnswersButton';
+import DeleteDialog from './components/DeleteDialog';
+import { useIsAdmin } from '../hooks';
+
+const HIDE_SHOW_QR = process.env.REACT_APP_HIDE_TOPICS_SHOW_QR === '1';
 
 const TopicTitle = ({ record }) => (record ? <span>{record.name}</span> : null);
-const CustomToolbar = (props) => (
-  <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <SaveButton
-      label="Save"
-      redirect="list"
-      submitOnEnter
-      disabled={props.pristine || (props.permissions && !props.permissions.allowEdit)}
-    />
-    <ShowQuestions size="medium" ml={1} />
-    {props.record.globalTopic ? null : <QrDialog ml={1} />}
-    <DeleteButton
-      basePath={props.basePath}
-      record={props.record}
-      undoable={false}
-      disabled={props.permissions && !props.permissions.allowDelete}
-    />
-  </Toolbar>
-);
-
-export const Advanced = (props) => (
-  <>
-    <Typography>
-      Advanced
-    </Typography>
-    <TextInput source="topicKey" record={props.record} fullWidth />
-  </>
-);
-
-const TopicEdit = ({ languages, dispatch, ...props }) => {
-  const { permissions } = usePermissions();
-
-  const getLang = (r) => {
-    if (!r || !languages[r.fk_languageId]) {
-      return null;
-    }
-
-    return languages[r.fk_languageId].code;
-  };
+const CustomToolbar = (props) => {
+  const admin = useIsAdmin();
+  const disableEdit = props?.record?.allowEdit === false;
+  const disableDelete = props?.record?.allowDelete !== true && !admin;
 
   return (
-    <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar />}>
-      <SimpleForm toolbar={<CustomToolbar permissions={permissions} />}>
-        <PlayableTextInput
-          source="name"
-          validate={required()}
-          fullWidth
-          lang={getLang}
-        />
-        <PlayableTextInput
-          source="welcomeText"
-          fullWidth
-          rows="4"
-          multiline
-          lang={getLang}
-        />
-        <ReferenceInput
-          validate={required()}
-          source="fk_languageId"
-          reference="languages"
-          label="resources.topics.fields.language"
-          fullWidth
-          disabled
-        >
-          <SelectInput
-            optionText="name"
-          />
-        </ReferenceInput>
-        <TextInput source="topicImageUrl" fullWidth />
-        <Img />
-        <Advanced source="topicKey" />
-      </SimpleForm>
-    </Edit>
+    <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <SaveButton
+        label="ra.action.save"
+        redirect="list"
+        submitOnEnter
+        disabled={props.pristine || (disableEdit && !admin)}
+      />
+      <ShowQuestions size="medium" ml={1} record={props?.record} />
+      {props.record.globalTopic || HIDE_SHOW_QR ? null : <QrDialog ml={1} />}
+      {
+        !(disableDelete || !admin) && (
+          <DeleteDialog />
+        )
+      }
+    </Toolbar>
+  );
+};
+
+const TopicEdit = ({ languages, dispatch, ...props }) => {
+  return (
+    <>
+      <Edit {...props} title={<TopicTitle />} actions={<CustomTopToolbar to="/topics" />} undoable={false}>
+        <SimpleForm toolbar={<CustomToolbar />}>
+          <FormFields {...props} languages={languages} editting />
+        </SimpleForm>
+      </Edit>
+    </>
   );
 };
 
 const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages
     ? state.admin.resources.languages.data
-    : [];
+    : {};
 
   return {
     languages,

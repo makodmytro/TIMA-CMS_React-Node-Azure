@@ -10,10 +10,13 @@ import {
   TextInput,
   useListContext,
   useDataProvider,
+  useTranslate,
 } from 'react-admin';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import { Form } from 'react-final-form';
 import { Language, Topic } from '../common/components/fields-values-by-fk';
 import ListActions, {
@@ -47,6 +50,7 @@ const Filters = ({
   languages, topics, countries, permissions, ...props
 }) => {
   const classes = styles();
+  const translate = useTranslate();
   const {
     filterValues,
     setFilters,
@@ -86,9 +90,12 @@ const Filters = ({
     <Form onSubmit={handleSetFilters} initialValues={filterValues}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit} className={classes.form}>
+          <Box flex="0 0 100%">
+            <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
+          </Box>
           <ReferenceInput
             onChange={() => handleSubmit()}
-            label="Language"
+            label="resources.sessions.fields.fk_languageId"
             source="fk_languageId"
             reference="languages"
             alwaysOn
@@ -99,11 +106,11 @@ const Filters = ({
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <ReferenceInput
-            label="Topic"
+            label="resources.sessions.fields.fk_topicId"
             source="fk_topicId"
             reference="topics"
             alwaysOn
@@ -117,11 +124,11 @@ const Filters = ({
               optionText="name"
               className={classes.select}
               allowEmpty
-              emptyText="None"
+              emptyText={translate('misc.none')}
             />
           </ReferenceInput>
           <DateTimeInput
-            label="From"
+            label="resources.sessions.fields.from"
             inputVariant="filled"
             source="from"
             size="small"
@@ -129,7 +136,7 @@ const Filters = ({
             disableFuture
           />
           <DateTimeInput
-            label="To"
+            label="resources.sessions.fields.to"
             inputVariant="filled"
             source="to"
             size="small"
@@ -141,15 +148,15 @@ const Filters = ({
             optionValue="clientCountry"
             className={classes.select}
             allowEmpty
-            emptyText="None"
+            emptyText={translate('misc.none')}
             source="clientCountry"
-            label="Country"
+            label="resources.sessions.fields.country"
             alwaysOn
             choices={countries}
             onChange={() => handleSubmit()}
           />
           {
-            permissions && permissions.allowDemo === true && (
+            permissions && permissions?.allowDemo === true && (
               <TextInput
                 source="demoCode"
                 label="Code"
@@ -183,19 +190,19 @@ const QuestionList = ({
   const dataProvider = useDataProvider();
 
   const columns = [
-    { key: 'clientCountry', el: <TextField label="Country" source="clientCountry" /> },
-    { key: 'fk_languageId', el: <Language label="Language" sortBy="fk_languageId" /> },
-    { key: 'fk_topicId', el: <Topic label="Topic" sortBy="fk_topicId" /> },
-    { key: 'duration', el: <TextField source="duration" label="Duration" /> },
-    { key: 'questionsCount', el: <TextField source="questionsCount" label="# of questions" /> },
-    { key: 'answersCount', el: <TextField source="answersCount" label="# of answers" /> },
+    { key: 'clientCountry', el: <TextField label="resources.sessions.fields.country" source="clientCountry" /> },
+    { key: 'fk_languageId', el: <Language label="resources.sessions.fields.language" sortBy="fk_languageId" /> },
+    { key: 'fk_topicId', el: <Topic label="resources.sessions.fields.topic" sortBy="fk_topicId" /> },
+    { key: 'duration', el: <TextField source="duration" label="resources.sessions.fields.duration" /> },
+    { key: 'questionsCount', el: <TextField source="questionsCount" label="resources.sessions.fields.questionsCount" /> },
+    { key: 'answersCount', el: <TextField source="answersCount" label="resources.sessions.fields.answersCount" /> },
   ];
 
-  if (permissions && permissions.allowDemo === true) {
-    columns.push({ key: 'demoCode', el: <DemoLink source="demoCode" label="Code" /> });
+  if (permissions && permissions?.allowDemo === true) {
+    columns.push({ key: 'demoCode', el: <DemoLink source="demoCode" label="resources.sessions.fields.code" /> });
   }
 
-  columns.push({ key: 'updatedAt', el: <DateField source="updatedAt" showTime /> });
+  columns.push({ key: 'updatedAt', el: <DateField source="updatedAt" label="resources.sessions.fields.updatedAt" showTime /> });
 
   const [visibleColumns, setVisibleColumns] = React.useState(getVisibleColumns(columns, 'sessions'));
 

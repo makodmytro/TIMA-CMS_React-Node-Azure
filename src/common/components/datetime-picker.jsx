@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslate } from 'react-admin';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { DateTimePicker, DatePicker } from '@material-ui/pickers';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -10,6 +11,7 @@ export const DateTimeInput = ({
   onChange,
   ...rest
 }) => {
+  const translate = useTranslate();
   const {
     input: { onChange: onValueChange, value },
   } = useField(source);
@@ -17,7 +19,7 @@ export const DateTimeInput = ({
   return (
     <FormGroup>
       <DateTimePicker
-        label={label}
+        label={translate(label)}
         value={value || null}
         format="yyyy-MM-dd HH:mm"
         onChange={(e) => {
@@ -33,7 +35,7 @@ export const DateTimeInput = ({
         clearable
         {...rest}
       />
-      <FormHelperText margin="dense">&nbsp;</FormHelperText>
+      <p style={{ marginTop: '8px' }} className="MuiFormHelperText-root MuiFormHelperText-contained MuiFormHelperText-marginDense" />
     </FormGroup>
   );
 };
@@ -44,6 +46,7 @@ export const DateInput = ({
   onChange,
   ...rest
 }) => {
+  const translate = useTranslate();
   const {
     input: { onChange: onValueChange, value },
   } = useField(source);
@@ -51,7 +54,7 @@ export const DateInput = ({
   return (
     <FormGroup>
       <DatePicker
-        label={label}
+        label={translate(label)}
         value={value || null}
         format="yyyy-MM-dd"
         onChange={(e) => {

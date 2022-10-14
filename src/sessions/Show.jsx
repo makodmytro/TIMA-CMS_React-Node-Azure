@@ -6,6 +6,7 @@ import {
   useDataProvider,
   useRedirect,
   useNotify,
+  useTranslate,
 } from 'react-admin';
 import { useParams, Link } from 'react-router-dom'; // eslint-disable-line
 import FormGroup from '@material-ui/core/FormGroup';
@@ -107,6 +108,7 @@ const QuestionLink = ({ record }) => {
 
 const AnswerLink = ({ record }) => {
   const classes = styles();
+  const translate = useTranslate();
 
   if (!record.answerText) {
     return (
@@ -118,7 +120,7 @@ const AnswerLink = ({ record }) => {
         variant="outlined"
       >
         <AddIcon />
-        &nbsp;Create
+        &nbsp;{translate('misc.create')}
       </Button>
     );
   }
@@ -137,10 +139,11 @@ const TableView = ({
   records, setSort, sortBy, sortDir,
 }) => {
   const classes = styles();
+  const translate = useTranslate();
 
   const SortableHeader = ({ label, field }) => (
     <TableCell className={classes.thead} onClick={() => setSort(field)}>
-      {label}&nbsp;
+      {translate(label)}&nbsp;
       {
         field === sortBy && sortDir === true && (
           <ArrowUp size="small" />
@@ -158,11 +161,11 @@ const TableView = ({
     <Table>
       <TableHead>
         <TableRow>
-          <SortableHeader label="Created" field="timestamp" />
-          <SortableHeader label="Topic" field="topicName" />
-          <SortableHeader label="Question" field="questionText" />
-          <SortableHeader label="Answer" field="answerText" />
-          <SortableHeader label="Score" field="score" />
+          <SortableHeader label="resources.sessions.fields.timestamp" field="timestamp" />
+          <SortableHeader label="resources.sessions.fields.topicName" field="topicName" />
+          <SortableHeader label="resources.sessions.fields.questionText" field="questionText" />
+          <SortableHeader label="resources.sessions.fields.answerText" field="answerText" />
+          <SortableHeader label="resources.sessions.fields.score" field="score" />
         </TableRow>
       </TableHead>
       <TableBody>
@@ -194,6 +197,7 @@ const TableView = ({
 
 const ChatView = ({ records }) => {
   const classes = styles();
+  const translate = useTranslate();
 
   return (
     <Box p={2}>
@@ -208,8 +212,8 @@ const ChatView = ({ records }) => {
                 {
                   record.fk_questionId && (
                     <Typography align="right" className={classes.resourceLink}>
-                      <Link to={`/questions/${record.fk_questionId}`} target="_blank">
-                        [view]
+                      <Link to={`/questions/${record.fk_questionId}`}>
+                        [{translate('misc.view')}]
                       </Link>
                     </Typography>
                   )
@@ -230,8 +234,8 @@ const ChatView = ({ records }) => {
                 {
                   record.fk_answerId && (
                     <Typography className={classes.resourceLink}>
-                      <Link to={`/answers/${record.fk_answerId}`} target="_blank">
-                        [view]
+                      <Link to={`/answers/${record.fk_answerId}`}>
+                        [{translate('misc.view')}]
                       </Link>
                     </Typography>
                   )
@@ -245,7 +249,7 @@ const ChatView = ({ records }) => {
                         {
                           record.suggestedQuestions.map((sq, ii) => (
                             <span key={ii}>
-                              <Link to={`/questions/${sq.id}`} target="_blank">
+                              <Link to={`/questions/${sq.id}`}>
                                 {ii + 1}. {sq.text}
                               </Link>
                               <br />
@@ -270,6 +274,7 @@ const SessionShow = () => {
   const redirect = useRedirect();
   const params = useParams();
   const notify = useNotify();
+  const translate = useTranslate();
   const [form, setForm] = React.useState({ chat: true });
   const [records, setRecords] = React.useState(null);
   const [sortBy, setSortBy] = React.useState('timestamp');
@@ -286,9 +291,7 @@ const SessionShow = () => {
 
       setRecords(orderBy(extended, [sortBy], [sortDir ? 'asc' : 'desc']));
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
   };
 
@@ -331,7 +334,7 @@ const SessionShow = () => {
               onChange={(e) => setForm({ chat: e.target.checked })}
             />
           )}
-          label="Enable chat view"
+          label={translate('resources.sessions.chat_view')}
         />
       </FormGroup>
       <Box mb={2} boxShadow={3}>

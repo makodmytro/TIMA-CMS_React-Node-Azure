@@ -7,14 +7,15 @@ import {
   SelectInput,
   useDataProvider,
   useNotify,
-  useRefresh,
   Title,
+  useTranslate,
 } from 'react-admin';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import TextField from './components/TextField';
 
 const Row = ({ label, value }) => (
   <Box display="flex" pb={1} mb={2} style={{ borderBottom: '1px solid #00000042' }}>
@@ -27,10 +28,10 @@ const Row = ({ label, value }) => (
   </Box>
 );
 
-const TestAsk = ({ topics, languages }) => {
+const TestAsk = ({ languages, topics }) => {
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const notify = useNotify();
-  const refresh = useRefresh();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
@@ -61,11 +62,7 @@ const TestAsk = ({ topics, languages }) => {
 
       setResponse(res.data);
     } catch (err) {
-      if (err.body && err.body.message) {
-        notify(err.body.message, 'error');
-      }
-
-      console.log(err);
+      notify(err?.body?.code || err?.body?.message || 'We could not execute the action', 'error');
     }
 
     setLoading(false);
@@ -73,54 +70,61 @@ const TestAsk = ({ topics, languages }) => {
 
   return (
     <Box p={2} boxShadow={3}>
-      <Title title="Test ask" />
+      <Title title={translate('misc.test_ask')} />
       <Form
         onSubmit={onSubmit}
         initialValues={{
           question: '',
           topicId: '',
-          languageId: '',
+          languageId: languages && languages.length ? languages[0].id : '',
         }}
         validate={(values) => {
           const errors = {};
 
-          ['question', 'topicId', 'languageId'].forEach((field) => {
+          //TODO - only if using multi level topics
+          //also fix the section for topics selection (multie level) and make it optional
+          ['question', /*'topicId',*/ 'languageId'].forEach((field) => {
             if (!values[field]) {
-              errors[field] = 'Required';
+              errors[field] = translate('Required');
             }
           });
 
           return errors;
         }}
-        render={({ handleSubmit, valid, values }) => {
+        render={({ handleSubmit, valid }) => {
           return (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>
+                {
+                  languages && languages.length > 1 && (
+                    <Grid item xs={12} sm={6} md={2}>
+                      <SelectInput
+                        source="languageId"
+                        label="resources.answers.fields.fk_languageId"
+                        choices={languages}
+                        optionText="name"
+                        optionValue="id"
+                        margin="dense"
+                        fullWidth
+                      />
+                    </Grid>
+                  )
+                }
                 <Grid item xs={12} sm={6} md={2}>
                   <SelectInput
-                    source="languageId"
-                    label="Language"
-                    choices={languages}
-                    optionText="name"
-                    optionValue="id"
-                    margin="dense"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <SelectInput
                     source="topicId"
-                    label="Topic"
-                    choices={topics.filter((t) => t.fk_languageId === values.languageId)}
+                    label="resources.answers.fields.fk_topicId"
+                    choices={topics.filter((t) => !t.fk_parentTopicId)}
                     optionText="name"
                     optionValue="id"
                     margin="dense"
+                    allowEmpty
+                    emptyText={translate('misc.none')}
                     fullWidth
-                    disabled={!values.languageId}
                   />
                 </Grid>
                 <Grid item xs={12} sm={9} md={5}>
-                  <TextInput source="question" label="Question" margin="dense" fullWidth />
+                  <TextInput source="question" label="resources.answers.fields.fk_questionId" margin="dense" fullWidth />
                 </Grid>
                 <Grid item xs={12} sm={3} md={2}>
                   <Box pt={1.3}>
@@ -132,7 +136,7 @@ const TestAsk = ({ topics, languages }) => {
                       fullWidth
                       size="large"
                     >
-                      Test
+                      {translate('misc.test')}
                     </Button>
                   </Box>
                 </Grid>
@@ -152,58 +156,67 @@ const TestAsk = ({ topics, languages }) => {
         {
           !loading && (!!response) && (
             <Box>
-              <Row label="Match found" value={response.matchFound ? 'Yes' : 'No'} />
+              <Row label={translate('misc.match_found')} value={response.matchFound ? translate('misc.yes') : translate('misc.no')} />
+              {
+                !!response.answerId && (
+                  <Box display="flex" mb={2} p={2} boxShadow={3}>
+                    <Box flex={1}>
+                      <TextField record={{ id: response.answerId, text: response.text, FollowupQuestions: response.followupQuestions }} />
+                    </Box>
+                  </Box>
+                )
+              }
+
               <Row label="Score" value={response.score} />
               <Row
-                label="Answer ID"
+                label={translate('misc.answer_id')}
                 value={
                   !response.answerId
                     ? '-'
-                    : <Link to={`/answers/${response.answerId}`} target="_blank">{response.answerId}</Link>
+                    : <Link to={`/answers/${response.answerId}`}>{response.answerId}</Link>
                 }
               />
               <Row
-                label="Question ID"
+                label={translate('misc.question_id')}
                 value={
                   !response.questionId
                     ? '-'
-                    : <Link to={`/questions/${response.questionId}`} target="_blank">{response.questionId}</Link>
+                    : <Link to={`/questions/${response.questionId}`}>{response.questionId}</Link>
                 }
               />
               <Row
-                label="Topic ID"
+                label={translate('misc.topic_id')}
                 value={
                   !response.topicId
                     ? '-'
-                    : <Link to={`/topics/${response.topicId}`} target="_blank">{response.topicId}</Link>
+                    : <Link to={`/topics/${response.topicId}`}>{response.topicId}</Link>
                 }
               />
-              <Row label="Request time (seconds)" value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
-              <Row label="Text" value={response.text} />
+              <Row label={translate('misc.request_time_seconds')} value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
               {
                 response.suggestions && !!response.suggestions.length && (
                   <>
-                    <Typography variant="h6">Suggestions</Typography>
+                    <Typography variant="h6">{translate('misc.suggestions')}</Typography>
                     {
                       response.suggestions.map((s, i) => (
                         <Box key={i} boxShadow={3} p={2} mb={2}>
-                          <Row label="Answer" value={s.answer} />
+                          <Row label={translate('misc.answer')} value={s.answer} />
                           <Row
                             label="ID"
                             value={
                               !s.id || s.id === 'NO_SUGGESTION'
                                 ? '-'
-                                : <Link to={`/questions/${s.id}`} target="_blank">{s.id}</Link>
+                                : <Link to={`/questions/${s.id}`}>{s.id}</Link>
                             }
                           />
-                          <Row label="Score" value={s.score} />
-                          <Row label="Text" value={s.text} />
+                          <Row label={translate('misc.score')} value={s.score} />
+                          <Row label={translate('misc.text')} value={s.text} />
                           <Row
-                            label="Topic ID"
+                            label={translate('misc.topic_id')}
                             value={
                               !s.topicId
                                 ? '-'
-                                : <Link to={`/topics/${s.topicId}`} target="_blank">{s.topicId}</Link>
+                                : <Link to={`/topics/${s.topicId}`}>{s.topicId}</Link>
                             }
                           />
                         </Box>
@@ -212,11 +225,11 @@ const TestAsk = ({ topics, languages }) => {
                   </>
                 )
               }
-              <Typography variant="h6">Steps</Typography>
+              <Typography variant="h6">{translate('misc.steps')}</Typography>
               <Box boxShadow={3} p={2} mb={2}>
                 {
                   response.flowSteps.map((step, i) => (
-                    <Typography key={i}>{i + 1}. {step}</Typography>
+                    <Typography key={i} style={{ overflowWrap: 'break-word', display: 'block', wordBreak: 'break-all' }}>{i + 1}. {step}</Typography>
                   ))
                 }
               </Box>
