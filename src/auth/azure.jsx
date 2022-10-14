@@ -27,6 +27,7 @@ const Authenticated = ({ setLoading }) => {
   const redirect = useRedirect();
   const notify = useNotify();
   const translate = useTranslate();
+  const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 
   const requestProfileData = async () => {
     setLoading(true);
@@ -58,8 +59,14 @@ const Authenticated = ({ setLoading }) => {
         sessionStorage.setItem('azure-login', 1);
         setLoading(false);
         redirect('/');
+      } else {
+        //handle exchangeToken error
+        setLoading(false);
+        setError(true);
+        notify('Failed to login, please check with your administrator whether your account has been enabled');
       }
     } catch (err) {
+      sessionStorage.clear();
       console.log('Failed to obtain MS token - error details:', JSON.stringify(err));
       console.error(err);
       setLoading(false);
@@ -68,7 +75,7 @@ const Authenticated = ({ setLoading }) => {
         window.location.href = url;
       } else {
         setError(true);
-        notify('Azure authentication failed', 'error');
+        notify('Failed to login, please check with your administrator whether your account has been enabled', 'error');
       }
     }
   };
@@ -80,6 +87,7 @@ const Authenticated = ({ setLoading }) => {
     });
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    sessionStorage.clear();
   };
 
   React.useEffect(() => {
@@ -91,12 +99,13 @@ const Authenticated = ({ setLoading }) => {
   const login = () => {
     instance.loginRedirect();
   };
-
   return (
     <Box>
+      {AZURE_LOGIN && (
       <Button onClick={login} fullWidth variant="outlined" {...USE_ALT_THEME ? { style: { color: 'white' }, color: 'secondary' } : {}}>
         <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
       </Button>
+      )}
       {
         error && (
           <Box textAlign="center" mt={15} display="flex" justifyContent="center">

@@ -8,6 +8,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
+import { ClearBrowserCacheBoundary } from 'react-clear-browser-cache';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -39,11 +40,13 @@ const Wrapper = ({ children }) => {
 
 ReactDOM.render(
   <Sentry.ErrorBoundary fallback="An error has occurred">
+  <ClearBrowserCacheBoundary auto fallback="Loading..." duration={2000}>
     <Wrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <App />
       </MuiPickersUtilsProvider>
     </Wrapper>
+  </ClearBrowserCacheBoundary>
   </Sentry.ErrorBoundary>,
   document.getElementById('root'),
 );

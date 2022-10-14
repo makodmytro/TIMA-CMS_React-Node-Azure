@@ -23,6 +23,7 @@
 | REACT_APP_HIDE_FIELDS_QUESTIONS | List of comma separated Questions columns to hide in the edit form | "text,fk_languageId" | null | N |
 | REACT_APP_HIDE_MENU_ITEMS | List of comma Resource names to hide in the side menu | "topics,languages,users" | null | N |
 | REACT_APP_USE_AZURE_LOGIN | Determines if the Azure login is to be when value = "1" | "1" | null | N |
+| REACT_APP_USE_USERNAME_AND_PASSWORD_LOGIN=1 | Determines if the user and password login is to be when value = "1" | "1" | null | N |
 | REACT_APP_AZURE_CLIENT_ID | Azure Client ID | "asdasd-qweqwe-123123-2" | null | When REACT_APP_USE_AZURE_LOGIN=1 |
 | REACT_APP_AZURE_AUTHORITY | Azure Authority URL | https://login.microsoftonline.com/d2fbe2cc-08e7-4a9c/ | null | When REACT_APP_USER_AZURE_LOGIN=1 |
 | REACT_APP_AZURE_REDIRECT_URI | Azure redirect URL after login. Must be base URL without path | http://localhost:3000 | When REACT_APP_USER_AZURE_LOGIN=1 |

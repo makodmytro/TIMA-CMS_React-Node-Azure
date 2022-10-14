@@ -120,6 +120,8 @@ const StatusInput = ({ record, disabled }) => {
   const { refresh } = useAnswer();
   const translate = useTranslate();
   const statuses = useSelector((state) => state.custom.workflowStatus);
+  const disabledCombined = disabled && options && options.length === 0;
+  const disabledContextOnly = record?.isContextOnly;
 
   const onSubmit = async ({ status }) => {
     try {
@@ -169,25 +171,25 @@ const StatusInput = ({ record, disabled }) => {
                       record={record}
                       source="status"
                       choices={options}
-                      disabled={disabled || !options.length}
+                      disabled={disabledCombined || disabledContextOnly}
                       fullWidth
                     />
                     {
-                      (disabled || !options.length) && (
+                      (disabledCombined || disabledContextOnly) && (
                         <Typography variant="body2">
-                          {translate('misc.can_not_change_status')}
+                          {disabledContextOnly ? translate('misc.can_not_change_status_context') : translate('misc.can_not_change_status')}
                         </Typography>
                       )
                     }
                   </Box>
                   <Box flex={1} textAlign="center" mt={2}>
-                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabled} size="small">
+                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
                       {translate('misc.add_comment')}
                     </Button>
                   </Box>
                 </Box>
 
-                <Button type="submit" variant="contained" color="primary" disabled={disabled || !valid || pristine}>
+                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || disabledContextOnly || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>
               </form>

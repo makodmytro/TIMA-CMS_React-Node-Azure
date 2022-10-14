@@ -134,7 +134,9 @@ const german = {
     topics: 'Themen',
     sessions_map: 'Sessions Karte',
     edit_topic: 'Bearbeiten',
+    view_topic: 'Details',
     can_not_change_status: 'Du hast keine Berechtigung den Status zu ändern',
+    can_not_change_status_context: 'Der Status kann für Kontextinhalte nicht geändert werden',
     add_comment: 'Kommentar erstellen',
     remove: 'Entfernen',
     search_users: 'Hier tippen um Nutzer zu suchen',
@@ -373,7 +375,10 @@ const german = {
           DEPLOYED_ON_PRODUCTION: 'Live',
         },
         errors: {
-          MIN_3_QUESTIONS: 'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
+          MIN_3_QUESTIONS:
+            'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
+          MAX_1_PARENT_FOR_CONTEXT_ONLY:
+            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort und kann deswegen nicht auf "Nur im Kontext" gesetzt werden',
         },
       },
       fields: {

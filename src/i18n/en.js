@@ -135,7 +135,9 @@ const english = {
     topics: 'Topics',
     sessions_map: 'Sessions map',
     edit_topic: 'Edit',
+    view_topic: 'View',
     can_not_change_status: 'The status cannot be changed by your current role',
+    can_not_change_status_context: 'The status cannot be changed for context only content',
     add_comment: 'Add comment',
     remove: 'Remove',
     search_users: 'Type to search for users',
@@ -378,7 +380,10 @@ const english = {
           DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
         errors: {
-          MIN_3_QUESTIONS: 'At least 3 questions are required when creating a new answer',
+          MIN_3_QUESTIONS:
+            'At least 3 questions are required when creating a new answer',
+          MAX_1_PARENT_FOR_CONTEXT_ONLY:
+            'This follow up QnA has more than 1 parent and can´t be set to "context only"',
         },
       },
       fields: {

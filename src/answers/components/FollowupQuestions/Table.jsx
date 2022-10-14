@@ -105,7 +105,7 @@ const FollowupQuestionsTable = ({
                   )
                 }
                 <TableCell>
-                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate />
+                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
                 </TableCell>
                 <TableCell>
                   <BooleanField
@@ -120,12 +120,13 @@ const FollowupQuestionsTable = ({
                     editInline
                     disabled={disabled}
                     onEditCallback={refresh}
-                    deleteComponent={(
+                    deleteComponent={record?.allowDelete !== false && (
                       <Button
                         onClick={() => onDelete(related.id)}
                         type="button"
                         size="small"
                         style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                        disabled={record?.allowDelete === false}
                         fullWidth
                       >
                         <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}

@@ -17,6 +17,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Alert from '@material-ui/lab/Alert';
+import DeleteIcon from '@material-ui/icons/Delete';
 import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
 import AlertDialog from '../../../common/components/Alert';
 import DropdownMenu from '../../../questions/components/list-dropdown-menu';
@@ -60,14 +61,15 @@ const RelatedQuestionsTable = ({
   }
 
   const onPreUnlinkClick = (id) => {
-    if (record?.RelatedQuestions?.length > 1) {
+    const minQuestions = record?.isFollowupChild ? 1 : 3;
+    if (record?.RelatedQuestions?.length > minQuestions) {
       return onUnlinkClick(id);
     }
 
     return setWarning(true);
   };
 
-  const isThereContext = record.RelatedQuestions.some((q) => q.fk_parentAnswerId);
+  const isThereContext = record.RelatedQuestions.some((q) => q.parentAnswers?.length > 0);
 
   return (
     <>
@@ -117,24 +119,27 @@ const RelatedQuestionsTable = ({
                         <FunctionField
                           record={related}
                           render={() => {
-                            if (!related.fk_parentAnswerId) {
+                            if (!related.parentAnswers || related.parentAnswers?.length === 0) {
                               return (
                                 <>-</>
                               );
                             }
 
-                            const _str = related.parentAnswerText || 'placeholder';
-
                             return (
                               <Box key={i} py={1}>
-                                <Typography
-                                  component={Link}
-                                  to={{ pathname: `/answers/${related.fk_parentAnswerId}/edit`, key: Math.random(), state: { applied: true } }}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className={classes.link}
-                                >
-                                  {_str.length > 20 ? `${_str.substr(0, 20)}...` : _str}
-                                </Typography>
+                                { related.parentAnswers && related.parentAnswers.map((pa, idx) => (
+                                  <Box key={idx}>
+                                    &#8226;&nbsp;
+                                    <Typography
+                                      component={Link}
+                                      to={{ pathname: `/answers/${pa.id}/edit`, key: pa.id, state: { applied: true } }}
+                                      onClick={(e) => e.stopPropagation()}
+                                      className={classes.link}
+                                    >
+                                      {pa.text.length > 20 ? `${pa.text.substr(0, 20)}...` : pa.text}
+                                    </Typography>
+                                  </Box>
+                                )) }
                                 <Box pl={2}>
                                   <SubdirectoryArrowRight fontSize="small" />
                                   &nbsp;
@@ -219,7 +224,19 @@ const RelatedQuestionsTable = ({
                       record={{ ...related }}
                       editInline
                       disabled={disabled}
-                      disabledDelete={record?.RelatedQuestions?.length < 2}
+                      disabledDelete={record?.allowDelete === false}
+                      deleteComponent={record?.allowDelete ? (
+                        <Button
+                          onClick={() => onPreUnlinkClick(related.id)}
+                          type="button"
+                          size="small"
+                          style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                          disabled={record?.allowDelete === false}
+                          fullWidth
+                        >
+                          <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
+                        </Button>
+                      ) : null}
                       onEditCallback={refresh}
                     />
                   </TableCell>

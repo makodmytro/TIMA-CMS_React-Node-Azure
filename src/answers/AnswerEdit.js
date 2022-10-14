@@ -41,7 +41,7 @@ const AnswerEdit = () => {
   const { answer, refresh } = useAnswer();
 
   const disableEdit = (answer && answer.allowEdit === false);
-  const disableDelete = (answer && answer.allowEdit === false);
+  const disableDelete = (answer && answer.allowDelete === false);
 
   const onSubmit = async (values) => {
     try {
@@ -83,10 +83,6 @@ const AnswerEdit = () => {
     notify('The answer and its related questions were updated');
     refresh();
   };
-
-  if (answer) {
-    answer.allowEdit = false; // eslint-disable-line
-  }
 
   return (
     <>

@@ -60,8 +60,7 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
   const refresh = useRefresh();
   const notify = useNotify();
   const translate = useTranslate();
-  const topicsTree = useSelector((s) => s.custom.topics);
-  const disabled = record?.allowEdit === false || !topicsTree.some((t) => t.allowCreateContent);
+  const disabled = record?.allowEdit === false;
 
   const onSelect = async (fk_answerId) => {
     try {

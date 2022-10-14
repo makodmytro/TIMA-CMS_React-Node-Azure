@@ -21,7 +21,9 @@ const DropdownMenu = ({
   const redirect = useRedirect();
   const translate = useTranslate();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const disableDelete = record?.allowDelete !== true && !admin;
+  //allow delete for admin, or is user has permission but not for top level topic
+  const allowDelete = admin || (record?.allowDelete && record?.fk_parentTopicId);
+  const allowManage = admin || record?.allowManage;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -68,7 +70,7 @@ const DropdownMenu = ({
             }}
             fullWidth
           >
-            {translate('misc.edit_topic')}
+            {translate(allowManage ? 'misc.edit_topic' : 'misc.view_topic')}
           </Button>
         </MenuItem>
         )}
@@ -105,7 +107,7 @@ const DropdownMenu = ({
           )
         }
         {
-          (admin || record?.allowManage) && !!onPermissionsClick && (
+          (allowManage) && !!onPermissionsClick && (
             <MenuItem
               onClick={(e) => e.stopPropagation()}
             >
@@ -140,7 +142,7 @@ const DropdownMenu = ({
           )
         }
         {
-          !disableDelete && (
+          allowDelete && (
             <MenuItem
               onClick={(e) => {
                 handleClose(e);

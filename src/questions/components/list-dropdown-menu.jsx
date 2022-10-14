@@ -27,7 +27,7 @@ const DropdownMenu = ({
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const disableEdit = record?.allowEdit === false || disabled;
-  const disableDelete = record?.allowDelete === false || disabled || disabledDelete;
+  const disableDelete = record?.allowDelete === false || disabled;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -145,9 +145,9 @@ const DropdownMenu = ({
                       refresh();
                     }
                   }}
-                  fullWidth
                   style={{ justifyContent: 'flex-start' }}
                   disabled={disableDelete}
+                  fullWidth
                 />
               </ResourceContextProvider>
             )

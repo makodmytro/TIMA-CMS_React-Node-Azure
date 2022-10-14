@@ -98,7 +98,7 @@ const ResultsList = ({
 }) => {
   const translate = useTranslate();
   const isSelected = (question) => selected.includes(question.id);
-
+  const questionsWithoutContextOnly = questions?.filter((question) => !question.isContextOnly);
   if (!questions) {
     return null;
   }
@@ -123,7 +123,7 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questions.map((question, i) => (
+            questionsWithoutContextOnly.map((question, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <Checkbox
@@ -169,7 +169,6 @@ const SearchCreateDialog = ({
   selectedButtonText,
   selectedButtonOnClick,
 }) => {
-  const [loading, setLoading] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
   const [enableCreate, setEnableCreate] = React.useState(false);
   const [questions, setQuestions] = React.useState(null);
@@ -200,8 +199,6 @@ const SearchCreateDialog = ({
 
       return;
     }
-    setLoading(true);
-
     try {
       const filter = { ...values };
 
@@ -223,7 +220,6 @@ const SearchCreateDialog = ({
     } catch (err) {
       notify(err?.body?.message || 'Unexpected error', 'error');
     }
-    setLoading(false);
   }, 500);
 
   const toggleSelect = (question) => {
@@ -248,7 +244,6 @@ const SearchCreateDialog = ({
   if (!open) {
     return null;
   }
-
   return (
     <Dialog open onClose={onClose} fullWidth maxWidth="lg">
       <Box display="flex" p={2}>
@@ -275,13 +270,6 @@ const SearchCreateDialog = ({
           selectedButtonText={selectedButtonText}
         />
         <hr />
-        {
-          loading && (
-            <Box textAlign="center" p={2}>
-              <CircularProgress color="primary" />
-            </Box>
-          )
-        }
         <ResultsList
           {...{
             questions,

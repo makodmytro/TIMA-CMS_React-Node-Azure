@@ -123,31 +123,57 @@ const AsyncResources = () => {
     setTac(true);
   };
 
+  const connectToWebSocket = () => {
+    const url = `${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`;
+    try {
+      const ws = new WebSocket(url);
+      console.log(`websocket connected to ${url}`);
+
+      setSocket(ws);
+    } catch (e) {
+      console.error('`failed to connect to websocket, retrying', e);
+      setTimeout(() => {
+        connectToWebSocket();
+      }, 5000);
+    }
+  };
+
   React.useEffect(() => {
     check();
   }, []);
 
   React.useEffect(() => {
-    if (!isLoginScreen() && !socket) {
-      const ws = new WebSocket(`${API_URL.replace('https://', 'wss://').replace('http://', 'ws://')}/topics/status`);
-
-      setSocket(ws);
-    }
-
-    if (isLoginScreen() && socket) {
+    if (!isLoginScreen()) {
+      if (socket === null || socket === undefined) {
+        connectToWebSocket();
+      }
+    } else if (socket) {
       socket.close();
     }
   }, [location.pathname]);
 
   React.useEffect(() => {
     if (socket) {
-      socket.onmessage = function ({ data }) {
+      socket.onopen = (e) => console.log('websocket open', e);
+      socket.onerror = console.error;
+      socket.onclose = (e) => {
+        console.warn('websocket closed, trying to reconnect', e);
+        setTimeout(() => {
+          connectToWebSocket();
+        }, 5000);
+      }
+      socket.onmessage = (message) => {
         try {
-          const d = JSON.parse(data);
-          if (d?.isSyncInProgress !== store.getState()?.custom?.isSyncInProgress) {
-            store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: d });
+          if (message?.data?.length > 0) {
+            const data = JSON.parse(message.data);
+            const state = store.getState()?.custom;
+            if (data?.isSyncInProgress !== state?.isSyncInProgress || data?.nextSyncScheduled !== state?.nextSyncScheduled) {
+              store.dispatch({ type: 'CUSTOM_TOPICS_SYNC_STATUS', payload: data });
+            }
           }
-        } catch (e) {} // eslint-disable-line
+        } catch (e) {
+          console.warn(e);
+        } // eslint-disable-line
       };
     }
   }, [socket]);
