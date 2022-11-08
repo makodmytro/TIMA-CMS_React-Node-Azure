@@ -33,6 +33,7 @@ const CustomToolbar = (props) => {
 const UsersCreate = (props) => {
   const [record, setRecord] = React.useState(null);
   const [_groups, setGroups] = React.useState([]);
+  const [userActive, setUserActive] = React.useState(false);
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const disabled = !useIsAdmin();
@@ -54,12 +55,18 @@ const UsersCreate = (props) => {
     return redirect('/users');
   };
 
+  const validateUserCreation = (values) => {
+    if (values.name?.length > 0 && values.email?.length > 0) {
+      setUserActive(true);
+    } else {
+      setUserActive(false);
+    }
+  };
   React.useEffect(() => {
     if (record) {
       onSuccess();
     }
   }, [_groups, record]);
-
   return (
     <Create
       {...props}
@@ -73,7 +80,7 @@ const UsersCreate = (props) => {
         setRecord(data);
       }}
     >
-      <SimpleForm toolbar={<CustomToolbar />} initialValues={{ groups: [] }}>
+      <SimpleForm validate={validateUserCreation} toolbar={<CustomToolbar />} initialValues={{ groups: [] }}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} autoComplete="no" />
         <TextInput source="email" validate={[required(), email()]} fullWidth disabled={disabled} autoComplete="no" />
         {
@@ -108,7 +115,14 @@ const UsersCreate = (props) => {
           )
         }
 
-        <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
+        <BooleanInput
+          options={{
+            checked: userActive,
+          }}
+          source="isActive"
+          label="resources.users.fields.isActive"
+          disabled={disabled}
+        />
         <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />
         <GroupsSelection disabled={disabled} />
       </SimpleForm>
