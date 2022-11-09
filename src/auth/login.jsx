@@ -22,7 +22,7 @@ import {
 } from '@material-ui/core';
 import Azure from './azure';
 import Logo from '../assets/TIMA_logo.png';
-import AltLogo from '../assets/QnA Manager Logo.png';
+import AltLogo from '../assets/QnA Manager Logo round.png';
 
 const AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN === '1';
 const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
@@ -46,7 +46,7 @@ const Wrapper = ({ children }) => {
         bgcolor="white"
         borderRadius={3}
         textAlign="center"
-        style={{ backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)', color: 'white' }}
+        style={{ backgroundImage: 'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)', color: 'white' }}
       >
         {children}
       </Box>
