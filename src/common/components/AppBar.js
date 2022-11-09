@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/AssignmentInd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Logo from '../../assets/TIMA_logo.png';
-import AltLogo from '../../assets/QnA Manager Logo Horizontal.png';
+import AltLogo from '../../assets/QnA Manager Logo Final green.png';
 import { baseApi } from '../httpClient';
 
 const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
@@ -98,7 +98,8 @@ const MyAppBar = (props) => {
 
   const style = USE_ALT_THEME
     ? {
-      backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+      backgroundImage:
+          'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
       color: 'white',
     }
     : { backgroundColor: '#fafafa' };

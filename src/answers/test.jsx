@@ -9,14 +9,19 @@ import {
   useNotify,
   Title,
   useTranslate,
+  Link,
+  TextField,
 } from 'react-admin';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+
 import Typography from '@material-ui/core/Typography';
 import { format } from 'date-fns';
+import { Dialog, DialogTitle } from '@material-ui/core';
 
 const styles = makeStyles((theme) => ({
   inputContainer: {
@@ -39,7 +44,7 @@ const styles = makeStyles((theme) => ({
     borderRadius: '15px',
     padding: theme.spacing(2),
     maxWidth: '45%',
-    marginBottom: theme.spacing(1),
+
   },
   textInput: {
     '&  .MuiFormHelperText-root': {
@@ -67,6 +72,7 @@ const TestAsk = ({ languages, topics }) => {
   const [response, setResponse] = React.useState([]);
   const [questionText, setQuestionText] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
 
   const onSubmit = (values) => {
     setQuestionText((prev) => [...prev, values]);
@@ -155,12 +161,85 @@ const TestAsk = ({ languages, topics }) => {
                   </Typography>
                 </Box>
                 {!!response[i] && (
-                  <Box mt={1}>
+                  <Box display="flex" alignItems="center" mt={1}>
                     <div className={classes.output}>
                       <Typography component="span">
                         {response[i].text}
                       </Typography>
+
                     </div>
+                    <Button onClick={() => setModal(true)}>
+                      <InfoIcon />
+                    </Button>
+                    <Dialog
+                      fullWidth
+                      open={modal}
+                      onClose={() => setModal(false)}
+                      aria-label="Show info"
+                    >
+                      {!loading && (!!response[i]) && (
+                      <Box p={2}>
+                        <Row label="Score" value={response[i].score} />
+                        <Row
+                          label={translate('misc.answer_id')}
+                          value={
+                            !response[i].answerId
+                              ? '-'
+                              : <Link to={`/answers/${response[i].answerId}`}>{response[i].answerId}</Link>
+                          }
+                        />
+                        <Row
+                          label={translate('misc.question_id')}
+                          value={
+                            !response[i].questionId
+                              ? '-'
+                              : <Link to={`/questions/${response[i].questionId}`}>{response[i].questionId}</Link>
+                          }
+                        />
+                        <Row
+                          label={translate('misc.topic_id')}
+                          value={
+                            !response[i].topicId
+                              ? '-'
+                              : <Link to={`/topics/${response[i].topicId}`}>{response[i].topicId}</Link>
+                          }
+                        />
+                        <Row label={translate('misc.request_time_seconds')} value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0} />
+                        {
+                          response[i].suggestions && !!response[i].suggestions.length && (
+                            <>
+                              <Typography variant="h6">{translate('misc.suggestions')}</Typography>
+                              {
+                                response[i].suggestions.map((s, index) => (
+                                  <Box key={index} boxShadow={3} p={2} mb={2}>
+                                    <Row label={translate('misc.answer')} value={s.answer} />
+                                    <Row
+                                      label="ID"
+                                      value={
+                                        !s.id || s.id === 'NO_SUGGESTION'
+                                          ? '-'
+                                          : <Link to={`/questions/${s.id}`}>{s.id}</Link>
+                                      }
+                                    />
+                                    <Row label={translate('misc.score')} value={s.score} />
+                                    <Row label={translate('misc.text')} value={s.text} />
+                                    <Row
+                                      label={translate('misc.topic_id')}
+                                      value={
+                                        !s.topicId
+                                          ? '-'
+                                          : <Link to={`/topics/${s.topicId}`}>{s.topicId}</Link>
+                                      }
+                                    />
+                                  </Box>
+                                ))
+                              }
+                            </>
+                          )
+                        }
+                      </Box>
+                      )}
+                    </Dialog>
                   </Box>
                 )}
               </Box>
@@ -214,58 +293,51 @@ const TestAsk = ({ languages, topics }) => {
         </Box>
         {/*<Box py={2}>
         {
-          loading && (
-            <Box textAlign="center">
-              <CircularProgress />
-            </Box>
-          )
-        }
-        {
           !loading && (!!response) && (
             <Box>
-              <Row label={translate('misc.match_found')} value={response.matchFound ? translate('misc.yes') : translate('misc.no')} />
+              <Row label={translate('misc.match_found')} value={response[i].matchFound ? translate('misc.yes') : translate('misc.no')} />
               {
-                !!response.answerId && (
+                !!response[i].answerId && (
                   <Box display="flex" mb={2} p={2} boxShadow={3}>
                     <Box flex={1}>
-                      <TextField record={{ id: response.answerId, text: response.text, FollowupQuestions: response.followupQuestions }} />
+                      <TextField record={{ id: response[i].answerId, text: response[i].text, FollowupQuestions: response[i].followupQuestions }} />
                     </Box>
                   </Box>
                 )
               }
 
-              <Row label="Score" value={response.score} />
+              <Row label="Score" value={response[i].score} />
               <Row
                 label={translate('misc.answer_id')}
                 value={
-                  !response.answerId
+                  !response[i].answerId
                     ? '-'
-                    : <Link to={`/answers/${response.answerId}`}>{response.answerId}</Link>
+                    : <Link to={`/answers/${response[i].answerId}`}>{response[i].answerId}</Link>
                 }
               />
               <Row
                 label={translate('misc.question_id')}
                 value={
-                  !response.questionId
+                  !response[i].questionId
                     ? '-'
-                    : <Link to={`/questions/${response.questionId}`}>{response.questionId}</Link>
+                    : <Link to={`/questions/${response[i].questionId}`}>{response[i].questionId}</Link>
                 }
               />
               <Row
                 label={translate('misc.topic_id')}
                 value={
-                  !response.topicId
+                  !response[i].topicId
                     ? '-'
-                    : <Link to={`/topics/${response.topicId}`}>{response.topicId}</Link>
+                    : <Link to={`/topics/${response[i].topicId}`}>{response[i].topicId}</Link>
                 }
               />
-              <Row label={translate('misc.request_time_seconds')} value={response.requestTimeMs ? response.requestTimeMs / 1000 : 0} />
+              <Row label={translate('misc.request_time_seconds')} value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0} />
               {
-                response.suggestions && !!response.suggestions.length && (
+                response[i].suggestions && !!response[i].suggestions.length && (
                   <>
                     <Typography variant="h6">{translate('misc.suggestions')}</Typography>
                     {
-                      response.suggestions.map((s, i) => (
+                      response[i].suggestions.map((s, i) => (
                         <Box key={i} boxShadow={3} p={2} mb={2}>
                           <Row label={translate('misc.answer')} value={s.answer} />
                           <Row
@@ -295,7 +367,7 @@ const TestAsk = ({ languages, topics }) => {
               <Typography variant="h6">{translate('misc.steps')}</Typography>
               <Box boxShadow={3} p={2} mb={2}>
                 {
-                  response.flowSteps.map((step, i) => (
+                  response[i].flowSteps.map((step, i) => (
                     <Typography key={i} style={{ overflowWrap: 'break-word', display: 'block', wordBreak: 'break-all' }}>{i + 1}. {step}</Typography>
                   ))
                 }
