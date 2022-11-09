@@ -15,10 +15,10 @@ let palette = {
 if (USE_ALT_THEME) {
   palette = {
     primary: {
-      main: '#50E6FF',
+      main: '#3F4349',
     },
     secondary: {
-      main: '#0078D4',
+      main: '#246974',
       // dark: '#456B91',
     },
   };

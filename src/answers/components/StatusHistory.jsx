@@ -92,18 +92,18 @@ const StatusHistory = ({ record }) => {
 
   return (
     <Box width="100%">
-      <Accordion expanded>
+      <Accordion defaultExpanded>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
+          aria-controls="panel1a-content"
+          id="panel1a-header"
         >
           <Typography>
             {translate('resources.answers.status_history')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box flex={1}>
+          <Box width="100%" flex={1}>
             <Table>
               <TableHead>
                 <TableRow>

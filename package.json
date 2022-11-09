@@ -1,6 +1,6 @@
 {
-  "name": "tima-cms",
-  "version": "0.1.0",
+  "name": "qna-manager",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^2.22.1",
@@ -54,6 +54,7 @@
   },
   "scripts": {
     "start": "export REACT_APP_VERSION=$(git rev-parse --short=7 HEAD) && react-scripts start",
+    "start-local": "react-scripts start",
     "build": "export REACT_APP_VERSION=$(git rev-parse --short=7 HEAD) && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

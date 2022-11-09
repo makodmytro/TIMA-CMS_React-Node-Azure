@@ -32,7 +32,7 @@ import lngReducer from './common/reducer/lngReducer';
 import customReducer from './common/reducer/custom';
 import 'react-markdown-editor-lite/lib/index.css';
 import Logo from './assets/TIMA_logo.png';
-import AltLogo from './assets/QnA Manager Logo.png';
+import AltLogo from './assets/QnA Manager Logo round.png';
 import theme from './common/theme';
 import Login from './auth/login';
 
@@ -161,7 +161,7 @@ const AsyncResources = () => {
         setTimeout(() => {
           connectToWebSocket();
         }, 5000);
-      }
+      };
       socket.onmessage = (message) => {
         try {
           if (message?.data?.length > 0) {
@@ -204,7 +204,8 @@ const AsyncResources = () => {
           flexDirection: 'column',
           paddingTop: '30vh',
           boxSizing: 'border-box',
-          backgroundImage: 'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+          backgroundImage:
+            'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
         }}
       >
         <Box py={2}>
