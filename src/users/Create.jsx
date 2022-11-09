@@ -55,18 +55,14 @@ const UsersCreate = (props) => {
     return redirect('/users');
   };
 
-  const validateUserCreation = (values) => {
-    if (values.name?.length > 0 && values.email?.length > 0) {
-      setUserActive(true);
-    } else {
-      setUserActive(false);
-    }
+  const validateUserCreation = () => {
   };
   React.useEffect(() => {
     if (record) {
       onSuccess();
     }
   }, [_groups, record]);
+  setUserActive(true);
   return (
     <Create
       {...props}
