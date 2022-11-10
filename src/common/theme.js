@@ -4,10 +4,10 @@ const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
 
 let palette = {
   primary: {
-    main: '#4EC2A8',
+    main: '#3F4349',
   },
   secondary: {
-    main: '#498CA7',
+    main: '#246974',
     dark: '#456B91',
   },
 };
