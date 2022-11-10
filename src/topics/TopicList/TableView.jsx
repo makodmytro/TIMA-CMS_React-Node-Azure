@@ -44,9 +44,18 @@ const Row = ({
 
   const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
 
+  const bgColor = (lv) => {
+    if (lv === 2) {
+      return '#B0B4BA';
+    } if (lv === 1) {
+      return '#91B4B9';
+    }
+    return 'initial';
+  };
+
   return (
     <>
-      <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
+      <TableRow style={{ backgroundColor: bgColor(level), cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
           {
             !!record.ChildTopics && record.ChildTopics.length > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
@@ -59,7 +68,7 @@ const Row = ({
 
                     setExpanded(!expanded);
                   }}
-                  style={{ color: level ? 'white' : '#4EC2A8' }}
+                  style={{ color: level ? 'white' : '#3F4349' }}
                 >
                   { !expanded && <AddIcon fontSize="small" /> }
                   { expanded && <MinusIcon fontSize="small" /> }
