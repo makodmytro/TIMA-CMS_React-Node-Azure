@@ -55,7 +55,7 @@ const AnswerCreate = () => {
       const fixedText = text.replace(/\n\s*\n/g, '\n');
       const { data } = await dataProvider.create('answers', {
         data: {
-          fk_languageId, fk_topicId, fixedText, tags, spokenText,
+          fk_languageId, fk_topicId, text: fixedText, tags, spokenText,
         },
       });
 

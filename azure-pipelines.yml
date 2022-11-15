@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- demo1
+- release/enbw
 
 # define variables to use during the build
 variables:
@@ -35,6 +35,7 @@ variables:
   REACT_APP_HIDE_TAGS_INPUT: '1'
   REACT_APP_HIDE_TOPICS_SHOW_QR: '1'
   REACT_APP_USE_USERNAME_AND_PASSWORD_LOGIN: '0'
+  REACT_APP_USE_ALT_THEME: '1'
 pool:
   vmImage: ubuntu-latest
 
