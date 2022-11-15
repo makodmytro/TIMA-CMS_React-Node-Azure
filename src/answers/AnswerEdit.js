@@ -22,7 +22,6 @@ import StatusHistory from './components/StatusHistory';
 import StatusWarning from './components/StatusWarning';
 import StatusInputSection from './components/StatusInput';
 import useAnswer from './useAnswer';
-import { valuesIn } from 'lodash';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 
@@ -46,7 +45,7 @@ const AnswerEdit = () => {
 
   const onSubmit = async (values) => {
     try {
-      const fixedValues = valuesIn;
+      const fixedValues = values;
       //workaround for the markdown editor bug - remove double line breaks
       fixedValues.text = isString(values.text) ? values.text.replace(/\n\s*\n/g, '\n') : values.text;
       const { data } = await dataProvider.update('answers', {
