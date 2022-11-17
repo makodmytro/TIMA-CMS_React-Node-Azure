@@ -12,7 +12,7 @@ import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
-import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
+import { markdownToDraft } from 'markdown-draft-js'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
 import PlayableText from '../../common/components/playable-text';
@@ -46,7 +46,7 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const rawData = mdToDraftjs(value);
+      const rawData = markdownToDraft(value);
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
@@ -68,7 +68,7 @@ const DraftInput = ({
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'history', 'list', 'image'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },
