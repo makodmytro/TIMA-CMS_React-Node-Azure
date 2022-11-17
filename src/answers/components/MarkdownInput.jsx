@@ -46,7 +46,21 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const rawData = markdownToDraft(value);
+      const rawData = markdownToDraft(value, {
+        blockEntities: {
+          IMAGE: (entity) => {
+            //const { src } = entity.data;
+            //return `![${text}](${src})`;
+            return {
+              type: 'atomic',
+              mutability: 'IMMUTABLE',
+              data: {
+                src: entity.src,
+              },
+            };
+          },
+        },
+      });
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
