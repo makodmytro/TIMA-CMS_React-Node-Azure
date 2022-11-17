@@ -48,14 +48,13 @@ const DraftInput = ({
     if (value && !touched && !dirty) {
       const rawData = markdownToDraft(value, {
         blockEntities: {
-          IMAGE: (entity) => {
-            //const { src } = entity.data;
-            //return `![${text}](${src})`;
+          image: (entity) => {
             return {
               type: 'atomic',
               mutability: 'IMMUTABLE',
               data: {
                 src: entity.src,
+                alt: entity.alt,
               },
             };
           },
