@@ -12,7 +12,7 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
-import { markdownToState } from 'draft-js-import-markdown';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { markdownToDraft } from 'markdown-draft-js'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
@@ -68,7 +68,7 @@ const DraftInput = ({
 
       const contentState = convertFromRaw(rawData);
 */
-      const contentState = markdownToState(value);
+      const contentState = stateFromMarkdown(value);
       setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
