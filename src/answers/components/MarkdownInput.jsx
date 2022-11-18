@@ -8,16 +8,15 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
-import { markdownToDraft } from 'markdown-draft-js'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
+import htmlToDraft from 'html-to-draftjs';
+import markdown2Html from '@deskeen/markdown';
 import PlayableText from '../../common/components/playable-text';
-import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 
@@ -48,27 +47,18 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      /*
-      const rawData = markdownToDraft(value, {
-        blockEntities: {
-          image: (entity) => {
-            return {
-              type: 'IMAGE',
-              mutability: 'IMMUTABLE',
-              data: {
-                src: entity.src,
-                alt: entity.alt,
-              },
-            };
-          },
-        },
-      });
-      console.log('rawData', rawData);
-      console.log('mdToDraftjs', mdToDraftjs(value));
+      //there are some markdown to draftjs converters, but they don't work well, either strikethrough is not working, or image is missing
+      //we are using the following approach to convert markdown to draftjs with all features: md->html->update tags->draftjs
 
-      const contentState = convertFromRaw(rawData);
-*/
-      const contentState = stateFromMarkdown(value);
+      //adapt markdown value to the parser, replace _ by * for italic
+      const fixedValue = value.replace(/_/g, '*');
+      const html = markdown2Html.parse(fixedValue).innerHTML;
+      //remove figure elements, replace <s> with <del>
+      const fixedHtml = html.replace(/<figure.*?>(.*?)<\/figure>/g, '$1').replace(/<s>/g, '<del>').replace(/<\/s>/g, '</del>');
+      const blocksFromHtml = htmlToDraft(fixedHtml);
+      const { contentBlocks, entityMap } = blocksFromHtml;
+      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
       setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
