@@ -8,7 +8,7 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
@@ -50,7 +50,7 @@ const DraftInput = ({
         blockEntities: {
           image: (entity) => {
             return {
-              type: 'atomic',
+              type: 'IMAGE',
               mutability: 'IMMUTABLE',
               data: {
                 src: entity.src,
@@ -73,6 +73,7 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
+            console.log(v.getCurrentContent());
             onChange(stateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
