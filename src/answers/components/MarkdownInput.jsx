@@ -12,6 +12,7 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
+import { markdownToState } from 'draft-js-import-markdown';
 import { markdownToDraft } from 'markdown-draft-js'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
@@ -47,6 +48,7 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
+      /*
       const rawData = markdownToDraft(value, {
         blockEntities: {
           image: (entity) => {
@@ -65,7 +67,8 @@ const DraftInput = ({
       console.log('mdToDraftjs', mdToDraftjs(value));
 
       const contentState = convertFromRaw(rawData);
-
+*/
+      const contentState = markdownToState(value);
       setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
