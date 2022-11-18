@@ -16,6 +16,7 @@ import { markdownToDraft } from 'markdown-draft-js'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
 import PlayableText from '../../common/components/playable-text';
+import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 
@@ -61,6 +62,8 @@ const DraftInput = ({
         },
       });
       console.log('rawData', rawData);
+      console.log('mdToDraftjs', mdToDraftjs(value));
+
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
@@ -73,7 +76,6 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
-            console.log(v.getCurrentContent());
             onChange(stateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
