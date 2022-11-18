@@ -60,6 +60,7 @@ const DraftInput = ({
           },
         },
       });
+      console.log('rawData', rawData);
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
