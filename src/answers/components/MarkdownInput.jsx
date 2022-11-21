@@ -46,7 +46,9 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const rawData = mdToDraftjs(value);
+      //remove double line breaks
+      const fixedValue = value.replace(/\n\s*\n/g, '\n').replace(/_/g, '*');
+      const rawData = mdToDraftjs(fixedValue);
       const contentState = convertFromRaw(rawData);
 
       setState(EditorState.createWithContent(contentState));
