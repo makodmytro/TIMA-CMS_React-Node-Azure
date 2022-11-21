@@ -51,11 +51,9 @@ const AnswerCreate = () => {
     } = values;
 
     try {
-      //workaround for the markdown editor bug - remove double line breaks
-      const fixedText = text.replace(/\n\s*\n/g, '\n');
       const { data } = await dataProvider.create('answers', {
         data: {
-          fk_languageId, fk_topicId, text: fixedText, tags, spokenText,
+          fk_languageId, fk_topicId, text, tags, spokenText,
         },
       });
 

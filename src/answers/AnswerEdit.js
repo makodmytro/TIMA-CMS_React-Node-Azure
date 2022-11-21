@@ -45,12 +45,9 @@ const AnswerEdit = () => {
 
   const onSubmit = async (values) => {
     try {
-      const fixedValues = values;
-      //workaround for the markdown editor bug - remove double line breaks
-      fixedValues.text = isString(values.text) ? values.text.replace(/\n\s*\n/g, '\n') : values.text;
       const { data } = await dataProvider.update('answers', {
         id,
-        data: omit(fixedValues, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']),
+        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']),
       });
 
       if (data.fk_languageId !== answer.fk_languageId) {
