@@ -255,7 +255,7 @@ const AsyncResources = () => {
 
   return (
     <AdminUI
-      title="TIMA Management"
+      title="QnA Manager - TamerinTECH"
       theme={theme}
       layout={MyLayout}
       loginPage={Login}
