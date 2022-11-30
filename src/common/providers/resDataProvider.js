@@ -91,11 +91,11 @@ const getListUrl = (initialUrl, resource, _params) => {
     const { page, perPage } = params.pagination || { page: 1, perPage: 50 };
 
     if (from && resource === 'audit') {
-      params.filter.from = from;
+      filter.from = from;
     }
 
     if (to && resource === 'audit') {
-      params.filter.to = to;
+      filter.to = to;
     }
 
     if (isContextOnly && resource === 'answers') {
