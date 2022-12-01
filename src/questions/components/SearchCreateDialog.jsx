@@ -61,7 +61,7 @@ const Filters = ({
                       variant="contained"
                       size="small"
                       onClick={() => onCreateSubmit({ text: values.q })}
-                      disabled={!enableCreate}
+                      disabled={!enableCreate || Object.keys(values).length === 0}
                       fullWidth
                     >
                       {translate('resources.questions.create')}
