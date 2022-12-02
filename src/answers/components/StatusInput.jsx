@@ -122,7 +122,6 @@ const StatusInput = ({ record, disabled }) => {
   const statuses = useSelector((state) => state.custom.workflowStatus);
   const disabledCombined = disabled && options && options.length === 0;
   const disabledContextOnly = record?.isContextOnly;
-
   const onSubmit = async ({ status }) => {
     try {
       await dataProvider.updateAnswerStatus('answers', {
@@ -171,13 +170,13 @@ const StatusInput = ({ record, disabled }) => {
                       record={record}
                       source="status"
                       choices={options}
-                      disabled={disabledCombined || disabledContextOnly}
+                      disabled={disabledCombined}
                       fullWidth
                     />
                     {
-                      (disabledCombined || disabledContextOnly) && (
+                      (disabledCombined) && (
                         <Typography variant="body2">
-                          {disabledContextOnly ? translate('misc.can_not_change_status_context') : translate('misc.can_not_change_status')}
+                          {translate('misc.can_not_change_status')}
                         </Typography>
                       )
                     }
@@ -189,7 +188,7 @@ const StatusInput = ({ record, disabled }) => {
                   </Box>
                 </Box>
 
-                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || disabledContextOnly || !valid || pristine}>
+                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>
               </form>
