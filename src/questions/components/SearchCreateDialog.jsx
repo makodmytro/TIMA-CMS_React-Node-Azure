@@ -31,7 +31,6 @@ import { useDisabledCreate } from '../../hooks';
 const Filters = ({
   onSubmit,
   onCreateSubmit,
-  enableCreate,
   selected,
   onSelectedSubmit,
   selectedButtonText,
@@ -61,7 +60,7 @@ const Filters = ({
                       variant="contained"
                       size="small"
                       onClick={() => onCreateSubmit({ text: values.q })}
-                      disabled={!enableCreate}
+                      disabled={Object.keys(values).length === 0}
                       fullWidth
                     >
                       {translate('resources.questions.create')}
@@ -98,7 +97,7 @@ const ResultsList = ({
 }) => {
   const translate = useTranslate();
   const isSelected = (question) => selected.includes(question.id);
-  const questionsWithoutContextOnly = questions?.filter((question) => !question.isContextOnly);
+  // const questionsWithoutContextOnly = questions?.filter((question) => !question.isContextOnly);
   if (!questions) {
     return null;
   }
@@ -123,7 +122,7 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questionsWithoutContextOnly.map((question, i) => (
+            questions.map((question, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <Checkbox
@@ -170,7 +169,6 @@ const SearchCreateDialog = ({
   selectedButtonOnClick,
 }) => {
   const [selected, setSelected] = React.useState([]);
-  const [enableCreate, setEnableCreate] = React.useState(false);
   const [questions, setQuestions] = React.useState(null);
   const translate = useTranslate();
   const dataProvider = useDataProvider();
@@ -216,7 +214,6 @@ const SearchCreateDialog = ({
       });
 
       setQuestions(data);
-      setEnableCreate(!data.length);
     } catch (err) {
       notify(err?.body?.message || 'Unexpected error', 'error');
     }
@@ -263,7 +260,6 @@ const SearchCreateDialog = ({
       <Box p={2}>
         <Filters
           onSubmit={onFiltersSubmit}
-          enableCreate={enableCreate}
           onCreateSubmit={onCreateSubmit}
           selected={selected}
           onSelectedSubmit={onSelectedSubmit}
