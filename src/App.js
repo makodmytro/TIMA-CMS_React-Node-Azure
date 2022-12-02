@@ -41,7 +41,7 @@ const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
 const API_URL = process.env.REACT_APP_BASE_API;
 const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
-const MAINTENANCE_MODE = process.env.REACT_APP_MAINTENANCE_MODE === '1';
+const MAINTENANCE_MODE = true;//process.env.REACT_APP_MAINTENANCE_MODE === '1';
 
 let statusLoaded = false;
 
@@ -206,6 +206,7 @@ const AsyncResources = () => {
           height: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           paddingTop: '30vh',
           boxSizing: 'border-box',
           backgroundImage:
