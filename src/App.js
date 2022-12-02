@@ -197,7 +197,7 @@ const AsyncResources = () => {
   //check for maintenance mode based on environment variables
   let isAdmin = window.location.href.includes('admin=') || sessionStorage.getItem('isAdmin') === 'true';
   if (isAdmin) {
-    sessionStorage.setItem(admin, 'true');
+    sessionStorage.setItem('admin', 'true');
   }
 
   const redirectToMaintenance = MAINTENANCE_MODE && !isAdmin;
