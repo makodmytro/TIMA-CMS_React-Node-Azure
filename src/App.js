@@ -206,6 +206,7 @@ const AsyncResources = () => {
           height: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           paddingTop: '30vh',
           boxSizing: 'border-box',
           backgroundImage:
