@@ -195,7 +195,7 @@ const AsyncResources = () => {
   }, [location.pathname, tic]);
 
   //check for maintenance mode based on environment variables
-  let isAdmin = window.location.href.includes('admin=') || sessionStorage.getItem('isAdmin') === 'true';
+  let isAdmin = window.location.href.includes('admin=') || sessionStorage.getItem('admin') === 'true';
   if (isAdmin) {
     sessionStorage.setItem('admin', 'true');
   }
