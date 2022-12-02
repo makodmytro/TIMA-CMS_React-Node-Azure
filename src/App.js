@@ -41,6 +41,7 @@ const DEFAULT_HOMEPAGE = process.env.REACT_APP_DEFAULT_HOMEPAGE;
 const IDLE_TIMEOUT_SECONDS = process.env.REACT_APP_IDLE_TIMEOUT_SECONDS;
 const API_URL = process.env.REACT_APP_BASE_API;
 const USE_ALT_THEME = process.env.REACT_APP_USE_ALT_THEME === '1';
+const MAINTENANCE_MODE = process.env.REACT_APP_MAINTENANCE_MODE === '1';
 
 let statusLoaded = false;
 
@@ -193,7 +194,10 @@ const AsyncResources = () => {
     store.dispatch({ type: 'CUSTOM_NAVIGATION_CHANGED', payload: location.pathname });
   }, [location.pathname, tic]);
 
-  if (!ready) {
+  //check for maintenance mode based on environment variables
+  const redirectToMaintenance = MAINTENANCE_MODE && !window.location.href.includes('admin=');
+
+  if (redirectToMaintenance || !ready) {
     return (
       <Box
         textAlign="center"
@@ -209,10 +213,38 @@ const AsyncResources = () => {
         }}
       >
         <Box py={2}>
-          <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
+          <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="300" height="250px" />
         </Box>
-        <Typography variant="body2" component="div" style={{ color: 'white' }}>
-          LOADING
+        <Typography
+          variant="body2"
+          component="div"
+          style={{
+            color: 'white',
+            width: '60%',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          {redirectToMaintenance ? (
+            <Box>
+              <Box
+                style={{
+                  fontSize: '32px',
+                  textAlign: 'center',
+                  marginTop: '15px',
+                }}
+              >
+                Der QnA Manager wird zur Zeit gewartet und steht Ihnen ab dem 6.
+                Dezember wieder zur Verfügung.
+              </Box>
+              <Box style={{ fontSize: '32px', marginTop: '15px' }}>
+                Wir danken Ihnen für Ihre Geduld.
+              </Box>
+            </Box>
+          ) : (
+            'Loading...'
+          )}
         </Typography>
       </Box>
     );
