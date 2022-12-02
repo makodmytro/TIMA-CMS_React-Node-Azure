@@ -195,7 +195,12 @@ const AsyncResources = () => {
   }, [location.pathname, tic]);
 
   //check for maintenance mode based on environment variables
-  const redirectToMaintenance = MAINTENANCE_MODE && !window.location.href.includes('admin=');
+  let isAdmin = window.location.href.includes('admin=') || sessionStorage.getItem('isAdmin') === 'true';
+  if (isAdmin) {
+    sessionStorage.setItem(admin, 'true');
+  }
+
+  const redirectToMaintenance = MAINTENANCE_MODE && !isAdmin;
 
   if (redirectToMaintenance || !ready) {
     return (
