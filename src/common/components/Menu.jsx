@@ -136,7 +136,7 @@ const Menu = ({ onMenuClick, logout }) => {
                 <Box mb={2} textAlign="center">
                   <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
                     {translate('Topic Sync Scheduled')}: <br />
-                    {(new Date(nextSyncScheduled)).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}
+                    {(new Date(nextSyncScheduled)).toLocaleString(navigator.language, { dateStyle: 'short', timeStyle: 'short' })}
                   </Typography>
                 </Box>
               )
