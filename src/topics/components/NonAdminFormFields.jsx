@@ -39,6 +39,7 @@ export const Qna = (props) => {
         record={props.record}
         fullWidth
         disabled={props.disabled === true}
+        validate={required()}
       />
       <TextInput
         source="qnaMetadataValue"
@@ -46,6 +47,7 @@ export const Qna = (props) => {
         record={props.record}
         fullWidth
         disabled={props.disabled === true}
+        validate={required()}
       />
     </>
   );
