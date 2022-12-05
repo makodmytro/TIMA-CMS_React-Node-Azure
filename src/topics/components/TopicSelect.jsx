@@ -9,6 +9,7 @@ import {
   useNotify,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
+import { Alert } from '@material-ui/lab';
 import PencilIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -305,6 +306,11 @@ const MultiTopicSelect = ({
           </>
         )
       }
+      {toggleEdit && (
+        <Alert severity="info">
+          {translate('resources.answers.topic_edit')}
+        </Alert>
+      )}
     </Box>
   );
 };

@@ -143,15 +143,15 @@ const Form = ({
         }
         {record?.isFollowupChild
         && (
-        <Typography variant="body2">
+          <Alert severity="info">
             {translate('resources.answers.allow_change_topic_false')}
-        </Typography>
+          </Alert>
         )}
       </Box>
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.isFollowupChild) || followupParentQuestions > 1}
+        disabled={disableEdit || (record && !record.isFollowupChild)}
       />
       {followupParentQuestions > 1 && <Alert severity="info">{translate('resources.users.workflow.errors.MAX_1_PARENT_FOR_CONTEXT_ONLY')}</Alert>}
       {
