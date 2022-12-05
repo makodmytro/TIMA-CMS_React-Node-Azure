@@ -18,11 +18,13 @@ const USE_AZURE_LOGIN = process.env.REACT_APP_USE_AZURE_LOGIN;
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [new BrowserTracing()],
-  tracesSampleRate: 1.0,
-});
+if (process.env.REACT_APP_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 1.0,
+  });
+}
 
 const Wrapper = ({ children }) => {
   if (USE_AZURE_LOGIN === '1') {
