@@ -291,6 +291,8 @@ const german = {
       status_can_not_change: 'Der Status kann nicht geändert werden',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
       allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
+      topic_edit: 'Dieses QnA hat Folgeantworten, diese werden auch mit in das gewünschte Thema verschoben. Bitte prüfe vorher, ob das korrekt ist.',
+      allow_change_topic_false: 'Du kannst das Thema einer Folgeantwort nicht unabhängig vom Thema der übergeordneten Antwort ändern. Bitte ändere auch das Thema der übergeordneten Antwort oder erstelle diese Folgeantwort in dem gewünschten Thema neu.',
       status: {
         createdAt: 'Datum',
         updatedBy: 'Editor',
@@ -378,7 +380,7 @@ const german = {
           MIN_3_QUESTIONS:
             'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
-            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort und kann deswegen nicht auf "Nur im Kontext" gesetzt werden',
+            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort. Wenn du sie auf "Nur im Kontext" setzt, wird sie für alle übergeordneten Antworten nur kontextbezogen ausgespielt',
         },
       },
       fields: {
