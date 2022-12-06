@@ -244,6 +244,7 @@ const english = {
       no_followup: 'There are no follow up questions',
       followup: 'Followup',
       use_as_suggestion: 'Use as suggestion',
+      duplicate_context_only_followups: 'You are creating a duplicate, this can just be triggered in context only.',
       topic_mismatch: 'Topics mismatch',
       topic_mismatch_bis: 'The selected record is linked to topic "%{a}". Linking will change the question\'s topic. Proceed?',
       topic_mismatch_explanation: 'The question is related to topic "%{a}" but the answer\'s topic is "%{b}".',

@@ -241,6 +241,7 @@ const german = {
       no_followup: 'Keine Folgefragen vorhanden',
       followup: 'Followup',
       use_as_suggestion: 'Als Vorschlag nutzen',
+      duplicate_context_only_followups: 'Du erstellst ein Duplikat, dieses kann nur kontextbezogen ausgespielt werden.',
       topic_mismatch: 'Thema stimmt nicht überein',
       topic_mismatch_bis: 'Der ausgewählte Eintrag ist mit Thema "%{a}" verlinkt. Durch die neue Verlinkung wird das Thema der Frage geändert. Fortfahren?',
       topic_mismatch_explanation: 'Die Frage bezieht sich auf das Thema "%{a}" aber das Thema der Antwort ist "%{b}".',
