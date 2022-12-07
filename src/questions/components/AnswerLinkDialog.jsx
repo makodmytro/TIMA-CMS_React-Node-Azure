@@ -24,6 +24,7 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
+import BackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import AnswerTextField from '../../answers/components/TextField';
 
@@ -70,9 +71,14 @@ const Filters = ({
             />
             {contextOnlySlider
               && (
-                <Alert severity="info">
-                  {translate('resources.questions.duplicate_context_only_followups')}
-                </Alert>
+                <>
+                  <Alert severity="info">
+                    {translate('resources.questions.duplicate_context_only_followups')}
+                  </Alert>
+                  <Alert severity="info">
+                    {translate('resources.answers.duplicate_answers')}
+                  </Alert>
+                </>
               )}
           </form>
         );
@@ -84,6 +90,7 @@ const Filters = ({
 const ResultsList = ({
   answers,
   onSelect,
+  contextOnlySlider,
 }) => {
   const translate = useTranslate();
 
@@ -91,7 +98,7 @@ const ResultsList = ({
     return null;
   }
 
-  if (!answers.length) {
+  if (!answers.length && !contextOnlySlider) {
     return (
       <Box p={2}>
         <Alert severity="info">
@@ -105,10 +112,12 @@ const ResultsList = ({
     <>
       <Table>
         <TableHead>
+          {!contextOnlySlider && (
           <TableRow>
             <TableCell>{translate('resources.answers.fields.text')}</TableCell>
             <TableCell>&nbsp;</TableCell>
           </TableRow>
+          )}
         </TableHead>
         <TableBody>
           {
@@ -242,6 +251,17 @@ const AnswerLinkDialog = ({ record, afterLink, isOpen = false, onClose = false, 
           <>
             <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
               <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
+                <Button
+                  color="secondary"
+                  size="small"
+                  onClick={() => {
+                    setOpen(false);
+                    createFinish?.();
+                  }}
+                >
+                  <BackIcon size="small" />
+                </Button>
+
                 <Box flex="2">
                   <Typography>{translate('misc.link_answer')}</Typography>
                 </Box>
@@ -260,7 +280,7 @@ const AnswerLinkDialog = ({ record, afterLink, isOpen = false, onClose = false, 
                     </Box>
                   )
                 }
-                <ResultsList answers={answersWithoutContextOnly} onSelect={onSelectLink} />
+                <ResultsList answers={answersWithoutContextOnly} contextOnlySlider={contextOnlySlider} onSelect={onSelectLink} />
               </Box>
             </Dialog>
           </>

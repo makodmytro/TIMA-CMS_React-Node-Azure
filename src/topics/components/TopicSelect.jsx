@@ -317,7 +317,7 @@ const MultiTopicSelect = ({
           </>
         )
       }
-      {toggleEdit && (
+      {(toggleEdit && record?.FollowupQuestions?.length !== 0) && (
         <Alert severity="info">
           {translate('resources.answers.topic_edit')}
         </Alert>

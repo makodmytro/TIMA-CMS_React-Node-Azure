@@ -135,7 +135,7 @@ const Form = ({
               label="resources.answers.fields.fk_topicId"
               editting={edit}
               record={record}
-              disabled={disableEdit || (record && record.isContextOnly)}
+              disabled={disableEdit}
               filterFunction={(t) => {
                 return t.allowCreateContent && t.fk_languageId === fkLanguageId;
               }}
@@ -146,7 +146,7 @@ const Form = ({
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.isFollowupChild)}
+        disabled={disableEdit}
       />
       {followupParentQuestions > 1 && <Alert severity="info">{translate('resources.users.workflow.errors.MAX_1_PARENT_FOR_CONTEXT_ONLY')}</Alert>}
       {
