@@ -146,7 +146,7 @@ const Form = ({
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.isFollowupChild)}
+        disabled={disableEdit}
       />
       {followupParentQuestions > 1 && <Alert severity="info">{translate('resources.users.workflow.errors.MAX_1_PARENT_FOR_CONTEXT_ONLY')}</Alert>}
       {
