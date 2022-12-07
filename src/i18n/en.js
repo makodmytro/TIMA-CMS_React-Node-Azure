@@ -297,7 +297,7 @@ const english = {
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
       topic_edit: 'This QnA has follow-up answers, these will also be moved to the desired topic. Please check if this is correct.',
-      allow_change_topic_false: 'You cannot change the topic of a follow-up reply independently of the topic of the parent reply. Please also change the topic of the parent answer or re-create this follow-up answer in the desired topic.',
+      allow_change_topic_false: 'You cannot change the topic of a follow-up reply. Please also change the topic of the parent answer or re-create this follow-up answer (context only) in the desired topic',
       steps: {
         topic: 'Select topic',
         questions: 'Create questions',
