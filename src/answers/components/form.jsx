@@ -135,7 +135,7 @@ const Form = ({
               label="resources.answers.fields.fk_topicId"
               editting={edit}
               record={record}
-              disabled={disableEdit || (record && record.isContextOnly)}
+              disabled={disableEdit}
               filterFunction={(t) => {
                 return t.allowCreateContent && t.fk_languageId === fkLanguageId;
               }}
