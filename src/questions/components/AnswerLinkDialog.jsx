@@ -24,6 +24,7 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
+import BackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import AnswerTextField from '../../answers/components/TextField';
 
@@ -242,6 +243,17 @@ const AnswerLinkDialog = ({ record, afterLink, isOpen = false, onClose = false, 
           <>
             <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
               <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
+                <Button
+                  color="secondary"
+                  size="small"
+                  onClick={() => {
+                    setOpen(false);
+                    createFinish?.();
+                  }}
+                >
+                  <BackIcon size="small" />
+                </Button>
+
                 <Box flex="2">
                   <Typography>{translate('misc.link_answer')}</Typography>
                 </Box>
