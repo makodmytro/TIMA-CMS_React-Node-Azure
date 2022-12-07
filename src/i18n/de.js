@@ -290,6 +290,7 @@ const german = {
       duplicate: 'Antwort duplizieren',
       status_history: 'Statusverlauf',
       status_can_not_change: 'Der Status kann nicht geändert werden',
+      duplicate_answers: 'Duplikate können nicht zu vorhandenen Antworten verlinkt werden, bitte erstelle eine neue Antwort',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
       allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
       topic_edit: 'Dieses QnA hat Folgeantworten, diese werden auch mit in das gewünschte Thema verschoben. Bitte prüfe vorher, ob das korrekt ist.',
