@@ -30,6 +30,7 @@ const MultiTopicSelect = ({
   label,
   anyLevelSelectable,
   filterFunction,
+  record,
 }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -254,20 +255,30 @@ const MultiTopicSelect = ({
       {
         !loading && (!editting || (editting && toggleEdit)) && (
           <>
-            <Box display="flex">
-              <Box flex={1} mr={1}>
-                <SelectInput
-                  source="topicOne"
-                  choices={filteredTopics}
-                  optionText="name"
-                  optionValue="id"
-                  label={TOPICS_LEVEL_LABELS[0]}
-                  fullWidth
-                  style={{ marginTop: '0px' }}
-                  disabled={disabled}
-                  validate={isRequired ? required() : null}
-                />
+            <Box display="flex" width="100%">
+              <Box display="flex" flexDirection="column" width="33%">
+
+                <Box flex={1} mr={1}>
+                  <SelectInput
+                    source="topicOne"
+                    choices={filteredTopics}
+                    optionText="name"
+                    optionValue="id"
+                    label={TOPICS_LEVEL_LABELS[0]}
+                    fullWidth
+                    style={{ marginTop: '0px' }}
+                    disabled={disabled || record?.isFollowupChild}
+                    validate={isRequired ? required() : null}
+                  />
+                </Box>
+                {record?.isFollowupChild
+                  && (
+                  <Alert severity="info">
+                    {translate('resources.answers.allow_change_topic_false')}
+                  </Alert>
+                  )}
               </Box>
+
               {
                 !!topicsChild.length && (!disabled || topicTwo) && (
                   <Box flex={1} mr={1}>
@@ -326,6 +337,7 @@ const TopicSelect = ({
   depth,
   allowEmpty,
   anyLevelSelectable,
+  record = [],
 }) => {
   if (!SELECT_TOPIC_LEVELS || SELECT_TOPIC_LEVELS === '0') {
     return (
@@ -359,6 +371,7 @@ const TopicSelect = ({
         label,
         anyLevelSelectable,
         filterFunction,
+        record,
       }}
     />
   );

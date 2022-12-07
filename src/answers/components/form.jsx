@@ -134,19 +134,14 @@ const Form = ({
               isRequired
               label="resources.answers.fields.fk_topicId"
               editting={edit}
-              disabled={disableEdit || (record && record.isContextOnly) || record?.isFollowupChild}
+              record={record}
+              disabled={disableEdit || (record && record.isContextOnly)}
               filterFunction={(t) => {
                 return t.allowCreateContent && t.fk_languageId === fkLanguageId;
               }}
             />
           )
         }
-        {record?.isFollowupChild
-        && (
-          <Alert severity="info">
-            {translate('resources.answers.allow_change_topic_false')}
-          </Alert>
-        )}
       </Box>
       <BooleanInput
         source="isContextOnly"
