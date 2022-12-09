@@ -49,6 +49,7 @@ export const Qna = (props) => {
   const translate = useTranslate();
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
+  const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
   return (
     <>
       <Typography>
@@ -63,6 +64,7 @@ export const Qna = (props) => {
             { id: TOPICS_METADATA_KEYS[0], name: TOPICS_METADATA_KEYS[0] },
             { id: TOPICS_METADATA_KEYS[1], name: TOPICS_METADATA_KEYS[1] },
             { id: TOPICS_METADATA_KEYS[2], name: TOPICS_METADATA_KEYS[2] },
+            existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey },
           ]}
           margin="dense"
           fullWidth
