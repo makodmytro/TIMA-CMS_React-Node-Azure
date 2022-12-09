@@ -68,6 +68,7 @@ const Filters = ({
               source="isContextOnly"
               label="resources.answers.fields.isContextOnly"
               defaultValue={contextOnlySlider || values.isContextOnly}
+              disabled={contextOnlySlider}
             />
             {contextOnlySlider
               && (
