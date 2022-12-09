@@ -22,36 +22,38 @@ const ActionsRow = ({ record }) => {
 
   return (
     <Box mb={2} display="flex">
-      <Box flex={6}>
-        <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
+      <Box display="flex" flexDirection="column" width="100%">
+        <Box flex={1} pb={2} width="150px" textAlign="center">
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            type="button"
+            onClick={() => setCreateOpen(true)}
+            disabled={disabled}
+            fullWidth
           >
-            <Typography>
-              {record.FollowupQuestions?.length || 0} {translate('resources.answers.followup_questions')}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box flex={1}>
-              <List record={record} />
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Box>
-      <Box flex={1} pl={2} pt={1} textAlign="center">
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          type="button"
-          onClick={() => setCreateOpen(true)}
-          disabled={disabled}
-          fullWidth
-        >
-          {translate('resources.questions.add_followup')}
-        </Button>
+            {translate('resources.questions.add_followup')}
+          </Button>
+        </Box>
+        <Box flex={6}>
+          <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1bh-content"
+              id="panel1bh-header"
+            >
+              <Typography>
+                {record.FollowupQuestions?.length || 0} {translate('resources.answers.followup_questions')}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box flex={1}>
+                <List record={record} />
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
       </Box>
       <SearchCreateDialog record={record} open={createOpen} onClose={() => setCreateOpen(false)} />
     </Box>
