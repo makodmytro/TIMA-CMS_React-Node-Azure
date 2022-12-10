@@ -241,8 +241,7 @@ const AsyncResources = () => {
                   marginTop: '15px',
                 }}
               >
-                Der QnA Manager wird zur Zeit gewartet und steht Ihnen ab dem 8.
-                Dezember wieder zur Verfügung.
+                Der QnA Manager wird zur Zeit gewartet und steht Ihnen bald wieder zur Verfügung.
               </Box>
               <Box style={{ fontSize: '32px', marginTop: '15px' }}>
                 Wir danken Ihnen für Ihre Geduld.
