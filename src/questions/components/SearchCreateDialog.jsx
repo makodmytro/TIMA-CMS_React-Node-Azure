@@ -169,6 +169,7 @@ const SearchCreateDialog = ({
   afterCreate,
   selectedButtonText,
   selectedButtonOnClick,
+  relatedOpen = false,
 }) => {
   const [selected, setSelected] = React.useState([]);
   const [questions, setQuestions] = React.useState(null);
@@ -180,7 +181,21 @@ const SearchCreateDialog = ({
   const [vals, setVals] = React.useState();
   const { refresh } = useAnswer();
 
-  const onCreateSubmit = async (values) => {
+  const onCreateRelatedSubmit = async (values) => {
+    try {
+      const { data } = await dataProvider.create('questions', {
+        data: {
+          ...values,
+          ...createInitialValues,
+        },
+      });
+      afterCreate(data);
+    } catch (e) {
+      notify(e?.body?.message || 'Unexpected error', 'error');
+    }
+  };
+
+  const onCreateFollowupSubmit = async (values) => {
     setVals(values);
     if (questions.map((el) => el.text === values.text).includes(true)) {
       setContextOnlySlider(true);
@@ -259,6 +274,7 @@ const SearchCreateDialog = ({
   if (!open) {
     return null;
   }
+  console.log(openAnswer);
   return (
     <>
 
@@ -281,7 +297,7 @@ const SearchCreateDialog = ({
           <Box p={2}>
             <Filters
               onSubmit={onFiltersSubmit}
-              onCreateSubmit={onCreateSubmit}
+              onCreateSubmit={relatedOpen ? onCreateRelatedSubmit : onCreateFollowupSubmit}
               selected={selected}
               onSelectedSubmit={onSelectedSubmit}
               selectedButtonText={selectedButtonText}
