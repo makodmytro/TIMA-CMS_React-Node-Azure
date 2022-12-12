@@ -124,36 +124,42 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questions.map((question, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <Checkbox
-                    checked={isSelected(question)}
-                    value={isSelected(question)}
-                    onClick={() => toggleSelect(question)}
-                    disabled={record?.id === question?.fk_answerId}
-                  />
-                </TableCell>
-                <TableCell>
-                  <PlayableTextField source="text" record={{ ...question }} />
-                </TableCell>
-                <TableCell style={{ width: '50%' }}>
-                  {
+            questions.map((question, i) => {
+              const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
+              return (
+                existedFollowup ? null
+                  : (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <Checkbox
+                          checked={isSelected(question)}
+                          value={isSelected(question)}
+                          onClick={() => toggleSelect(question)}
+                          disabled={record?.id === question?.fk_answerId}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <PlayableTextField source="text" record={{ ...question }} />
+                      </TableCell>
+                      <TableCell style={{ width: '50%' }}>
+                        {
                     question.fk_answerId && question?.fk_answerId !== record?.id && (
                       <AnswerField record={question} />
                     )
                   }
-                  {
-                    question?.fk_answerId === record?.id && (
+                        {
+                      question?.fk_answerId === record?.id && (
                       <>{translate('misc.already_linked')}</>
-                    )
+                      )
                   }
-                  {
+                        {
                     !question.fk_answerId && ('-')
                   }
-                </TableCell>
-              </TableRow>
-            ))
+                      </TableCell>
+                    </TableRow>
+                  )
+              );
+            })
           }
         </TableBody>
       </Table>
@@ -169,6 +175,7 @@ const SearchCreateDialog = ({
   afterCreate,
   selectedButtonText,
   selectedButtonOnClick,
+  relatedOpen = false,
 }) => {
   const [selected, setSelected] = React.useState([]);
   const [questions, setQuestions] = React.useState(null);
@@ -180,7 +187,21 @@ const SearchCreateDialog = ({
   const [vals, setVals] = React.useState();
   const { refresh } = useAnswer();
 
-  const onCreateSubmit = async (values) => {
+  const onCreateRelatedSubmit = async (values) => {
+    try {
+      const { data } = await dataProvider.create('questions', {
+        data: {
+          ...values,
+          ...createInitialValues,
+        },
+      });
+      afterCreate(data);
+    } catch (e) {
+      notify(e?.body?.message || 'Unexpected error', 'error');
+    }
+  };
+
+  const onCreateFollowupSubmit = async (values) => {
     setVals(values);
     if (questions.map((el) => el.text === values.text).includes(true)) {
       setContextOnlySlider(true);
@@ -281,7 +302,7 @@ const SearchCreateDialog = ({
           <Box p={2}>
             <Filters
               onSubmit={onFiltersSubmit}
-              onCreateSubmit={onCreateSubmit}
+              onCreateSubmit={relatedOpen ? onCreateRelatedSubmit : onCreateFollowupSubmit}
               selected={selected}
               onSelectedSubmit={onSelectedSubmit}
               selectedButtonText={selectedButtonText}

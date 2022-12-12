@@ -6,7 +6,7 @@ import {
 import QuestionsSearchCreateDialog from '../../../questions/components/SearchCreateDialog';
 import useAnswer from '../../useAnswer';
 
-const SearchCreateDialog = ({ record, open, onClose }) => {
+const SearchCreateDialog = ({ record, open, onClose, relatedOpen = false }) => {
   const { refresh } = useAnswer();
   const notify = useNotify();
   const dataProvider = useDataProvider();
@@ -42,6 +42,7 @@ const SearchCreateDialog = ({ record, open, onClose }) => {
   return (
     <QuestionsSearchCreateDialog
       open={open}
+      relatedOpen={relatedOpen}
       onClose={onClose}
       record={record}
       createInitialValues={{
