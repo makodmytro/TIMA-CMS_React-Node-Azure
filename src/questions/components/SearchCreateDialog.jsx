@@ -124,36 +124,42 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questions.map((question, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <Checkbox
-                    checked={isSelected(question)}
-                    value={isSelected(question)}
-                    onClick={() => toggleSelect(question)}
-                    disabled={record?.id === question?.fk_answerId}
-                  />
-                </TableCell>
-                <TableCell>
-                  <PlayableTextField source="text" record={{ ...question }} />
-                </TableCell>
-                <TableCell style={{ width: '50%' }}>
-                  {
+            questions.map((question, i) => {
+              const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
+              return (
+                existedFollowup ? null
+                  : (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <Checkbox
+                          checked={isSelected(question)}
+                          value={isSelected(question)}
+                          onClick={() => toggleSelect(question)}
+                          disabled={record?.id === question?.fk_answerId}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <PlayableTextField source="text" record={{ ...question }} />
+                      </TableCell>
+                      <TableCell style={{ width: '50%' }}>
+                        {
                     question.fk_answerId && question?.fk_answerId !== record?.id && (
                       <AnswerField record={question} />
                     )
                   }
-                  {
-                    question?.fk_answerId === record?.id && (
+                        {
+                      question?.fk_answerId === record?.id && (
                       <>{translate('misc.already_linked')}</>
-                    )
+                      )
                   }
-                  {
+                        {
                     !question.fk_answerId && ('-')
                   }
-                </TableCell>
-              </TableRow>
-            ))
+                      </TableCell>
+                    </TableRow>
+                  )
+              );
+            })
           }
         </TableBody>
       </Table>
@@ -274,7 +280,6 @@ const SearchCreateDialog = ({
   if (!open) {
     return null;
   }
-  console.log(openAnswer);
   return (
     <>
 
