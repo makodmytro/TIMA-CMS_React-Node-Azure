@@ -46,7 +46,7 @@ const ContextOnlySwitchField = ({ record, disabled, afterEdit }) => {
         update(e.target.checked);
       }}
       checked={!!record.isContextOnly}
-      disabled={disabled === true}
+      disabled={disabled}
     />
   );
 };

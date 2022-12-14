@@ -112,7 +112,7 @@ const FollowupQuestionsTable = ({
                   <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
                 </TableCell>
                 <TableCell>
-                  <ContextOnlySwitchField disabled={false} record={related} afterEdit={refresh} />
+                  <ContextOnlySwitchField disabled={related.isDuplicated} record={related} afterEdit={refresh} />
                 </TableCell>
                 <TableCell>
                   <StatusInputSection record={related.Answer} disabled={false} />
