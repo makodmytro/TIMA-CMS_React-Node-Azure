@@ -205,6 +205,8 @@ const SearchCreateDialog = ({
     setVals(values);
     if (questions.map((el) => el.text === values.text).includes(true)) {
       setContextOnlySlider(true);
+    } else {
+      setContextOnlySlider(false);
     }
     if (!questions.length || !selected.length) {
       setOpenAnswer(true);
