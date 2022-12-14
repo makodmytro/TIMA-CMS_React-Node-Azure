@@ -32,6 +32,20 @@ const styles = makeStyles((theme) => ({
     fontSize: '0.8rem',
     marginRight: '5px',
   },
+  followupQuestion: {
+    width: 'fit-content',
+    marginTop: '10px',
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white',
+    borderRadius: '15px',
+    padding: theme.spacing(2),
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main,
+    },
+  },
+  link: {
+    textDecoration: 'underline',
+  },
   input: {
     backgroundColor: theme.palette.primary.main,
     color: 'white',
@@ -162,15 +176,38 @@ const TestAsk = ({ languages, topics }) => {
                 </Box>
                 {!!response[i] && (
                   <Box display="flex" alignItems="center" mt={1}>
-                    <div className={classes.output}>
-                      <Typography component="span">
-                        {response[i].text}
-                      </Typography>
+                    <Box display="flex" flexDirection="column" width="100%">
+                      <Box display="flex">
+                        <div className={classes.output}>
+                          <Typography component="span">
+                            {response[i].text}
+                          </Typography>
 
-                    </div>
-                    <Button onClick={() => setModal(true)}>
-                      <InfoIcon />
-                    </Button>
+                        </div>
+                        <Button onClick={() => setModal(true)}>
+                          <InfoIcon />
+                        </Button>
+                      </Box>
+                      <Box display="flex" flexDirection="column">
+                        {response[i]?.followupQuestions?.map((followup, index) => {
+                          return (
+                            <Box key={index} display="flex">
+                              <Button
+                                className={classes.followupQuestion}
+                                onClick={() => {
+                                  onSubmit({ createdAt: new Date(), languageId: languages && languages.length ? languages[0].id : '', topicId: '', question: followup.text });
+                                }}
+                                key={i}
+                                component="span"
+                              >
+                                {index + 1}.{followup.text}?
+                              </Button>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+
+                    </Box>
                     <Dialog
                       fullWidth
                       open={modal}
@@ -178,66 +215,66 @@ const TestAsk = ({ languages, topics }) => {
                       aria-label="Show info"
                     >
                       {!loading && (!!response[i]) && (
-                      <Box p={2}>
-                        <Row label="Score" value={response[i].score} />
-                        <Row
-                          label={translate('misc.answer_id')}
-                          value={
-                            !response[i].answerId
-                              ? '-'
-                              : <Link to={`/answers/${response[i].answerId}`}>{response[i].answerId}</Link>
+                        <Box p={2}>
+                          <Row label="Score" value={response[i].score} />
+                          <Row
+                            label={translate('misc.answer_id')}
+                            value={
+                              !response[i].answerId
+                                ? '-'
+                                : <Link className={classes.link} to={`/answers/${response[i].answerId}`}>{response[i].answerId}</Link>
+                            }
+                          />
+                          <Row
+                            label={translate('misc.question_id')}
+                            value={
+                              !response[i].questionId
+                                ? '-'
+                                : <Link className={classes.link} to={`/questions/${response[i].questionId}`}>{response[i].questionId}</Link>
+                            }
+                          />
+                          <Row
+                            label={translate('misc.topic_id')}
+                            value={
+                              !response[i].topicId
+                                ? '-'
+                                : <Link className={classes.link} to={`/topics/${response[i].topicId}`}>{response[i].topicId}</Link>
+                            }
+                          />
+                          <Row label={translate('misc.request_time_seconds')} value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0} />
+                          {
+                            response[i].suggestions && !!response[i].suggestions.length && (
+                              <>
+                                <Typography variant="h6">{translate('misc.suggestions')}</Typography>
+                                {
+                                  response[i].suggestions.map((s, index) => (
+                                    <Box key={index} boxShadow={3} p={2} mb={2}>
+                                      <Row label={translate('misc.answer')} value={s.answer} />
+                                      <Row
+                                        label="ID"
+                                        value={
+                                          !s.id || s.id === 'NO_SUGGESTION'
+                                            ? '-'
+                                            : <Link className={classes.link} to={`/questions/${s.id}`}>{s.id}</Link>
+                                        }
+                                      />
+                                      <Row label={translate('misc.score')} value={s.score} />
+                                      <Row label={translate('misc.text')} value={s.text} />
+                                      <Row
+                                        label={translate('misc.topic_id')}
+                                        value={
+                                          !s.topicId
+                                            ? '-'
+                                            : <Link className={classes.link} to={`/topics/${s.topicId}`}>{s.topicId}</Link>
+                                        }
+                                      />
+                                    </Box>
+                                  ))
+                                }
+                              </>
+                            )
                           }
-                        />
-                        <Row
-                          label={translate('misc.question_id')}
-                          value={
-                            !response[i].questionId
-                              ? '-'
-                              : <Link to={`/questions/${response[i].questionId}`}>{response[i].questionId}</Link>
-                          }
-                        />
-                        <Row
-                          label={translate('misc.topic_id')}
-                          value={
-                            !response[i].topicId
-                              ? '-'
-                              : <Link to={`/topics/${response[i].topicId}`}>{response[i].topicId}</Link>
-                          }
-                        />
-                        <Row label={translate('misc.request_time_seconds')} value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0} />
-                        {
-                          response[i].suggestions && !!response[i].suggestions.length && (
-                            <>
-                              <Typography variant="h6">{translate('misc.suggestions')}</Typography>
-                              {
-                                response[i].suggestions.map((s, index) => (
-                                  <Box key={index} boxShadow={3} p={2} mb={2}>
-                                    <Row label={translate('misc.answer')} value={s.answer} />
-                                    <Row
-                                      label="ID"
-                                      value={
-                                        !s.id || s.id === 'NO_SUGGESTION'
-                                          ? '-'
-                                          : <Link to={`/questions/${s.id}`}>{s.id}</Link>
-                                      }
-                                    />
-                                    <Row label={translate('misc.score')} value={s.score} />
-                                    <Row label={translate('misc.text')} value={s.text} />
-                                    <Row
-                                      label={translate('misc.topic_id')}
-                                      value={
-                                        !s.topicId
-                                          ? '-'
-                                          : <Link to={`/topics/${s.topicId}`}>{s.topicId}</Link>
-                                      }
-                                    />
-                                  </Box>
-                                ))
-                              }
-                            </>
-                          )
-                        }
-                      </Box>
+                        </Box>
                       )}
                     </Dialog>
                   </Box>
