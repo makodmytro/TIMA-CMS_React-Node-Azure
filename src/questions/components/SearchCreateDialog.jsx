@@ -125,6 +125,7 @@ const ResultsList = ({
         <TableBody>
           {
             questions.map((question, i) => {
+              //disable to link to the exact same followup that already related to this answer
               const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
               return (
                 existedFollowup ? null
