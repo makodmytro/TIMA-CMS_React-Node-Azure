@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Alert } from '@material-ui/lab';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import useAnswer from '../useAnswer';
 
@@ -187,15 +188,21 @@ const StatusInput = ({ record, disabled }) => {
                     }
                   </Box>
                   {record?.FollowupQuestions && (
-                  <Box flex={1} textAlign="center" mt={2}>
-                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
-                      {translate('misc.add_comment')}
-                    </Button>
-                  </Box>
+                    <Box flex={1} textAlign="center" mt={2}>
+                      <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
+                        {translate('misc.add_comment')}
+                      </Button>
+                    </Box>
                   )}
 
                 </Box>
-
+                {record?.FollowupQuestions && record?.FollowupQuestions?.length !== 0 && (
+                  <Box mb={3}>
+                    <Alert severity="info">
+                      {translate('resources.answers.status.followup_status')}
+                    </Alert>
+                  </Box>
+                )}
                 <Button style={{ height: '40px', marginBottom: `${!record?.FollowupQuestions && '15px'}` }} type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>

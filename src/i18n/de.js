@@ -293,11 +293,11 @@ const german = {
       duplicate_answers: 'Duplikate können nicht zu vorhandenen Antworten verlinkt werden, bitte erstelle eine neue Antwort',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
       allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
-      topic_edit: 'Dieses QnA hat Folgeantworten, diese werden auch mit in das gewünschte Thema verschoben. Bitte prüfe vorher, ob das korrekt ist.',
-      allow_change_topic_false: 'Du kannst den Fachbereich einer Folgeantwort nicht ändern. Bitte ändere den Fachbereich der übergeordneten Antwort oder erstelle diese Folgeantwort (nur im Kontext) im gewünschten Fachbereich neu.',
+      topic_edit: 'Dieses QnA hat Folgeantworten. Bitte prüfe, ob diese auch in das gewünschte Thema verschoben werden sollten.',
       status: {
         createdAt: 'Datum',
         updatedBy: 'Editor',
+        followup_status: 'Dieses QnA hat Folgeantworten. Bitte prüfe, ob deren Status auch geändert werden sollte.',
         status: 'Status',
         comment: 'Kommentar',
       },
