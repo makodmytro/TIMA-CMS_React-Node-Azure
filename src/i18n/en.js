@@ -297,8 +297,7 @@ const english = {
       duplicate_answers: 'Duplicates can´t be linked to existing answers, please create a new answer',
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
-      topic_edit: 'This QnA has follow-up answers, these will also be moved to the desired topic. Please check if this is correct.',
-      allow_change_topic_false: 'You cannot change the topic of a follow-up reply. Please also change the topic of the parent answer or re-create this follow-up answer (context only) in the desired topic',
+      topic_edit: 'This QnA has follow-up answers, please check if these should be moved to the desired topic as well.',
       steps: {
         topic: 'Select topic',
         questions: 'Create questions',
@@ -307,6 +306,7 @@ const english = {
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
+        followup_status: 'This QnA has follow-up answers, please check if their status should be changed as well',
         status: 'Status',
         comment: 'Comment',
       },

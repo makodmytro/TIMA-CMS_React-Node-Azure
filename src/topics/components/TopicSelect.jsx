@@ -267,16 +267,10 @@ const MultiTopicSelect = ({
                     label={TOPICS_LEVEL_LABELS[0]}
                     fullWidth
                     style={{ marginTop: '0px' }}
-                    disabled={disabled || record?.isFollowupChild}
+                    disabled={disabled}
                     validate={isRequired ? required() : null}
                   />
                 </Box>
-                {record?.isFollowupChild
-                  && (
-                  <Alert severity="info">
-                    {translate('resources.answers.allow_change_topic_false')}
-                  </Alert>
-                  )}
               </Box>
 
               {
