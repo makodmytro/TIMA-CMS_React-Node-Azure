@@ -92,7 +92,7 @@ const DraftInput = ({
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'history', 'image'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },
@@ -103,8 +103,13 @@ const DraftInput = ({
             },
             image: {
               uploadEnabled: false,
-              previewImage: true,
-            }
+              previewImage: false,
+              alignmentEnabled: false,
+              defaultSize: {
+                height: 'auto',
+                width: 'auto',
+              },
+            },
           }}
         />
         <HiddenField fieldName="spokenText">
