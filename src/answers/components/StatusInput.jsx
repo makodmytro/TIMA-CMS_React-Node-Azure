@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Alert } from '@material-ui/lab';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import useAnswer from '../useAnswer';
 
@@ -162,7 +163,12 @@ const StatusInput = ({ record, disabled }) => {
           enableReinitialize
           render={({ handleSubmit, valid, pristine }) => {
             return (
-              <form onSubmit={handleSubmit}>
+              <form
+                style={{ display: `${!record?.FollowupQuestions && 'flex'}`,
+                  justifyContent: `${!record?.FollowupQuestions && 'space-between'}`,
+                  alignItems: `${!record?.FollowupQuestions && 'center'}` }}
+                onSubmit={handleSubmit}
+              >
                 <Box display="flex">
                   <Box flex={4}>
                     <SelectInput
@@ -181,14 +187,23 @@ const StatusInput = ({ record, disabled }) => {
                       )
                     }
                   </Box>
-                  <Box flex={1} textAlign="center" mt={2}>
-                    <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
-                      {translate('misc.add_comment')}
-                    </Button>
-                  </Box>
-                </Box>
+                  {record?.FollowupQuestions && (
+                    <Box flex={1} textAlign="center" mt={2}>
+                      <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
+                        {translate('misc.add_comment')}
+                      </Button>
+                    </Box>
+                  )}
 
-                <Button type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
+                </Box>
+                {record?.FollowupQuestions && record?.FollowupQuestions?.length !== 0 && (
+                  <Box mb={3}>
+                    <Alert severity="info">
+                      {translate('resources.answers.status.followup_status')}
+                    </Alert>
+                  </Box>
+                )}
+                <Button style={{ height: '40px', marginBottom: `${!record?.FollowupQuestions && '15px'}` }} type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
                   <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                 </Button>
               </form>
@@ -205,20 +220,24 @@ const StatusInputSection = ({ record, disabled }) => {
 
   return (
     <Box width="100%">
-      <Accordion defaultExpanded>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography>
-            {translate('resources.answers.status.status')}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <StatusInput record={record} disabled={disabled} />
-        </AccordionDetails>
-      </Accordion>
+      {record?.FollowupQuestions ? (
+        <Accordion defaultExpanded>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+          >
+
+            <Typography>
+              {translate('resources.answers.status.status')}
+            </Typography>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <StatusInput record={record} disabled={disabled} />
+          </AccordionDetails>
+        </Accordion>
+      ) : <StatusInput record={record} disabled={disabled} />}
     </Box>
   );
 };

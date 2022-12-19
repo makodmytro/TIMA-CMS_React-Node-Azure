@@ -14,6 +14,7 @@ const ActionsRow = ({ record }) => {
   const translate = useTranslate();
   const [expanded, setExpanded] = React.useState(true);
   const [createOpen, setCreateOpen] = React.useState(false);
+  const [relatedOpen, setRelatedOpen] = React.useState(false);
   const disabled = record && record.allowEdit === false;
 
   if (!record) {
@@ -46,14 +47,17 @@ const ActionsRow = ({ record }) => {
           variant="contained"
           color="secondary"
           type="button"
-          onClick={() => setCreateOpen(true)}
+          onClick={() => {
+            setCreateOpen(true);
+            setRelatedOpen(true);
+          }}
           disabled={disabled}
           fullWidth
         >
           {translate('resources.questions.add_related')}
         </Button>
       </Box>
-      <SearchCreateDialog record={record} open={createOpen} onClose={() => setCreateOpen(false)} />
+      <SearchCreateDialog relatedOpen={relatedOpen} record={record} open={createOpen} onClose={() => setCreateOpen(false)} />
     </Box>
   );
 };

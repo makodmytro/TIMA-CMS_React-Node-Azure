@@ -21,6 +21,8 @@ import ApprovedSwitchField from '../../../questions/components/approved-switch-f
 import UseAsSuggestionSwitchField from '../../../questions/components/use-as-suggestion-switch-field';
 import { useDisabledApprove } from '../../../hooks';
 import useAnswer from '../../useAnswer';
+import StatusInputSection from '../StatusInput';
+import ContextOnlySwitchField from '../../../questions/components/ContextOnlySwitchField';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
@@ -69,6 +71,8 @@ const FollowupQuestionsTable = ({
           <TableCell>&nbsp;</TableCell>
           <TableCell>{translate('resources.questions.fields.contextOnly')}</TableCell>
           <TableCell>&nbsp;</TableCell>
+          <TableCell>&nbsp;</TableCell>
+
         </TableRow>
       </TableHead>
       <TableBody>
@@ -93,26 +97,25 @@ const FollowupQuestionsTable = ({
                   />
                 </TableCell>
                 {
-                  !USE_WORKFLOW && (
-                    <>
-                      <TableCell>
-                        <ApprovedSwitchField record={related} disabled={disabledApproved} />
-                      </TableCell>
-                      <TableCell>
-                        <UseAsSuggestionSwitchField record={related} disabled={disabled} />
-                      </TableCell>
-                    </>
-                  )
-                }
+                    !USE_WORKFLOW && (
+                      <>
+                        <TableCell>
+                          <ApprovedSwitchField record={related} disabled={disabledApproved} />
+                        </TableCell>
+                        <TableCell>
+                          <UseAsSuggestionSwitchField record={related} disabled={disabled} />
+                        </TableCell>
+                      </>
+                    )
+                  }
                 <TableCell>
                   <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
                 </TableCell>
                 <TableCell>
-                  <BooleanField
-                    record={{ ...related, isContextOnly: related.isContextOnly }}
-                    source="isContextOnly"
-                    label={translate('resources.questions.fields.contextOnly')}
-                  />
+                  <ContextOnlySwitchField disabled={related.isDuplicated} record={related} afterEdit={refresh} />
+                </TableCell>
+                <TableCell>
+                  <StatusInputSection record={related.Answer} disabled={false} />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu
@@ -121,16 +124,16 @@ const FollowupQuestionsTable = ({
                     disabled={disabled}
                     onEditCallback={refresh}
                     deleteComponent={record?.allowDelete !== false && (
-                      <Button
-                        onClick={() => onDelete(related.id)}
-                        type="button"
-                        size="small"
-                        style={{ justifyContent: 'flex-start', color: '#d64242' }}
-                        disabled={record?.allowDelete === false}
-                        fullWidth
-                      >
-                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
-                      </Button>
+                    <Button
+                      onClick={() => onDelete(related.id)}
+                      type="button"
+                      size="small"
+                      style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                      disabled={record?.allowDelete === false}
+                      fullWidth
+                    >
+                      <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
+                    </Button>
                     )}
                   />
                 </TableCell>

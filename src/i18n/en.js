@@ -244,6 +244,7 @@ const english = {
       no_followup: 'There are no follow up questions',
       followup: 'Followup',
       use_as_suggestion: 'Use as suggestion',
+      duplicate_context_only_followups: 'You are creating a duplicate, this can just be triggered in context only.',
       topic_mismatch: 'Topics mismatch',
       topic_mismatch_bis: 'The selected record is linked to topic "%{a}". Linking will change the question\'s topic. Proceed?',
       topic_mismatch_explanation: 'The question is related to topic "%{a}" but the answer\'s topic is "%{b}".',
@@ -293,8 +294,10 @@ const english = {
       add_related_question: 'Add related question',
       status_history: 'Status history',
       status_can_not_change: 'The status can not be changed',
+      duplicate_answers: 'Duplicates can´t be linked to existing answers, please create a new answer',
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
+      topic_edit: 'This QnA has follow-up answers, please check if these should be moved to the desired topic as well.',
       steps: {
         topic: 'Select topic',
         questions: 'Create questions',
@@ -303,6 +306,7 @@ const english = {
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
+        followup_status: 'This QnA has follow-up answers, please check if their status should be changed as well',
         status: 'Status',
         comment: 'Comment',
       },
@@ -383,7 +387,7 @@ const english = {
           MIN_3_QUESTIONS:
             'At least 3 questions are required when creating a new answer',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
-            'This follow up QnA has more than 1 parent and can´t be set to "context only"',
+            'This follow up QnA has more than 1 parent. If you set it to "context only", it will be triggered for all parent responses only in context',
         },
       },
       fields: {

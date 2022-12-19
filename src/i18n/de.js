@@ -241,6 +241,7 @@ const german = {
       no_followup: 'Keine Folgefragen vorhanden',
       followup: 'Followup',
       use_as_suggestion: 'Als Vorschlag nutzen',
+      duplicate_context_only_followups: 'Du erstellst ein Duplikat, dieses kann nur kontextbezogen ausgespielt werden.',
       topic_mismatch: 'Thema stimmt nicht überein',
       topic_mismatch_bis: 'Der ausgewählte Eintrag ist mit Thema "%{a}" verlinkt. Durch die neue Verlinkung wird das Thema der Frage geändert. Fortfahren?',
       topic_mismatch_explanation: 'Die Frage bezieht sich auf das Thema "%{a}" aber das Thema der Antwort ist "%{b}".',
@@ -289,11 +290,14 @@ const german = {
       duplicate: 'Antwort duplizieren',
       status_history: 'Statusverlauf',
       status_can_not_change: 'Der Status kann nicht geändert werden',
+      duplicate_answers: 'Duplikate können nicht zu vorhandenen Antworten verlinkt werden, bitte erstelle eine neue Antwort',
       no_possible_status: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte kontaktiere das Edison-Team',
       allow_edit_false: 'Du kannst die Antwort mit dem aktuellen Status nicht bearbeiten: %{status} - bitte ändere den Status',
+      topic_edit: 'Dieses QnA hat Folgeantworten. Bitte prüfe, ob diese auch in das gewünschte Thema verschoben werden sollten.',
       status: {
         createdAt: 'Datum',
         updatedBy: 'Editor',
+        followup_status: 'Dieses QnA hat Folgeantworten. Bitte prüfe, ob deren Status auch geändert werden sollte.',
         status: 'Status',
         comment: 'Kommentar',
       },
@@ -378,7 +382,7 @@ const german = {
           MIN_3_QUESTIONS:
             'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
-            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort und kann deswegen nicht auf "Nur im Kontext" gesetzt werden',
+            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort. Wenn du sie auf "Nur im Kontext" setzt, wird sie für alle übergeordneten Antworten nur kontextbezogen ausgespielt',
         },
       },
       fields: {

@@ -8,13 +8,18 @@ import { useField } from 'react-final-form'; // eslint-disable-line
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToMarkdown } from 'draft-js-export-markdown';
 import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
 import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
 // import editorStyles from './editorStyles.module.css';
+import { marked } from 'marked';
+import draftToHtml from 'draftjs-to-html';
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
+import htmlToDraft from 'html-to-draftjs';
+
 import PlayableText from '../../common/components/playable-text';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
@@ -46,14 +51,31 @@ const DraftInput = ({
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      //remove double line breaks
-      const fixedValue = value.replace(/\n\s*\n/g, '\n').replace(/_/g, '*');
-      const rawData = mdToDraftjs(fixedValue);
-      const contentState = convertFromRaw(rawData);
+      const fixedValue = value.replace(/\n\s*\n/g, '\n') //remove double line breaks
+        .replace(/(?<!\]\()(https?:\/\/[^\s]+)(?=\))/g, (match) => match.replace(/_/g, '*')) //replace underscores with asterisks just if it's not part of a link
+        .replace(/alt="undefined"/g, ''); //remove alt="undefined" from images
 
+      /*const rawData = mdToDraftjs(fixedValue);
+      const contentState = convertFromRaw(rawData);*/
+
+      const html = marked.parse(fixedValue);
+      const blocksFromHtml = htmlToDraft(html);
+      const { contentBlocks, entityMap } = blocksFromHtml;
+      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
       setState(EditorState.createWithContent(contentState));
     }
   }, [value]);
+
+  const convertDraftJsStateToMarkdown = (contentState) => {
+    //return stateToMarkdown(contentState);
+    const rawContentState = convertToRaw(contentState);
+
+    const convertedHTML = draftToHtml(rawContentState);
+    const mdFromHtml = NodeHtmlMarkdown.translate(convertedHTML, { bulletMarker: '-', keepDataImages: false });
+
+    return mdFromHtml;
+  };
+
   return (
     <>
       <InputLabel error={invalid}>{translate(label)}</InputLabel>
@@ -61,7 +83,7 @@ const DraftInput = ({
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
-            onChange(stateToMarkdown(v.getCurrentContent()));
+            onChange(convertDraftJsStateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
           plugins={plugins}
@@ -70,7 +92,7 @@ const DraftInput = ({
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'remove', 'history', 'list', 'image'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'history', 'image'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },
@@ -81,8 +103,13 @@ const DraftInput = ({
             },
             image: {
               uploadEnabled: false,
-              previewImage: true,
-            }
+              previewImage: false,
+              alignmentEnabled: false,
+              defaultSize: {
+                height: 'auto',
+                width: 'auto',
+              },
+            },
           }}
         />
         <HiddenField fieldName="spokenText">

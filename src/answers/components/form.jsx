@@ -11,6 +11,7 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { connect, useSelector } from 'react-redux';
+import { Typography } from '@material-ui/core';
 import TagsInput from './tags-input';
 import MarkdownInput from './MarkdownInput';
 import TopicSelect from '../../topics/components/TopicSelect';
@@ -133,7 +134,8 @@ const Form = ({
               isRequired
               label="resources.answers.fields.fk_topicId"
               editting={edit}
-              disabled={disableEdit || (record && record.isContextOnly)}
+              record={record}
+              disabled={disableEdit}
               filterFunction={(t) => {
                 return t.allowCreateContent && t.fk_languageId === fkLanguageId;
               }}
@@ -144,7 +146,7 @@ const Form = ({
       <BooleanInput
         source="isContextOnly"
         label="resources.answers.fields.isContextOnly"
-        disabled={disableEdit || (record && !record.isFollowupChild) || followupParentQuestions > 1}
+        disabled={disableEdit}
       />
       {followupParentQuestions > 1 && <Alert severity="info">{translate('resources.users.workflow.errors.MAX_1_PARENT_FOR_CONTEXT_ONLY')}</Alert>}
       {

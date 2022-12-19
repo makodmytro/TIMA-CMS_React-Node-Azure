@@ -9,6 +9,7 @@ import {
   useNotify,
 } from 'react-admin';
 import Button from '@material-ui/core/Button';
+import { Alert } from '@material-ui/lab';
 import PencilIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -29,6 +30,7 @@ const MultiTopicSelect = ({
   label,
   anyLevelSelectable,
   filterFunction,
+  record,
 }) => {
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -253,20 +255,24 @@ const MultiTopicSelect = ({
       {
         !loading && (!editting || (editting && toggleEdit)) && (
           <>
-            <Box display="flex">
-              <Box flex={1} mr={1}>
-                <SelectInput
-                  source="topicOne"
-                  choices={filteredTopics}
-                  optionText="name"
-                  optionValue="id"
-                  label={TOPICS_LEVEL_LABELS[0]}
-                  fullWidth
-                  style={{ marginTop: '0px' }}
-                  disabled={disabled}
-                  validate={isRequired ? required() : null}
-                />
+            <Box display="flex" width="100%">
+              <Box display="flex" flexDirection="column" width="33%">
+
+                <Box flex={1} mr={1}>
+                  <SelectInput
+                    source="topicOne"
+                    choices={filteredTopics}
+                    optionText="name"
+                    optionValue="id"
+                    label={TOPICS_LEVEL_LABELS[0]}
+                    fullWidth
+                    style={{ marginTop: '0px' }}
+                    disabled={disabled}
+                    validate={isRequired ? required() : null}
+                  />
+                </Box>
               </Box>
+
               {
                 !!topicsChild.length && (!disabled || topicTwo) && (
                   <Box flex={1} mr={1}>
@@ -305,6 +311,11 @@ const MultiTopicSelect = ({
           </>
         )
       }
+      {(toggleEdit && record?.FollowupQuestions?.length !== 0) && (
+        <Alert severity="info">
+          {translate('resources.answers.topic_edit')}
+        </Alert>
+      )}
     </Box>
   );
 };
@@ -320,6 +331,7 @@ const TopicSelect = ({
   depth,
   allowEmpty,
   anyLevelSelectable,
+  record = [],
 }) => {
   if (!SELECT_TOPIC_LEVELS || SELECT_TOPIC_LEVELS === '0') {
     return (
@@ -353,6 +365,7 @@ const TopicSelect = ({
         label,
         anyLevelSelectable,
         filterFunction,
+        record,
       }}
     />
   );

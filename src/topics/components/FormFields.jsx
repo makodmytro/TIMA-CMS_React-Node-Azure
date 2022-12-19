@@ -47,22 +47,42 @@ export const Advanced = (props) => {
 
 export const Qna = (props) => {
   const translate = useTranslate();
-
+  const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
+  const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
+  const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
   return (
     <>
       <Typography>
         {translate('misc.qna')}
       </Typography>
-      <TextInput
-        source="qnaMetadataKey"
-        label="resources.topics.fields.qnaMetadataKey"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-      />
+      {TOPICS_METADATA_KEYS ? (
+        <SelectInput
+          source="qnaMetadataKey"
+          label="resources.topics.fields.qnaMetadataKey"
+          validate={TOPICS_METADATA && required()}
+          choices={[
+            { id: TOPICS_METADATA_KEYS[0], name: TOPICS_METADATA_KEYS[0] },
+            { id: TOPICS_METADATA_KEYS[1], name: TOPICS_METADATA_KEYS[1] },
+            { id: TOPICS_METADATA_KEYS[2], name: TOPICS_METADATA_KEYS[2] },
+            existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey },
+          ]}
+          margin="dense"
+          fullWidth
+        />
+      ) : (
+        <TextInput
+          source="qnaMetadataKey"
+          label="resources.topics.fields.qnaMetadataKey"
+          validate={TOPICS_METADATA && required()}
+          record={props.record}
+          fullWidth
+          disabled={props.disabled === true}
+        />
+      )}
       <TextInput
         source="qnaMetadataValue"
         label="resources.topics.fields.qnaMetadataValue"
+        validate={TOPICS_METADATA && required()}
         record={props.record}
         fullWidth
         disabled={props.disabled === true}

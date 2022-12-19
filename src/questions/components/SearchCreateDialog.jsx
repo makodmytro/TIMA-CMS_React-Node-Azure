@@ -27,6 +27,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextField } from '../../common/components/playable-text';
 import AnswerField from './AnswerField';
 import { useDisabledCreate } from '../../hooks';
+import AnswerLinkDialog from './AnswerLinkDialog';
+import useAnswer from '../../answers/useAnswer';
 
 const Filters = ({
   onSubmit,
@@ -122,36 +124,43 @@ const ResultsList = ({
         </TableHead>
         <TableBody>
           {
-            questions.map((question, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <Checkbox
-                    checked={isSelected(question)}
-                    value={isSelected(question)}
-                    onClick={() => toggleSelect(question)}
-                    disabled={record?.id === question?.fk_answerId}
-                  />
-                </TableCell>
-                <TableCell>
-                  <PlayableTextField source="text" record={{ ...question }} />
-                </TableCell>
-                <TableCell style={{ width: '50%' }}>
-                  {
+            questions.map((question, i) => {
+              //disable to link to the exact same followup that already related to this answer
+              const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
+              return (
+                existedFollowup ? null
+                  : (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <Checkbox
+                          checked={isSelected(question)}
+                          value={isSelected(question)}
+                          onClick={() => toggleSelect(question)}
+                          disabled={record?.id === question?.fk_answerId}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <PlayableTextField source="text" record={{ ...question }} />
+                      </TableCell>
+                      <TableCell style={{ width: '50%' }}>
+                        {
                     question.fk_answerId && question?.fk_answerId !== record?.id && (
                       <AnswerField record={question} />
                     )
                   }
-                  {
-                    question?.fk_answerId === record?.id && (
+                        {
+                      question?.fk_answerId === record?.id && (
                       <>{translate('misc.already_linked')}</>
-                    )
+                      )
                   }
-                  {
+                        {
                     !question.fk_answerId && ('-')
                   }
-                </TableCell>
-              </TableRow>
-            ))
+                      </TableCell>
+                    </TableRow>
+                  )
+              );
+            })
           }
         </TableBody>
       </Table>
@@ -167,14 +176,19 @@ const SearchCreateDialog = ({
   afterCreate,
   selectedButtonText,
   selectedButtonOnClick,
+  relatedOpen = false,
 }) => {
   const [selected, setSelected] = React.useState([]);
   const [questions, setQuestions] = React.useState(null);
+  const [openAnswer, setOpenAnswer] = React.useState(false);
+  const [contextOnlySlider, setContextOnlySlider] = React.useState(false);
   const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const [vals, setVals] = React.useState();
+  const { refresh } = useAnswer();
 
-  const onCreateSubmit = async (values) => {
+  const onCreateRelatedSubmit = async (values) => {
     try {
       const { data } = await dataProvider.create('questions', {
         data: {
@@ -182,16 +196,44 @@ const SearchCreateDialog = ({
           ...createInitialValues,
         },
       });
-
       afterCreate(data);
     } catch (e) {
       notify(e?.body?.message || 'Unexpected error', 'error');
     }
   };
 
+  const onCreateFollowupSubmit = async (values) => {
+    setVals(values);
+    if (questions.map((el) => el.text === values.text).includes(true)) {
+      setContextOnlySlider(true);
+    } else {
+      setContextOnlySlider(false);
+    }
+    if (!questions.length || !selected.length) {
+      setOpenAnswer(true);
+      return;
+    }
+  };
+
+  const f = React.useCallback(async () => {
+    try {
+      const { data } = await dataProvider.create('questions', {
+        data: {
+          ...vals,
+          ...createInitialValues,
+        },
+      });
+      await afterCreate(data);
+
+      return data;
+    } catch (e) {
+      notify(e?.body?.message || 'Unexpected error', 'error');
+      return null;
+    }
+  }, [vals, createInitialValues]);
+
   const onFiltersSubmit = debounce(async (values) => {
     setSelected([]);
-
     if (!values.q) {
       setQuestions(null);
 
@@ -242,40 +284,56 @@ const SearchCreateDialog = ({
     return null;
   }
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="lg">
-      <Box display="flex" p={2}>
-        <Box flex={5}>
-          <Typography>
-            {translate('resources.answers.related_questions')}
-          </Typography>
+    <>
+
+      {!openAnswer ? (
+        <Dialog open onClose={onClose} fullWidth maxWidth="lg">
+          <Box display="flex" p={2}>
+            <Box flex={5}>
+              <Typography>
+                {translate('resources.answers.related_questions')}
+              </Typography>
+            </Box>
+            <Box flex={1} textAlign="right">
+              <IconButton
+                onClick={onClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Box>
+          <Box p={2}>
+            <Filters
+              onSubmit={onFiltersSubmit}
+              onCreateSubmit={relatedOpen ? onCreateRelatedSubmit : onCreateFollowupSubmit}
+              selected={selected}
+              onSelectedSubmit={onSelectedSubmit}
+              selectedButtonText={selectedButtonText}
+            />
+            <hr />
+            <ResultsList
+              {...{
+                questions,
+                selected,
+                toggleSelect,
+                record,
+              }}
+            />
+          </Box>
+        </Dialog>
+      ) : (
+        <Box>
+          <AnswerLinkDialog
+            afterLink={refresh}
+            isOpen={openAnswer}
+            onClose={onClose}
+            contextOnlySlider={contextOnlySlider}
+            afterCreate={f}
+            createFinish={() => { setOpenAnswer(false); }}
+          />
         </Box>
-        <Box flex={1} textAlign="right">
-          <IconButton
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      </Box>
-      <Box p={2}>
-        <Filters
-          onSubmit={onFiltersSubmit}
-          onCreateSubmit={onCreateSubmit}
-          selected={selected}
-          onSelectedSubmit={onSelectedSubmit}
-          selectedButtonText={selectedButtonText}
-        />
-        <hr />
-        <ResultsList
-          {...{
-            questions,
-            selected,
-            toggleSelect,
-            record,
-          }}
-        />
-      </Box>
-    </Dialog>
+      )}
+    </>
   );
 };
 

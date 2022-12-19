@@ -6,6 +6,8 @@ import {
   TextInput,
   useTranslate,
   BooleanInput,
+  SelectInput,
+  required,
 } from 'react-admin';
 
 const StepFour = ({
@@ -14,31 +16,47 @@ const StepFour = ({
   onBack,
 }) => {
   const translate = useTranslate();
-
+  const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
+  const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
       validate={async (values) => {
         const errors = {};
-
         if (values.hasParent && !values.fk_parentTopicId) {
-          errors.fk_parentTopicId = 'Required';
+          errors.fk_parentTopicId = translate('Required');
         }
-
         return errors;
       }}
       render={({ handleSubmit, submitting, values, valid }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box>
-              <TextInput
-                source="qnaMetadataKey"
-                label="resources.topics.fields.qnaMetadataKey"
-                fullWidth
-              />
+              {TOPICS_METADATA_KEYS ? (
+                <SelectInput
+                  source="qnaMetadataKey"
+                  label="resources.topics.fields.qnaMetadataKey"
+                  validate={TOPICS_METADATA && required()}
+                  choices={[
+                    { id: TOPICS_METADATA_KEYS[0], name: TOPICS_METADATA_KEYS[0] },
+                    { id: TOPICS_METADATA_KEYS[1], name: TOPICS_METADATA_KEYS[1] },
+                    { id: TOPICS_METADATA_KEYS[2], name: TOPICS_METADATA_KEYS[2] },
+                  ]}
+                  margin="dense"
+                  fullWidth
+                />
+              ) : (
+                <TextInput
+                  source="qnaMetadataKey"
+                  validate={TOPICS_METADATA && required()}
+                  label="resources.topics.fields.qnaMetadataKey"
+                  fullWidth
+                />
+              )}
               <TextInput
                 source="qnaMetadataValue"
+                validate={TOPICS_METADATA && required()}
                 label="resources.topics.fields.qnaMetadataValue"
                 fullWidth
               />
