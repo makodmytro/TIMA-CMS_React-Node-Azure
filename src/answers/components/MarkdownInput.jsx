@@ -71,7 +71,12 @@ const DraftInput = ({
     const rawContentState = convertToRaw(contentState);
 
     const convertedHTML = draftToHtml(rawContentState);
-    const mdFromHtml = NodeHtmlMarkdown.translate(convertedHTML, { bulletMarker: '-', keepDataImages: false });
+    const mdFromHtml = NodeHtmlMarkdown.translate(convertedHTML, {
+      bulletMarker: '-',
+      keepDataImages: false,
+      emDelimiter: '*',
+      strongDelimiter: '**'
+    });
 
     return mdFromHtml;
   };
@@ -92,7 +97,7 @@ const DraftInput = ({
           readOnly={disabled === true}
           wrapperClassName={disabled === true ? 'disabled-markdown-editor' : ''}
           toolbar={{
-            options: ['inline', 'blockType', 'link', 'emoji', 'history', 'image'],
+            options: ['inline', 'blockType', 'link', 'emoji', 'history', 'image', 'list'],
             inline: {
               options: ['bold', 'italic', 'strikethrough'],
             },
