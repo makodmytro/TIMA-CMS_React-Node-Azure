@@ -108,8 +108,9 @@ const DraftInput = ({
             },
             image: {
               uploadEnabled: false,
-              previewImage: false,
-              alignmentEnabled: false,
+              previewImage: true,
+              alignmentEnabled: true,
+              alt: { present: false, mandatory: false },
               defaultSize: {
                 height: 'auto',
                 width: 'auto',
