@@ -165,6 +165,7 @@ const english = {
     bug_report: 'Bug report',
     bug_report_text: 'Please describe the problem with as much details as possible',
     submit: 'Submit',
+    change_status: 'Change status',
   },
   resources: {
     topics: {
@@ -383,6 +384,7 @@ const english = {
           INTEGRATION_TESTS_OK: 'Integration tests passed',
           DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
+
         errors: {
           MIN_3_QUESTIONS:
             'At least 3 questions are required when creating a new answer',
