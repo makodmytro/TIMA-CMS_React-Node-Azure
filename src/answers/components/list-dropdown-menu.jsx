@@ -1,21 +1,18 @@
 import React from 'react';
-import {
-  EditButton,
-  DeleteButton,
-  useTranslate,
-} from 'react-admin';
+import { EditButton, DeleteButton, useTranslate, useDataProvider, useNotify } from 'react-admin';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+import StatusesSubMenu from './StatusesSubMenu';
+import useAnswer from '../useAnswer';
 
-const DropdownMenu = ({
-  record,
-}) => {
+const DropdownMenu = ({ record }) => {
   const translate = useTranslate();
   const disableEdit = record?.allowEdit === false;
   const disableDelete = record?.allowDelete === false;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const dataProvider = useDataProvider();
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -23,9 +20,31 @@ const DropdownMenu = ({
 
     return false;
   };
+  const { refresh } = useAnswer(record?.id);
+  const notify = useNotify();
 
   const handleClose = (e) => {
     e.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  const handleStatusChange = async (statusId) => {
+    try {
+      await dataProvider.updateAnswerStatus('answers', {
+        id: record?.id,
+        status: statusId,
+      });
+
+      refresh();
+      notify('The record has been updated');
+    } catch (err) {
+      refresh();
+      const msg = err?.body?.code
+        ? translate(`resources.users.workflow.errors.${err.body.code}`)
+        : err?.body?.message || 'We could not execute the action';
+      notify(msg, 'error');
+    }
+
     setAnchorEl(null);
   };
 
@@ -52,20 +71,11 @@ const DropdownMenu = ({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
-          <EditButton
-            basePath="/answers"
-            record={record}
-            fullWidth
-            style={{ justifyContent: 'flex-start' }}
-            disabled={disableEdit}
-          />
+        <MenuItem onClick={(e) => e.stopPropagation()}>
+          <EditButton basePath="/answers" record={record} fullWidth style={{ justifyContent: 'flex-start' }} disabled={disableEdit} />
         </MenuItem>
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
+        <StatusesSubMenu record={record} onStatusChange={handleStatusChange} />
+        <MenuItem onClick={(e) => e.stopPropagation()}>
           <DeleteButton
             basePath="/answers"
             record={record}
