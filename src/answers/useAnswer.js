@@ -6,14 +6,14 @@ import {
   useNotify,
 } from 'react-admin';
 
-const useAnswer = () => {
+const useAnswer = (answerId) => {
   const { id } = useParams();
   const [loading, setLoading] = React.useState(false);
   const dataProvider = useDataProvider();
   const dispatch = useDispatch();
   const notify = useNotify();
   const answer = useSelector((state) => {
-    return state.custom?.answers?.data[id];
+    return state.custom?.answers?.data[id || answerId];
   });
 
   const refresh = async () => {
@@ -24,12 +24,12 @@ const useAnswer = () => {
     setLoading(true);
 
     try {
-      const { data } = await dataProvider.getOne('answers', { id });
+      const { data } = await dataProvider.getOne('answers', { id: id || answerId });
 
       dispatch({
         type: 'CUSTOM_SET_ANSWER',
         payload: {
-          id, data,
+          id: id || answerId, data,
         },
       });
     } catch (err) {
