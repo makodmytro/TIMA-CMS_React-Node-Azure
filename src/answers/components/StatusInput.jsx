@@ -121,7 +121,6 @@ const StatusInput = ({ record, disabled }) => {
   const { refresh } = useAnswer();
   const translate = useTranslate();
   const statuses = useSelector((state) => state.custom.workflowStatus);
-  const disabledCombined = disabled && options && options.length === 0;
   const disabledContextOnly = record?.isContextOnly;
   const onSubmit = async ({ status }) => {
     try {
@@ -146,6 +145,8 @@ const StatusInput = ({ record, disabled }) => {
   if (matching && !options.find((o) => o.id === matching.value)) {
     options.push({ id: matching.value, name: translate(`resources.users.workflow.status.${matching.name}`) });
   }
+
+  const disabledCombined = disabled && options && options.length === 0;
 
   if (!record) {
     return null;
