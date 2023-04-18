@@ -13,7 +13,7 @@ const StatusesSubMenu = ({ record, onStatusChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const options = statuses
-    .filter((o) => (record?.possibleNextStatus.length ? (record?.possibleNextStatus || []).includes(o.value) : true))
+    .filter((o) => (record?.possibleNextStatus || []).includes(o.value))
     .map((o) => ({ id: o.value, name: translate(`resources.users.workflow.status.${o.name}`) }))
     .reverse();
   const matching = statuses.find((s) => s.value === record?.status);
@@ -30,6 +30,10 @@ const StatusesSubMenu = ({ record, onStatusChange }) => {
     e.stopPropagation();
     setAnchorEl(null);
   };
+
+  if (!record?.possibleNextStatus.length) {
+    return null;
+  }
 
   return (
     <>
