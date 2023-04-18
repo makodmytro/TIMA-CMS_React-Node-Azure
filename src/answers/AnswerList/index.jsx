@@ -26,6 +26,7 @@ import ListActions, {
 import ApprovedSwitchField from '../components/approved-swtich-field';
 import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
+import { EditableStatusField } from '../components/EditableStatusField';
 import StatusField from '../../common/components/StatusField';
 import DropDownMenu from '../components/list-dropdown-menu';
 import AnswerTextField, { AnswerRelatedQuestionField } from '../components/TextField';
@@ -148,7 +149,9 @@ const CustomGridItem = ({
         {
           visibleColumns.includes('status') && (
             <TableCell>
-              <StatusField source="status" label="resources.answers.fields.status" sortable={false} record={record} />
+              <EditableStatusField record={record}>
+                <StatusField source="status" label="resources.answers.fields.status" sortable={false} record={record} />
+              </EditableStatusField>
             </TableCell>
           )
         }

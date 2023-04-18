@@ -19,7 +19,7 @@ const StatusField = ({ record }) => {
   }
 
   return (
-    <Box position="relative">
+    <Box position="relative" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8 }}>
       <Box
         style={{
           width: '10px',
