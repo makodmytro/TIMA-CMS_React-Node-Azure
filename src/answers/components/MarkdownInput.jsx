@@ -1,24 +1,18 @@
 import React from 'react';
-import {
-  TextInput,
-  useTranslate,
-  required,
-} from 'react-admin';
-import { useField } from 'react-final-form'; // eslint-disable-line
+import { TextInput, useTranslate, required } from 'react-admin';
+import { useField } from 'react-final-form';
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel';
-import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { stateToMarkdown } from 'draft-js-export-markdown';
-import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter'; // eslint-disable-line
-import createImagePlugin from '@draft-js-plugins/image'; // eslint-disable-line
-// import editorStyles from './editorStyles.module.css';
+import createImagePlugin from '@draft-js-plugins/image';
 import { marked } from 'marked';
 import draftToHtml from 'draftjs-to-html';
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
+import { NodeHtmlMarkdown } from 'node-html-markdown';
 import htmlToDraft from 'html-to-draftjs';
+import Button from '@material-ui/core/Button';
 
 import PlayableText from '../../common/components/playable-text';
 
@@ -33,25 +27,23 @@ const HiddenField = ({ children, fieldName }) => {
 };
 
 const imagePlugin = createImagePlugin();
-const plugins = [imagePlugin];
 
-const DraftInput = ({
-  source, label, lang, disabled,
-}) => {
+const DraftInput = ({ source, label, lang, disabled }) => {
   const translate = useTranslate();
   const [state, setState] = React.useState(EditorState.createEmpty());
-  const { input: { value: spokenText, onBlur } } = useField('spokenText');
+  const {
+    input: { value: spokenText, onBlur },
+  } = useField('spokenText');
   const {
     input: { onChange, value },
-    meta: {
-      touched, dirty, error, submitFailed,
-    },
+    meta: { touched, dirty, error, submitFailed },
   } = useField(source, { validate: required() });
   const invalid = !!error && (touched || dirty || submitFailed);
 
   React.useEffect(() => {
     if (value && !touched && !dirty) {
-      const fixedValue = value.replace(/\n\s*\n/g, '\n') //remove double line breaks
+      const fixedValue = value
+        .replace(/\n\s*\n/g, '\n') //remove double line breaks
         .replace(/(?<!\]\()(https?:\/\/[^\s]+)(?=\))/g, (match) => match.replace(/_/g, '*')) //replace underscores with asterisks just if it's not part of a link
         .replace(/alt="undefined"/g, ''); //remove alt="undefined" from images
 
@@ -75,7 +67,7 @@ const DraftInput = ({
       bulletMarker: '-',
       keepDataImages: false,
       emDelimiter: '*',
-      strongDelimiter: '**'
+      strongDelimiter: '**',
     });
 
     return mdFromHtml;
@@ -83,15 +75,28 @@ const DraftInput = ({
 
   return (
     <>
-      <InputLabel error={invalid}>{translate(label)}</InputLabel>
-      <FormControl fullWidth error={invalid}>
+      <style jsx global>
+        {`
+          img {
+            max-width: 100%;
+          }
+        `}
+      </style>
+
+      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <InputLabel error={invalid}>{translate(label)}</InputLabel>
+        <Button onClick={() => setState(EditorState.createEmpty())} disabled={disabled === true}>
+          {translate('misc.clear')}
+        </Button>
+      </Box>
+      <FormControl fullWidth error={invalid} style={{ img: { maxWidth: '100%' } }}>
         <Editor
           editorState={state}
           onEditorStateChange={(v) => {
             onChange(convertDraftJsStateToMarkdown(v.getCurrentContent()));
             setState(v);
           }}
-          plugins={plugins}
+          plugins={[imagePlugin]}
           onBlur={() => onBlur()}
           disabled={disabled === true}
           readOnly={disabled === true}
@@ -102,9 +107,7 @@ const DraftInput = ({
               options: ['bold', 'italic', 'strikethrough'],
             },
             emoji: {
-              emojis: [
-                '😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎',
-              ],
+              emojis: ['😀', '😉', '😎', '😮', '🙁', '👋', '👌', '👍', '👎'],
             },
             image: {
               uploadEnabled: false,
@@ -120,7 +123,14 @@ const DraftInput = ({
         />
         <HiddenField fieldName="spokenText">
           <Box p={1} textAlign="right" style={{ border: '1px solid #e0e0e0', borderTop: 'none' }}>
-            <TextInput source="spokenText" label="resources.answers.fields.spokenText" fullWidth multiline rows={2} disabled={disabled === true} />
+            <TextInput
+              source="spokenText"
+              label="resources.answers.fields.spokenText"
+              fullWidth
+              multiline
+              rows={2}
+              disabled={disabled === true}
+            />
             <PlayableText text={spokenText || value} lang={lang} hideText disabled={disabled === true} />
           </Box>
         </HiddenField>
