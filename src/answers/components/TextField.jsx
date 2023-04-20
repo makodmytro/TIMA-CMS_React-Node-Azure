@@ -57,7 +57,7 @@ const TextField = ({ record }) => {
   const classes = styles();
 
   return (
-    <Box>
+    <Box maxWidth={400}>
       <Box display="flex" alignContent="flex-end">
         <Box flex={5}>
           <Link
@@ -65,7 +65,14 @@ const TextField = ({ record }) => {
             onClick={(e) => e.stopPropagation()}
             className={classes.link}
           >
-            <ReactMarkdown source={record.text} allowedTypes={allowedTypes} plugins={[remarkGfm]} />
+            <ReactMarkdown
+              source={record.text}
+              allowedTypes={allowedTypes}
+              plugins={[remarkGfm]}
+              renderers={{
+                image: ({ alt, src }) => <img src={src} alt={alt} style={{ maxWidth: '100%' }} />,
+              }}
+            />
           </Link>
         </Box>
         <Box flex={1}>
