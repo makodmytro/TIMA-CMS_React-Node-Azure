@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ReferenceInput,
   required,
@@ -50,6 +50,41 @@ export const Qna = (props) => {
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
   const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
+
+  const topics = useSelector((state) => state.admin.resources.topics.data);
+
+  const { search } = useLocation();
+
+  const qnaMetadataKeyChoices = useMemo(() => {
+    const choices = [
+      {
+        id: TOPICS_METADATA_KEYS[0],
+        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
+      },
+      {
+        id: TOPICS_METADATA_KEYS[1],
+        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[1]}`) || TOPICS_METADATA_KEYS[1],
+      },
+      {
+        id: TOPICS_METADATA_KEYS[2],
+        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[2]}`) || TOPICS_METADATA_KEYS[2],
+      }
+    ];
+
+    if (!search) {
+      return choices;
+    }
+
+    const querystring = new URLSearchParams(search);
+    const fk_parentTopicId = parseInt(querystring.get('fk_parentTopicId'), 10);
+
+    return [
+      ...(!fk_parentTopicId ? [choices[0]] : []),
+      ...(topics[fk_parentTopicId]?.qnaMetadataKey === 'fb' ? [choices[1]] : []),
+      ...(topics[fk_parentTopicId]?.qnaMetadataKey === 'tg' ? [choices[2]] : []),
+    ];
+  }, [search, topics]);
+
   return (
     <>
       <Typography>
@@ -61,9 +96,7 @@ export const Qna = (props) => {
           label="resources.topics.fields.qnaMetadataKey"
           validate={TOPICS_METADATA && required()}
           choices={[
-            { id: TOPICS_METADATA_KEYS[0], name: TOPICS_METADATA_KEYS[0] },
-            { id: TOPICS_METADATA_KEYS[1], name: TOPICS_METADATA_KEYS[1] },
-            { id: TOPICS_METADATA_KEYS[2], name: TOPICS_METADATA_KEYS[2] },
+            ...qnaMetadataKeyChoices,
             existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey },
           ]}
           margin="dense"
