@@ -165,6 +165,9 @@ const german = {
     bug_report_text: 'Bitte beschreibe das Problem so detailliert wie möglich',
     submit: 'Submit',
     change_status: 'Status ändern',
+    department: 'Fachbereich',
+    topic_group: 'Themengruppe',
+    topic: 'Thema',
   },
   resources: {
     topics: {
@@ -217,6 +220,11 @@ const german = {
         syncScheduled: 'Sync geplant',
         lastSyncAt: 'Letztes Sync',
         qnaMetadataKey: 'Metadata key',
+        qnaMetadataKeyOptions: {
+          fb: 'fb (Fachbereich)',
+          tg: 'tg (Themengruppe)',
+          th: 'th (Thema)',
+        },
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Sollen die Daten jetzt synchronisiert werden?',
@@ -244,7 +252,8 @@ const german = {
       use_as_suggestion: 'Als Vorschlag nutzen',
       duplicate_context_only_followups: 'Du erstellst ein Duplikat, dieses kann nur kontextbezogen ausgespielt werden.',
       topic_mismatch: 'Thema stimmt nicht überein',
-      topic_mismatch_bis: 'Der ausgewählte Eintrag ist mit Thema "%{a}" verlinkt. Durch die neue Verlinkung wird das Thema der Frage geändert. Fortfahren?',
+      topic_mismatch_bis:
+        'Der ausgewählte Eintrag ist mit Thema "%{a}" verlinkt. Durch die neue Verlinkung wird das Thema der Frage geändert. Fortfahren?',
       topic_mismatch_explanation: 'Die Frage bezieht sich auf das Thema "%{a}" aber das Thema der Antwort ist "%{b}".',
       topic_mismatch_option_a: '1. Frage aktualisieren und in das Thema der Antwort verschieben (beide "%{a}")',
       topic_mismatch_option_b: '2. Antwort in das Thema "%{b}" duplizieren und mit der Frage verbinden',
@@ -380,8 +389,7 @@ const german = {
           DEPLOYED_ON_PRODUCTION: 'Live',
         },
         errors: {
-          MIN_3_QUESTIONS:
-            'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
+          MIN_3_QUESTIONS: 'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
             'Diese Folgeantwort hat mehr als eine übergeordnete Antwort. Wenn du sie auf "Nur im Kontext" setzt, wird sie für alle übergeordneten Antworten nur kontextbezogen ausgespielt',
         },

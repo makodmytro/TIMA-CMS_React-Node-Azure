@@ -166,6 +166,9 @@ const english = {
     bug_report_text: 'Please describe the problem with as much details as possible',
     submit: 'Submit',
     change_status: 'Change status',
+    department: 'Department',
+    topic_group: 'Topic group',
+    topic: 'Topic',
   },
   resources: {
     topics: {
@@ -219,6 +222,11 @@ const english = {
         syncScheduled: 'Sync scheduled',
         lastSyncAt: 'Last sync at',
         qnaMetadataKey: 'Metadata key',
+        qnaMetadataKeyOptions: {
+          fb: 'fb (Department)',
+          tg: 'tg (Topic group)',
+          th: 'th (Topic)',
+        },
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Pull data from QNA now?',
