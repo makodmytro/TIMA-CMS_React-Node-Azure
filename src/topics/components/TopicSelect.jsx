@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useField, useFormState } from 'react-final-form'; // eslint-disable-line
 import {
   useDataProvider,
@@ -129,6 +129,14 @@ const MultiTopicSelect = ({
     setLoading(false);
   };
 
+  const isHasChildTopicsWithChildTopics = useCallback((t) => {
+    return t.ChildTopics?.length > 0 && t.ChildTopics.some((ct) => ct.ChildTopics?.length > 0);
+  }, []);
+
+  const isHasChildTopics = useCallback((t) => {
+    return t.ChildTopics?.length > 0;
+  }, []);
+
   React.useEffect(() => {
     if (topicOne) {
       setTopicsChild([]);
@@ -145,9 +153,7 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        setTopicsChild(
-          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
-        );
+        setTopicsChild(topic.ChildTopics.filter((t) => isHasChildTopics(t) && (filterFunction?.(t) || true)));
       }
 
       if (!topic.ChildTopics?.length || anyLevelSelectable) {
@@ -212,13 +218,15 @@ const MultiTopicSelect = ({
     }
   }, []);
 
+  const isChitchatTopic = useCallback((t) => t.name === 'Chitchat', []);
+
   React.useEffect(() => {
     if (filter && filter.fk_languageId) {
-      setFilteredTopics(topics.filter((t) => t.fk_languageId === filter.fk_languageId));
+      setFilteredTopics(
+        topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isChitchatTopic(t)) && t.fk_languageId === filter.fk_languageId),
+      );
     } else if (filterFunction) {
-      setFilteredTopics(topics.filter((t) => filterFunction(t)));
-    } else {
-      setFilteredTopics(topics);
+      setFilteredTopics(topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isChitchatTopic(t)) && (filterFunction?.(t) || true)));
     }
   }, [filter, topics]);
 
