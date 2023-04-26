@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ReferenceInput,
   required,
@@ -50,6 +50,38 @@ export const Qna = (props) => {
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
   const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
+
+  const topics = useSelector((state) => state.admin.resources.topics.data);
+
+  const { search } = useLocation();
+
+  const qnaMetadataKeyChoices = useMemo(() => {
+    const choices = TOPICS_METADATA_KEYS.map((key) => ({
+      id: key,
+      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key,
+    }));
+
+    if (!search) {
+      return choices;
+    }
+
+    const querystring = new URLSearchParams(search);
+    const fk_parentTopicId = parseInt(querystring.get('fk_parentTopicId'), 10);
+
+    if (!fk_parentTopicId) {
+      return choices;
+    }
+
+    const parentMetadataKey = topics[fk_parentTopicId]?.qnaMetadataKey;
+    const parentMetadataKeyIndex = TOPICS_METADATA_KEYS.indexOf(parentMetadataKey);
+
+    if (parentMetadataKeyIndex !== -1 && TOPICS_METADATA_KEYS[parentMetadataKeyIndex + 1]) {
+      return [choices[parentMetadataKeyIndex + 1]];
+    }
+
+    return choices;
+  }, [search, topics]);
+
   return (
     <>
       <Typography>
@@ -61,9 +93,7 @@ export const Qna = (props) => {
           label="resources.topics.fields.qnaMetadataKey"
           validate={TOPICS_METADATA && required()}
           choices={[
-            { id: TOPICS_METADATA_KEYS[0], name: TOPICS_METADATA_KEYS[0] },
-            { id: TOPICS_METADATA_KEYS[1], name: TOPICS_METADATA_KEYS[1] },
-            { id: TOPICS_METADATA_KEYS[2], name: TOPICS_METADATA_KEYS[2] },
+            ...qnaMetadataKeyChoices,
             existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey },
           ]}
           margin="dense"
