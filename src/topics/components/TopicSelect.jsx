@@ -218,15 +218,15 @@ const MultiTopicSelect = ({
     }
   }, []);
 
-  const isChitchatTopic = useCallback((t) => t.name === 'Chitchat', []);
+  const isGlobalTopic = useCallback((t) => t.globalTopic, []);
 
   React.useEffect(() => {
     if (filter && filter.fk_languageId) {
       setFilteredTopics(
-        topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isChitchatTopic(t)) && t.fk_languageId === filter.fk_languageId),
+        topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isGlobalTopic(t)) && t.fk_languageId === filter.fk_languageId),
       );
     } else if (filterFunction) {
-      setFilteredTopics(topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isChitchatTopic(t)) && (filterFunction?.(t) || true)));
+      setFilteredTopics(topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isGlobalTopic(t)) && (filterFunction?.(t) || true)));
     }
   }, [filter, topics]);
 
