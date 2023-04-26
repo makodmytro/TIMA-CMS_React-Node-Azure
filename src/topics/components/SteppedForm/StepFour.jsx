@@ -19,12 +19,6 @@ const StepFour = ({
   const translate = useTranslate();
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
-  const topics = useSelector((state) => state.admin.resources.topics.data);
-
-  const departments = useMemo(() => Object.values(topics).filter((topic) => topic.fk_parentTopicId == null), [topics]);
-  const topicGroups = useMemo(() => {
-    return Object.values(topics).filter((topic) => topics[topic.fk_parentTopicId] && !topics[topic.fk_parentTopicId].fk_parentTopicId);
-  }, [topics]);
 
   return (
     <Form
@@ -46,20 +40,10 @@ const StepFour = ({
                   source="qnaMetadataKey"
                   label="resources.topics.fields.qnaMetadataKey"
                   validate={TOPICS_METADATA && required()}
-                  choices={[
-                    {
-                      id: TOPICS_METADATA_KEYS[0],
-                      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
-                    },
-                    {
-                      id: TOPICS_METADATA_KEYS[1],
-                      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[1]}`) || TOPICS_METADATA_KEYS[1],
-                    },
-                    {
-                      id: TOPICS_METADATA_KEYS[2],
-                      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[2]}`) || TOPICS_METADATA_KEYS[2],
-                    },
-                  ]}
+                  choices={[{
+                    id: TOPICS_METADATA_KEYS[0],
+                    name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
+                  }]}
                   margin="dense"
                   fullWidth
                 />
@@ -68,18 +52,6 @@ const StepFour = ({
                   source="qnaMetadataKey"
                   validate={TOPICS_METADATA && required()}
                   label="resources.topics.fields.qnaMetadataKey"
-                  fullWidth
-                />
-              )}
-              {!!values.qnaMetadataKey && values.qnaMetadataKey !== TOPICS_METADATA_KEYS[0] && (
-                <SelectInput
-                  source="fk_parentTopicId"
-                  label="resources.topics.fields.qnaMetadataKey"
-                  validate={required()}
-                  choices={
-                    values.qnaMetadataKey === TOPICS_METADATA_KEYS[1] ? departments : topicGroups
-                  }
-                  margin="dense"
                   fullWidth
                 />
               )}

@@ -56,20 +56,10 @@ export const Qna = (props) => {
   const { search } = useLocation();
 
   const qnaMetadataKeyChoices = useMemo(() => {
-    const choices = [
-      {
-        id: TOPICS_METADATA_KEYS[0],
-        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
-      },
-      {
-        id: TOPICS_METADATA_KEYS[1],
-        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[1]}`) || TOPICS_METADATA_KEYS[1],
-      },
-      {
-        id: TOPICS_METADATA_KEYS[2],
-        name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[2]}`) || TOPICS_METADATA_KEYS[2],
-      }
-    ];
+    const choices = TOPICS_METADATA_KEYS.map((key) => ({
+      id: key,
+      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key,
+    }));
 
     if (!search) {
       return choices;
@@ -78,11 +68,18 @@ export const Qna = (props) => {
     const querystring = new URLSearchParams(search);
     const fk_parentTopicId = parseInt(querystring.get('fk_parentTopicId'), 10);
 
-    return [
-      ...(!fk_parentTopicId ? [choices[0]] : []),
-      ...(topics[fk_parentTopicId]?.qnaMetadataKey === 'fb' ? [choices[1]] : []),
-      ...(topics[fk_parentTopicId]?.qnaMetadataKey === 'tg' ? [choices[2]] : []),
-    ];
+    if (!fk_parentTopicId) {
+      return choices;
+    }
+
+    const parentMetadataKey = topics[fk_parentTopicId]?.qnaMetadataKey;
+    const parentMetadataKeyIndex = TOPICS_METADATA_KEYS.indexOf(parentMetadataKey);
+
+    if (parentMetadataKeyIndex !== -1 && TOPICS_METADATA_KEYS[parentMetadataKeyIndex + 1]) {
+      return [choices[parentMetadataKeyIndex + 1]];
+    }
+
+    return choices;
   }, [search, topics]);
 
   return (
