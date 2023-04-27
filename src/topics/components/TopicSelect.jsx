@@ -186,10 +186,15 @@ const MultiTopicSelect = ({
   }, [topicTwo]);
 
   React.useEffect(() => {
+    if (topics[topicOne]?.globalTopic) {
+      onChange(topicOne);
+      return;
+    }
+
     if (topicThree) {
       onChange(topicThree);
     }
-  }, [topicThree]);
+  }, [topicOne, topicThree]);
 
   React.useEffect(() => {
     // editing, we need to go backwards
