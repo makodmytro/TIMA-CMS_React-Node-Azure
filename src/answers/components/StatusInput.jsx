@@ -114,7 +114,7 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
   );
 };
 
-const StatusInput = ({ record, disabled }) => {
+const StatusInput = ({ record, disabled, preSubmitFn }) => {
   const [open, setOpen] = React.useState(false);
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -124,6 +124,7 @@ const StatusInput = ({ record, disabled }) => {
   const disabledContextOnly = record?.isContextOnly;
   const onSubmit = async ({ status }) => {
     try {
+      preSubmitFn?.();
       await dataProvider.updateAnswerStatus('answers', {
         id: record?.id,
         status,
@@ -131,8 +132,8 @@ const StatusInput = ({ record, disabled }) => {
       refresh();
       notify('The record has been updated');
     } catch (err) {
-      refresh();
-      const msg = err?.body?.code ? translate(`resources.users.workflow.errors.${err.body.code}`) : err?.body?.message || 'We could not execute the action';
+      // refresh();
+      const msg = err?.message || (err?.body?.code ? translate(`resources.users.workflow.errors.${err.body.code}`) : err?.body?.message || 'We could not execute the action');
       notify(msg, 'error');
     }
   };
@@ -216,7 +217,7 @@ const StatusInput = ({ record, disabled }) => {
   );
 };
 
-const StatusInputSection = ({ record, disabled }) => {
+const StatusInputSection = ({ record, disabled, preSubmitFn }) => {
   const translate = useTranslate();
 
   return (
@@ -235,10 +236,10 @@ const StatusInputSection = ({ record, disabled }) => {
           </AccordionSummary>
 
           <AccordionDetails>
-            <StatusInput record={record} disabled={disabled} />
+            <StatusInput record={record} disabled={disabled} preSubmitFn={preSubmitFn} />
           </AccordionDetails>
         </Accordion>
-      ) : <StatusInput record={record} disabled={disabled} />}
+      ) : <StatusInput record={record} disabled={disabled} preSubmitFn={preSubmitFn} />}
     </Box>
   );
 };
