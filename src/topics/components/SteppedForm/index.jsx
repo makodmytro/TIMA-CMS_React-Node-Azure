@@ -89,6 +89,13 @@ const SteppedForm = ({
     }
   }, [_languages, state.fk_languageId]);
 
+  React.useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      qnaMetadataValue: prevState.name.toLocaleLowerCase(),
+    }));
+  }, [state.name]);
+
   const back = (values) => {
     setState({
       ...state,
