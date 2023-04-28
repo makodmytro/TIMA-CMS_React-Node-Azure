@@ -168,6 +168,7 @@ const german = {
     department: 'Fachbereich',
     topic_group: 'Themengruppe',
     topic: 'Thema',
+    answer_form_pristine_error: 'Bitte speichere zuerst deine Antwort.',
   },
   resources: {
     topics: {

@@ -174,6 +174,8 @@ const FormFields = (props) => {
   const { input: { onChange: qnaApiVersionChange } } = useField('qnaApiVersion');
   const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
   const { input: { onChange: qnaKnowledgeBaseIdChange } } = useField('qnaKnowledgeBaseId');
+  const { input: { onChange: qnaMetadataValueChange } } = useField('qnaMetadataValue');
+  const { input: { value: nameValue } } = useField('name');
 
   const getLang = (r) => {
     if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
@@ -217,6 +219,10 @@ const FormFields = (props) => {
   React.useEffect(() => {
     onParentSelected();
   }, [fkParentTopicId]);
+
+  React.useEffect(() => {
+    qnaMetadataValueChange(nameValue.toLocaleLowerCase());
+  }, [nameValue]);
 
   return (
     <>

@@ -84,6 +84,18 @@ const AnswerEdit = () => {
     refresh();
   };
 
+  const [answerFormPristine, setAnswerFormPristine] = React.useState(true);
+
+  React.useEffect(() => {
+    console.log('answerFormPristine', answerFormPristine);
+  }, [answerFormPristine]);
+
+  const throwIfAnswerFormDirty = () => {
+    if (!answerFormPristine) {
+      throw new Error(translate('misc.answer_form_pristine_error'));
+    }
+  };
+
   return (
     <>
       <CustomTopToolbar />
@@ -95,9 +107,7 @@ const AnswerEdit = () => {
       <Box boxShadow={3} borderRadius={5}>
         <Form
           onSubmit={onSubmit}
-          initialValues={{
-            ...answer,
-          }}
+          initialValues={{ ...answer }}
           enableReinitialize
           render={({ handleSubmit, valid, values }) => {
             const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
@@ -111,6 +121,10 @@ const AnswerEdit = () => {
 
               return answer && values[key] === answer[key];
             });
+
+            if ((pristine) !== answerFormPristine) {
+              setAnswerFormPristine(pristine);
+            }
 
             return (
               <Box>
@@ -141,7 +155,7 @@ const AnswerEdit = () => {
       </Box>
 
       <Box pt={2}>
-        <StatusInputSection record={answer} disabled={disableEdit} />
+        <StatusInputSection record={answer} disabled={disableEdit} preSubmitFn={throwIfAnswerFormDirty} />
       </Box>
       <Box pt={2}>
         <StatusHistory record={answer} />

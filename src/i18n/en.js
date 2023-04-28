@@ -169,6 +169,7 @@ const english = {
     department: 'Department',
     topic_group: 'Topic group',
     topic: 'Topic',
+    answer_form_pristine_error: 'Please save your answer first.',
   },
   resources: {
     topics: {
