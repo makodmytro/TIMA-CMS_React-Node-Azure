@@ -150,6 +150,11 @@ const MultiTopicSelect = ({
         return;
       }
 
+      if (topic.globalTopic) {
+        onChange(topicOne);
+        return;
+      }
+
       if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
