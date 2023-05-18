@@ -312,7 +312,7 @@ const FormFields = (props) => {
               label="resources.topics.fields.fk_parentTopicId"
               allowEmpty
               depth={2}
-              editting={props?.editting}
+              editting
               anyLevelSelectable
               isRequired={!admin}
               filterFunction={(topic) => topic?.allowCreateChild}
