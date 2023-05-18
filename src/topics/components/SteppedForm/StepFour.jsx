@@ -17,6 +17,9 @@ const StepFour = ({
   onBack,
 }) => {
   const translate = useTranslate();
+  const [state, setState] = React.useState({
+    kbIntegration: '1',
+  });
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
 
@@ -66,11 +69,13 @@ const StepFour = ({
                 label="resources.topics.fields.qnaApiEndpoint"
                 fullWidth
               />
-              <TextInput
-                source="qnaApiVersion"
-                label="resources.topics.fields.qnaApiVersion"
-                fullWidth
-              />
+              {state.kbIntegration === '0' ? (
+                <TextInput
+                  source="qnaApiVersion"
+                  label="resources.topics.fields.qnaApiVersion"
+                  fullWidth
+                />
+              ) : null}
               <TextInput
                 source="qnaSubscriptionKey"
                 label="resources.topics.fields.qnaSubscriptionKey"
@@ -80,7 +85,7 @@ const StepFour = ({
               />
               <TextInput
                 source="qnaKnowledgeBaseId"
-                label="resources.topics.fields.qnaKnowledgeBaseId"
+                label={state.kbIntegration === '1' ? 'resources.topics.fields.qnaProjectName' : 'resources.topics.fields.qnaKnowledgeBaseId'}
                 autoComplete="new-password"
                 fullWidth
               />
