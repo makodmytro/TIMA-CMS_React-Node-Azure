@@ -71,7 +71,6 @@ export const Qna = (props) => {
     if (!fk_parentTopicId) {
       return choices;
     }
-
     const parentMetadataKey = topics[fk_parentTopicId]?.qnaMetadataKey;
     const parentMetadataKeyIndex = TOPICS_METADATA_KEYS.indexOf(parentMetadataKey);
 
@@ -211,8 +210,10 @@ const FormFields = (props) => {
   }, [_languages, fkLanguageId]);
 
   React.useEffect(() => {
-    if (!fkParentTopicId && querystring.get('fk_parentTopicId') && parseInt(querystring.get('fk_parentTopicId'), 10)) {
-      onFkParentTopicIdChange(parseInt(querystring.get('fk_parentTopicId'), 10));
+    const valueFromUrl = querystring.get('fk_parentTopicId') ? parseInt(querystring.get('fk_parentTopicId'), 10) : 0;
+    //check if value from url is valid numeric and different from the one in the form
+    if (!fkParentTopicId || (valueFromUrl > 0 && valueFromUrl !== fkParentTopicId)) {
+      onFkParentTopicIdChange(valueFromUrl);
     }
   }, [fkParentTopicId]);
 
@@ -283,13 +284,13 @@ const FormFields = (props) => {
           <HiddenField fieldName="fk_parentTopicId">
             <TopicSelect
               source="fk_parentTopicId"
-              disabled={props?.editting || props?.disableTopicSelection}
+              disabled
               label="resources.topics.fields.fk_parentTopicId"
               allowEmpty
               depth={2}
               editting={props?.editting}
               anyLevelSelectable
-              isRequired={!admin}
+              isRequired
               filterFunction={(topic) => topic?.allowCreateChild}
             />
           </HiddenField>
