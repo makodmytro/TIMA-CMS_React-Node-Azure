@@ -52,6 +52,7 @@ export const Qna = (props) => {
   const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
 
   const topics = useSelector((state) => state.admin.resources.topics.data);
+  const qnaSourceType = props?.record?.qnaSourceType || 0;
 
   const { search } = useLocation();
 
