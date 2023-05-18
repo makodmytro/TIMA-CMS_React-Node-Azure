@@ -31,7 +31,8 @@ const StepThree = ({
                 source="kbIntegration"
                 label="resources.topics.fields.kbIntegration"
                 choices={[
-                  { name: translate('resources.topics.kbIntegration.microsoft_qna_maker'), id: '1' },
+                  { name: translate('resources.topics.kbIntegration.microsoft_language_studio'), id: '1' },
+                  { name: translate('resources.topics.kbIntegration.microsoft_qna_maker'), id: '0' },
                   { name: translate('resources.topics.kbIntegration.amazon_lex'), id: '2', disabled: true },
                   { name: translate('resources.topics.kbIntegration.gpt3'), id: '3', disabled: true },
                 ]}

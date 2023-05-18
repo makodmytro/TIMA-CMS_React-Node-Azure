@@ -50,6 +50,7 @@ const SteppedForm = ({
       ? parseInt(querystring.get('fk_parentTopicId'), 10)
       : null,
     name: '',
+    kbIntegration: '1',
     qnaMetadataKey: '',
     qnaMetadataValue: '',
     qnaApiEndpoint: '',

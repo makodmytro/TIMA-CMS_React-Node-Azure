@@ -127,13 +127,23 @@ export const Qna = (props) => {
               fullWidth
               disabled={props.disabled === true}
             />
-            <TextInput
-              source="qnaApiVersion"
-              label="resources.topics.fields.qnaApiVersion"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
+            {qnaSourceType === 1 ? (
+              <TextInput
+                source="qnaLangStudioApiVersion"
+                label="resources.topics.fields.qnaLangStudioApiVersion"
+                record={props.record}
+                fullWidth
+                disabled={props.disabled === true}
+              />
+            ) : (
+              <TextInput
+                source="qnaApiVersion"
+                label="resources.topics.fields.qnaApiVersion"
+                record={props.record}
+                fullWidth
+                disabled={props.disabled === true}
+              />
+            )}
             <TextInput
               source="qnaSubscriptionKey"
               label="resources.topics.fields.qnaSubscriptionKey"
@@ -142,13 +152,23 @@ export const Qna = (props) => {
               disabled={props.disabled === true}
               type={props.disabled ? 'password' : 'text'}
             />
-            <TextInput
-              source="qnaKnowledgeBaseId"
-              label="resources.topics.fields.qnaKnowledgeBaseId"
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
+            {qnaSourceType === 1 ? (
+              <TextInput
+                source="qnaProjectName"
+                label="resources.topics.fields.qnaProjectName"
+                record={props.record}
+                fullWidth
+                disabled={props.disabled === true}
+              />
+            ) : (
+              <TextInput
+                source="qnaKnowledgeBaseId"
+                label="resources.topics.fields.qnaKnowledgeBaseId"
+                record={props.record}
+                fullWidth
+                disabled={props.disabled === true}
+              />
+            )}
           </>
         )
       }
@@ -175,6 +195,8 @@ const FormFields = (props) => {
   const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
   const { input: { onChange: qnaKnowledgeBaseIdChange } } = useField('qnaKnowledgeBaseId');
   const { input: { onChange: qnaMetadataValueChange } } = useField('qnaMetadataValue');
+  const { input: { onChange: qnaProjectNameValueChange } } = useField('qnaProjectName');
+  const { input: { onChange: qnaLangStudioApiVersionValueChange } } = useField('qnaLangStudioApiVersion');
   const { input: { value: nameValue } } = useField('name');
 
   const getLang = (r) => {
@@ -200,6 +222,8 @@ const FormFields = (props) => {
         qnaApiVersionChange(data.qnaApiVersion);
         qnaSubscriptionKeyChange(data.qnaSubscriptionKey);
         qnaKnowledgeBaseIdChange(data.qnaKnowledgeBaseId);
+        qnaProjectNameValueChange(data.qnaProjectName);
+        qnaLangStudioApiVersionValueChange(data.qnaLangStudioApiVersion);
       }
     } catch (e) {} // eslint-disable-line
   };
