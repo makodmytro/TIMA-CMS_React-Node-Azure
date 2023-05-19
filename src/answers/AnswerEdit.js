@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import omit from 'lodash/omit';
 import isString from 'lodash/isString';
 import { Form } from 'react-final-form';
@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+import ChatIcon from '@material-ui/icons/Chat';
 import {
   useNotify,
   useDataProvider,
@@ -22,6 +23,7 @@ import StatusHistory from './components/StatusHistory';
 import StatusWarning from './components/StatusWarning';
 import StatusInputSection from './components/StatusInput';
 import useAnswer from './useAnswer';
+import SummarizeAnswerDialog from './components/SummarizeAnswerDialog';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 
@@ -39,6 +41,7 @@ const AnswerEdit = () => {
   const notify = useNotify();
   const dataProvider = useDataProvider();
   const { answer, refresh } = useAnswer();
+  const [summarizeOpen, setSummarizeOpen] = useState(true);
 
   const disableEdit = (answer && answer.allowEdit === false);
   const disableDelete = (answer && answer.allowDelete === false);
@@ -59,6 +62,24 @@ const AnswerEdit = () => {
     } catch (err) {
       return notify(err?.body?.message || 'Failed to update', 'error');
     }
+  };
+
+  const summarizeAnswerRequest = async (text) => {
+    try {
+      const { data } = await dataProvider.summarizeAnswer('answers', {
+        data: {
+          text,
+        },
+      });
+      setSummarizeOpen(true);
+      return data;
+    } catch (err) {
+      return notify(err?.body?.message || 'Failed to update', 'error');
+    }
+  };
+
+  const acceptSummarize = (text) => {
+    // update answer.text
   };
 
   React.useEffect(() => {
@@ -137,6 +158,21 @@ const AnswerEdit = () => {
                       <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
                         <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                       </Button>
+                      <Button
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        style={{ marginLeft: '12px' }}
+                        onClick={() => summarizeAnswerRequest(answer.text)}
+                      >
+                        <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
+                      </Button>
+                      <SummarizeAnswerDialog
+                        text={answer.text}
+                        open={summarizeOpen}
+                        onClose={() => setSummarizeOpen(false)}
+                        onSuccess={acceptSummarize}
+                      />
                     </Box>
                     <Box flex={1} textAlign="right">
                       <DeleteButton

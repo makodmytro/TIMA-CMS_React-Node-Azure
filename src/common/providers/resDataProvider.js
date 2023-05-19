@@ -395,6 +395,13 @@ const resDataProvider = {
 
     return { data: true };
   },
+  summarizeAnswer: async (resource, params) => {
+    const { json } = await httpClient(`${baseApi}/answers/summarize`, {
+      method: 'POST',
+      body: JSON.stringify(params.data),
+    });
+    return { data: json };
+  },
   batchApproveQuestions: async (resource, params) => {
     await httpClient(`${baseApi}/answers/${params.id}/approve`, {
       method: 'PUT',
