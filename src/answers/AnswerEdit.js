@@ -25,6 +25,7 @@ import useAnswer from './useAnswer';
 import SummarizeAnswerDialog from './components/SummarizeAnswerDialog';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
+const SHOW_GPT_SUMMARIZE = process.env.REACT_APP_FEATURE_GPT_SUMMARIZE ?? false;
 
 const HiddenField = ({ children, fieldName }) => {
   if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
@@ -175,31 +176,35 @@ const AnswerEdit = () => {
                           <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
                             <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
                           </Button>
-                          <Box position="relative" width="max-content">
-                            <Button
-                              type="button"
-                              variant="contained"
-                              color="secondary"
-                              style={{ marginLeft: '12px' }}
-                              onClick={() => summarizeAnswerRequest(answer.text)}
-                              disabled={isLoading}
-                            >
-                              <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
-                            </Button>
-                            {
-                              isLoading && (
-                                <Fade
-                                  in={isLoading}
-                                  style={{
-                                    transitionDelay: isLoading ? '800ms' : '0ms',
-                                  }}
-                                  unmountOnExit
+                          {
+                            SHOW_GPT_SUMMARIZE && (
+                              <Box position="relative" width="max-content">
+                                <Button
+                                  type="button"
+                                  variant="contained"
+                                  color="secondary"
+                                  style={{ marginLeft: '12px' }}
+                                  onClick={() => summarizeAnswerRequest(answer.text)}
+                                  disabled={isLoading}
                                 >
-                                  <CircularProgress color="secondary" size={20} className={classes.buttonProgress} />
-                                </Fade>
-                              )
-                            }
-                          </Box>
+                                  <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
+                                </Button>
+                                {
+                                  isLoading && (
+                                    <Fade
+                                      in={isLoading}
+                                      style={{
+                                        transitionDelay: isLoading ? '800ms' : '0ms',
+                                      }}
+                                      unmountOnExit
+                                    >
+                                      <CircularProgress color="secondary" size={20} className={classes.buttonProgress} />
+                                    </Fade>
+                                  )
+                                }
+                              </Box>
+                            )
+                          }
                           <SummarizeAnswerDialog
                             text={summarizeRef.current}
                             open={summarizeOpen}
