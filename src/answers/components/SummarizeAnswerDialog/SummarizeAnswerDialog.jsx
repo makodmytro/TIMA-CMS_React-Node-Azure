@@ -40,7 +40,7 @@ const SummarizeAnswerDialog = ({
             color="secondary"
             type="button"
             size="small"
-            onClick={onSuccess}
+            onClick={() => { onSuccess(); }}
           >
             {translate('misc.accept')}
           </Button>

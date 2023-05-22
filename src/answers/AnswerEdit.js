@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import omit from 'lodash/omit';
 import isString from 'lodash/isString';
 import { Form } from 'react-final-form';
 import { useParams } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { Typography, Box, Button, CircularProgress, Fade } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import ChatIcon from '@material-ui/icons/Chat';
 import {
@@ -35,14 +34,27 @@ const HiddenField = ({ children, fieldName }) => {
   return children;
 };
 
+const useStyles = makeStyles(() => ({
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
+
 const AnswerEdit = () => {
+  const classes = useStyles();
   const { id } = useParams();
   const translate = useTranslate();
   const notify = useNotify();
   const dataProvider = useDataProvider();
   const { answer, refresh } = useAnswer();
-  const [summarizeOpen, setSummarizeOpen] = useState(true);
-
+  const [summarizeOpen, setSummarizeOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [summarized, setSummarized] = useState('');
+  const summarizeRef = useRef('');
   const disableEdit = (answer && answer.allowEdit === false);
   const disableDelete = (answer && answer.allowDelete === false);
 
@@ -66,26 +78,32 @@ const AnswerEdit = () => {
 
   const summarizeAnswerRequest = async (text) => {
     try {
+      setIsLoading(true);
       const { data } = await dataProvider.summarizeAnswer('answers', {
         data: {
           text,
         },
       });
-      setSummarizeOpen(true);
+      if (data.summary) {
+        summarizeRef.current = data.summary;
+        setIsLoading(false);
+        setSummarizeOpen(true);
+      }
       return data;
     } catch (err) {
-      return notify(err?.body?.message || 'Failed to update', 'error');
+      return notify(err?.body?.message || 'Failed to summarize', 'error');
     }
-  };
-
-  const acceptSummarize = (text) => {
-    // update answer.text
   };
 
   React.useEffect(() => {
     refresh();
   }, [id]);
 
+  const acceptSummarize = () => {
+    setSummarized(summarizeRef.current);
+    setSummarizeOpen(false);
+    setAnswerFormPristine(false);
+  };
   const updateRelatedQuestions = async (questions, { fk_languageId, fk_topicId }) => {
     let i = 0;
 
@@ -105,11 +123,7 @@ const AnswerEdit = () => {
     refresh();
   };
 
-  const [answerFormPristine, setAnswerFormPristine] = React.useState(true);
-
-  React.useEffect(() => {
-    console.log('answerFormPristine', answerFormPristine);
-  }, [answerFormPristine]);
+  const [answerFormPristine, setAnswerFormPristine] = useState(true);
 
   const throwIfAnswerFormDirty = () => {
     if (!answerFormPristine) {
@@ -125,70 +139,91 @@ const AnswerEdit = () => {
       <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
         {translate('misc.editing_answer')}
       </Typography>
-      <Box boxShadow={3} borderRadius={5}>
-        <Form
-          onSubmit={onSubmit}
-          initialValues={{ ...answer }}
-          enableReinitialize
-          render={({ handleSubmit, valid, values }) => {
-            const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
-              if (!answer) {
-                return false;
-              }
-
-              if (isString(values[key]) && isString(answer[key])) {
-                return values[key].trim() === answer[key].trim();
-              }
-
-              return answer && values[key] === answer[key];
-            });
-
-            if ((pristine) !== answerFormPristine) {
-              setAnswerFormPristine(pristine);
-            }
-
-            return (
-              <Box>
-                <form onSubmit={handleSubmit}>
-                  <Box p={2}>
-                    <FormFields edit record={answer} />
+      {
+        true && (
+          <Box boxShadow={3} borderRadius={5}>
+            <Form
+              initialValues={{ ...answer }}
+              onSubmit={onSubmit}
+              mutators={{
+                replaceWithSummarized: (args, state, { changeValue }) => {
+                  changeValue(state, 'text', () => summarized);
+                },
+              }}
+              enableReinitialize
+              render={({ form, handleSubmit, valid, values }) => {
+                const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
+                  if (!answer) {
+                    return false;
+                  }
+                  if (isString(values[key]) && isString(answer[key])) {
+                    return values[key].trim() === answer[key].trim();
+                  }
+                  return answer && values[key] === answer[key];
+                });
+                if ((pristine) !== answerFormPristine) {
+                  setAnswerFormPristine(pristine);
+                }
+                return (
+                  <Box>
+                    <form onSubmit={handleSubmit}>
+                      <Box p={2}>
+                        <FormFields edit record={answer} markdownText={summarized} />
+                      </Box>
+                      <Box display="flex" p={2} bgcolor="#f5f5f5">
+                        <Box flex={1} display="flex">
+                          <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
+                            <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
+                          </Button>
+                          <Box position="relative" width="max-content">
+                            <Button
+                              type="button"
+                              variant="contained"
+                              color="secondary"
+                              style={{ marginLeft: '12px' }}
+                              onClick={() => summarizeAnswerRequest(answer.text)}
+                              disabled={isLoading}
+                            >
+                              <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
+                            </Button>
+                            {
+                              isLoading && (
+                                <Fade
+                                  in={isLoading}
+                                  style={{
+                                    transitionDelay: isLoading ? '800ms' : '0ms',
+                                  }}
+                                  unmountOnExit
+                                >
+                                  <CircularProgress color="secondary" size={20} className={classes.buttonProgress} />
+                                </Fade>
+                              )
+                            }
+                          </Box>
+                          <SummarizeAnswerDialog
+                            text={summarizeRef.current}
+                            open={summarizeOpen}
+                            onClose={() => { setSummarizeOpen(false); summarizeRef.current = ''; }}
+                            onSuccess={() => { form.mutators.replaceWithSummarized(); acceptSummarize(); }}
+                          />
+                        </Box>
+                        <Box flex={1} textAlign="right">
+                          <DeleteButton
+                            basePath="/answers"
+                            record={answer}
+                            undoable={false}
+                            disabled={disableDelete}
+                          />
+                        </Box>
+                      </Box>
+                    </form>
                   </Box>
-                  <Box display="flex" p={2} bgcolor="#f5f5f5">
-                    <Box flex={1}>
-                      <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
-                        <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        style={{ marginLeft: '12px' }}
-                        onClick={() => summarizeAnswerRequest(answer.text)}
-                      >
-                        <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
-                      </Button>
-                      <SummarizeAnswerDialog
-                        text={answer.text}
-                        open={summarizeOpen}
-                        onClose={() => setSummarizeOpen(false)}
-                        onSuccess={acceptSummarize}
-                      />
-                    </Box>
-                    <Box flex={1} textAlign="right">
-                      <DeleteButton
-                        basePath="/answers"
-                        record={answer}
-                        undoable={false}
-                        disabled={disableDelete}
-                      />
-                    </Box>
-                  </Box>
-                </form>
-              </Box>
-            );
-          }}
-        />
-      </Box>
+                );
+              }}
+            />
+          </Box>
+        )
+      }
 
       <Box pt={2}>
         <StatusInputSection record={answer} disabled={disableEdit} preSubmitFn={throwIfAnswerFormDirty} />
