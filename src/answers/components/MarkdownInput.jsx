@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextInput, useTranslate, required } from 'react-admin';
 import { useField } from 'react-final-form';
 import FormControl from '@material-ui/core/FormControl';
@@ -28,7 +28,7 @@ const HiddenField = ({ children, fieldName }) => {
 
 const imagePlugin = createImagePlugin();
 
-const DraftInput = ({ source, label, lang, disabled }) => {
+const DraftInput = ({ source, label, lang, disabled, initialText = '' }) => {
   const translate = useTranslate();
   const [state, setState] = React.useState(EditorState.createEmpty());
   const {
@@ -40,7 +40,7 @@ const DraftInput = ({ source, label, lang, disabled }) => {
   } = useField(source, { validate: required() });
   const invalid = !!error && (touched || dirty || submitFailed);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value && !touched && !dirty) {
       const fixedValue = value
         .replace(/\n\s*\n/g, '\n') //remove double line breaks
@@ -72,6 +72,13 @@ const DraftInput = ({ source, label, lang, disabled }) => {
 
     return mdFromHtml;
   };
+
+  useEffect(() => {
+    if (initialText !== '') {
+      setState(EditorState.createWithContent(ContentState.createFromText(initialText)));
+      onChange(initialText);
+    }
+  }, [initialText]);
 
   return (
     <>

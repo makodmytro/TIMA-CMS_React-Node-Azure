@@ -21,7 +21,7 @@ import ApprovedInput from './ApprovedInput';
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
 const Form = ({
-  languages, topics, edit, record,
+  languages, topics, edit, record, markdownText,
 }) => {
   const _languages = useSelector((state) => state.custom.languages);
   const admin = useIsAdmin();
@@ -107,6 +107,7 @@ const Form = ({
         label="resources.answers.fields.text"
         source="text"
         lang={getLang()}
+        initialText={markdownText}
         disabled={disableEdit}
       />
 
