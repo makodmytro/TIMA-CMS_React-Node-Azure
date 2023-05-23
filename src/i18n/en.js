@@ -225,6 +225,7 @@ const english = {
         qnaProjectName: 'Language Studio Project name',
         qnaLangStudioApiVersion: 'Language Studio API Version',
         qnaSubscriptionKey: 'QNA Subscription key',
+        qnaSourceType: 'QNA Source Type',
         fk_parentTopicId: 'Parent topic',
         has_fk_parentTopicId: 'Has parent',
         syncScheduled: 'Sync scheduled',

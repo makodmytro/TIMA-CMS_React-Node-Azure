@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ReferenceInput,
   required,
@@ -52,7 +52,7 @@ export const Qna = (props) => {
   const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
 
   const topics = useSelector((state) => state.admin.resources.topics.data);
-  const qnaSourceType = props?.record?.qnaSourceType || 0;
+  const [qnaSourceType, setQnaSourceType] = useState(props?.record?.qnaSourceType || 0);
 
   const { search } = useLocation();
 
@@ -120,6 +120,19 @@ export const Qna = (props) => {
       {
         !props?.fkParentTopicId && (
           <>
+            <SelectInput
+              source="qnaSourceType"
+              label="resources.topics.fields.qnaSourceType"
+              validate={required()}
+              choices={[
+                { id: 1, name: 'Language Studio' },
+                { id: 0, name: 'QnaMaker' },
+              ]}
+              margin="dense"
+              initialValue={1}
+              fullWidth
+              onChange={(e) => setQnaSourceType(e.target.value)}
+            />
             <TextInput
               source="qnaApiEndpoint"
               label="resources.topics.fields.qnaApiEndpoint"
@@ -132,13 +145,16 @@ export const Qna = (props) => {
                 source="qnaLangStudioApiVersion"
                 label="resources.topics.fields.qnaLangStudioApiVersion"
                 record={props.record}
+                validate={required()}
                 fullWidth
+                initialValue="2021-10-01"
                 disabled={props.disabled === true}
               />
             ) : (
               <TextInput
                 source="qnaApiVersion"
                 label="resources.topics.fields.qnaApiVersion"
+                validate={required()}
                 record={props.record}
                 fullWidth
                 disabled={props.disabled === true}
@@ -157,6 +173,7 @@ export const Qna = (props) => {
                 source="qnaProjectName"
                 label="resources.topics.fields.qnaProjectName"
                 record={props.record}
+                validate={required()}
                 fullWidth
                 disabled={props.disabled === true}
               />
@@ -164,6 +181,7 @@ export const Qna = (props) => {
               <TextInput
                 source="qnaKnowledgeBaseId"
                 label="resources.topics.fields.qnaKnowledgeBaseId"
+                validate={required()}
                 record={props.record}
                 fullWidth
                 disabled={props.disabled === true}

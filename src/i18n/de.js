@@ -223,6 +223,7 @@ const german = {
         qnaProjectName: 'Language Studio Project name',
         qnaLangStudioApiVersion: 'Language Studio API Version',
         qnaSubscriptionKey: 'QNA Subscription key',
+        qnaSourceType: 'QNA Source Type',
         fk_parentTopicId: 'Fachbereich/Themengruppe übergeordnet',
         has_fk_parentTopicId: 'Fachbereich/Themengruppe übergeordnet',
         syncScheduled: 'Sync geplant',
