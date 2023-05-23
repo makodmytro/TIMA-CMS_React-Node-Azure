@@ -92,9 +92,6 @@ const DraftInput = ({ source, label, lang, disabled, initialText = '' }) => {
 
       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <InputLabel error={invalid}>{translate(label)}</InputLabel>
-        <Button onClick={() => setState(EditorState.createEmpty())} disabled={disabled === true}>
-          {translate('misc.clear')}
-        </Button>
       </Box>
       <FormControl fullWidth error={invalid} style={{ img: { maxWidth: '100%' } }}>
         <Editor
