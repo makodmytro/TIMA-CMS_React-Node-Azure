@@ -55,7 +55,7 @@ const columns = [
   { key: 'fk_topicId' },
   { key: 'approved' },
   { key: 'tags' },
-  { key: 'updatedAt' },
+  { key: 'contentLastUpdatedAt' },
 ].filter((c) => !HIDDEN_FIELDS.includes(c.key));
 
 const mapStateToProps = (state) => {
@@ -177,9 +177,9 @@ const CustomGridItem = ({
           )
         }
         {
-          visibleColumns.includes('updatedAt') && (
+          visibleColumns.includes('contentLastUpdatedAt') && (
             <TableCell>
-              <DateField source="updatedAt" showTime record={record} />
+              <DateField source="contentLastUpdatedAt" showTime record={record} />
             </TableCell>
           )
         }
@@ -230,7 +230,7 @@ const CustomGrid = ({ visibleColumns }) => {
                 <Th label="resources.answers.fields.status" field="status" />
                 <Th label="resources.answers.fields.fk_topicId" field="fk_topicId" />
                 <Th label="resources.answers.fields.approved" field="approved" />
-                <Th label="resources.answers.fields.updatedAt" field="updatedAt" />
+                <Th label="resources.answers.fields.updatedAt" field="contentLastUpdatedAt" />
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
@@ -285,7 +285,7 @@ const AnswerList = ({
         empty={false}
         filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}
-        sort={{ field: 'updatedAt', order: 'DESC' }}
+        sort={{ field: 'contentLastUpdatedAt', order: 'DESC' }}
       >
         <CustomGrid visibleColumns={visibleColumns} />
       </List>
