@@ -1,12 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {
-  ReferenceInput,
-  required,
-  SelectInput,
-  TextInput,
-  useTranslate,
-  useDataProvider,
-} from 'react-admin';
+import { ReferenceInput, required, SelectInput, TextInput, useTranslate, useDataProvider, choices as selectChoices } from 'react-admin';
 import { useLocation } from 'react-router-dom';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
@@ -31,16 +24,8 @@ export const Advanced = (props) => {
 
   return (
     <>
-      <Typography>
-        {translate('misc.advanced')}
-      </Typography>
-      <TextInput
-        source="topicKey"
-        record={props.record}
-        fullWidth
-        disabled={props.disabled === true}
-        label="resources.topics.fields.topicKey"
-      />
+      <Typography>{translate('misc.advanced')}</Typography>
+      <TextInput source="topicKey" record={props.record} fullWidth disabled={props.disabled === true} label="resources.topics.fields.topicKey" />
     </>
   );
 };
@@ -59,7 +44,7 @@ export const Qna = (props) => {
   const qnaMetadataKeyChoices = useMemo(() => {
     const choices = TOPICS_METADATA_KEYS.map((key) => ({
       id: key,
-      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key,
+      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key
     }));
 
     if (!search) {
@@ -84,19 +69,15 @@ export const Qna = (props) => {
 
   return (
     <>
-      <Typography>
-        {translate('misc.qna')}
-      </Typography>
+      <Typography>{translate('misc.qna')}</Typography>
       {TOPICS_METADATA_KEYS ? (
         <SelectInput
           source="qnaMetadataKey"
           label="resources.topics.fields.qnaMetadataKey"
           validate={TOPICS_METADATA && required()}
-          choices={[
-            ...qnaMetadataKeyChoices,
-            existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey },
-          ]}
+          choices={[...qnaMetadataKeyChoices, existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey }]}
           margin="dense"
+          initialValue={qnaMetadataKeyChoices.length === 1 ? qnaMetadataKeyChoices[0].id : null}
           fullWidth
         />
       ) : (
@@ -117,80 +98,77 @@ export const Qna = (props) => {
         fullWidth
         disabled={props.disabled === true}
       />
-      {
-        !props?.fkParentTopicId && (
-          <>
-            <SelectInput
-              source="qnaSourceType"
-              label="resources.topics.fields.qnaSourceType"
+      {!props?.fkParentTopicId && (
+        <>
+          <SelectInput
+            source="qnaSourceType"
+            label="resources.topics.fields.qnaSourceType"
+            validate={required()}
+            choices={[
+              { id: 1, name: 'Language Studio' },
+              { id: 0, name: 'QnaMaker' }
+            ]}
+            margin="dense"
+            initialValue={1}
+            fullWidth
+            onChange={(e) => setQnaSourceType(e.target.value)}
+          />
+          <TextInput
+            source="qnaApiEndpoint"
+            label="resources.topics.fields.qnaApiEndpoint"
+            record={props.record}
+            fullWidth
+            disabled={props.disabled === true}
+          />
+          {qnaSourceType === 1 ? (
+            <TextInput
+              source="qnaLangStudioApiVersion"
+              label="resources.topics.fields.qnaLangStudioApiVersion"
+              record={props.record}
               validate={required()}
-              choices={[
-                { id: 1, name: 'Language Studio' },
-                { id: 0, name: 'QnaMaker' },
-              ]}
-              margin="dense"
-              initialValue={1}
               fullWidth
-              onChange={(e) => setQnaSourceType(e.target.value)}
+              initialValue="2021-10-01"
+              disabled={props.disabled === true}
             />
+          ) : (
             <TextInput
-              source="qnaApiEndpoint"
-              label="resources.topics.fields.qnaApiEndpoint"
+              source="qnaApiVersion"
+              label="resources.topics.fields.qnaApiVersion"
+              validate={required()}
               record={props.record}
               fullWidth
               disabled={props.disabled === true}
             />
-            {qnaSourceType === 1 ? (
-              <TextInput
-                source="qnaLangStudioApiVersion"
-                label="resources.topics.fields.qnaLangStudioApiVersion"
-                record={props.record}
-                validate={required()}
-                fullWidth
-                initialValue="2021-10-01"
-                disabled={props.disabled === true}
-              />
-            ) : (
-              <TextInput
-                source="qnaApiVersion"
-                label="resources.topics.fields.qnaApiVersion"
-                validate={required()}
-                record={props.record}
-                fullWidth
-                disabled={props.disabled === true}
-              />
-            )}
+          )}
+          <TextInput
+            source="qnaSubscriptionKey"
+            label="resources.topics.fields.qnaSubscriptionKey"
+            record={props.record}
+            fullWidth
+            disabled={props.disabled === true}
+            type={props.disabled ? 'password' : 'text'}
+          />
+          {qnaSourceType === 1 ? (
             <TextInput
-              source="qnaSubscriptionKey"
-              label="resources.topics.fields.qnaSubscriptionKey"
+              source="qnaProjectName"
+              label="resources.topics.fields.qnaProjectName"
+              record={props.record}
+              validate={required()}
+              fullWidth
+              disabled={props.disabled === true}
+            />
+          ) : (
+            <TextInput
+              source="qnaKnowledgeBaseId"
+              label="resources.topics.fields.qnaKnowledgeBaseId"
+              validate={required()}
               record={props.record}
               fullWidth
               disabled={props.disabled === true}
-              type={props.disabled ? 'password' : 'text'}
             />
-            {qnaSourceType === 1 ? (
-              <TextInput
-                source="qnaProjectName"
-                label="resources.topics.fields.qnaProjectName"
-                record={props.record}
-                validate={required()}
-                fullWidth
-                disabled={props.disabled === true}
-              />
-            ) : (
-              <TextInput
-                source="qnaKnowledgeBaseId"
-                label="resources.topics.fields.qnaKnowledgeBaseId"
-                validate={required()}
-                record={props.record}
-                fullWidth
-                disabled={props.disabled === true}
-              />
-            )}
-          </>
-        )
-      }
-
+          )}
+        </>
+      )}
     </>
   );
 };
@@ -205,17 +183,35 @@ const FormFields = (props) => {
   const admin = useIsAdmin();
 
   const {
-    input: { value: fkLanguageId, onChange: changeLanguage },
+    input: { value: fkLanguageId, onChange: changeLanguage }
   } = useField('fk_languageId');
-  const { input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange } } = useField('fk_parentTopicId');
-  const { input: { onChange: qnaApiEndpointChange } } = useField('qnaApiEndpoint');
-  const { input: { onChange: qnaApiVersionChange } } = useField('qnaApiVersion');
-  const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
-  const { input: { onChange: qnaKnowledgeBaseIdChange } } = useField('qnaKnowledgeBaseId');
-  const { input: { onChange: qnaMetadataValueChange } } = useField('qnaMetadataValue');
-  const { input: { onChange: qnaProjectNameValueChange } } = useField('qnaProjectName');
-  const { input: { onChange: qnaLangStudioApiVersionValueChange } } = useField('qnaLangStudioApiVersion');
-  const { input: { value: nameValue } } = useField('name');
+  const {
+    input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange }
+  } = useField('fk_parentTopicId');
+  const {
+    input: { onChange: qnaApiEndpointChange }
+  } = useField('qnaApiEndpoint');
+  const {
+    input: { onChange: qnaApiVersionChange }
+  } = useField('qnaApiVersion');
+  const {
+    input: { onChange: qnaSubscriptionKeyChange }
+  } = useField('qnaSubscriptionKey');
+  const {
+    input: { onChange: qnaKnowledgeBaseIdChange }
+  } = useField('qnaKnowledgeBaseId');
+  const {
+    input: { onChange: qnaMetadataValueChange }
+  } = useField('qnaMetadataValue');
+  const {
+    input: { onChange: qnaProjectNameValueChange }
+  } = useField('qnaProjectName');
+  const {
+    input: { onChange: qnaLangStudioApiVersionValueChange }
+  } = useField('qnaLangStudioApiVersion');
+  const {
+    input: { value: nameValue }
+  } = useField('name');
 
   const getLang = (r) => {
     if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
@@ -232,7 +228,7 @@ const FormFields = (props) => {
 
     try {
       const { data } = await dataProvider.getOne('topics', {
-        id: fkParentTopicId,
+        id: fkParentTopicId
       });
 
       if (data) {
@@ -293,71 +289,56 @@ const FormFields = (props) => {
           label="resources.topics.fields.welcomeText"
         />
       </HiddenField>
-      {
-        _languages && _languages.length > 1 && (
-          <HiddenField fieldName="fk_languageId">
-            <ReferenceInput
-              validate={required()}
-              source="fk_languageId"
-              reference="languages"
-              label="resources.topics.fields.language"
-              fullWidth
-              disabled={disabled && !admin}
-            >
-              <SelectInput
-                optionText="name"
-              />
-            </ReferenceInput>
-          </HiddenField>
-        )
-      }
+      {_languages && _languages.length > 1 && (
+        <HiddenField fieldName="fk_languageId">
+          <ReferenceInput
+            validate={required()}
+            source="fk_languageId"
+            reference="languages"
+            label="resources.topics.fields.language"
+            fullWidth
+            disabled={disabled && !admin}
+          >
+            <SelectInput optionText="name" />
+          </ReferenceInput>
+        </HiddenField>
+      )}
       <HiddenField fieldName="topicImageUrl">
-        <TextInput
-          source="topicImageUrl"
-          fullWidth
-          disabled={disabled && !admin}
-          label="resources.topics.fields.image"
-        />
+        <TextInput source="topicImageUrl" fullWidth disabled={disabled && !admin} label="resources.topics.fields.image" />
       </HiddenField>
       <HiddenField fieldName="topicImageUrl">
         <TopicImage {...props} />
       </HiddenField>
-      {
-        (!props?.editting || fkParentTopicId) && (
-          <HiddenField fieldName="fk_parentTopicId">
-            <TopicSelect
-              source="fk_parentTopicId"
-              disabled
-              label="resources.topics.fields.fk_parentTopicId"
-              allowEmpty
-              depth={2}
-              editting
-              anyLevelSelectable
-              isRequired
-              filterFunction={(topic) => topic?.allowCreateChild}
-            />
-          </HiddenField>
-        )
-      }
+      {(!props?.editting || fkParentTopicId) && (
+        <HiddenField fieldName="fk_parentTopicId">
+          <TopicSelect
+            source="fk_parentTopicId"
+            disabled
+            label="resources.topics.fields.fk_parentTopicId"
+            allowEmpty
+            depth={2}
+            editting
+            anyLevelSelectable
+            isRequired
+            filterFunction={(topic) => topic?.allowCreateChild}
+          />
+        </HiddenField>
+      )}
 
-      {
-        /*
+      {/*
           <HiddenField fieldName="level">
             <TextInput source="level" label="resources.topics.fields.level" fullWidth disabled />
           </HiddenField>
-        */
-      }
+        */}
 
       <HiddenField fieldName="topicKey">
         <Advanced source="topicKey" disabled={disabled && !admin} />
       </HiddenField>
-      {
-        (!fkParentTopicId || admin) && (
-          <HiddenField fieldName="qna">
-            <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />
-          </HiddenField>
-        )
-      }
+      {(!fkParentTopicId || admin) && (
+        <HiddenField fieldName="qna">
+          <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />
+        </HiddenField>
+      )}
     </>
   );
 };
