@@ -77,6 +77,7 @@ export const Qna = (props) => {
           validate={TOPICS_METADATA && required()}
           choices={[...qnaMetadataKeyChoices, existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey }]}
           margin="dense"
+          initialValue={qnaMetadataKeyChoices.length === 1 ? qnaMetadataKeyChoices[0].id : null}
           fullWidth
         />
       ) : (
