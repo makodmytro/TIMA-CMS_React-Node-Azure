@@ -1,13 +1,13 @@
+import Typography from '@material-ui/core/Typography';
 import React, { useMemo, useState } from 'react';
-import { ReferenceInput, required, SelectInput, TextInput, useTranslate, useDataProvider, choices as selectChoices } from 'react-admin';
-import { useLocation } from 'react-router-dom';
+import { ReferenceInput, SelectInput, TextInput, required, useDataProvider, useTranslate } from 'react-admin';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
-import TopicImage from './Image';
-import TopicSelect from './TopicSelect';
+import { useLocation } from 'react-router-dom';
 import { PlayableTextInput } from '../../common/components/playable-text';
 import { useIsAdmin } from '../../hooks';
+import TopicImage from './Image';
+import TopicSelect from './TopicSelect';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_TOPICS ? process.env.REACT_APP_HIDE_FIELDS_TOPICS.split(',') : [];
 
@@ -201,7 +201,7 @@ const FormFields = (props) => {
     input: { onChange: qnaKnowledgeBaseIdChange }
   } = useField('qnaKnowledgeBaseId');
   const {
-    input: { onChange: qnaMetadataValueChange }
+    input: { value: qnaMetadataValue, onChange: qnaMetadataValueChange }
   } = useField('qnaMetadataValue');
   const {
     input: { onChange: qnaProjectNameValueChange }
@@ -261,7 +261,9 @@ const FormFields = (props) => {
   }, [fkParentTopicId]);
 
   React.useEffect(() => {
-    qnaMetadataValueChange(nameValue.toLocaleLowerCase());
+    if (qnaMetadataValue === '' && !props.editing) {
+      qnaMetadataValueChange(nameValue.toLocaleLowerCase());
+    }
   }, [nameValue]);
 
   return (
