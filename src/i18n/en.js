@@ -343,6 +343,7 @@ const english = {
         tags: 'Tags',
         status: 'Status',
         isContextOnly: 'Context only',
+        contentLastUpdatedAt: 'Updated',
       },
     },
     sources: {

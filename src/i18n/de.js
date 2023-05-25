@@ -340,6 +340,7 @@ const german = {
         tags: 'Tags',
         status: 'Status',
         isContextOnly: 'Nur im Kontext',
+        contentLastUpdatedAt: 'Aktualisiert',
       },
     },
     sources: {
