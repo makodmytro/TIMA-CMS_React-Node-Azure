@@ -249,7 +249,7 @@ const FormFields = (props) => {
   }, [_languages, fkLanguageId]);
 
   React.useEffect(() => {
-    const valueFromUrl = querystring.get('fk_parentTopicId') ? parseInt(querystring.get('fk_parentTopicId'), 10) : 0;
+    const valueFromUrl = querystring.get('fk_parentTopicId') ? parseInt(querystring.get('fk_parentTopicId'), 10) : null;
     //check if value from url is valid numeric and different from the one in the form
     if (!fkParentTopicId || (valueFromUrl > 0 && valueFromUrl !== fkParentTopicId)) {
       onFkParentTopicIdChange(valueFromUrl);
