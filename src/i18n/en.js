@@ -313,7 +313,7 @@ const english = {
       add_related_question: 'Add related question',
       status_history: 'Status history',
       status_can_not_change: 'The status can not be changed',
-      duplicate_answers: 'Duplicates can´t be linked to existing answers, please create a new answer',
+      duplicate_answers: 'Duplicates can\'t be linked to existing answers, please create a new answer',
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
       topic_edit: 'This QnA has follow-up answers, please check if these should be moved to the desired topic as well.',
