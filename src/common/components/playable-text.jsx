@@ -3,11 +3,7 @@ import get from 'lodash/get';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
 import { useSelector } from 'react-redux';
-import {
-  useDataProvider,
-  useNotify,
-  TextInput,
-} from 'react-admin';
+import { useDataProvider, useNotify, TextInput } from 'react-admin';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import PlayArrow from '@material-ui/icons/PlayArrow';
@@ -58,21 +54,10 @@ const PlayableTextField = ({ record, source, getLanguageFromRecord }) => {
     lang = getLanguageFromRecord(record);
   }
 
-  return (
-    <PlayableText
-      text={get(record, source)}
-      lang={lang}
-    />
-  );
+  return <PlayableText text={get(record, source)} lang={lang} />;
 };
 
-const PlayableText = ({
-  el,
-  text,
-  lang,
-  fkLanguageId,
-  hideText,
-}) => {
+const PlayableText = ({ el, text, lang, fkLanguageId, hideText }) => {
   const languages = useSelector((state) => state.admin.resources.languages.data);
   const [playing, setPlaying] = React.useState(false);
   const dataProvider = useDataProvider();
@@ -125,34 +110,12 @@ const PlayableText = ({
 
   return (
     <>
-      {
-        !hideText && (
-          <>
-            {el || text}
-          </>
-        )
-      }
+      {!hideText && <>{el || text}</>}
       &nbsp;
-      {
-        playing && DISABLED !== '1' && (
-          <StopIcon
-            size="small"
-            className={classes.play}
-            onClick={stop}
-            color={code ? 'secondary' : 'disabled'}
-          />
-        )
-      }
-      {
-        !playing && DISABLED !== '1' && (
-          <PlayArrow
-            size="small"
-            className={classes.play}
-            onClick={getAudio}
-            color={code ? 'secondary' : 'disabled'}
-          />
-        )
-      }
+      {playing && DISABLED !== '1' && <StopIcon size="small" className={classes.play} onClick={stop} color={code ? 'secondary' : 'disabled'} />}
+      {!playing && DISABLED !== '1' && (
+        <PlayArrow size="small" className={classes.play} onClick={getAudio} color={code ? 'secondary' : 'disabled'} />
+      )}
     </>
   );
 };

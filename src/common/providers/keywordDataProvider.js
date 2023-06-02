@@ -7,10 +7,8 @@ const keywordDataProvider = {
       fk_sourceTextId: textId,
       fk_languageId: languageId,
       text,
-
     };
   },
-
 };
 
 export default keywordDataProvider;

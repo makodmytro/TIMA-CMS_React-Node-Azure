@@ -6,13 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TablePagination from '@material-ui/core/TablePagination';
 import { Form } from 'react-final-form'; // eslint-disable-line
-import {
-  useDataProvider,
-  SelectInput,
-  ReferenceInput,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, SelectInput, ReferenceInput, useNotify, useTranslate } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
 const Filters = ({ onSubmit, initialValues }) => {
@@ -32,12 +26,7 @@ const Filters = ({ onSubmit, initialValues }) => {
             </Grid>
             <Grid item xs={12} sm={4} md={3}>
               <Box pt={2}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                >
+                <Button type="submit" color="primary" variant="contained" fullWidth>
                   {translate('misc.search')}
                 </Button>
               </Box>
@@ -122,25 +111,28 @@ const PastSessions = () => {
     },
     tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>'
-        + '<td style="padding:0"><b>{point.y}</b></td></tr>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y}</b></td></tr>',
       footerFormat: '</table>',
       shared: true,
       useHTML: true,
     },
-    series: [{
-      name: 'Questions',
-      data: topics.map((topic) => topic.totalQuestions),
-      color: '#1b6ec5',
-    }, {
-      name: 'Asked',
-      data: topics.map((topic) => topic.totalAskedQuestions),
-      color: '#2c9e4a',
-    }, {
-      name: 'Unanswered',
-      data: topics.map((topic) => topic.totalUnanswered),
-      color: '#d32f2f',
-    }],
+    series: [
+      {
+        name: 'Questions',
+        data: topics.map((topic) => topic.totalQuestions),
+        color: '#1b6ec5',
+      },
+      {
+        name: 'Asked',
+        data: topics.map((topic) => topic.totalAskedQuestions),
+        color: '#2c9e4a',
+      },
+      {
+        name: 'Unanswered',
+        data: topics.map((topic) => topic.totalUnanswered),
+        color: '#d32f2f',
+      },
+    ],
   };
 
   return (
@@ -155,39 +147,32 @@ const PastSessions = () => {
         />
       </Box>
       <Box>
-        {
-          !!topics.length && (
-            <>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={options}
+        {!!topics.length && (
+          <>
+            <HighchartsReact highcharts={Highcharts} options={options} />
+            <Box textAlign="center">
+              <TablePagination
+                component="div"
+                count={count}
+                page={pagination.page - 1}
+                onChangePage={(e, value) => {
+                  setPage(value);
+                }}
+                rowsPerPage={pagination.perPage}
+                rowsPerPageOptions={[5, 10, 15]}
+                onChangeRowsPerPage={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  setPageSize(value);
+                }}
               />
-              <Box textAlign="center">
-                <TablePagination
-                  component="div"
-                  count={count}
-                  page={pagination.page - 1}
-                  onChangePage={(e, value) => {
-                    setPage(value);
-                  }}
-                  rowsPerPage={pagination.perPage}
-                  rowsPerPageOptions={[5, 10, 15]}
-                  onChangeRowsPerPage={(e) => {
-                    const value = parseInt(e.target.value, 10);
-                    setPageSize(value);
-                  }}
-                />
-              </Box>
-            </>
-          )
-        }
-        {
-          !topics.length && (
-            <Alert severity="info" elevation={3}>
-              No data found
-            </Alert>
-          )
-        }
+            </Box>
+          </>
+        )}
+        {!topics.length && (
+          <Alert severity="info" elevation={3}>
+            No data found
+          </Alert>
+        )}
       </Box>
     </Box>
   );

@@ -43,10 +43,7 @@ export const FollowupIcon = () => {
 
   return (
     <>
-      <QuestionAnswerOutlined
-        style={{ fontSize: '12px' }}
-        titleAccess={translate('resources.questions.followup')}
-      />
+      <QuestionAnswerOutlined style={{ fontSize: '12px' }} titleAccess={translate('resources.questions.followup')} />
       &nbsp;
     </>
   );
@@ -76,58 +73,40 @@ const TextField = ({ record }) => {
           </Link>
         </Box>
         <Box flex={1}>
-          <PlayableText
-            hideText
-            text={record.spokenText || record.text}
-            fkLanguageId={record.fk_languageId}
-          />
+          <PlayableText hideText text={record.spokenText || record.text} fkLanguageId={record.fk_languageId} />
         </Box>
       </Box>
-      {
-        record.FollowupQuestions?.length > 0 && (
-          <Box borderTop="1px solid #e5e5e5">
-            <Box mt={0}>
-              {
-                record.FollowupQuestions.map((q, i) => {
-                  return (
-                    <Box key={i} pt={0.5} display="flex">
-                      <Box flex={1} pr={1}>
-                        {
-                          q.isContextOnly && (
-                            <Chip
-                              label={translate('resources.questions.fields.contextOnly')}
-                              variant="outlined"
-                              size="small"
-                              style={{ fontSize: '0.5rem', textTransform: 'uppercase' }}
-                            />
-                          )
-                        }
-                      </Box>
-                      <Box fontSize="0.9rem" lineHeight="14px" flex={4}>
-                        &#8226;&nbsp;
-                        {
-                          q.fk_answerId && (
-                            <Link
-                              className={classes.link}
-                              to={`/answers/${q.fk_answerId}/edit`}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {q.text}
-                            </Link>
-                          )
-                        }
-                        {
-                          !q.fk_answerId && (<>{q.text}</>)
-                        }
-                      </Box>
-                    </Box>
-                  );
-                })
-              }
-            </Box>
+      {record.FollowupQuestions?.length > 0 && (
+        <Box borderTop="1px solid #e5e5e5">
+          <Box mt={0}>
+            {record.FollowupQuestions.map((q, i) => {
+              return (
+                <Box key={i} pt={0.5} display="flex">
+                  <Box flex={1} pr={1}>
+                    {q.isContextOnly && (
+                      <Chip
+                        label={translate('resources.questions.fields.contextOnly')}
+                        variant="outlined"
+                        size="small"
+                        style={{ fontSize: '0.5rem', textTransform: 'uppercase' }}
+                      />
+                    )}
+                  </Box>
+                  <Box fontSize="0.9rem" lineHeight="14px" flex={4}>
+                    &#8226;&nbsp;
+                    {q.fk_answerId && (
+                      <Link className={classes.link} to={`/answers/${q.fk_answerId}/edit`} onClick={(e) => e.stopPropagation()}>
+                        {q.text}
+                      </Link>
+                    )}
+                    {!q.fk_answerId && <>{q.text}</>}
+                  </Box>
+                </Box>
+              );
+            })}
           </Box>
-        )
-      }
+        </Box>
+      )}
     </Box>
   );
 };
@@ -142,52 +121,45 @@ export const AnswerRelatedQuestionField = ({ record }) => {
   return (
     <Box display="flex" alignItems="center">
       <Box flex={1}>
-        {
-          record.RelatedQuestions.length > 1 && (
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
+        {record.RelatedQuestions.length > 1 && (
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={(e) => {
+              e.stopPropagation();
 
-                setExpanded(!expanded);
-              }}
-            >
-              { !expanded && <ExpandMore fontSize="small" /> }
-              { expanded && <ExpandLess fontSize="small" /> }
-              &nbsp;
-            </IconButton>
-          )
-        }
-        {
-          record.RelatedQuestions.length <= 1 && (<Box component="span" pl={4}>&nbsp;</Box>)
-        }
+              setExpanded(!expanded);
+            }}
+          >
+            {!expanded && <ExpandMore fontSize="small" />}
+            {expanded && <ExpandLess fontSize="small" />}
+            &nbsp;
+          </IconButton>
+        )}
+        {record.RelatedQuestions.length <= 1 && (
+          <Box component="span" pl={4}>
+            &nbsp;
+          </Box>
+        )}
       </Box>
       <Box flex={11}>
         <Box pb={1}>
-          {
-            record.RelatedQuestions[0].isFollowup && (
-              <FollowupIcon />
-            )
-          }
+          {record.RelatedQuestions[0].isFollowup && <FollowupIcon />}
           <RATextField record={record.RelatedQuestions[0]} source="text" />
         </Box>
-        {
-          expanded && record.RelatedQuestions.map((rq, i) => {
+        {expanded &&
+          record.RelatedQuestions.map((rq, i) => {
             if (i === 0) {
               return null;
             }
 
             return (
               <Box key={i} py={1} borderTop="1px solid #f1f1f1">
-                {
-                  rq.isFollowup && <FollowupIcon />
-                }
+                {rq.isFollowup && <FollowupIcon />}
                 <RATextField record={rq} source="text" />
               </Box>
             );
-          })
-        }
+          })}
       </Box>
     </Box>
   );

@@ -10,9 +10,7 @@ const secondsToTime = (seconds) => {
     return '00:00';
   }
 
-  const minutes = Math.floor(seconds / 60) > 0
-    ? Math.floor(seconds / 60)
-    : '00';
+  const minutes = Math.floor(seconds / 60) > 0 ? Math.floor(seconds / 60) : '00';
   const left = seconds % 60;
 
   return `${String(minutes).padStart(2, '0')}:${String(left).padStart(2, '0')}`;
@@ -55,8 +53,7 @@ const getStacked = (sessions, translate) => {
     legend: {
       align: 'center',
       verticalAlign: 'bottom',
-      backgroundColor:
-          Highcharts.defaultOptions.legend.backgroundColor || 'white',
+      backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
       borderColor: '#CCC',
       borderWidth: 1,
       shadow: false,
@@ -69,15 +66,18 @@ const getStacked = (sessions, translate) => {
         },
       },
     },
-    series: [{
-      name: translate('Questions unanswered'),
-      data: sessions.map((session) => u(session)),
-      color: '#d32f2f',
-    }, {
-      name: translate('Questions answered'),
-      data: sessions.map((session) => a(session)),
-      color: '#1861e8',
-    }],
+    series: [
+      {
+        name: translate('Questions unanswered'),
+        data: sessions.map((session) => u(session)),
+        color: '#d32f2f',
+      },
+      {
+        name: translate('Questions answered'),
+        data: sessions.map((session) => a(session)),
+        color: '#1861e8',
+      },
+    ],
   };
 };
 
@@ -107,17 +107,20 @@ const getBars = (sessions, translate) => ({
     },
   },
   tooltip: {
-      formatter: function () { // eslint-disable-line
+    formatter() {
+      // eslint-disable-line
       return `<b>${translate('Duration')}: </b> ${secondsToTime(this.y)}`;
     },
   },
-  series: [{
-    name: translate('Duration'),
-    data: sessions.map((session) => ({
-      colorByPoint: true,
-      y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
-    })),
-  }],
+  series: [
+    {
+      name: translate('Duration'),
+      data: sessions.map((session) => ({
+        colorByPoint: true,
+        y: session.avgDuration ? Math.floor(session.avgDuration) : 0,
+      })),
+    },
+  ],
 });
 
 const SessionGraphs = ({ sessions }) => {
@@ -130,16 +133,10 @@ const SessionGraphs = ({ sessions }) => {
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={stacked}
-          />
+          <HighchartsReact highcharts={Highcharts} options={stacked} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={bars}
-          />
+          <HighchartsReact highcharts={Highcharts} options={bars} />
         </Grid>
       </Grid>
     </Box>

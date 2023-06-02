@@ -1,10 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  useDataProvider,
-  useNotify,
-} from 'react-admin';
+import { useDataProvider, useNotify } from 'react-admin';
 
 const useAnswer = (answerId) => {
   const { id } = useParams();
@@ -29,7 +26,8 @@ const useAnswer = (answerId) => {
       dispatch({
         type: 'CUSTOM_SET_ANSWER',
         payload: {
-          id: id || answerId, data,
+          id: id || answerId,
+          data,
         },
       });
     } catch (err) {

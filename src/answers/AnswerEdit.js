@@ -7,12 +7,7 @@ import { Typography, Box, Button, CircularProgress, Fade } from '@material-ui/co
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import ChatIcon from '@material-ui/icons/Chat';
-import {
-  useNotify,
-  useDataProvider,
-  DeleteButton,
-  useTranslate,
-} from 'react-admin';
+import { useNotify, useDataProvider, DeleteButton, useTranslate } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import FormFields from './components/form';
 import AnswerMedia from './media/media';
@@ -56,8 +51,8 @@ const AnswerEdit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [summarized, setSummarized] = useState('');
   const summarizeRef = useRef('');
-  const disableEdit = (answer && answer.allowEdit === false);
-  const disableDelete = (answer && answer.allowDelete === false);
+  const disableEdit = answer && answer.allowEdit === false;
+  const disableDelete = answer && answer.allowDelete === false;
 
   const onSubmit = async (values) => {
     try {
@@ -109,7 +104,8 @@ const AnswerEdit = () => {
     let i = 0;
 
     while (i < questions.length) {
-      await dataProvider.update('questions', { // eslint-disable-line
+      await dataProvider.update('questions', {
+        // eslint-disable-line
         id: questions[i].id,
         data: {
           fk_languageId,
@@ -140,95 +136,92 @@ const AnswerEdit = () => {
       <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
         {translate('misc.editing_answer')}
       </Typography>
-      {
-        true && (
-          <Box boxShadow={3} borderRadius={5}>
-            <Form
-              initialValues={{ ...answer }}
-              onSubmit={onSubmit}
-              mutators={{
-                replaceWithSummarized: (args, state, { changeValue }) => {
-                  changeValue(state, 'text', () => summarized);
-                },
-              }}
-              enableReinitialize
-              render={({ form, handleSubmit, valid, values }) => {
-                const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
-                  if (!answer) {
-                    return false;
-                  }
-                  if (isString(values[key]) && isString(answer[key])) {
-                    return values[key].trim() === answer[key].trim();
-                  }
-                  return answer && values[key] === answer[key];
-                });
-                if ((pristine) !== answerFormPristine) {
-                  setAnswerFormPristine(pristine);
+      {true && (
+        <Box boxShadow={3} borderRadius={5}>
+          <Form
+            initialValues={{ ...answer }}
+            onSubmit={onSubmit}
+            mutators={{
+              replaceWithSummarized: (args, state, { changeValue }) => {
+                changeValue(state, 'text', () => summarized);
+              },
+            }}
+            enableReinitialize
+            render={({ form, handleSubmit, valid, values }) => {
+              const pristine = ['fk_languageId', 'fk_topicId', 'spokenText', 'tags', 'text', 'isContextOnly'].every((key) => {
+                if (!answer) {
+                  return false;
                 }
-                return (
-                  <Box>
-                    <form onSubmit={handleSubmit}>
-                      <Box p={2}>
-                        <FormFields edit record={answer} markdownText={summarized} />
+                if (isString(values[key]) && isString(answer[key])) {
+                  return values[key].trim() === answer[key].trim();
+                }
+                return answer && values[key] === answer[key];
+              });
+              if (pristine !== answerFormPristine) {
+                setAnswerFormPristine(pristine);
+              }
+              return (
+                <Box>
+                  <form onSubmit={handleSubmit}>
+                    <Box p={2}>
+                      <FormFields edit record={answer} markdownText={summarized} />
+                    </Box>
+                    <Box display="flex" p={2} bgcolor="#f5f5f5">
+                      <Box flex={1} display="flex">
+                        <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
+                          <SaveIcon style={{ fontSize: '18px' }} />
+                          &nbsp; {translate('misc.save')}
+                        </Button>
+                        {SHOW_GPT_SUMMARIZE && (
+                          <Box position="relative" width="max-content">
+                            <Button
+                              type="button"
+                              variant="contained"
+                              color="secondary"
+                              style={{ marginLeft: '12px' }}
+                              onClick={() => summarizeAnswerRequest(answer.text)}
+                              disabled={isLoading}
+                            >
+                              <ChatIcon style={{ fontSize: '18px' }} />
+                              &nbsp; {translate('misc.summarize')}
+                            </Button>
+                            {isLoading && (
+                              <Fade
+                                in={isLoading}
+                                style={{
+                                  transitionDelay: isLoading ? '800ms' : '0ms',
+                                }}
+                                unmountOnExit
+                              >
+                                <CircularProgress color="secondary" size={20} className={classes.buttonProgress} />
+                              </Fade>
+                            )}
+                          </Box>
+                        )}
+                        <SummarizeAnswerDialog
+                          text={summarizeRef.current}
+                          open={summarizeOpen}
+                          onClose={() => {
+                            setSummarizeOpen(false);
+                            summarizeRef.current = '';
+                          }}
+                          onSuccess={() => {
+                            form.mutators.replaceWithSummarized();
+                            acceptSummarize();
+                          }}
+                        />
                       </Box>
-                      <Box display="flex" p={2} bgcolor="#f5f5f5">
-                        <Box flex={1} display="flex">
-                          <Button type="submit" variant="contained" color="primary" disabled={pristine || disableEdit || !valid}>
-                            <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
-                          </Button>
-                          {
-                            SHOW_GPT_SUMMARIZE && (
-                              <Box position="relative" width="max-content">
-                                <Button
-                                  type="button"
-                                  variant="contained"
-                                  color="secondary"
-                                  style={{ marginLeft: '12px' }}
-                                  onClick={() => summarizeAnswerRequest(answer.text)}
-                                  disabled={isLoading}
-                                >
-                                  <ChatIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.summarize')}
-                                </Button>
-                                {
-                                  isLoading && (
-                                    <Fade
-                                      in={isLoading}
-                                      style={{
-                                        transitionDelay: isLoading ? '800ms' : '0ms',
-                                      }}
-                                      unmountOnExit
-                                    >
-                                      <CircularProgress color="secondary" size={20} className={classes.buttonProgress} />
-                                    </Fade>
-                                  )
-                                }
-                              </Box>
-                            )
-                          }
-                          <SummarizeAnswerDialog
-                            text={summarizeRef.current}
-                            open={summarizeOpen}
-                            onClose={() => { setSummarizeOpen(false); summarizeRef.current = ''; }}
-                            onSuccess={() => { form.mutators.replaceWithSummarized(); acceptSummarize(); }}
-                          />
-                        </Box>
-                        <Box flex={1} textAlign="right">
-                          <DeleteButton
-                            basePath="/answers"
-                            record={answer}
-                            undoable={false}
-                            disabled={disableDelete}
-                          />
-                        </Box>
+                      <Box flex={1} textAlign="right">
+                        <DeleteButton basePath="/answers" record={answer} undoable={false} disabled={disableDelete} />
                       </Box>
-                    </form>
-                  </Box>
-                );
-              }}
-            />
-          </Box>
-        )
-      }
+                    </Box>
+                  </form>
+                </Box>
+              );
+            }}
+          />
+        </Box>
+      )}
 
       <Box pt={2}>
         <StatusInputSection record={answer} disabled={disableEdit} preSubmitFn={throwIfAnswerFormDirty} />
@@ -241,14 +234,12 @@ const AnswerEdit = () => {
       </Box>
 
       <HiddenField fieldName="media">
-        {
-          !disableEdit && (
-            <Box my={1} p={2} boxShadow={3}>
-              <Typography>{translate('resources.answers.media')}</Typography>
-              <AnswerMedia answer={answer} />
-            </Box>
-          )
-        }
+        {!disableEdit && (
+          <Box my={1} p={2} boxShadow={3}>
+            <Typography>{translate('resources.answers.media')}</Typography>
+            <AnswerMedia answer={answer} />
+          </Box>
+        )}
       </HiddenField>
     </>
   );

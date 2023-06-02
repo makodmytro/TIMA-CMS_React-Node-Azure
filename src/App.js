@@ -3,12 +3,7 @@ import './App.css';
 import { useStore } from 'react-redux';
 import { Route, useLocation } from 'react-router-dom'; // eslint-disable-line
 import { createBrowserHistory } from 'history'; // eslint-disable-line
-import {
-  Resource,
-  AdminContext,
-  AdminUI,
-  useDataProvider,
-} from 'react-admin';
+import { Resource, AdminContext, AdminUI, useDataProvider } from 'react-admin';
 import IdleTracker from 'idle-tracker';
 import * as Sentry from '@sentry/react';
 import Box from '@material-ui/core/Box';
@@ -45,11 +40,13 @@ const MAINTENANCE_MODE = process.env.REACT_APP_MAINTENANCE_MODE === '1';
 
 let statusLoaded = false;
 
-const delay = (ms) => new Promise((r) => { // eslint-disable-line
-  setTimeout(() => {
-    return r();
-  }, ms);
-});
+const delay = (ms) =>
+  new Promise((r) => {
+    // eslint-disable-line
+    setTimeout(() => {
+      return r();
+    }, ms);
+  });
 let idleTracker;
 
 if (IDLE_TIMEOUT_SECONDS) {
@@ -85,10 +82,7 @@ const AsyncResources = () => {
   const fetchWorkflow = async () => {
     if (!statusLoaded && sessionStorage.getItem('token') && process.env.REACT_APP_USE_WORKFLOW === '1') {
       try {
-        const [roles, status] = await Promise.all([
-          dataProvider.workflowRoles(),
-          dataProvider.workflowStatus(),
-        ]);
+        const [roles, status] = await Promise.all([dataProvider.workflowRoles(), dataProvider.workflowStatus()]);
         store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
         store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
         statusLoaded = true;
@@ -100,11 +94,9 @@ const AsyncResources = () => {
     const a = async () => (isLoginScreen() || window.location.href.includes('code=') ? Promise.resolve() : dataProvider.activeSessions());
 
     try {
-      await Promise.all([
-        await a(),
-        await delay(250),
-      ]);
-    } catch (err) { // eslint-disable-line
+      await Promise.all([await a(), await delay(250)]);
+    } catch (err) {
+      // eslint-disable-line
     }
 
     setReady(true);
@@ -214,8 +206,7 @@ const AsyncResources = () => {
           alignItems: 'center',
           paddingTop: '30vh',
           boxSizing: 'border-box',
-          backgroundImage:
-            'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
+          backgroundImage: 'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
         }}
       >
         <Box py={2}>
@@ -243,9 +234,7 @@ const AsyncResources = () => {
               >
                 Der QnA Manager wird zur Zeit gewartet und steht Ihnen bald wieder zur Verfügung.
               </Box>
-              <Box style={{ fontSize: '32px', marginTop: '15px' }}>
-                Wir danken Ihnen für Ihre Geduld.
-              </Box>
+              <Box style={{ fontSize: '32px', marginTop: '15px' }}>Wir danken Ihnen für Ihre Geduld.</Box>
             </Box>
           ) : (
             'Loading...'
@@ -256,24 +245,9 @@ const AsyncResources = () => {
   }
 
   let customRoutes = [
-    <Route
-      exact
-      key={0}
-      path="/"
-      component={dashboard}
-    />,
-    <Route
-      exact
-      key={1}
-      path="/test-ask"
-      component={TestAsk}
-    />,
-    <Route
-      exact
-      key={1}
-      path="/import-data"
-      component={topic.import}
-    />,
+    <Route exact key={0} path="/" component={dashboard} />,
+    <Route exact key={1} path="/test-ask" component={TestAsk} />,
+    <Route exact key={1} path="/import-data" component={topic.import} />,
   ];
 
   if (HIDE_MENU_ITEMS.includes('dashboard')) {
@@ -291,81 +265,30 @@ const AsyncResources = () => {
   fetchWorkflow();
 
   return (
-    <AdminUI
-      title="QnA Manager - TamerinTECH"
-      theme={theme}
-      layout={MyLayout}
-      loginPage={Login}
-      customRoutes={customRoutes}
-    >
-      {
-        (permissions) => {
-          const demo = permissions && permissions.allowDemo !== true
-            ? null
-            : (
-              <Resource
-                name="demos"
-                key="demos"
-                {...demos}
-              />
-            );
+    <AdminUI title="QnA Manager - TamerinTECH" theme={theme} layout={MyLayout} loginPage={Login} customRoutes={customRoutes}>
+      {(permissions) => {
+        const demo = permissions && permissions.allowDemo !== true ? null : <Resource name="demos" key="demos" {...demos} />;
 
-          const languages = (
-            <Resource
-              key="languages"
-              name="languages"
-              {...language}
-            />
-          );
+        const languages = <Resource key="languages" name="languages" {...language} />;
 
-          return ([
-            <Resource
-              key="answers"
-              name="answers"
-              {...answer}
-            />,
-            <Resource
-              key="questions"
-              name="questions"
-              {...question}
-            />,
-            <Resource
-              key="topics"
-              name="topics"
-              {...topic}
-            />,
-            languages,
-            <Resource
-              key="stats/sessions"
-              name="stats/sessions"
-              {...sessions}
-            />,
-            <Resource
-              key="users"
-              name="users"
-              {...users}
-            />,
-            <Resource
-              key="groups"
-              name="groups"
-              {...groups}
-            />,
-            demo,
-            <Resource
-              key="audit"
-              name="audit"
-              {...audit}
-            />,
-          ].sort((a) => {
-            if (!DEFAULT_HOMEPAGE || !a) {
-              return 0;
-            }
+        return [
+          <Resource key="answers" name="answers" {...answer} />,
+          <Resource key="questions" name="questions" {...question} />,
+          <Resource key="topics" name="topics" {...topic} />,
+          languages,
+          <Resource key="stats/sessions" name="stats/sessions" {...sessions} />,
+          <Resource key="users" name="users" {...users} />,
+          <Resource key="groups" name="groups" {...groups} />,
+          demo,
+          <Resource key="audit" name="audit" {...audit} />,
+        ].sort((a) => {
+          if (!DEFAULT_HOMEPAGE || !a) {
+            return 0;
+          }
 
-            return a?.key.toLowerCase() === DEFAULT_HOMEPAGE ? -1 : 0;
-          }));
-        }
-      }
-
+          return a?.key.toLowerCase() === DEFAULT_HOMEPAGE ? -1 : 0;
+        });
+      }}
     </AdminUI>
   );
 };

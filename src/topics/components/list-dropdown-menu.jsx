@@ -11,12 +11,7 @@ import { useIsAdmin } from '../../hooks';
 
 const HIDE_SHOW_QR = process.env.REACT_APP_HIDE_TOPICS_SHOW_QR === '1';
 
-const DropdownMenu = ({
-  record,
-  onSync,
-  onPermissionsClick,
-  showCreateChild,
-}) => {
+const DropdownMenu = ({ record, onSync, onPermissionsClick, showCreateChild }) => {
   const admin = useIsAdmin();
   const redirect = useRedirect();
   const translate = useTranslate();
@@ -39,14 +34,7 @@ const DropdownMenu = ({
 
   return (
     <div>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        variant="contained"
-        color="secondary"
-        size="small"
-      >
+      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant="contained" color="secondary" size="small">
         {translate('misc.actions')} <ExpandIcon />
       </Button>
       <Menu
@@ -59,99 +47,77 @@ const DropdownMenu = ({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        { (admin || record?.allowCreateContent) && (
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Button
-            variant="outlined"
-            onClick={(e) => {
-              redirect(`/topics/${record?.id}/edit`);
-            }}
-            fullWidth
-          >
-            {translate(allowManage ? 'misc.edit_topic' : 'misc.view_topic')}
-          </Button>
-        </MenuItem>
+        {(admin || record?.allowCreateContent) && (
+          <MenuItem onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                redirect(`/topics/${record?.id}/edit`);
+              }}
+              fullWidth
+            >
+              {translate(allowManage ? 'misc.edit_topic' : 'misc.view_topic')}
+            </Button>
+          </MenuItem>
         )}
-        <MenuItem
-          onClick={(e) => e.stopPropagation()}
-        >
+        <MenuItem onClick={(e) => e.stopPropagation()}>
           <ShowAnswersButton record={record} fullWidth />
         </MenuItem>
-        {
-          record?.globalTopic && !HIDE_SHOW_QR && (
-            <MenuItem
-              onClick={(e) => e.stopPropagation()}
-            >
-              <QrDialog record={record} fullWidth />
-            </MenuItem>
-          )
-        }
-        {
-          admin && !record?.fk_parentTopicId && (
-            <MenuItem
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Button
-                variant="outlined"
-                onClick={(e) => {
-                  handleClose(e);
-                  return onSync(record?.id);
-                }}
-                fullWidth
-              >
-                {translate('misc.schedule_sync')}
-              </Button>
-            </MenuItem>
-          )
-        }
-        {
-          (allowManage) && !!onPermissionsClick && (
-            <MenuItem
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Button
-                variant="outlined"
-                onClick={(e) => {
-                  handleClose(e);
-                  return onPermissionsClick(record?.id);
-                }}
-                fullWidth
-              >
-                {translate('misc.manage_permissions')}
-              </Button>
-            </MenuItem>
-          )
-        }
-        {
-          showCreateChild && (
-            <MenuItem
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Button
-                variant="outlined"
-                onClick={(e) => {
-                  redirect(`/topics/create?fk_parentTopicId=${record?.id}`);
-                }}
-                fullWidth
-              >
-                {translate('resources.topics.create_child')}
-              </Button>
-            </MenuItem>
-          )
-        }
-        {
-          allowDelete && (
-            <MenuItem
+        {record?.globalTopic && !HIDE_SHOW_QR && (
+          <MenuItem onClick={(e) => e.stopPropagation()}>
+            <QrDialog record={record} fullWidth />
+          </MenuItem>
+        )}
+        {admin && !record?.fk_parentTopicId && (
+          <MenuItem onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="outlined"
               onClick={(e) => {
                 handleClose(e);
+                return onSync(record?.id);
               }}
+              fullWidth
             >
-              <DeleteDialog record={record} button={{ fullWidth: true }} afterDelete="refresh" />
-            </MenuItem>
-          )
-        }
+              {translate('misc.schedule_sync')}
+            </Button>
+          </MenuItem>
+        )}
+        {allowManage && !!onPermissionsClick && (
+          <MenuItem onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                handleClose(e);
+                return onPermissionsClick(record?.id);
+              }}
+              fullWidth
+            >
+              {translate('misc.manage_permissions')}
+            </Button>
+          </MenuItem>
+        )}
+        {showCreateChild && (
+          <MenuItem onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                redirect(`/topics/create?fk_parentTopicId=${record?.id}`);
+              }}
+              fullWidth
+            >
+              {translate('resources.topics.create_child')}
+            </Button>
+          </MenuItem>
+        )}
+        {allowDelete && (
+          <MenuItem
+            onClick={(e) => {
+              handleClose(e);
+            }}
+          >
+            <DeleteDialog record={record} button={{ fullWidth: true }} afterDelete="refresh" />
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  Confirm,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, Confirm, useTranslate } from 'react-admin';
 import { connect } from 'react-redux';
 import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
@@ -23,10 +17,7 @@ import AnswerDiffTopicDialog from './answer-diff-topic.dialog';
 import Filters from './filters-form';
 import CreateForm from './answer-create-form';
 
-const LinksDialog = ({
-  record,
-  languages,
-}) => {
+const LinksDialog = ({ record, languages }) => {
   const disabled = record?.allowEdit === false;
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -102,7 +93,7 @@ const LinksDialog = ({
         acc[cur.id] = cur;
 
         return acc;
-      }, {}),
+      }, {})
     );
   };
 
@@ -118,22 +109,14 @@ const LinksDialog = ({
   const onSubmit = async (values, paging = pagination) => {
     setForm(values);
 
-    const {
-      type, approved, all_topics, ignored, ...rest
-    } = values;
+    const { type, approved, all_topics, ignored, ...rest } = values;
 
     const { data, total } = await dataProvider.getList(type, {
       filter: {
         ...rest,
         ...(approved !== '__none__' && type === 'questions' ? { approved } : {}),
-        ...(
-          all_topics ? {} : { fk_topicId: record.fk_topicId }
-        ),
-        ...(
-          type === 'questions'
-            ? { fk_answerId: '!NULL' }
-            : {}
-        ),
+        ...(all_topics ? {} : { fk_topicId: record.fk_topicId }),
+        ...(type === 'questions' ? { fk_answerId: '!NULL' } : {}),
         ...(type === 'questions' ? { ignored } : {}),
       },
       pagination: paging,
@@ -236,34 +219,30 @@ const LinksDialog = ({
 
   return (
     <>
-      {
-        dialogs.answers && (
-          <AnswerDiffTopicDialog
-            open={dialogs.answers}
-            onUpdate={onConfirm}
-            onDuplicate={() => {
-              createAnswer({
-                text: selected.text,
-              });
-              onClose();
-            }}
-            {...{
-              topics,
-              selected,
-              onClose,
-              record,
-            }}
-          />
-        )
-      }
+      {dialogs.answers && (
+        <AnswerDiffTopicDialog
+          open={dialogs.answers}
+          onUpdate={onConfirm}
+          onDuplicate={() => {
+            createAnswer({
+              text: selected.text,
+            });
+            onClose();
+          }}
+          {...{
+            topics,
+            selected,
+            onClose,
+            record,
+          }}
+        />
+      )}
       <Confirm
         isOpen={dialogs.confirmation}
         loading={false}
         title={translate('misc.link')}
         content={
-          selected
-            ? translate('resources.questions.topic_mismatch_bis', { a: topics[selected.fk_topicId].name })
-            : translate('misc.confirm')
+          selected ? translate('resources.questions.topic_mismatch_bis', { a: topics[selected.fk_topicId].name }) : translate('misc.confirm')
         }
         onConfirm={onConfirm}
         onClose={onClose}
@@ -275,169 +254,113 @@ const LinksDialog = ({
         }}
         initialValues={form}
       />
-      {
-        !results && (
-          <Box py={2}>
-            <Alert severity="info">
-              {translate('misc.search_questions_answers')}
-            </Alert>
-          </Box>
-        )
-      }
-      {
-        results && !results.length && (
-          <Box py={2}>
-            <Alert severity="info">
-              {translate('misc.no_records')}
-            </Alert>
-          </Box>
-        )
-      }
-      {
-        results && !!results.length && (
-          <>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>{translate('resources.questions.fields.text')}</TableCell>
-                  <TableCell>{translate('resources.questions.fields.fk_topicId')}</TableCell>
-                  {
-                    form.type === 'questions' && (
-                      <TableCell>{translate('resources.questions.fields.fk_answerId')}</TableCell>
-                    )
-                  }
-                  <TableCell>&nbsp;</TableCell>
-                  {
-                    form.type === 'questions' && (
-                      <TableCell>&nbsp;</TableCell>
-                    )
-                  }
+      {!results && (
+        <Box py={2}>
+          <Alert severity="info">{translate('misc.search_questions_answers')}</Alert>
+        </Box>
+      )}
+      {results && !results.length && (
+        <Box py={2}>
+          <Alert severity="info">{translate('misc.no_records')}</Alert>
+        </Box>
+      )}
+      {results && !!results.length && (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>{translate('resources.questions.fields.text')}</TableCell>
+                <TableCell>{translate('resources.questions.fields.fk_topicId')}</TableCell>
+                {form.type === 'questions' && <TableCell>{translate('resources.questions.fields.fk_answerId')}</TableCell>}
+                <TableCell>&nbsp;</TableCell>
+                {form.type === 'questions' && <TableCell>&nbsp;</TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {results.map((result, i) => (
+                <TableRow key={i}>
+                  <TableCell style={{ width: '25%' }}>
+                    {form.type === 'questions' && (
+                      <PlayableTextField
+                        source="text"
+                        record={result}
+                        getLanguageFromRecord={(r) => {
+                          return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
+                        }}
+                      />
+                    )}
+                    {form.type === 'answers' && <AnswerTextField record={result} hideRelatedQuestions />}
+                  </TableCell>
+                  <TableCell>
+                    {!!result.fk_topicId && result.fk_topicId !== record.fk_topicId && (
+                      <WarningIcon color="error" style={{ verticalAlign: 'middle' }} />
+                    )}
+                    {topics[result.fk_topicId] ? topics[result.fk_topicId].name : result.fk_topicId}
+                  </TableCell>
+                  {form.type === 'questions' && (
+                    <TableCell style={{ width: '25%' }}>
+                      {result.fk_answerId && <AnswerTextField record={result.Answer} hideRelatedQuestions />}
+                    </TableCell>
+                  )}
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      type="button"
+                      onClick={() => {
+                        selectToLink(result);
+                      }}
+                      disabled={disabled}
+                    >
+                      {translate('resources.questions.link')}
+                    </Button>
+                  </TableCell>
+                  {form.type === 'questions' && (
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="small"
+                        type="button"
+                        onClick={() => {
+                          setAsChild(result);
+                        }}
+                        disabled={disabled || result.fk_parentQuestionId === record.id}
+                      >
+                        {translate('resources.questions.set_as_child')}
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                  results.map((result, i) => (
-                    <TableRow key={i}>
-                      <TableCell style={{ width: '25%' }}>
-                        {
-                          form.type === 'questions' && (
-                            <PlayableTextField
-                              source="text"
-                              record={result}
-                              getLanguageFromRecord={(r) => {
-                                return languages[r.fk_languageId]
-                                  ? languages[r.fk_languageId].code
-                                  : null;
-                              }}
-                            />
-                          )
-                        }
-                        {
-                          form.type === 'answers' && (
-                            <AnswerTextField
-                              record={result}
-                              hideRelatedQuestions
-                            />
-                          )
-                        }
-                      </TableCell>
-                      <TableCell>
-                        {
-                          !!result.fk_topicId && result.fk_topicId !== record.fk_topicId && (
-                            <WarningIcon
-                              color="error"
-                              style={{ verticalAlign: 'middle' }}
-                            />
-                          )
-                        }
-                        {
-                          topics[result.fk_topicId]
-                            ? topics[result.fk_topicId].name
-                            : result.fk_topicId
-                        }
-                      </TableCell>
-                      {
-                        form.type === 'questions' && (
-                          <TableCell style={{ width: '25%' }}>
-                            {
-                              result.fk_answerId && (
-                                <AnswerTextField
-                                  record={result.Answer}
-                                  hideRelatedQuestions
-                                />
-                              )
-                            }
-                          </TableCell>
-                        )
-                      }
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          type="button"
-                          onClick={() => {
-                            selectToLink(result);
-                          }}
-                          disabled={disabled}
-                        >
-                          {translate('resources.questions.link')}
-                        </Button>
-                      </TableCell>
-                      {
-                        form.type === 'questions' && (
-                          <TableCell>
-                            <Button
-                              variant="outlined"
-                              color="secondary"
-                              size="small"
-                              type="button"
-                              onClick={() => {
-                                setAsChild(result);
-                              }}
-                              disabled={disabled || result.fk_parentQuestionId === record.id}
-                            >
-                              {translate('resources.questions.set_as_child')}
-                            </Button>
-                          </TableCell>
-                        )
-                      }
-                    </TableRow>
-                  ))
-                }
-              </TableBody>
-            </Table>
-            <Box textAlign="right">
-              <TablePagination
-                component="div"
-                count={count}
-                page={pagination.page - 1}
-                onChangePage={(e, value) => {
-                  setPage(value);
-                }}
-                rowsPerPage={pagination.perPage}
-                rowsPerPageOptions={[1, 5, 10, 15]}
-                onChangeRowsPerPage={(e) => {
-                  const value = parseInt(e.target.value, 10);
-                  setPageSize(value);
-                }}
-              />
-            </Box>
-          </>
-        )
-      }
+              ))}
+            </TableBody>
+          </Table>
+          <Box textAlign="right">
+            <TablePagination
+              component="div"
+              count={count}
+              page={pagination.page - 1}
+              onChangePage={(e, value) => {
+                setPage(value);
+              }}
+              rowsPerPage={pagination.perPage}
+              rowsPerPageOptions={[1, 5, 10, 15]}
+              onChangeRowsPerPage={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setPageSize(value);
+              }}
+            />
+          </Box>
+        </>
+      )}
       <hr />
-      <CreateForm
-        onSubmit={(v) => createAnswer(v)}
-        disabled={disabled}
-      />
+      <CreateForm onSubmit={(v) => createAnswer(v)} disabled={disabled} />
     </>
   );
 };
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : {};
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
   return {
     languages,

@@ -5,12 +5,7 @@ import { DateTimePicker, DatePicker } from '@material-ui/pickers';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormGroup from '@material-ui/core/FormGroup';
 
-export const DateTimeInput = ({
-  label,
-  source,
-  onChange,
-  ...rest
-}) => {
+export const DateTimeInput = ({ label, source, onChange, ...rest }) => {
   const translate = useTranslate();
   const {
     input: { onChange: onValueChange, value },
@@ -40,12 +35,7 @@ export const DateTimeInput = ({
   );
 };
 
-export const DateInput = ({
-  label,
-  source,
-  onChange,
-  ...rest
-}) => {
+export const DateInput = ({ label, source, onChange, ...rest }) => {
   const translate = useTranslate();
   const {
     input: { onChange: onValueChange, value },

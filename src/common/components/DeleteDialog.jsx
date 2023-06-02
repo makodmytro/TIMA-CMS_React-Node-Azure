@@ -8,9 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
-import {
-  useTranslate,
-} from 'react-admin';
+import { useTranslate } from 'react-admin';
 
 const styles = makeStyles((theme) => ({
   redBg: {
@@ -29,17 +27,10 @@ const styles = makeStyles((theme) => ({
   },
   uppercase: {
     textTransform: 'uppercase',
-  }
+  },
 }));
 
-const DeleteDialog = ({
-  open,
-  onClose,
-  onConfirm,
-  title,
-  content,
-  confirmationText,
-}) => {
+const DeleteDialog = ({ open, onClose, onConfirm, title, content, confirmationText }) => {
   const translate = useTranslate();
   const classes = styles();
   const [confirmation, setConfirmation] = React.useState('');
@@ -76,7 +67,9 @@ const DeleteDialog = ({
           </Box>
         </Box>
         <Box p={2}>
-          <Typography align="center" variant="h6" className={classes.uppercase}>{title}</Typography>
+          <Typography align="center" variant="h6" className={classes.uppercase}>
+            {title}
+          </Typography>
           {content}
           <Box mt={4} mb={1}>
             <Typography align="center">
@@ -98,12 +91,7 @@ const DeleteDialog = ({
         <Box p={2} bgcolor="#ececec">
           <Box display="flex">
             <Box flex={1} pr={1}>
-              <Button
-                onClick={onClose}
-                type="button"
-                variant="contained"
-                fullWidth
-              >
+              <Button onClick={onClose} type="button" variant="contained" fullWidth>
                 {translate('misc.cancel')}
               </Button>
             </Box>

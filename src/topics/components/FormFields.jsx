@@ -44,7 +44,7 @@ export const Qna = (props) => {
   const qnaMetadataKeyChoices = useMemo(() => {
     const choices = TOPICS_METADATA_KEYS.map((key) => ({
       id: key,
-      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key
+      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${key}`) || key,
     }));
 
     if (!search) {
@@ -106,7 +106,7 @@ export const Qna = (props) => {
             validate={required()}
             choices={[
               { id: 1, name: 'Language Studio' },
-              { id: 0, name: 'QnaMaker' }
+              { id: 0, name: 'QnaMaker' },
             ]}
             margin="dense"
             initialValue={1}
@@ -183,34 +183,34 @@ const FormFields = (props) => {
   const admin = useIsAdmin();
 
   const {
-    input: { value: fkLanguageId, onChange: changeLanguage }
+    input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
   const {
-    input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange }
+    input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange },
   } = useField('fk_parentTopicId');
   const {
-    input: { onChange: qnaApiEndpointChange }
+    input: { onChange: qnaApiEndpointChange },
   } = useField('qnaApiEndpoint');
   const {
-    input: { onChange: qnaApiVersionChange }
+    input: { onChange: qnaApiVersionChange },
   } = useField('qnaApiVersion');
   const {
-    input: { onChange: qnaSubscriptionKeyChange }
+    input: { onChange: qnaSubscriptionKeyChange },
   } = useField('qnaSubscriptionKey');
   const {
-    input: { onChange: qnaKnowledgeBaseIdChange }
+    input: { onChange: qnaKnowledgeBaseIdChange },
   } = useField('qnaKnowledgeBaseId');
   const {
-    input: { value: qnaMetadataValue, onChange: qnaMetadataValueChange }
+    input: { value: qnaMetadataValue, onChange: qnaMetadataValueChange },
   } = useField('qnaMetadataValue');
   const {
-    input: { onChange: qnaProjectNameValueChange }
+    input: { onChange: qnaProjectNameValueChange },
   } = useField('qnaProjectName');
   const {
-    input: { onChange: qnaLangStudioApiVersionValueChange }
+    input: { onChange: qnaLangStudioApiVersionValueChange },
   } = useField('qnaLangStudioApiVersion');
   const {
-    input: { value: nameValue }
+    input: { value: nameValue },
   } = useField('name');
 
   const getLang = (r) => {
@@ -228,7 +228,7 @@ const FormFields = (props) => {
 
     try {
       const { data } = await dataProvider.getOne('topics', {
-        id: fkParentTopicId
+        id: fkParentTopicId,
       });
 
       if (data) {

@@ -1,13 +1,6 @@
 import React, { useCallback } from 'react';
 import { useField, useFormState } from 'react-final-form'; // eslint-disable-line
-import {
-  useDataProvider,
-  SelectInput,
-  useTranslate,
-  required,
-  ReferenceInput,
-  useNotify,
-} from 'react-admin';
+import { useDataProvider, SelectInput, useTranslate, required, ReferenceInput, useNotify } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import { Alert } from '@material-ui/lab';
 import PencilIcon from '@material-ui/icons/Edit';
@@ -43,10 +36,22 @@ const MultiTopicSelect = ({
   const [topicsGrandchild, setTopicsGrandchild] = React.useState([]);
 
   const { errors } = useFormState();
-  const { meta: { dirty: sourceDirty }, input: { value, onChange } } = useField(source);
-  const { meta: { dirty: topicOneDirty }, input: { value: topicOne, onChange: onTopicOneChange } } = useField('topicOne');
-  const { meta: { dirty: topicTwoDirty }, input: { value: topicTwo, onChange: onTopicTwoChange } } = useField('topicTwo');
-  const { meta: { dirty: topicThreeDirty }, input: { value: topicThree, onChange: onTopicThreeChange } } = useField('topicThree');
+  const {
+    meta: { dirty: sourceDirty },
+    input: { value, onChange },
+  } = useField(source);
+  const {
+    meta: { dirty: topicOneDirty },
+    input: { value: topicOne, onChange: onTopicOneChange },
+  } = useField('topicOne');
+  const {
+    meta: { dirty: topicTwoDirty },
+    input: { value: topicTwo, onChange: onTopicTwoChange },
+  } = useField('topicTwo');
+  const {
+    meta: { dirty: topicThreeDirty },
+    input: { value: topicThree, onChange: onTopicThreeChange },
+  } = useField('topicThree');
 
   const findWhatIsSelected = async (_id) => {
     // try to match to the top level tops
@@ -181,9 +186,7 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0 && (!depth || depth > 2)) {
         onChange(null);
 
-        setTopicsGrandchild(
-          filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics
-        );
+        setTopicsGrandchild(filterFunction ? topic.ChildTopics.filter((t) => filterFunction(t)) : topic.ChildTopics);
       } else {
         onChange(topicTwo);
       }
@@ -219,8 +222,11 @@ const MultiTopicSelect = ({
     }, 200);
   };
 
-  const error = (errors[source] && sourceDirty) || (errors.topicOne && topicOneDirty)
-    || (errors.topicTwo && topicTwoDirty) || (errors.topicThree && topicThreeDirty);
+  const error =
+    (errors[source] && sourceDirty) ||
+    (errors.topicOne && topicOneDirty) ||
+    (errors.topicTwo && topicTwoDirty) ||
+    (errors.topicThree && topicThreeDirty);
 
   React.useEffect(() => {
     if (!topics.length) {
@@ -233,7 +239,7 @@ const MultiTopicSelect = ({
   React.useEffect(() => {
     if (filter && filter.fk_languageId) {
       setFilteredTopics(
-        topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isGlobalTopic(t)) && t.fk_languageId === filter.fk_languageId),
+        topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isGlobalTopic(t)) && t.fk_languageId === filter.fk_languageId)
       );
     } else if (filterFunction) {
       setFilteredTopics(topics.filter((t) => (isHasChildTopicsWithChildTopics(t) || isGlobalTopic(t)) && (filterFunction?.(t) || true)));
@@ -244,96 +250,82 @@ const MultiTopicSelect = ({
 
   return (
     <Box>
-      {
-        !!label && (
-          <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
-            {translate(label)}&nbsp;
-            {
-              allowEmpty && !disabled && (
-                <small onClick={() => clear()} style={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'lowercase' }}>
-                  ({translate('misc.clear')})
-                </small>
-              )
-            }
-          </Typography>
-        )
-      }
-      {
-        loading && <Box mb={2}><CircularProgress size={20} /></Box>
-      }
-      {
-        !loading && (editting && !toggleEdit) && (
-          <Box mb={2}>
-            <Button color="secondary" onClick={() => setToggleEdit(true)} size="small" disabled={disabled}>
-              {selectedTopicLabel || translate('misc.none')} &nbsp;&nbsp;<PencilIcon fontSize="small" />
-            </Button>
-          </Box>
-        )
-      }
-      {
-        !loading && (!editting || (editting && toggleEdit)) && (
-          <>
-            <Box display="flex" width="100%">
-              <Box display="flex" flexDirection="column" width="33%">
-
-                <Box flex={1} mr={1}>
-                  <SelectInput
-                    source="topicOne"
-                    choices={filteredTopics}
-                    optionText="name"
-                    optionValue="id"
-                    label={TOPICS_LEVEL_LABELS[0]}
-                    fullWidth
-                    style={{ marginTop: '0px' }}
-                    disabled={disabled}
-                    validate={isRequired ? required() : null}
-                  />
-                </Box>
-              </Box>
-
-              {
-                !!topicsChild.length && (!disabled || topicTwo) && (
-                  <Box flex={1} mr={1}>
-                    <SelectInput
-                      source="topicTwo"
-                      choices={topicsChild}
-                      optionText="name"
-                      optionValue="id"
-                      label={TOPICS_LEVEL_LABELS[1]}
-                      fullWidth
-                      style={{ marginTop: '0px' }}
-                      disabled={disabled}
-                      validate={isRequired ? required() : null}
-                    />
-                  </Box>
-                )
-              }
-              {
-                !!topicsGrandchild.length && (!depth || depth > 2) && (!disabled || topicThree) && (
-                  <Box flex={1}>
-                    <SelectInput
-                      source="topicThree"
-                      choices={topicsGrandchild}
-                      optionText="name"
-                      optionValue="id"
-                      label={TOPICS_LEVEL_LABELS[2]}
-                      fullWidth
-                      style={{ marginTop: '0px' }}
-                      disabled={disabled}
-                      validate={isRequired ? required() : null}
-                    />
-                  </Box>
-                )
-              }
-            </Box>
-          </>
-        )
-      }
-      {(toggleEdit && record?.FollowupQuestions?.length !== 0) && (
-        <Alert severity="info">
-          {translate('resources.answers.topic_edit')}
-        </Alert>
+      {!!label && (
+        <Typography variant="body2" style={{ color: error ? '#f44336' : 'initial' }}>
+          {translate(label)}&nbsp;
+          {allowEmpty && !disabled && (
+            <small onClick={() => clear()} style={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'lowercase' }}>
+              ({translate('misc.clear')})
+            </small>
+          )}
+        </Typography>
       )}
+      {loading && (
+        <Box mb={2}>
+          <CircularProgress size={20} />
+        </Box>
+      )}
+      {!loading && editting && !toggleEdit && (
+        <Box mb={2}>
+          <Button color="secondary" onClick={() => setToggleEdit(true)} size="small" disabled={disabled}>
+            {selectedTopicLabel || translate('misc.none')} &nbsp;&nbsp;
+            <PencilIcon fontSize="small" />
+          </Button>
+        </Box>
+      )}
+      {!loading && (!editting || (editting && toggleEdit)) && (
+        <>
+          <Box display="flex" width="100%">
+            <Box display="flex" flexDirection="column" width="33%">
+              <Box flex={1} mr={1}>
+                <SelectInput
+                  source="topicOne"
+                  choices={filteredTopics}
+                  optionText="name"
+                  optionValue="id"
+                  label={TOPICS_LEVEL_LABELS[0]}
+                  fullWidth
+                  style={{ marginTop: '0px' }}
+                  disabled={disabled}
+                  validate={isRequired ? required() : null}
+                />
+              </Box>
+            </Box>
+
+            {!!topicsChild.length && (!disabled || topicTwo) && (
+              <Box flex={1} mr={1}>
+                <SelectInput
+                  source="topicTwo"
+                  choices={topicsChild}
+                  optionText="name"
+                  optionValue="id"
+                  label={TOPICS_LEVEL_LABELS[1]}
+                  fullWidth
+                  style={{ marginTop: '0px' }}
+                  disabled={disabled}
+                  validate={isRequired ? required() : null}
+                />
+              </Box>
+            )}
+            {!!topicsGrandchild.length && (!depth || depth > 2) && (!disabled || topicThree) && (
+              <Box flex={1}>
+                <SelectInput
+                  source="topicThree"
+                  choices={topicsGrandchild}
+                  optionText="name"
+                  optionValue="id"
+                  label={TOPICS_LEVEL_LABELS[2]}
+                  fullWidth
+                  style={{ marginTop: '0px' }}
+                  disabled={disabled}
+                  validate={isRequired ? required() : null}
+                />
+              </Box>
+            )}
+          </Box>
+        </>
+      )}
+      {toggleEdit && record?.FollowupQuestions?.length !== 0 && <Alert severity="info">{translate('resources.answers.topic_edit')}</Alert>}
     </Box>
   );
 };
@@ -362,10 +354,7 @@ const TopicSelect = ({
         filter={filter}
         disabled={disabled}
       >
-        <SelectInput
-          optionText="name"
-          disabled={disabled}
-        />
+        <SelectInput optionText="name" disabled={disabled} />
       </ReferenceInput>
     );
   }

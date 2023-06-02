@@ -9,12 +9,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  useTranslate,
-  useDataProvider,
-  useNotify,
-  useRedirect,
-} from 'react-admin';
+import { useTranslate, useDataProvider, useNotify, useRedirect } from 'react-admin';
 import StepKB from './StepKB';
 import StepQNAData from './StepQNAData';
 import StepFetchKnowledgebases from './StepFetchKnowledgebases';
@@ -27,12 +22,10 @@ const style = makeStyles(() => ({
     '& text': {
       fill: 'white',
     },
-  }
+  },
 }));
 
-const ImportData = ({
-  onSubmit,
-}) => {
+const ImportData = ({ onSubmit }) => {
   const classes = style();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -76,82 +69,45 @@ const ImportData = ({
   const onKBDataSelected = (selected) => {
     setKBSelectedKeys(selected);
     next();
-  }
+  };
 
   return (
     <>
       <Stepper activeStep={step} orientation="vertical">
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_kb')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_kb')}</StepLabel>
           <StepContent>
-            <StepKB
-              initialValues={state}
-              onSubmit={onStepSubmit}
-            />
+            <StepKB initialValues={state} onSubmit={onStepSubmit} />
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_qna')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_qna')}</StepLabel>
           <StepContent>
-            <StepQNAData
-              initialValues={state}
-              onSubmit={onStepSubmit}
-              onBack={back}
-            />
+            <StepQNAData initialValues={state} onSubmit={onStepSubmit} onBack={back} />
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_fetch_knowledgebases')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_fetch_knowledgebases')}</StepLabel>
           <StepContent>
-            <StepFetchKnowledgebases
-              initialValues={state}
-              onSubmit={onStepSubmit}
-              onBack={back}
-            />
+            <StepFetchKnowledgebases initialValues={state} onSubmit={onStepSubmit} onBack={back} />
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_analyze_submit')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_analyze_submit')}</StepLabel>
           <StepContent>
-            <StepAnalyzeKB
-              initialValues={state}
-              onKBDataReady={onKBDataReady}
-              onBack={back}
-            />
+            <StepAnalyzeKB initialValues={state} onKBDataReady={onKBDataReady} onBack={back} />
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_process_kb_result')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_process_kb_result')}</StepLabel>
           <StepContent>
-            <StepProcessKBResult
-              initialValues={state}
-              analyzeKBResult={analyzeKBResult}
-              onBack={back}
-              onSubmit={onKBDataSelected}
-            />
+            <StepProcessKBResult initialValues={state} analyzeKBResult={analyzeKBResult} onBack={back} onSubmit={onKBDataSelected} />
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('import.step_kb_selection_edit')}
-          </StepLabel>
+          <StepLabel>{translate('import.step_kb_selection_edit')}</StepLabel>
           <StepContent>
-            <StepKBSelectionEdit
-              initialValues={state}
-              analyzeKBResult={analyzeKBResult}
-              onBack={back}
-              selectedKBKeys={kbSelectedKeys}
-            />
+            <StepKBSelectionEdit initialValues={state} analyzeKBResult={analyzeKBResult} onBack={back} selectedKBKeys={kbSelectedKeys} />
           </StepContent>
         </Step>
       </Stepper>

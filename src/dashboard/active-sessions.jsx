@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import SessionCharts from './sessions-charts';

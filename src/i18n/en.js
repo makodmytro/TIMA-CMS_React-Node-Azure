@@ -53,11 +53,11 @@ const english = {
   'The error was reported successfully': 'The error was reported successfully',
   // end notifications
   dialogs: {
-    batch_approve: 'Are you sure you want to approve this answer\'s related questions?',
-    change_language: 'Changing an answers\'s language will also have an effect its topic and the related question\'s topics',
+    batch_approve: "Are you sure you want to approve this answer's related questions?",
+    change_language: "Changing an answers's language will also have an effect its topic and the related question's topics",
     confirm_media_delete: 'Are you sure you want to delete this media file?',
     unlink_confirmation: 'Are you sure you want to unlink the answer from the question?',
-    change_language_confirmation: 'Changing a question\'s language will also have an effect in the topic',
+    change_language_confirmation: "Changing a question's language will also have an effect in the topic",
   },
   misc: {
     bug_report_success: 'Thank you for reporting this issue. A ticket was created with ID',
@@ -313,7 +313,7 @@ const english = {
       add_related_question: 'Add related question',
       status_history: 'Status history',
       status_can_not_change: 'The status can not be changed',
-      duplicate_answers: 'Duplicates can\'t be linked to existing answers, please create a new answer',
+      duplicate_answers: "Duplicates can't be linked to existing answers, please create a new answer",
       no_possible_status: 'You cannot edit the answer with the current status: %{status} - please contact the reviewers team',
       allow_edit_false: 'You cannot edit the answer with the current status: %{status} - please change back to editing',
       topic_edit: 'This QnA has follow-up answers, please check if these should be moved to the desired topic as well.',
@@ -405,8 +405,7 @@ const english = {
         },
 
         errors: {
-          MIN_3_QUESTIONS:
-            'At least 3 questions are required when creating a new answer',
+          MIN_3_QUESTIONS: 'At least 3 questions are required when creating a new answer',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
             'This follow up QnA has more than 1 parent. If you set it to "context only", it will be triggered for all parent responses only in context',
         },

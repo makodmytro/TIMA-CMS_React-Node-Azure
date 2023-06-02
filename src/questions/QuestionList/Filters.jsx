@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  BooleanInput,
-  ReferenceInput,
-  SelectInput,
-  TextInput,
-  useListContext,
-  useTranslate,
-} from 'react-admin';
+import { BooleanInput, ReferenceInput, SelectInput, TextInput, useListContext, useTranslate } from 'react-admin';
 import { Form } from 'react-final-form';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -24,10 +17,7 @@ const Filters = ({ languages, topics, ...props }) => {
   const classes = styles();
   const [open, setOpen] = React.useState(false);
   const translate = useTranslate();
-  const {
-    filterValues,
-    setFilters,
-  } = useListContext();
+  const { filterValues, setFilters } = useListContext();
 
   React.useEffect(() => {
     if (!filterValues.topLevelOnly) {
@@ -92,26 +82,24 @@ const Filters = ({ languages, topics, ...props }) => {
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
           <TextInput label="resources.questions.fields.text" source="q" alwaysOn onChange={() => handleSubmit()} />
-          {
-            languages?.length > 1 && (
-              <ReferenceInput
-                onChange={() => handleSubmit()}
-                label="resources.questions.fields.fk_languageId"
-                source="fk_languageId"
-                reference="languages"
-                alwaysOn
+          {languages?.length > 1 && (
+            <ReferenceInput
+              onChange={() => handleSubmit()}
+              label="resources.questions.fields.fk_languageId"
+              source="fk_languageId"
+              reference="languages"
+              alwaysOn
+              allowEmpty
+            >
+              <SelectInput
+                disabled={Boolean(filterValues.fk_topicId)}
+                optionText="name"
+                className={classes.select}
                 allowEmpty
-              >
-                <SelectInput
-                  disabled={Boolean(filterValues.fk_topicId)}
-                  optionText="name"
-                  className={classes.select}
-                  allowEmpty
-                  emptyText={translate('misc.all')}
-                />
-              </ReferenceInput>
-            )
-          }
+                emptyText={translate('misc.all')}
+              />
+            </ReferenceInput>
+          )}
 
           <ReferenceInput
             onChange={() => handleSubmit()}
@@ -124,79 +112,55 @@ const Filters = ({ languages, topics, ...props }) => {
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
           </ReferenceInput>
-          {
-            TOPICS_ENABLE_TREE_LIST === '1' && (
-              <Box display="inline-flex" style={{ verticalAlign: 'top', flexDirection: 'column' }} pb={4}>
-                <Button onClick={() => setOpen(true)}>
-                  {translate('resources.topics.filter_by_topics')} {filterValues.fk_topicId ? `(${filterValues.fk_topicId.length})` : ''}
-                </Button>
-                <TopicSelectDialog
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  onConfirm={onTopicFilterConfirm}
-                  initialValues={filterValues.fk_topicId || []}
-                />
-              </Box>
-            )
-          }
-          {
-            TOPICS_ENABLE_TREE_LIST !== '1' && (
-              <ReferenceInput
-                label="resources.questions.fields.fk_topicId"
-                source="fk_topicId"
-                reference="topics"
-                alwaysOn
-                allowEmpty
-                perPage={100}
-                onChange={handleTopicChange}
-                filter={getTopicsFilter()}
-              >
-                <SelectInput
-                  optionText="name"
-                  className={classes.select}
-                  allowEmpty
-                  emptyText={translate('misc.all')}
-                />
-              </ReferenceInput>
-            )
-          }
-
-          {
-            !USE_WORKFLOW && (
-              <SelectInput
-                label="resources.questions.fields.approved"
-                source="approved"
-                allowEmpty
-                emptyText="Both"
-                onChange={() => handleSubmit()}
-                defaultValue=""
-                choices={[
-                  { id: true, name: <DoneIcon color="primary" /> },
-                  { id: false, name: <ClearIcon /> },
-                ]}
+          {TOPICS_ENABLE_TREE_LIST === '1' && (
+            <Box display="inline-flex" style={{ verticalAlign: 'top', flexDirection: 'column' }} pb={4}>
+              <Button onClick={() => setOpen(true)}>
+                {translate('resources.topics.filter_by_topics')} {filterValues.fk_topicId ? `(${filterValues.fk_topicId.length})` : ''}
+              </Button>
+              <TopicSelectDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                onConfirm={onTopicFilterConfirm}
+                initialValues={filterValues.fk_topicId || []}
               />
-            )
-          }
+            </Box>
+          )}
+          {TOPICS_ENABLE_TREE_LIST !== '1' && (
+            <ReferenceInput
+              label="resources.questions.fields.fk_topicId"
+              source="fk_topicId"
+              reference="topics"
+              alwaysOn
+              allowEmpty
+              perPage={100}
+              onChange={handleTopicChange}
+              filter={getTopicsFilter()}
+            >
+              <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.all')} />
+            </ReferenceInput>
+          )}
 
-          {
-            !HIDE_IGNORED && (
-              <>
-                <BooleanInput
-                  label="resources.questions.fields.ignored"
-                  source="ignored"
-                  alwaysOn
-                  onChange={() => handleSubmit()}
-                />
-                <BooleanInput
-                  label="misc.unanswered_questions"
-                  source="unanswered"
-                  alwaysOn
-                  onChange={() => handleSubmit()}
-                />
-              </>
-            )
-          }
+          {!USE_WORKFLOW && (
+            <SelectInput
+              label="resources.questions.fields.approved"
+              source="approved"
+              allowEmpty
+              emptyText="Both"
+              onChange={() => handleSubmit()}
+              defaultValue=""
+              choices={[
+                { id: true, name: <DoneIcon color="primary" /> },
+                { id: false, name: <ClearIcon /> },
+              ]}
+            />
+          )}
 
+          {!HIDE_IGNORED && (
+            <>
+              <BooleanInput label="resources.questions.fields.ignored" source="ignored" alwaysOn onChange={() => handleSubmit()} />
+              <BooleanInput label="misc.unanswered_questions" source="unanswered" alwaysOn onChange={() => handleSubmit()} />
+            </>
+          )}
         </form>
       )}
     </Form>

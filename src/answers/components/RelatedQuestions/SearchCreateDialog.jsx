@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-} from 'react-admin';
+import { useDataProvider, useNotify } from 'react-admin';
 import QuestionsSearchCreateDialog from '../../../questions/components/SearchCreateDialog';
 import useAnswer from '../../useAnswer';
 
@@ -28,7 +25,7 @@ const SearchCreateDialog = ({ record, open, onClose, relatedOpen = false }) => {
               fk_topicId: record.fk_topicId,
             },
           });
-        }),
+        })
       );
 
       notify('The questions were linked');

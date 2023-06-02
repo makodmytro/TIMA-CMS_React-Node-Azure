@@ -2,26 +2,16 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import {
-  useTranslate,
-  SelectInput,
-  required,
-} from 'react-admin';
+import { useTranslate, SelectInput, required } from 'react-admin';
 
-const StepKB = ({
-  initialValues,
-  onSubmit,
-  onBack,
-}) => {
+const StepKB = ({ initialValues, onSubmit, onBack }) => {
   const translate = useTranslate();
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      render={({
-        handleSubmit, valid, values, submitting,
-      }) => {
+      render={({ handleSubmit, valid, values, submitting }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box>
@@ -46,13 +36,7 @@ const StepKB = ({
                 {translate('misc.back')}
               </Button>
               &nbsp;
-              <Button
-                type="submit"
-                disabled={!valid || submitting}
-                variant="contained"
-                color="secondary"
-                size="small"
-              >
+              <Button type="submit" disabled={!valid || submitting} variant="contained" color="secondary" size="small">
                 {translate('misc.next')}
               </Button>
             </Box>

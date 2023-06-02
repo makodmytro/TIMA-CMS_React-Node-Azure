@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  TopToolbar,
-  useTranslate,
-  useRedirect,
-} from 'react-admin';
+import { TopToolbar, useTranslate, useRedirect } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory } from 'react-router-dom'; // eslint-disable-line
@@ -24,7 +20,7 @@ const Toolbar = ({ children, extra, to }) => {
             if (to) {
               redirect(to);
             } else {
-              history.goBack()
+              history.goBack();
             }
           }}
         >

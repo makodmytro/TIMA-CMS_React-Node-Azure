@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  Dialog,
-  Box,
-  IconButton,
-} from '@material-ui/core';
+import { Dialog, Box, IconButton } from '@material-ui/core';
 import ReactDiffViewer from 'react-diff-viewer';
 import CloseIcon from '@material-ui/icons/Close';
 
-const DetailDialog = ({
-  open,
-  onClose,
-  record,
-}) => {
+const DetailDialog = ({ open, onClose, record }) => {
   if (!open) {
     return null;
   }

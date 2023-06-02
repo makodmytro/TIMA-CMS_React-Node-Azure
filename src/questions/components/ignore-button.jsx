@@ -1,16 +1,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import BlockIcon from '@material-ui/icons/RemoveCircleOutline';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, useTranslate } from 'react-admin';
 
-const IgnoreButton = ({
-  record, justifyContent, onClick, disabled,
-}) => {
+const IgnoreButton = ({ record, justifyContent, onClick, disabled }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -51,13 +44,10 @@ const IgnoreButton = ({
       style={{ justifyContent: justifyContent || 'flex-start' }}
       disabled={disabled === true}
     >
-      <BlockIcon fontSize="small" />&nbsp;
-      {
-        record.ignored && (<>{translate('misc.un_ignore')}</>)
-      }
-      {
-        !record.ignored && (<>{translate('misc.ignore')}</>)
-      }
+      <BlockIcon fontSize="small" />
+      &nbsp;
+      {record.ignored && <>{translate('misc.un_ignore')}</>}
+      {!record.ignored && <>{translate('misc.ignore')}</>}
     </Button>
   );
 };

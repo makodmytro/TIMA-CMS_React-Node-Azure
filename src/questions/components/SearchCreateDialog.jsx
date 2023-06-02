@@ -1,13 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import { Form } from 'react-final-form';
-import {
-  useTranslate,
-  TextInput,
-  useNotify,
-  useDataProvider,
-  usePermissions,
-} from 'react-admin';
+import { useTranslate, TextInput, useNotify, useDataProvider, usePermissions } from 'react-admin';
 import {
   Box,
   Button,
@@ -30,13 +24,7 @@ import { useDisabledCreate } from '../../hooks';
 import AnswerLinkDialog from './AnswerLinkDialog';
 import useAnswer from '../../answers/useAnswer';
 
-const Filters = ({
-  onSubmit,
-  onCreateSubmit,
-  selected,
-  onSelectedSubmit,
-  selectedButtonText,
-}) => {
+const Filters = ({ onSubmit, onCreateSubmit, selected, onSelectedSubmit, selectedButtonText }) => {
   const translate = useTranslate();
   const disableCreate = useDisabledCreate();
 
@@ -48,40 +36,28 @@ const Filters = ({
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
               <Box flex={3}>
-                <Typography variant="body2">
-                  {translate('misc.search_create_questions')}
-                </Typography>
+                <Typography variant="body2">{translate('misc.search_create_questions')}</Typography>
                 <TextInput label="resources.questions.fields.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
               <Box flex={1} px={2} pt={5}>
-                {
-                  !disableCreate && !selected.length && (
-                    <Button
-                      type="button"
-                      color="primary"
-                      variant="contained"
-                      size="small"
-                      onClick={() => onCreateSubmit({ text: values.q })}
-                      disabled={Object.keys(values).length === 0}
-                      fullWidth
-                    >
-                      {translate('resources.questions.create')}
-                    </Button>
-                  )
-                }
-                {
-                  !!selected.length && (
-                    <Button
-                      type="button"
-                      onClick={onSelectedSubmit}
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                    >
-                      {translate(selectedButtonText, { val: selected.length })}
-                    </Button>
-                  )
-                }
+                {!disableCreate && !selected.length && (
+                  <Button
+                    type="button"
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    onClick={() => onCreateSubmit({ text: values.q })}
+                    disabled={Object.keys(values).length === 0}
+                    fullWidth
+                  >
+                    {translate('resources.questions.create')}
+                  </Button>
+                )}
+                {!!selected.length && (
+                  <Button type="button" onClick={onSelectedSubmit} variant="contained" color="secondary" size="small">
+                    {translate(selectedButtonText, { val: selected.length })}
+                  </Button>
+                )}
               </Box>
             </Box>
           </form>
@@ -91,12 +67,7 @@ const Filters = ({
   );
 };
 
-const ResultsList = ({
-  record,
-  questions,
-  selected,
-  toggleSelect,
-}) => {
+const ResultsList = ({ record, questions, selected, toggleSelect }) => {
   const translate = useTranslate();
   const isSelected = (question) => selected.includes(question.id);
   // const questionsWithoutContextOnly = questions?.filter((question) => !question.isContextOnly);
@@ -105,11 +76,7 @@ const ResultsList = ({
   }
 
   if (!questions.length) {
-    return (
-      <Alert severity="info">
-        {translate('resources.questions.no_results')}
-      </Alert>
-    );
+    return <Alert severity="info">{translate('resources.questions.no_results')}</Alert>;
   }
 
   return (
@@ -123,45 +90,30 @@ const ResultsList = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {
-            questions.map((question, i) => {
-              //disable to link to the exact same followup that already related to this answer
-              const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
-              return (
-                existedFollowup ? null
-                  : (
-                    <TableRow key={i}>
-                      <TableCell>
-                        <Checkbox
-                          checked={isSelected(question)}
-                          value={isSelected(question)}
-                          onClick={() => toggleSelect(question)}
-                          disabled={record?.id === question?.fk_answerId}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <PlayableTextField source="text" record={{ ...question }} />
-                      </TableCell>
-                      <TableCell style={{ width: '50%' }}>
-                        {
-                    question.fk_answerId && question?.fk_answerId !== record?.id && (
-                      <AnswerField record={question} />
-                    )
-                  }
-                        {
-                      question?.fk_answerId === record?.id && (
-                      <>{translate('misc.already_linked')}</>
-                      )
-                  }
-                        {
-                    !question.fk_answerId && ('-')
-                  }
-                      </TableCell>
-                    </TableRow>
-                  )
-              );
-            })
-          }
+          {questions.map((question, i) => {
+            //disable to link to the exact same followup that already related to this answer
+            const existedFollowup = record?.FollowupQuestions.map((el) => el.text === question?.text).includes(true);
+            return existedFollowup ? null : (
+              <TableRow key={i}>
+                <TableCell>
+                  <Checkbox
+                    checked={isSelected(question)}
+                    value={isSelected(question)}
+                    onClick={() => toggleSelect(question)}
+                    disabled={record?.id === question?.fk_answerId}
+                  />
+                </TableCell>
+                <TableCell>
+                  <PlayableTextField source="text" record={{ ...question }} />
+                </TableCell>
+                <TableCell style={{ width: '50%' }}>
+                  {question.fk_answerId && question?.fk_answerId !== record?.id && <AnswerField record={question} />}
+                  {question?.fk_answerId === record?.id && <>{translate('misc.already_linked')}</>}
+                  {!question.fk_answerId && '-'}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </>
@@ -285,19 +237,14 @@ const SearchCreateDialog = ({
   }
   return (
     <>
-
       {!openAnswer ? (
         <Dialog open onClose={onClose} fullWidth maxWidth="lg">
           <Box display="flex" p={2}>
             <Box flex={5}>
-              <Typography>
-                {translate('resources.answers.related_questions')}
-              </Typography>
+              <Typography>{translate('resources.answers.related_questions')}</Typography>
             </Box>
             <Box flex={1} textAlign="right">
-              <IconButton
-                onClick={onClose}
-              >
+              <IconButton onClick={onClose}>
                 <CloseIcon />
               </IconButton>
             </Box>
@@ -329,7 +276,9 @@ const SearchCreateDialog = ({
             onClose={onClose}
             contextOnlySlider={contextOnlySlider}
             afterCreate={f}
-            createFinish={() => { setOpenAnswer(false); }}
+            createFinish={() => {
+              setOpenAnswer(false);
+            }}
           />
         </Box>
       )}

@@ -2,16 +2,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  TextInput,
-  SelectInput,
-  useDataProvider,
-  useNotify,
-  Title,
-  useTranslate,
-  Link,
-  TextField,
-} from 'react-admin';
+import { TextInput, SelectInput, useDataProvider, useNotify, Title, useTranslate, Link, TextField } from 'react-admin';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -58,7 +49,6 @@ const styles = makeStyles((theme) => ({
     borderRadius: '15px',
     padding: theme.spacing(2),
     maxWidth: '45%',
-
   },
   textInput: {
     '&  .MuiFormHelperText-root': {
@@ -73,7 +63,9 @@ const Row = ({ label, value }) => (
       <Typography component="div">{label}</Typography>
     </Box>
     <Box flex={1}>
-      <Typography component="div" align="right">{value}</Typography>
+      <Typography component="div" align="right">
+        {value}
+      </Typography>
     </Box>
   </Box>
 );
@@ -156,132 +148,143 @@ const TestAsk = ({ languages, topics }) => {
       />
       <Box py={2}>
         <Box p={2}>
-          {!!questionText && questionText.map((el, i) => {
-            return (
-              <Box key={i} my={2}>
-                <Box
-                  className={classes.inputContainer}
-                  mt={1}
-                >
-                  <div className={classes.input}>
-                    <Typography component="span">
-                      {el.question}
+          {!!questionText &&
+            questionText.map((el, i) => {
+              return (
+                <Box key={i} my={2}>
+                  <Box className={classes.inputContainer} mt={1}>
+                    <div className={classes.input}>
+                      <Typography component="span">{el.question}</Typography>
+                    </div>
+                  </Box>
+                  <Box className={classes.inputContainer}>
+                    <Typography variant="body2" component="div" className={classes.date}>
+                      {format(el.createdAt, 'yyyy-MM-dd HH:mm')}
                     </Typography>
-                  </div>
-                </Box>
-                <Box className={classes.inputContainer}>
-                  <Typography variant="body2" component="div" className={classes.date}>
-                    {format(el.createdAt, 'yyyy-MM-dd HH:mm')}
-                  </Typography>
-                </Box>
-                {!!response[i] && (
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <Box display="flex" flexDirection="column" width="100%">
-                      <Box display="flex">
-                        <div className={classes.output}>
-                          <Typography component="span">
-                            {response[i].text}
-                          </Typography>
-
-                        </div>
-                        <Button onClick={() => setModal(true)}>
-                          <InfoIcon />
-                        </Button>
+                  </Box>
+                  {!!response[i] && (
+                    <Box display="flex" alignItems="center" mt={1}>
+                      <Box display="flex" flexDirection="column" width="100%">
+                        <Box display="flex">
+                          <div className={classes.output}>
+                            <Typography component="span">{response[i].text}</Typography>
+                          </div>
+                          <Button onClick={() => setModal(true)}>
+                            <InfoIcon />
+                          </Button>
+                        </Box>
+                        <Box display="flex" flexDirection="column">
+                          {response[i]?.followupQuestions?.map((followup, index) => {
+                            return (
+                              <Box key={index} display="flex">
+                                <Button
+                                  className={classes.followupQuestion}
+                                  onClick={() => {
+                                    onSubmit({
+                                      createdAt: new Date(),
+                                      languageId: languages && languages.length ? languages[0].id : '',
+                                      topicId: '',
+                                      question: followup.text,
+                                    });
+                                  }}
+                                  key={i}
+                                  component="span"
+                                >
+                                  {index + 1}.{followup.text}?
+                                </Button>
+                              </Box>
+                            );
+                          })}
+                        </Box>
                       </Box>
-                      <Box display="flex" flexDirection="column">
-                        {response[i]?.followupQuestions?.map((followup, index) => {
-                          return (
-                            <Box key={index} display="flex">
-                              <Button
-                                className={classes.followupQuestion}
-                                onClick={() => {
-                                  onSubmit({ createdAt: new Date(), languageId: languages && languages.length ? languages[0].id : '', topicId: '', question: followup.text });
-                                }}
-                                key={i}
-                                component="span"
-                              >
-                                {index + 1}.{followup.text}?
-                              </Button>
-                            </Box>
-                          );
-                        })}
-                      </Box>
-
-                    </Box>
-                    <Dialog
-                      fullWidth
-                      open={modal}
-                      onClose={() => setModal(false)}
-                      aria-label="Show info"
-                    >
-                      {!loading && (!!response[i]) && (
-                        <Box p={2}>
-                          <Row label="Score" value={response[i].score} />
-                          <Row
-                            label={translate('misc.answer_id')}
-                            value={
-                              !response[i].answerId
-                                ? '-'
-                                : <Link className={classes.link} to={`/answers/${response[i].answerId}`}>{response[i].answerId}</Link>
-                            }
-                          />
-                          <Row
-                            label={translate('misc.question_id')}
-                            value={
-                              !response[i].questionId
-                                ? '-'
-                                : <Link className={classes.link} to={`/questions/${response[i].questionId}`}>{response[i].questionId}</Link>
-                            }
-                          />
-                          <Row
-                            label={translate('misc.topic_id')}
-                            value={
-                              !response[i].topicId
-                                ? '-'
-                                : <Link className={classes.link} to={`/topics/${response[i].topicId}`}>{response[i].topicId}</Link>
-                            }
-                          />
-                          <Row label={translate('misc.request_time_seconds')} value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0} />
-                          {
-                            response[i].suggestions && !!response[i].suggestions.length && (
+                      <Dialog fullWidth open={modal} onClose={() => setModal(false)} aria-label="Show info">
+                        {!loading && !!response[i] && (
+                          <Box p={2}>
+                            <Row label="Score" value={response[i].score} />
+                            <Row
+                              label={translate('misc.answer_id')}
+                              value={
+                                !response[i].answerId ? (
+                                  '-'
+                                ) : (
+                                  <Link className={classes.link} to={`/answers/${response[i].answerId}`}>
+                                    {response[i].answerId}
+                                  </Link>
+                                )
+                              }
+                            />
+                            <Row
+                              label={translate('misc.question_id')}
+                              value={
+                                !response[i].questionId ? (
+                                  '-'
+                                ) : (
+                                  <Link className={classes.link} to={`/questions/${response[i].questionId}`}>
+                                    {response[i].questionId}
+                                  </Link>
+                                )
+                              }
+                            />
+                            <Row
+                              label={translate('misc.topic_id')}
+                              value={
+                                !response[i].topicId ? (
+                                  '-'
+                                ) : (
+                                  <Link className={classes.link} to={`/topics/${response[i].topicId}`}>
+                                    {response[i].topicId}
+                                  </Link>
+                                )
+                              }
+                            />
+                            <Row
+                              label={translate('misc.request_time_seconds')}
+                              value={response[i].requestTimeMs ? response[i].requestTimeMs / 1000 : 0}
+                            />
+                            {response[i].suggestions && !!response[i].suggestions.length && (
                               <>
                                 <Typography variant="h6">{translate('misc.suggestions')}</Typography>
-                                {
-                                  response[i].suggestions.map((s, index) => (
-                                    <Box key={index} boxShadow={3} p={2} mb={2}>
-                                      <Row label={translate('misc.answer')} value={s.answer} />
-                                      <Row
-                                        label="ID"
-                                        value={
-                                          !s.id || s.id === 'NO_SUGGESTION'
-                                            ? '-'
-                                            : <Link className={classes.link} to={`/questions/${s.id}`}>{s.id}</Link>
-                                        }
-                                      />
-                                      <Row label={translate('misc.score')} value={s.score} />
-                                      <Row label={translate('misc.text')} value={s.text} />
-                                      <Row
-                                        label={translate('misc.topic_id')}
-                                        value={
-                                          !s.topicId
-                                            ? '-'
-                                            : <Link className={classes.link} to={`/topics/${s.topicId}`}>{s.topicId}</Link>
-                                        }
-                                      />
-                                    </Box>
-                                  ))
-                                }
+                                {response[i].suggestions.map((s, index) => (
+                                  <Box key={index} boxShadow={3} p={2} mb={2}>
+                                    <Row label={translate('misc.answer')} value={s.answer} />
+                                    <Row
+                                      label="ID"
+                                      value={
+                                        !s.id || s.id === 'NO_SUGGESTION' ? (
+                                          '-'
+                                        ) : (
+                                          <Link className={classes.link} to={`/questions/${s.id}`}>
+                                            {s.id}
+                                          </Link>
+                                        )
+                                      }
+                                    />
+                                    <Row label={translate('misc.score')} value={s.score} />
+                                    <Row label={translate('misc.text')} value={s.text} />
+                                    <Row
+                                      label={translate('misc.topic_id')}
+                                      value={
+                                        !s.topicId ? (
+                                          '-'
+                                        ) : (
+                                          <Link className={classes.link} to={`/topics/${s.topicId}`}>
+                                            {s.topicId}
+                                          </Link>
+                                        )
+                                      }
+                                    />
+                                  </Box>
+                                ))}
                               </>
-                            )
-                          }
-                        </Box>
-                      )}
-                    </Dialog>
-                  </Box>
-                )}
-              </Box>
-            );
-          })}
+                            )}
+                          </Box>
+                        )}
+                      </Dialog>
+                    </Box>
+                  )}
+                </Box>
+              );
+            })}
           <Form
             onSubmit={onSubmit}
             initialValues={{
@@ -295,29 +298,30 @@ const TestAsk = ({ languages, topics }) => {
                 <>
                   <form onSubmit={handleSubmit}>
                     <Grid container spacing={1}>
-                      {
-                        languages && languages.length > 1 && (
-                          <Grid item xs={12} sm={6} md={2}>
-                            <SelectInput
-                              source="languageId"
-                              label="resources.answers.fields.fk_languageId"
-                              choices={languages}
-                              optionText="name"
-                              optionValue="id"
-                              margin="dense"
-                              fullWidth
-                            />
-                          </Grid>
-                        )
-                      }
+                      {languages && languages.length > 1 && (
+                        <Grid item xs={12} sm={6} md={2}>
+                          <SelectInput
+                            source="languageId"
+                            label="resources.answers.fields.fk_languageId"
+                            choices={languages}
+                            optionText="name"
+                            optionValue="id"
+                            margin="dense"
+                            fullWidth
+                          />
+                        </Grid>
+                      )}
                       <Grid item xs={10} sm={9} md={11}>
-                        <TextInput className={classes.textInput} source="question" label="resources.answers.fields.fk_questionId" margin="dense" fullWidth />
+                        <TextInput
+                          className={classes.textInput}
+                          source="question"
+                          label="resources.answers.fields.fk_questionId"
+                          margin="dense"
+                          fullWidth
+                        />
                       </Grid>
                       <Box pt={1.3}>
-                        <Button
-                          type="submit"
-                          disabled={!valid}
-                        >
+                        <Button type="submit" disabled={!valid}>
                           <SendIcon />
                         </Button>
                       </Box>

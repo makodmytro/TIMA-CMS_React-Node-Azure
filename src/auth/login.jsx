@@ -1,25 +1,8 @@
 import * as React from 'react';
 import { Form } from 'react-final-form';
-import {
-  useLogin,
-  useNotify,
-  Notification,
-  defaultTheme,
-  TextInput,
-  required,
-  useAuthState,
-  useRedirect,
-  useTranslate,
-} from 'react-admin';
+import { useLogin, useNotify, Notification, defaultTheme, TextInput, required, useAuthState, useRedirect, useTranslate } from 'react-admin';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  CircularProgress,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, Button, Grid, Typography, CircularProgress, makeStyles } from '@material-ui/core';
 import Azure from './azure';
 import Logo from '../assets/TIMA_logo.png';
 import AltLogo from '../assets/QnA Manager Logo round.png';
@@ -77,9 +60,11 @@ export default () => {
   const notify = useNotify();
 
   const onSubmit = async (values) => {
-    return login(values).then(() => redirect('/')).catch((e) => {
-      notify(e?.body?.message || 'Authentication failed', 'error');
-    });
+    return login(values)
+      .then(() => redirect('/'))
+      .catch((e) => {
+        notify(e?.body?.message || 'Authentication failed', 'error');
+      });
   };
 
   const l = loading || azureLoading;
@@ -113,68 +98,60 @@ export default () => {
               <Box py={2} textAlign="center">
                 <img src={USE_ALT_THEME ? AltLogo : Logo} alt="logo" width="135" />
               </Box>
-              {
-                AZURE_LOGIN && (
-                  <Box textAlign="center" mb={2}>
-                    <Box textAlign="center" py={2}>
-                      <Azure setLoading={setAzureLoading} />
-                    </Box>
-                    {AZURE_LOGIN && USER_AND_PASSWORD_LOGIN ? (
-                      <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
-                        {translate('misc.or')}
-                      </Typography>
-                    ) : ''}
+              {AZURE_LOGIN && (
+                <Box textAlign="center" mb={2}>
+                  <Box textAlign="center" py={2}>
+                    <Azure setLoading={setAzureLoading} />
                   </Box>
-                )
-              }
+                  {AZURE_LOGIN && USER_AND_PASSWORD_LOGIN ? (
+                    <Typography variant="body2" style={{ textTransform: 'uppercase', color: USE_ALT_THEME ? 'white' : 'default' }}>
+                      {translate('misc.or')}
+                    </Typography>
+                  ) : (
+                    ''
+                  )}
+                </Box>
+              )}
               {USER_AND_PASSWORD_LOGIN && (
-              <Form
-                autoComplete="off"
-                autoFill="off"
-                onSubmit={onSubmit}
-                initialValues={{
-                  username: '',
-                  password: '',
-                }}
-                render={({ handleSubmit, submitting }) => (
-                  <form onSubmit={handleSubmit}>
-                    <TextInput
-                      source="username"
-                      label={translate('resources.users.fields.email')}
-                      validate={required()}
-                      fullWidth
-                      className={USE_ALT_THEME ? classes.input : null}
-                    />
-                    <TextInput
-                      source="password"
-                      label={translate('resources.users.fields.password')}
-                      type="password"
-                      validate={required()}
-                      fullWidth
-                      className={USE_ALT_THEME ? classes.input : null}
-                    />
-                    <Button
-                      type="submit"
-                      variant="outlined"
-                      fullWidth
-                      color={USE_ALT_THEME ? 'secondary' : 'primary'}
-                      disabled={submitting || loading || azureLoading}
-                      style={{ color: USE_ALT_THEME ? 'white' : 'default' }}
-                    >
-                      {
-                        l && (
-                          <CircularProgress color="primary" />
-                        )
-                      }
-                      {
-                        !l && (
-                          <>{translate('misc.login')}</>
-                        )
-                      }
-                    </Button>
-                  </form>
-                )}
-              />
+                <Form
+                  autoComplete="off"
+                  autoFill="off"
+                  onSubmit={onSubmit}
+                  initialValues={{
+                    username: '',
+                    password: '',
+                  }}
+                  render={({ handleSubmit, submitting }) => (
+                    <form onSubmit={handleSubmit}>
+                      <TextInput
+                        source="username"
+                        label={translate('resources.users.fields.email')}
+                        validate={required()}
+                        fullWidth
+                        className={USE_ALT_THEME ? classes.input : null}
+                      />
+                      <TextInput
+                        source="password"
+                        label={translate('resources.users.fields.password')}
+                        type="password"
+                        validate={required()}
+                        fullWidth
+                        className={USE_ALT_THEME ? classes.input : null}
+                      />
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        fullWidth
+                        color={USE_ALT_THEME ? 'secondary' : 'primary'}
+                        disabled={submitting || loading || azureLoading}
+                        style={{ color: USE_ALT_THEME ? 'white' : 'default' }}
+                      >
+                        {l && <CircularProgress color="primary" />}
+                        {!l && <>{translate('misc.login')}</>}
+                      </Button>
+                    </form>
+                  )}
+                />
               )}
             </Wrapper>
           </Grid>

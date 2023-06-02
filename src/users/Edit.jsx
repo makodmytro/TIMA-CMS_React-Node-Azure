@@ -2,7 +2,10 @@ import React from 'react';
 import { useField } from 'react-final-form'; // eslint-disable-line
 import { useParams } from 'react-router-dom';
 import {
-  Edit, required, SimpleForm, TextInput,
+  Edit,
+  required,
+  SimpleForm,
+  TextInput,
   SaveButton,
   DeleteButton,
   Toolbar,
@@ -28,12 +31,7 @@ const CustomToolbar = (props) => {
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="ra.action.save"
-        redirect="list"
-        submitOnEnter
-        disabled={props.pristine || disabled}
-      />
+      <SaveButton label="ra.action.save" redirect="list" submitOnEnter disabled={props.pristine || disabled} />
     </Toolbar>
   );
 };
@@ -41,12 +39,7 @@ const CustomToolbar = (props) => {
 const ProfileCustomToolbar = (props) => {
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="ra.action.save"
-        redirect="list"
-        submitOnEnter
-        disabled={props.pristine}
-      />
+      <SaveButton label="ra.action.save" redirect="list" submitOnEnter disabled={props.pristine} />
     </Toolbar>
   );
 };
@@ -75,7 +68,9 @@ export const GroupsSelection = ({ disabled }) => {
     }
   }, []);
 
-  const { input: { onChange, value } } = useField('groups');
+  const {
+    input: { onChange, value },
+  } = useField('groups');
 
   const handleChange = (id) => {
     if (value.includes(id)) {
@@ -87,38 +82,30 @@ export const GroupsSelection = ({ disabled }) => {
   return (
     <Box>
       <Box borderBottom="1px solid #D5D5D5" mb={2}>
-        <Typography variant="body2">
-          {translate('resources.groups.select_user')}
-        </Typography>
+        <Typography variant="body2">{translate('resources.groups.select_user')}</Typography>
       </Box>
       <Box display="flex" flexWrap="wrap">
-        {
-          groups.map((group) => {
-            return (
-              <Box key={group.id} flex="0 0 30%">
-                <FormGroup style={{ paddingBottom: '25px' }}>
-                  <FormControlLabel
-                    control={(
-                      <Switch
-                        name={`u_${group.id}`}
-                        checked={value.includes(group.id)}
-                        record={{ [`u_${group.id}`]: value.includes(group.id) }}
-                        onChange={() => handleChange(group.id)}
-                        disabled={disabled}
-                        color="primary"
-                      />
-                    )}
-                    label={(
-                      <Box fontSize={18}>
-                        {group.name}
-                      </Box>
-                    )}
-                  />
-                </FormGroup>
-              </Box>
-            );
-          })
-        }
+        {groups.map((group) => {
+          return (
+            <Box key={group.id} flex="0 0 30%">
+              <FormGroup style={{ paddingBottom: '25px' }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      name={`u_${group.id}`}
+                      checked={value.includes(group.id)}
+                      record={{ [`u_${group.id}`]: value.includes(group.id) }}
+                      onChange={() => handleChange(group.id)}
+                      disabled={disabled}
+                      color="primary"
+                    />
+                  }
+                  label={<Box fontSize={18}>{group.name}</Box>}
+                />
+              </FormGroup>
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );
@@ -169,80 +156,22 @@ const UsersEdit = (props) => {
     redirect('/users');
   };
 
-  const T = ({ record }) => (<>{record?.name}</>);
-  if (parseInt(id, 10) === parseInt(permissions?.userId, 10) && disabled) { // user is not admin and just looking at his profile
+  const T = ({ record }) => <>{record?.name}</>;
+  if (parseInt(id, 10) === parseInt(permissions?.userId, 10) && disabled) {
+    // user is not admin and just looking at his profile
     return (
-      <Edit
-        {...props}
-        actions={<CustomTopToolbar />}
-        undoable={false}
-        onSuccess={onSuccess}
-        title={<T />}
-      >
+      <Edit {...props} actions={<CustomTopToolbar />} undoable={false} onSuccess={onSuccess} title={<T />}>
         <SimpleForm toolbar={<ProfileCustomToolbar />}>
-          <TextInput label={translate('resources.users.change_password')} source="change_password" type="text" defaultValue={1} style={{ display: 'none' }} />
+          <TextInput
+            label={translate('resources.users.change_password')}
+            source="change_password"
+            type="text"
+            defaultValue={1}
+            style={{ display: 'none' }}
+          />
           <TextInput source="name" validate={required()} fullWidth disabled />
           <TextInput source="email" validate={required()} fullWidth disabled />
-          {
-            !AZURE_LOGIN && (
-              <>
-                <TextInput
-                  source="password"
-                  type="password"
-                  validate={required()}
-                  fullWidth
-                  helperText={translate('misc.password_must_change')}
-                  autoComplete="new-password"
-                  label="resources.users.fields.password"
-                />
-                <TextInput
-                  type="password"
-                  source="password_confirm"
-                  validate={(value, allValues) => {
-                    if (value !== allValues?.password) {
-                      return translate('misc.password_mismatch');
-                    }
-
-                    return undefined;
-                  }}
-                  fullWidth
-                  autoComplete="new-password"
-                  label="resources.users.fields.password_confirm"
-                />
-              </>
-            )
-          }
-
-          <GroupsSelection disabled />
-        </SimpleForm>
-      </Edit>
-    );
-  }
-
-  return (
-    <Edit
-      {...props}
-      actions={<CustomTopToolbar />}
-      undoable={false}
-      onSuccess={onSuccess}
-      title={<T />}
-    >
-      <SimpleForm toolbar={<CustomToolbar />}>
-        <TextInput source="name" validate={required()} fullWidth />
-        <TextInput source="email" validate={required()} fullWidth />
-        {
-          !AZURE_LOGIN && (
-            <BooleanInput
-              source="change_password"
-              label="Change user password"
-              disabled={disabled}
-              onChange={(v) => setPasswordToggle(v)}
-            />
-          )
-        }
-
-        {
-          passwordToggle && (
+          {!AZURE_LOGIN && (
             <>
               <TextInput
                 source="password"
@@ -268,23 +197,53 @@ const UsersEdit = (props) => {
                 label="resources.users.fields.password_confirm"
               />
             </>
-          )
-        }
-        <NullableBoolean
-          source="isActive"
-          label="resources.users.fields.isActive"
-          disabled={disabledCheckbox}
-        />
-        <NullableBoolean
-          source="isAdmin"
-          label="resources.users.fields.isAdmin"
-          disabled={disabledCheckbox}
-        />
-        {
-          disabledCheckbox && (
-            <DeactivateWarning />
-          )
-        }
+          )}
+
+          <GroupsSelection disabled />
+        </SimpleForm>
+      </Edit>
+    );
+  }
+
+  return (
+    <Edit {...props} actions={<CustomTopToolbar />} undoable={false} onSuccess={onSuccess} title={<T />}>
+      <SimpleForm toolbar={<CustomToolbar />}>
+        <TextInput source="name" validate={required()} fullWidth />
+        <TextInput source="email" validate={required()} fullWidth />
+        {!AZURE_LOGIN && (
+          <BooleanInput source="change_password" label="Change user password" disabled={disabled} onChange={(v) => setPasswordToggle(v)} />
+        )}
+
+        {passwordToggle && (
+          <>
+            <TextInput
+              source="password"
+              type="password"
+              validate={required()}
+              fullWidth
+              helperText={translate('misc.password_must_change')}
+              autoComplete="new-password"
+              label="resources.users.fields.password"
+            />
+            <TextInput
+              type="password"
+              source="password_confirm"
+              validate={(value, allValues) => {
+                if (value !== allValues?.password) {
+                  return translate('misc.password_mismatch');
+                }
+
+                return undefined;
+              }}
+              fullWidth
+              autoComplete="new-password"
+              label="resources.users.fields.password_confirm"
+            />
+          </>
+        )}
+        <NullableBoolean source="isActive" label="resources.users.fields.isActive" disabled={disabledCheckbox} />
+        <NullableBoolean source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabledCheckbox} />
+        {disabledCheckbox && <DeactivateWarning />}
         <GroupsSelection disabled={disabled} />
       </SimpleForm>
     </Edit>

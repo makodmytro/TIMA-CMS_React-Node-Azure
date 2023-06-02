@@ -20,7 +20,9 @@ const StatusWarning = ({ record }) => {
     return (
       <Box my={2}>
         <Alert severity="info" elevation={3}>
-          {translate('resources.answers.no_possible_status', { status: match ? translate(`resources.users.workflow.status.${match.name}`) : 'N/A' })}
+          {translate('resources.answers.no_possible_status', {
+            status: match ? translate(`resources.users.workflow.status.${match.name}`) : 'N/A',
+          })}
         </Alert>
       </Box>
     );

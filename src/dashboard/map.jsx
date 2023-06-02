@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-} from 'react-admin';
+import { useDataProvider, useNotify } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import * as Ol from 'ol';
@@ -25,43 +22,37 @@ const Map = () => {
 
   const createMap = (data) => {
     try {
-      const mapped = data
-        .reduce((acc, cur) => {
-          const code = (cur.clientCountry || '').toLowerCase().trim();
-          const match = CountryCodeToCoodrinates.find((country) => {
-            return (
-              country.alpha2.toLowerCase() === code || country.alpha3.toLowerCase() === code
-              || country.country.toLowerCase() === code
-            );
-          });
+      const mapped = data.reduce((acc, cur) => {
+        const code = (cur.clientCountry || '').toLowerCase().trim();
+        const match = CountryCodeToCoodrinates.find((country) => {
+          return country.alpha2.toLowerCase() === code || country.alpha3.toLowerCase() === code || country.country.toLowerCase() === code;
+        });
 
-          if (!match) {
-            return acc;
-          }
-
-          const { latitude, longitude } = match;
-
-          if (!acc[match.alpha2]) {
-            acc[match.alpha2] = {
-              latitude,
-              longitude,
-              country: cur.clientCountry,
-              sessionsCount: cur.sessionsCount,
-            };
-          } else {
-            acc[match.alpha2].sessionsCount += cur.sessionsCount;
-          }
-
+        if (!match) {
           return acc;
-        }, {});
+        }
+
+        const { latitude, longitude } = match;
+
+        if (!acc[match.alpha2]) {
+          acc[match.alpha2] = {
+            latitude,
+            longitude,
+            country: cur.clientCountry,
+            sessionsCount: cur.sessionsCount,
+          };
+        } else {
+          acc[match.alpha2].sessionsCount += cur.sessionsCount;
+        }
+
+        return acc;
+      }, {});
 
       let max = 0;
       let maxLocation = [0, 0];
 
       const features = Object.keys(mapped).map((key) => {
-        const {
-          latitude, longitude, country, sessionsCount,
-        } = mapped[key];
+        const { latitude, longitude, country, sessionsCount } = mapped[key];
 
         const icon = new Ol.Feature({
           geometry: new OlGeom.Point(OlProj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')),
@@ -145,7 +136,8 @@ const Map = () => {
         }
       };
 
-      mapObject.on('pointermove', function (evt) { // eslint-disable-line
+      mapObject.on('pointermove', (evt) => {
+        // eslint-disable-line
         if (evt.dragging) {
           return;
         }
@@ -156,7 +148,8 @@ const Map = () => {
       });
 
       setMap(mapObject);
-    } catch (err) { // eslint-disable-line
+    } catch (err) {
+      // eslint-disable-line
       console.log(err); // eslint-disable-line
     }
   };
@@ -187,11 +180,7 @@ const Map = () => {
 
   return (
     <Box mb={4} p={1} boxShadow={6}>
-      {
-        !map && (
-          <Typography align="center">Loading...</Typography>
-        )
-      }
+      {!map && <Typography align="center">Loading...</Typography>}
       <div ref={mapRef} style={{ height: '50vh' }} />
     </Box>
   );

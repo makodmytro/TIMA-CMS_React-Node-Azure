@@ -23,19 +23,16 @@ const CustomToolbar = (props) => {
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="ra.action.save"
-        redirect="list"
-        submitOnEnter
-        disabled={props.pristine || disabled}
-      />
+      <SaveButton label="ra.action.save" redirect="list" submitOnEnter disabled={props.pristine || disabled} />
     </Toolbar>
   );
 };
 
 const UsersSelection = ({ users }) => {
   const translate = useTranslate();
-  const { input: { onChange, value } } = useField('Users');
+  const {
+    input: { onChange, value },
+  } = useField('Users');
 
   const handleChange = (id) => {
     if (value.includes(id)) {
@@ -48,25 +45,21 @@ const UsersSelection = ({ users }) => {
   return (
     <Box>
       <Box borderBottom="1px solid #D5D5D5" mb={2}>
-        <Typography variant="body2">
-          {translate('resources.groups.select_users_bis')}
-        </Typography>
+        <Typography variant="body2">{translate('resources.groups.select_users_bis')}</Typography>
       </Box>
       <Box display="flex" flexWrap="wrap">
-        {
-          users.map((user) => {
-            return (
-              <Box key={user.id} flex="0 0 50%">
-                <BooleanInput
-                  name={`u_${user.id}`}
-                  label={user.name}
-                  record={{ [`u_${user.id}`]: value.includes(user.id) }}
-                  onChange={() => handleChange(user.id)}
-                />
-              </Box>
-            );
-          })
-        }
+        {users.map((user) => {
+          return (
+            <Box key={user.id} flex="0 0 50%">
+              <BooleanInput
+                name={`u_${user.id}`}
+                label={user.name}
+                record={{ [`u_${user.id}`]: value.includes(user.id) }}
+                onChange={() => handleChange(user.id)}
+              />
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );

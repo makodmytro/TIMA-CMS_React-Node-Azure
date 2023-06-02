@@ -1,10 +1,6 @@
 import React from 'react';
 import { useField } from 'react-final-form'; // eslint-disable-line
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate } from 'react-admin';
 import debounce from 'lodash/debounce';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -22,39 +18,37 @@ const AutocompleteInput = () => {
     input: { onChange, value: currentValue },
   } = useField('fk_answerId');
   const {
-    input: {
-      onChange: setInputValue,
-      value: inputValue,
-    },
+    input: { onChange: setInputValue, value: inputValue },
   } = useField('answer_text');
   let active = true;
 
   const fetch = React.useMemo(
-    () => debounce(async (query, callback) => {
-      try {
-        if (active) {
-          setLoading(true);
+    () =>
+      debounce(async (query, callback) => {
+        try {
+          if (active) {
+            setLoading(true);
+          }
+
+          const { data } = await dataProvider.getList('answers', {
+            pagination: { perPage: 10, page: 1 },
+            filter: { q: query },
+          });
+
+          if (active) {
+            setLoading(false);
+          }
+
+          return callback(data);
+        } catch (err) {
+          if (err.body && err.body.message) {
+            notify(err.body.message, 'error');
+          }
+
+          return callback(null);
         }
-
-        const { data } = await dataProvider.getList('answers', {
-          pagination: { perPage: 10, page: 1 },
-          filter: { q: query },
-        });
-
-        if (active) {
-          setLoading(false);
-        }
-
-        return callback(data);
-      } catch (err) {
-        if (err.body && err.body.message) {
-          notify(err.body.message, 'error');
-        }
-
-        return callback(null);
-      }
-    }, 200),
-    [],
+      }, 200),
+    []
   );
   const getPresetAnswer = async () => {
     try {

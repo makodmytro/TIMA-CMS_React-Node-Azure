@@ -1,12 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {
-  Confirm,
-  useDataProvider,
-  useRefresh,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { Confirm, useDataProvider, useRefresh, useNotify, useTranslate } from 'react-admin';
 import TickIcon from '@material-ui/icons/DoneAll';
 
 const BatchApproveButton = ({ answerId, variant, disabled }) => {
@@ -41,26 +35,17 @@ const BatchApproveButton = ({ answerId, variant, disabled }) => {
 
   return (
     <>
-      {
-        open && (
-          <Confirm
-            isOpen={open}
-            loading={false}
-            title={translate('misc.batch_approve')}
-            content={translate('dialogs.batch_approve')}
-            onConfirm={onConfirm}
-            onClose={onClose}
-          />
-        )
-      }
-      <Button
-        type="button"
-        color="secondary"
-        onClick={onOpen}
-        size="small"
-        variant={variant || 'text'}
-        disabled={disabled === true}
-      >
+      {open && (
+        <Confirm
+          isOpen={open}
+          loading={false}
+          title={translate('misc.batch_approve')}
+          content={translate('dialogs.batch_approve')}
+          onConfirm={onConfirm}
+          onClose={onClose}
+        />
+      )}
+      <Button type="button" color="secondary" onClick={onOpen} size="small" variant={variant || 'text'} disabled={disabled === true}>
         <TickIcon /> {translate('misc.batch_approve')}
       </Button>
     </>

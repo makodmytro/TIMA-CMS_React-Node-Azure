@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  Create, required, SimpleForm, TextInput,
+  Create,
+  required,
+  SimpleForm,
+  TextInput,
   BooleanInput,
   email,
   Toolbar,
@@ -76,37 +79,35 @@ const UsersCreate = (props) => {
       <SimpleForm toolbar={<CustomToolbar />} initialValues={{ groups: [], isActive: true }}>
         <TextInput source="name" validate={required()} fullWidth disabled={disabled} autoComplete="no" />
         <TextInput source="email" validate={[required(), email()]} fullWidth disabled={disabled} autoComplete="no" />
-        {
-          !AZURE_LOGIN && (
-            <>
-              <TextInput
-                source="password"
-                type="password"
-                validate={required()}
-                fullWidth
-                disabled={disabled}
-                helperText={translate('misc.password_must_change')}
-                autoComplete="new-password"
-                label="resources.users.fields.password"
-              />
-              <TextInput
-                type="password"
-                source="password_confirm"
-                label="resources.users.fields.password_confirm"
-                validate={(value, allValues) => {
-                  if (value !== allValues?.password) {
-                    return translate('misc.password_mismatch');
-                  }
+        {!AZURE_LOGIN && (
+          <>
+            <TextInput
+              source="password"
+              type="password"
+              validate={required()}
+              fullWidth
+              disabled={disabled}
+              helperText={translate('misc.password_must_change')}
+              autoComplete="new-password"
+              label="resources.users.fields.password"
+            />
+            <TextInput
+              type="password"
+              source="password_confirm"
+              label="resources.users.fields.password_confirm"
+              validate={(value, allValues) => {
+                if (value !== allValues?.password) {
+                  return translate('misc.password_mismatch');
+                }
 
-                  return undefined;
-                }}
-                fullWidth
-                disabled={disabled}
-                autoComplete="new-password"
-              />
-            </>
-          )
-        }
+                return undefined;
+              }}
+              fullWidth
+              disabled={disabled}
+              autoComplete="new-password"
+            />
+          </>
+        )}
 
         <BooleanInput source="isActive" label="resources.users.fields.isActive" disabled={disabled} />
         <BooleanInput source="isAdmin" label="resources.users.fields.isAdmin" disabled={disabled} />

@@ -1,10 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate } from 'react-admin';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -35,11 +31,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const PreviewDialog = ({
-  media,
-  open,
-  onClose,
-}) => {
+const PreviewDialog = ({ media, open, onClose }) => {
   const translate = useTranslate();
   const classes = styles();
   const notify = useNotify();
@@ -83,40 +75,17 @@ const PreviewDialog = ({
           </IconButton>
         </DialogTitle>
         <DialogContent dividers className={classes.content}>
-          {
-            loading && (
-              <div>{translate('misc.loading')}...</div>
-            )
-          }
-          {
-            !loading && (
-              <div>
-                {
-                  media.type.startsWith('audio') && (
-                    <Audio src={src} />
-                  )
-                }
-                {
-                  media.type.startsWith('video') && (
-                    <Video src={src} />
-                  )
-                }
-                {
-                  media.type.startsWith('image') && (
-                    <Image src={src} />
-                  )
-                }
-              </div>
-            )
-          }
+          {loading && <div>{translate('misc.loading')}...</div>}
+          {!loading && (
+            <div>
+              {media.type.startsWith('audio') && <Audio src={src} />}
+              {media.type.startsWith('video') && <Video src={src} />}
+              {media.type.startsWith('image') && <Image src={src} />}
+            </div>
+          )}
         </DialogContent>
         <DialogActions className={classes.actions}>
-          <Button
-            type="button"
-            onClick={onClose}
-            variant="contained"
-            color="secondary"
-          >
+          <Button type="button" onClick={onClose} variant="contained" color="secondary">
             {translate('misc.close')}
           </Button>
         </DialogActions>
