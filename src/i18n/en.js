@@ -322,6 +322,12 @@ const english = {
         questions: 'Create questions',
         answer: 'Create the answer',
       },
+      intent_entity: {
+        text: 'Intent/Entity (admin only)',
+        intent: 'Intent',
+        entity: 'Entity',
+        answerId: 'Answer Id',
+      },
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',

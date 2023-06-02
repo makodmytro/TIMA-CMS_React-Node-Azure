@@ -3,7 +3,7 @@ import germanMessages from 'ra-language-german';
 const german = {
   ...germanMessages,
   appbar: {
-    languageSelect: 'Sprache',
+    languageSelect: 'Sprache'
   },
   Test: 'Test',
   Dashboard: 'Dashboard',
@@ -57,7 +57,7 @@ const german = {
     change_language: 'Das Ändern der Sprache einer Antwort wirkt sich auch auf das Thema und die verlinkten Fragen aus',
     confirm_media_delete: 'Bist du sicher, dass du diese Mediendatei löschen möchtest?',
     unlink_confirmation: 'Bist du sicher, dass du die Verlinkung von Antwort und Frage entfernen möchtest?',
-    change_language_confirmation: 'Das Ändern der Sprache einer Frage wirkt sich auch auf das Thema aus',
+    change_language_confirmation: 'Das Ändern der Sprache einer Frage wirkt sich auch auf das Thema aus'
   },
   misc: {
     bug_report_success: 'Thank you for reporting this issue. A ticket was created with ID',
@@ -171,7 +171,7 @@ const german = {
     department: 'Fachbereich',
     topic_group: 'Themengruppe',
     topic: 'Thema',
-    answer_form_pristine_error: 'Bitte speichere zuerst deine Antwort.',
+    answer_form_pristine_error: 'Bitte speichere zuerst deine Antwort.'
   },
   resources: {
     topics: {
@@ -188,13 +188,13 @@ const german = {
         kb_integration: 'KB Integration',
         qna: 'Knowledge Base settings',
         qna_lang_studio: 'Language Studio Project settings',
-        group: 'Related Group',
+        group: 'Related Group'
       },
       kbIntegration: {
         microsoft_language_studio: 'Microsoft Language Studio',
         microsoft_qna_maker: 'Microsoft QnA Maker',
         amazon_lex: 'Amazon Lex (nicht möglich)',
-        gpt3: 'GPT3 Questions API (nicht möglich)',
+        gpt3: 'GPT3 Questions API (nicht möglich)'
       },
       permissions: {
         group: 'Gruppe',
@@ -205,7 +205,7 @@ const german = {
         no_permissions: 'Dieses Thema hat noch keine Berechtigungen',
         all_assigned: 'Alle Gruppen wurden bereits zugewiesen',
         create_new: 'Erstelle eine neue Berechtigung',
-        manage_permissions: 'Bearbeite Berechtigungen',
+        manage_permissions: 'Bearbeite Berechtigungen'
       },
       fields: {
         name: 'Name',
@@ -232,13 +232,13 @@ const german = {
         qnaMetadataKeyOptions: {
           fb: 'fb (Fachbereich)',
           tg: 'tg (Themengruppe)',
-          th: 'th (Thema)',
+          th: 'th (Thema)'
         },
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Sollen die Daten jetzt synchronisiert werden?',
-        qnaEndpointKey: 'QNA endpoint key',
-      },
+        qnaEndpointKey: 'QNA endpoint key'
+      }
     },
     languages: {
       name: 'Sprache |||| Sprachen',
@@ -247,8 +247,8 @@ const german = {
         name: 'Name',
         code: 'Code',
         welcomeText: 'Begrüßungstext',
-        welcomeButton: 'Button Text',
-      },
+        welcomeButton: 'Button Text'
+      }
     },
     questions: {
       name: 'Frage |||| Training',
@@ -288,10 +288,10 @@ const german = {
         ignored: 'Ignoriert',
         status: 'Status',
         contextOnly: 'Nur im Kontext',
-        context: 'Kontext',
+        context: 'Kontext'
       },
       add_related: 'Frage hinzufügen',
-      add_followup: 'Folgefrage hinzufügen',
+      add_followup: 'Folgefrage hinzufügen'
     },
     answers: {
       name: 'Antwort |||| QnA',
@@ -319,12 +319,17 @@ const german = {
         updatedBy: 'Editor',
         followup_status: 'Dieses QnA hat Folgeantworten. Bitte prüfe, ob deren Status auch geändert werden sollte.',
         status: 'Status',
-        comment: 'Kommentar',
+        comment: 'Kommentar'
+      },
+      intent_entity: {
+        intent: 'Intent',
+        entity: 'Entity',
+        answerId: 'Antwort ID'
       },
       steps: {
         topic: 'Thema wählen',
         questions: 'Fragen erstellen',
-        answer: 'Antwort erstellen',
+        answer: 'Antwort erstellen'
       },
       fields: {
         filter: 'Text',
@@ -340,19 +345,19 @@ const german = {
         tags: 'Tags',
         status: 'Status',
         isContextOnly: 'Nur im Kontext',
-        contentLastUpdatedAt: 'Aktualisiert',
-      },
+        contentLastUpdatedAt: 'Aktualisiert'
+      }
     },
     sources: {
       name: 'Source |||| Sources',
       fields: {
         text: 'Text',
         fk_languageId: 'Sprache',
-        updatedAt: 'Aktualisiert',
-      },
+        updatedAt: 'Aktualisiert'
+      }
     },
     'stats/sessions': {
-      name: 'Session |||| Sessions',
+      name: 'Session |||| Sessions'
     },
     sessions: {
       name: 'Session |||| Sessions',
@@ -375,8 +380,8 @@ const german = {
         topicName: 'Thema',
         questionText: 'Frage',
         answerText: 'Antwort',
-        score: 'Wert',
-      },
+        score: 'Wert'
+      }
     },
     users: {
       name: 'Nutzer |||| Nutzer',
@@ -387,7 +392,7 @@ const german = {
         role: 'Rolle',
         roles: {
           EDITOR: 'Editor',
-          REVIEWER: 'Reviewer',
+          REVIEWER: 'Reviewer'
         },
         status: {
           EDITING: 'In Bearbeitung',
@@ -397,13 +402,13 @@ const german = {
           INTEGRATION_ERROR: 'Integrationsfehler',
           DEPLOYED_ON_TEST: 'Auf Test',
           INTEGRATION_TESTS_OK: 'Tests erfolgreich',
-          DEPLOYED_ON_PRODUCTION: 'Live',
+          DEPLOYED_ON_PRODUCTION: 'Live'
         },
         errors: {
           MIN_3_QUESTIONS: 'Für den Status "Integrationsbereit" sind mindestens 3 Fragen erforderlich',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
-            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort. Wenn du sie auf "Nur im Kontext" setzt, wird sie für alle übergeordneten Antworten nur kontextbezogen ausgespielt',
-        },
+            'Diese Folgeantwort hat mehr als eine übergeordnete Antwort. Wenn du sie auf "Nur im Kontext" setzt, wird sie für alle übergeordneten Antworten nur kontextbezogen ausgespielt'
+        }
       },
       fields: {
         id: 'ID',
@@ -418,8 +423,8 @@ const german = {
         related_groups: 'Zugehörige Gruppen',
         password: 'Passwort',
         password_confirm: 'Passwort bestätigen',
-        roles: 'Rollen',
-      },
+        roles: 'Rollen'
+      }
     },
     groups: {
       name: 'Gruppen |||| Gruppen',
@@ -433,8 +438,8 @@ const german = {
         id: 'ID',
         name: 'Name',
         createdAt: 'Erstellt am',
-        workflowRole: 'Workflow Berechtigung',
-      },
+        workflowRole: 'Workflow Berechtigung'
+      }
     },
     audit: {
       name: 'Audit |||| Audit',
@@ -442,15 +447,15 @@ const german = {
         1: 'Hinzugefügt',
         2: 'Aktualisiert',
         3: 'Gelöscht',
-        4: 'Login',
+        4: 'Login'
       },
       fields: {
         fk_userId: 'Nutzer',
         entityName: 'Bereich',
         actionType: 'Aktion',
         createdAt: 'Datum',
-        updatedAt: 'Datum',
-      },
+        updatedAt: 'Datum'
+      }
     },
     import: {
       step_kb: 'step_kb',
@@ -469,12 +474,12 @@ const german = {
       metadata_value_label: 'metadata_value_label',
       metadata_value_view_content: 'metadata_value_view_content',
       ready_to_process_single_topic: 'ready_to_process_single_topic',
-      metadata_key_label: 'metadata_key_label',
+      metadata_key_label: 'metadata_key_label'
     },
     demos: {
-      name: 'Demo |||| Demos',
-    },
-  },
+      name: 'Demo |||| Demos'
+    }
+  }
 };
 
 export default german;

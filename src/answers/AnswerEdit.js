@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import omit from 'lodash/omit';
 import isString from 'lodash/isString';
 import { Form } from 'react-final-form';
@@ -18,6 +18,8 @@ import StatusWarning from './components/StatusWarning';
 import StatusInputSection from './components/StatusInput';
 import useAnswer from './useAnswer';
 import SummarizeAnswerDialog from './components/SummarizeAnswerDialog';
+import IntentEntity from './components/IntentEntity';
+import { useIsAdmin } from '../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 const SHOW_GPT_SUMMARIZE = process.env.REACT_APP_FEATURE_GPT_SUMMARIZE ?? false;
@@ -43,6 +45,7 @@ const useStyles = makeStyles(() => ({
 const AnswerEdit = () => {
   const classes = useStyles();
   const { id } = useParams();
+  const isAdmin = useIsAdmin();
   const translate = useTranslate();
   const notify = useNotify();
   const dataProvider = useDataProvider();
@@ -91,7 +94,7 @@ const AnswerEdit = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     refresh();
   }, [id]);
 
@@ -132,6 +135,7 @@ const AnswerEdit = () => {
     <>
       <CustomTopToolbar />
       <StatusWarning record={answer} />
+      {answer && isAdmin && <IntentEntity record={answer} />}
       <RelatedQuestionsActionsRow record={answer} />
       <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
         {translate('misc.editing_answer')}
