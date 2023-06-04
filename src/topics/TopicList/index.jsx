@@ -111,12 +111,16 @@ const TopicList = () => {
     // setSearchParams();
     const pageNo = parseInt(querystring.get('pageNo'), 10);
     if (pageNo && pageNo <= count / pagination.perPage + 1) {
-      setPagination({
-        ...pagination,
+      setPagination((p) => ({
+        ...p,
         page: pageNo
-      });
+      }))
+      onSubmit(form, { ...pagination, page: pageNo });
     }
   }, [count, querystring]);
+
+  // useEffect(() => {
+  // }, [pagination.page, pagination.perPage])
 
   // useRecursiveTimeout(() => onSubmit(), 1000 * 30);
 
