@@ -15,7 +15,7 @@ const intentOptions = [
   },
 ];
 
-const EditableIntentEntityField = ({ record, children }) => {
+const EditableIntentEntityField = ({ record, type, children }) => {
   const [editMode, setEditMode] = useState(false);
 
   const dataProvider = useDataProvider();
@@ -23,23 +23,22 @@ const EditableIntentEntityField = ({ record, children }) => {
   const { refresh } = useAnswer(record.id);
   const translate = useTranslate();
 
-  const handleStatusChange = async (statusId) => {
+  const handleChange = async (statusId) => {
     if (statusId === record?.status) {
       setEditMode(false);
       return;
     }
 
-    try {
-      await dataProvider.updateAnswerStatus('answers', {
-        id: record?.id,
-      });
-      refresh();
-      notify('The record has been updated');
-    } catch (err) {
-      refresh();
-    } finally {
-      setEditMode(false);
-    }
+    // try {
+    //   await dataProvider.updateAnswerStatus('answers', {
+    //     id: record?.id,
+    //   });
+    //   refresh();
+    //   notify('The record has been updated');
+    // } catch (err) {
+    //   refresh();
+    // }
+    setEditMode(false);
   };
 
   if (!record) {
@@ -58,13 +57,13 @@ const EditableIntentEntityField = ({ record, children }) => {
                   transform: 'translate(12px, 7px) scale(0.75)',
                 }}
               >
-                {translate('resources.answers.fields.status')}
+                {type === 'intent' ? translate('resources.answers.intent_entity.intent') : translate('resources.answers.intent_entity.entity') }
               </InputLabel>
               <Select
                 labelId={`change-label-${record.id}`}
                 size="small"
                 value={1}
-                onChange={(e) => handleStatusChange(e.target.value)}
+                onChange={(e) => handleChange(e.target.value)}
                 variant="filled"
                 margin="dense"
                 fullWidth
