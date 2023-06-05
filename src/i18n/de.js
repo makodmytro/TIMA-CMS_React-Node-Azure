@@ -291,7 +291,8 @@ const german = {
         context: 'Kontext'
       },
       add_related: 'Frage hinzufügen',
-      add_followup: 'Folgefrage hinzufügen'
+      add_followup: 'Folgefrage hinzufügen',
+      convert_row_intent: 'In Rohnintent umwandeln'
     },
     answers: {
       name: 'Antwort |||| QnA',

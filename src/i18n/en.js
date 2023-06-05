@@ -294,6 +294,7 @@ const english = {
       },
       add_related: 'Add Question',
       add_followup: 'Add Followup',
+      convert_row_intent: 'Convert to raw intent'
     },
     answers: {
       name: 'Answer |||| Answers',
