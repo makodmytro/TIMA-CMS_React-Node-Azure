@@ -37,27 +37,16 @@ const CustomToolbar = (props) => {
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="ra.action.save"
-        submitOnEnter
-        disabled={props.pristine || disableEdit}
-      />
+      <SaveButton label="ra.action.save" submitOnEnter disabled={props.pristine || disableEdit} />
       <Box flex={1}>
         <IgnoreButton record={props.record} justifyContent="flex-end" disabled={disableEdit} />
       </Box>
-      <DeleteButton
-        basePath={props.basePath}
-        record={props.record}
-        undoable={false}
-        disabled={disableDelete}
-      />
+      <DeleteButton basePath={props.basePath} record={props.record} undoable={false} disabled={disableDelete} />
     </Toolbar>
   );
 };
 
-const Answer = ({
-  record, answer, unlinkAnswer, scrollToSearch, disabled,
-}) => {
+const Answer = ({ record, answer, unlinkAnswer, scrollToSearch, disabled }) => {
   const translate = useTranslate();
 
   if (!record) {
@@ -66,14 +55,7 @@ const Answer = ({
 
   if (!answer) {
     return (
-      <Button
-        color="primary"
-        variant="outlined"
-        type="button"
-        size="small"
-        onClick={scrollToSearch}
-        disabled={disabled === true}
-      >
+      <Button color="primary" variant="outlined" type="button" size="small" onClick={scrollToSearch} disabled={disabled === true}>
         {translate('resources.questions.link')}
       </Button>
     );
@@ -83,7 +65,9 @@ const Answer = ({
     <Box boxShadow={3} p={1} style={{ backgroundColor: '#e8e8e8' }} borderBottom={1}>
       <Typography variant="body2">
         {translate('misc.answer')}&nbsp;
-        <small><Link to={`/answers/${answer.id}`}>{translate('misc.view')}</Link></small>
+        <small>
+          <Link to={`/answers/${answer.id}`}>{translate('misc.view')}</Link>
+        </small>
       </Typography>
       <ReactMarkdown source={answer.text} />
       <Box textAlign="right">
@@ -105,16 +89,7 @@ const Answer = ({
   );
 };
 
-const FormFields = ({
-  languages,
-  topics,
-  record,
-  setRecord,
-  answer,
-  setAnswer,
-  scrollToSearch,
-  unlinkAnswer,
-}) => {
+const FormFields = ({ languages, topics, record, setRecord, answer, setAnswer, scrollToSearch, unlinkAnswer }) => {
   const [tmpLanguageValue, setTmpLanguageValue] = React.useState(null);
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -222,10 +197,7 @@ const FormFields = ({
         }}
         disabled={disableEdit}
       >
-        <SelectInput
-          optionText="name"
-          disabled={disableEdit}
-        />
+        <SelectInput optionText="name" disabled={disableEdit} />
       </ReferenceInput>
       <TopicSelect
         label="resources.questions.fields.fk_topicId"
@@ -234,17 +206,18 @@ const FormFields = ({
         filter={{ fk_languageId: fkLanguageId }}
         disabled={disableEdit}
       />
-      {
-        !USE_WORKFLOW && (
-          <>
-            <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
-            <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
-          </>
-        )
-      }
+      {!USE_WORKFLOW && (
+        <>
+          <BooleanInput label="resources.questions.fields.approved" source="approved" disabled={disableEdit} />
+          <BooleanInput label="resources.questions.fields.useAsSuggestion" source="useAsSuggestion" disabled={disableEdit} />
+        </>
+      )}
       <Answer
         {...{
-          answer, unlinkAnswer, record, scrollToSearch,
+          answer,
+          unlinkAnswer,
+          record,
+          scrollToSearch,
         }}
         disabled={disableEdit}
       />
@@ -252,10 +225,7 @@ const FormFields = ({
   );
 };
 
-const QuestionEdit = ({
-  dispatch, languages, topics,
-  ...props
-}) => {
+const QuestionEdit = ({ dispatch, languages, topics, ...props }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const translate = useTranslate();
@@ -338,17 +308,12 @@ const QuestionEdit = ({
       <Box my={1} p={2} boxShadow={3}>
         <Typography>{translate('resources.questions.fields.fk_questionId')}</Typography>
         <Box my={2}>
-          <RelatedQuestionsTable
-            record={record}
-            relatedQuestions={answer ? answer.RelatedQuestions : []}
-          />
+          <RelatedQuestionsTable record={record} relatedQuestions={answer ? answer.RelatedQuestions : []} />
         </Box>
       </Box>
       <Box my={1} mb={6} p={2} boxShadow={3}>
         <Typography>{translate('misc.search_questions_answers_link')}</Typography>
-        <SearchQuestionsAnswers
-          record={record}
-        />
+        <SearchQuestionsAnswers record={record} />
         <div ref={ref} />
       </Box>
     </>
@@ -356,13 +321,9 @@ const QuestionEdit = ({
 };
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : {};
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
-  const topics = state.admin.resources.topics
-    ? state.admin.resources.topics.data
-    : {};
+  const topics = state.admin.resources.topics ? state.admin.resources.topics.data : {};
 
   return {
     languages,

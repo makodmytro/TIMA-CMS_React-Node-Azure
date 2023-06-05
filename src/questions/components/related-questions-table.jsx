@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useRefresh,
-  useNotify,
-  Confirm,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useRefresh, useNotify, Confirm, useTranslate } from 'react-admin';
 import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
@@ -16,12 +10,7 @@ import Alert from '@material-ui/lab/Alert';
 import { PlayableTextField } from '../../common/components/playable-text';
 import DropdownMenu from './list-dropdown-menu';
 
-const RelatedQuestionsTable = ({
-  record,
-  relatedQuestions,
-  answerView,
-  languages,
-}) => {
+const RelatedQuestionsTable = ({ record, relatedQuestions, answerView, languages }) => {
   const translate = useTranslate();
   const disabled = record?.allowEdit === false;
 
@@ -67,13 +56,8 @@ const RelatedQuestionsTable = ({
     return null;
   }
 
-  if (!relatedQuestions || (!answerView && relatedQuestions.length - 1 === 0)
-    || !relatedQuestions.length) {
-    return (
-      <Alert severity="info">
-        {translate('resources.questions.no_related')}
-      </Alert>
-    );
+  if (!relatedQuestions || (!answerView && relatedQuestions.length - 1 === 0) || !relatedQuestions.length) {
+    return <Alert severity="info">{translate('resources.questions.no_related')}</Alert>;
   }
 
   return (
@@ -88,47 +72,42 @@ const RelatedQuestionsTable = ({
       />
       <Table>
         <TableBody>
-          {
-            relatedQuestions
-              .filter((r) => {
-                if (record.fk_answerId) {
-                  return r.id !== record.id;
-                }
+          {relatedQuestions
+            .filter((r) => {
+              if (record.fk_answerId) {
+                return r.id !== record.id;
+              }
 
-                return true;
-              })
-              .map((related, i) => (
-                <TableRow key={i}>
-                  <TableCell>
-                    <PlayableTextField
-                      source="text"
-                      getLanguageFromRecord={(r) => {
-                        return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
-                      }}
-                      record={{ ...related }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button
-                      className="error-btn btn-xs"
-                      size="small"
-                      type="button"
-                      variant="outlined"
-                      onClick={() => unlinkAnswerClicked(related.id)}
-                      disabled={disabled}
-                    >
-                      {translate('misc.unlink_answer')}
-                    </Button>
-                  </TableCell>
-                  <TableCell align="right">
-                    <DropdownMenu
-                      record={{ ...related }}
-                      editInline
-                    />
-                  </TableCell>
-                </TableRow>
-              ))
-          }
+              return true;
+            })
+            .map((related, i) => (
+              <TableRow key={i}>
+                <TableCell>
+                  <PlayableTextField
+                    source="text"
+                    getLanguageFromRecord={(r) => {
+                      return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
+                    }}
+                    record={{ ...related }}
+                  />
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    className="error-btn btn-xs"
+                    size="small"
+                    type="button"
+                    variant="outlined"
+                    onClick={() => unlinkAnswerClicked(related.id)}
+                    disabled={disabled}
+                  >
+                    {translate('misc.unlink_answer')}
+                  </Button>
+                </TableCell>
+                <TableCell align="right">
+                  <DropdownMenu record={{ ...related }} editInline />
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </>
@@ -136,9 +115,7 @@ const RelatedQuestionsTable = ({
 };
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : {};
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
   return { languages };
 };

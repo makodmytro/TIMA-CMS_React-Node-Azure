@@ -7,12 +7,12 @@ import useAnswer from '../../useAnswer';
 const intentOptions = [
   {
     id: 0,
-    name: 'Lorem Ipsum 0'
+    name: 'Lorem Ipsum 0',
   },
   {
     id: 1,
-    name: 'Lorem Ipsum 1'
-  }
+    name: 'Lorem Ipsum 1',
+  },
 ];
 
 const EditableIntentEntityField = ({ record, children }) => {
@@ -31,7 +31,7 @@ const EditableIntentEntityField = ({ record, children }) => {
 
     try {
       await dataProvider.updateAnswerStatus('answers', {
-        id: record?.id
+        id: record?.id,
       });
       refresh();
       notify('The record has been updated');
@@ -55,7 +55,7 @@ const EditableIntentEntityField = ({ record, children }) => {
               <InputLabel
                 id={`change-label-${record.id}`}
                 style={{
-                  transform: 'translate(12px, 7px) scale(0.75)'
+                  transform: 'translate(12px, 7px) scale(0.75)',
                 }}
               >
                 {translate('resources.answers.fields.status')}

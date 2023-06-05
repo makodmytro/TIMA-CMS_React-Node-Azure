@@ -10,7 +10,7 @@ import {
   TableHead,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditableIntentEntityField from '../EditableIntentEntityField';

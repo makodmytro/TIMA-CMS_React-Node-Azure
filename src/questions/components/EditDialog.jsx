@@ -1,29 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  useTranslate,
-  required,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, useTranslate, required } from 'react-admin';
 import { Form } from 'react-final-form';
-import {
-  Dialog,
-  Box,
-  Typography,
-  IconButton,
-  Button,
-} from '@material-ui/core';
+import { Dialog, Box, Typography, IconButton, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { PlayableTextInput } from '../../common/components/playable-text';
 
-const EditDialog = ({
-  record,
-  open,
-  onClose,
-  afterEdit,
-}) => {
+const EditDialog = ({ record, open, onClose, afterEdit }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const disableEdit = record?.allowEdit === false;
   const dataProvider = useDataProvider();
@@ -69,14 +52,10 @@ const EditDialog = ({
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <Box display="flex" p={2}>
         <Box flex={5}>
-          <Typography>
-            {translate('resources.questions.edit')}
-          </Typography>
+          <Typography>{translate('resources.questions.edit')}</Typography>
         </Box>
         <Box flex={1} textAlign="right">
-          <IconButton
-            onClick={onClose}
-          >
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -99,22 +78,11 @@ const EditDialog = ({
                   disabled={disableEdit}
                 />
                 <Box textAlign="right" py={2}>
-                  <Button
-                    variant="contained"
-                    type="button"
-                    size="small"
-                    onClick={() => onClose()}
-                  >
+                  <Button variant="contained" type="button" size="small" onClick={() => onClose()}>
                     {translate('misc.cancel')}
                   </Button>
                   &nbsp;
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    size="small"
-                    disabled={record?.allowEdit === false}
-                  >
+                  <Button variant="contained" color="primary" type="submit" size="small" disabled={record?.allowEdit === false}>
                     {translate('misc.save')}
                   </Button>
                 </Box>

@@ -1,14 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import { Form } from 'react-final-form';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  useTranslate,
-  TextInput,
-  BooleanInput,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, useTranslate, TextInput, BooleanInput } from 'react-admin';
 import {
   Table,
   TableCell,
@@ -28,10 +21,7 @@ import BackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import AnswerTextField from '../../answers/components/TextField';
 
-const Filters = ({
-  onSubmit,
-  onCreateSubmit, contextOnlySlider,
-}) => {
+const Filters = ({ onSubmit, onCreateSubmit, contextOnlySlider }) => {
   const translate = useTranslate();
 
   return (
@@ -42,26 +32,22 @@ const Filters = ({
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box display="flex">
               <Box flex={3}>
-                <Typography variant="body2">
-                  {translate('misc.search_answers_link')}
-                </Typography>
+                <Typography variant="body2">{translate('misc.search_answers_link')}</Typography>
                 <TextInput label="resources.answers.fields.text" source="q" fullWidth onChange={() => form.submit()} autoComplete="no" />
               </Box>
               <Box flex={1} ml={1} pt={5}>
-                {
-                  !!values?.q?.length && (
-                    <Button
-                      type="button"
-                      color="primary"
-                      variant="contained"
-                      size="small"
-                      onClick={() => onCreateSubmit({ text: values.q, isContextOnly: contextOnlySlider || values.isContextOnly })}
-                      fullWidth
-                    >
-                      {translate('resources.answers.create')}
-                    </Button>
-                  )
-                }
+                {!!values?.q?.length && (
+                  <Button
+                    type="button"
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    onClick={() => onCreateSubmit({ text: values.q, isContextOnly: contextOnlySlider || values.isContextOnly })}
+                    fullWidth
+                  >
+                    {translate('resources.answers.create')}
+                  </Button>
+                )}
               </Box>
             </Box>
             <BooleanInput
@@ -70,17 +56,12 @@ const Filters = ({
               defaultValue={contextOnlySlider || values.isContextOnly}
               disabled={contextOnlySlider}
             />
-            {contextOnlySlider
-              && (
-                <>
-                  <Alert severity="info">
-                    {translate('resources.questions.duplicate_context_only_followups')}
-                  </Alert>
-                  <Alert severity="info">
-                    {translate('resources.answers.duplicate_answers')}
-                  </Alert>
-                </>
-              )}
+            {contextOnlySlider && (
+              <>
+                <Alert severity="info">{translate('resources.questions.duplicate_context_only_followups')}</Alert>
+                <Alert severity="info">{translate('resources.answers.duplicate_answers')}</Alert>
+              </>
+            )}
           </form>
         );
       }}
@@ -88,11 +69,7 @@ const Filters = ({
   );
 };
 
-const ResultsList = ({
-  answers,
-  onSelect,
-  contextOnlySlider,
-}) => {
+const ResultsList = ({ answers, onSelect, contextOnlySlider }) => {
   const translate = useTranslate();
 
   if (!answers) {
@@ -102,9 +79,7 @@ const ResultsList = ({
   if (!answers.length && !contextOnlySlider) {
     return (
       <Box p={2}>
-        <Alert severity="info">
-          {translate('misc.no_records')}
-        </Alert>
+        <Alert severity="info">{translate('misc.no_records')}</Alert>
       </Box>
     );
   }
@@ -114,40 +89,40 @@ const ResultsList = ({
       <Table>
         <TableHead>
           {!contextOnlySlider && (
-          <TableRow>
-            <TableCell>{translate('resources.answers.fields.text')}</TableCell>
-            <TableCell>&nbsp;</TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell>{translate('resources.answers.fields.text')}</TableCell>
+              <TableCell>&nbsp;</TableCell>
+            </TableRow>
           )}
         </TableHead>
         <TableBody>
-          {
-            answers.map((answer, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <AnswerTextField record={answer} />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    type="button"
-                    size="small"
-                    onClick={() => onSelect(answer.id)}
-                  >
-                    {translate('misc.link')}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-          }
+          {answers.map((answer, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <AnswerTextField record={answer} />
+              </TableCell>
+              <TableCell>
+                <Button variant="contained" color="secondary" type="button" size="small" onClick={() => onSelect(answer.id)}>
+                  {translate('misc.link')}
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </>
   );
 };
 
-const AnswerLinkDialog = ({ record, afterLink, isOpen = false, onClose = false, contextOnlySlider = false, createFinish = () => { }, afterCreate = async () => { } }) => {
+const AnswerLinkDialog = ({
+  record,
+  afterLink,
+  isOpen = false,
+  onClose = false,
+  contextOnlySlider = false,
+  createFinish = () => {},
+  afterCreate = async () => {},
+}) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(isOpen);
   const [answers, setAnswers] = React.useState(null);
@@ -247,46 +222,42 @@ const AnswerLinkDialog = ({ record, afterLink, isOpen = false, onClose = false, 
   }, 500);
   return (
     <>
-      {
-        open && (
-          <>
-            <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
-              <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
-                <Button
-                  color="secondary"
-                  size="small"
-                  onClick={() => {
-                    setOpen(false);
-                    createFinish?.();
-                  }}
-                >
-                  <BackIcon size="small" />
-                </Button>
+      {open && (
+        <>
+          <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
+            <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
+              <Button
+                color="secondary"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                  createFinish?.();
+                }}
+              >
+                <BackIcon size="small" />
+              </Button>
 
-                <Box flex="2">
-                  <Typography>{translate('misc.link_answer')}</Typography>
-                </Box>
-                <Box flex="1" textAlign="right">
-                  <IconButton onClick={onClose} size="small">
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Box>
+              <Box flex="2">
+                <Typography>{translate('misc.link_answer')}</Typography>
               </Box>
-              <Box p={2}>
-                <Filters onSubmit={onFiltersSubmit} contextOnlySlider={contextOnlySlider} onCreateSubmit={onCreateSubmit} />
-                {
-                  loading && (
-                    <Box textAlign="center" p={2}>
-                      <CircularProgress color="primary" />
-                    </Box>
-                  )
-                }
-                <ResultsList answers={answersWithoutContextOnly} contextOnlySlider={contextOnlySlider} onSelect={onSelectLink} />
+              <Box flex="1" textAlign="right">
+                <IconButton onClick={onClose} size="small">
+                  <CloseIcon fontSize="small" />
+                </IconButton>
               </Box>
-            </Dialog>
-          </>
-        )
-      }
+            </Box>
+            <Box p={2}>
+              <Filters onSubmit={onFiltersSubmit} contextOnlySlider={contextOnlySlider} onCreateSubmit={onCreateSubmit} />
+              {loading && (
+                <Box textAlign="center" p={2}>
+                  <CircularProgress color="primary" />
+                </Box>
+              )}
+              <ResultsList answers={answersWithoutContextOnly} contextOnlySlider={contextOnlySlider} onSelect={onSelectLink} />
+            </Box>
+          </Dialog>
+        </>
+      )}
       {/* <Button
         size="small"
         className="error-btn btn-xs"

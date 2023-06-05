@@ -9,12 +9,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  useTranslate,
-  useDataProvider,
-  useNotify,
-  useRedirect,
-} from 'react-admin';
+import { useTranslate, useDataProvider, useNotify, useRedirect } from 'react-admin';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
@@ -26,12 +21,10 @@ const style = makeStyles(() => ({
     '& text': {
       fill: 'white',
     },
-  }
+  },
 }));
 
-const SteppedForm = ({
-  onSubmit,
-}) => {
+const SteppedForm = ({ onSubmit }) => {
   const classes = style();
   const notify = useNotify();
   const redirect = useRedirect();
@@ -46,9 +39,10 @@ const SteppedForm = ({
   const querystring = new URLSearchParams(search);
   const [state, setState] = React.useState({
     fk_languageId: null,
-    fk_parentTopicId: querystring.get('fk_parentTopicId') && parseInt(querystring.get('fk_parentTopicId'), 10)
-      ? parseInt(querystring.get('fk_parentTopicId'), 10)
-      : null,
+    fk_parentTopicId:
+      querystring.get('fk_parentTopicId') && parseInt(querystring.get('fk_parentTopicId'), 10)
+        ? parseInt(querystring.get('fk_parentTopicId'), 10)
+        : null,
     name: '',
     kbIntegration: '1',
     qnaMetadataKey: '',
@@ -167,13 +161,7 @@ const SteppedForm = ({
     return (
       <Box textAlign="center" py={2}>
         <Typography>{translate('misc.done')}</Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          size="small"
-          component={Link}
-          to="/topics"
-        >
+        <Button variant="outlined" color="primary" size="small" component={Link} to="/topics">
           {translate('misc.back')}
         </Button>
         &nbsp;
@@ -194,9 +182,7 @@ const SteppedForm = ({
     <>
       <Stepper activeStep={step} orientation="vertical">
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.topics.steps.basic')}
-          </StepLabel>
+          <StepLabel>{translate('resources.topics.steps.basic')}</StepLabel>
           <StepContent>
             <StepOne
               initialValues={{
@@ -219,18 +205,11 @@ const SteppedForm = ({
               onBack={back}
             />
           </StepContent>
-        </Step>*/
-        }
+        </Step>*/}
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.topics.steps.kb_integration')}
-          </StepLabel>
+          <StepLabel>{translate('resources.topics.steps.kb_integration')}</StepLabel>
           <StepContent>
-            <StepThree
-              initialValues={{}}
-              onSubmit={next}
-              onBack={back}
-            />
+            <StepThree initialValues={{}} onSubmit={next} onBack={back} />
           </StepContent>
         </Step>
         {/*
@@ -248,25 +227,16 @@ const SteppedForm = ({
                 />
               </StepContent>
             </Step>
-          )*/
-        }
+          )*/}
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.topics.steps.qna')}
-          </StepLabel>
+          <StepLabel>{translate('resources.topics.steps.qna')}</StepLabel>
           <StepContent>
-            <StepFour
-              initialValues={state}
-              onSubmit={onFinalStepSubmit}
-              onBack={back}
-            />
-            {
-              loading && (
-                <Box textAlign="center" py={2}>
-                  <CircularProgress />
-                </Box>
-              )
-            }
+            <StepFour initialValues={state} onSubmit={onFinalStepSubmit} onBack={back} />
+            {loading && (
+              <Box textAlign="center" py={2}>
+                <CircularProgress />
+              </Box>
+            )}
           </StepContent>
         </Step>
       </Stepper>

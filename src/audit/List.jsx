@@ -1,14 +1,5 @@
 import React, { cloneElement } from 'react';
-import {
-  Datagrid,
-  DateField,
-  List,
-  TextField,
-  Filter,
-  ReferenceInput,
-  SelectInput,
-  useTranslate,
-} from 'react-admin';
+import { Datagrid, DateField, List, TextField, Filter, ReferenceInput, SelectInput, useTranslate } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -22,11 +13,7 @@ const ActionTypeField = ({ record }) => {
     return null;
   }
 
-  return (
-    <div>
-      {translate(`resources.audit.actions.${record.actionType}`)}
-    </div>
-  );
+  return <div>{translate(`resources.audit.actions.${record.actionType}`)}</div>;
 };
 
 const Filters = (props) => {
@@ -38,22 +25,8 @@ const Filters = (props) => {
         <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
       </Box>
       <Filter {...props}>
-        <DateTimeInput
-          label="resources.sessions.fields.from"
-          inputVariant="filled"
-          source="from"
-          size="small"
-          disableFuture
-          alwaysOn
-        />
-        <DateTimeInput
-          label="resources.sessions.fields.to"
-          inputVariant="filled"
-          source="to"
-          size="small"
-          disableFuture
-          alwaysOn
-        />
+        <DateTimeInput label="resources.sessions.fields.from" inputVariant="filled" source="from" size="small" disableFuture alwaysOn />
+        <DateTimeInput label="resources.sessions.fields.to" inputVariant="filled" source="to" size="small" disableFuture alwaysOn />
         <ReferenceInput
           source="fk_userId"
           label="resources.audit.fields.fk_userId"
@@ -72,7 +45,7 @@ const Filters = (props) => {
 const Btn = ({ record, onClick }) => {
   const translate = useTranslate();
 
-  if (record && (!record.objectBefore && !record.objectAfter)) {
+  if (record && !record.objectBefore && !record.objectAfter) {
     return null;
   }
 
@@ -121,13 +94,7 @@ const LogsList = (props) => {
   return (
     <>
       <DetailDialog open={!!open} record={open} onClose={() => setOpen(null)} />
-      <List
-        {...props}
-        actions={null}
-        filters={<Filters />}
-        bulkActionButtons={false}
-        sort={{ field: 'updatedAt', order: 'DESC' }}
-      >
+      <List {...props} actions={null} filters={<Filters />} bulkActionButtons={false} sort={{ field: 'updatedAt', order: 'DESC' }}>
         <Datagrid rowClick={null}>
           {columns.map((col) => cloneElement(col.el, { key: col.key }))}
           <Btn onClick={onClick} />

@@ -7,12 +7,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  useTranslate,
-  useDataProvider,
-  useNotify,
-  useRedirect,
-} from 'react-admin';
+import { useTranslate, useDataProvider, useNotify, useRedirect } from 'react-admin';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
@@ -22,11 +17,9 @@ const style = makeStyles(() => ({
     '& text': {
       fill: 'white',
     },
-  }
-}))
-const SteppedForm = ({
-  onSubmit,
-}) => {
+  },
+}));
+const SteppedForm = ({ onSubmit }) => {
   const classes = style();
   const notify = useNotify();
   const redirect = useRedirect();
@@ -37,13 +30,17 @@ const SteppedForm = ({
   const [state, setState] = React.useState({
     fk_languageId: null,
     fk_topicId: null,
-    questions: [{
-      text: '',
-    }, {
-      text: '',
-    }, {
-      text: '',
-    }],
+    questions: [
+      {
+        text: '',
+      },
+      {
+        text: '',
+      },
+      {
+        text: '',
+      },
+    ],
     text: '',
     spokenText: '',
     tags: '',
@@ -95,7 +92,7 @@ const SteppedForm = ({
     try {
       await dataProvider.create('questions', {
         data: _data,
-      })
+      });
     } catch (e) {} // eslint-disable-line
   };
 
@@ -107,21 +104,28 @@ const SteppedForm = ({
     setState(merged);
     setLoading(true);
 
-    const {
-      fk_languageId, fk_topicId, text, tags, spokenText, questions,
-    } = merged;
+    const { fk_languageId, fk_topicId, text, tags, spokenText, questions } = merged;
 
     try {
       const { data } = await dataProvider.create('answers', {
         data: {
-          fk_languageId, fk_topicId, text, tags, spokenText,
+          fk_languageId,
+          fk_topicId,
+          text,
+          tags,
+          spokenText,
         },
       });
 
       await Promise.all(
-        questions.map((q) => createQuestion({
-          fk_languageId, fk_topicId, text: q.text, fk_answerId: data.id,
-        })),
+        questions.map((q) =>
+          createQuestion({
+            fk_languageId,
+            fk_topicId,
+            text: q.text,
+            fk_answerId: data.id,
+          })
+        )
       );
 
       setLoading(false);
@@ -137,9 +141,7 @@ const SteppedForm = ({
     <>
       <Stepper activeStep={step} orientation="vertical">
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.answers.steps.topic')}
-          </StepLabel>
+          <StepLabel>{translate('resources.answers.steps.topic')}</StepLabel>
           <StepContent>
             <StepOne
               initialValues={{
@@ -152,9 +154,7 @@ const SteppedForm = ({
         </Step>
 
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.answers.steps.questions')}
-          </StepLabel>
+          <StepLabel>{translate('resources.answers.steps.questions')}</StepLabel>
           <StepContent>
             <StepTwo
               initialValues={{
@@ -168,9 +168,7 @@ const SteppedForm = ({
           </StepContent>
         </Step>
         <Step classes={{ root: classes.label }}>
-          <StepLabel>
-            {translate('resources.answers.steps.answer')}
-          </StepLabel>
+          <StepLabel>{translate('resources.answers.steps.answer')}</StepLabel>
           <StepContent>
             <StepThree
               initialValues={{
@@ -181,13 +179,11 @@ const SteppedForm = ({
               onSubmit={onStepThreeSubmit}
               onBack={back}
             />
-            {
-              loading && (
-                <Box pt={2} textAlign="center">
-                  <CircularProgress color="primary" />
-                </Box>
-              )
-            }
+            {loading && (
+              <Box pt={2} textAlign="center">
+                <CircularProgress color="primary" />
+              </Box>
+            )}
           </StepContent>
         </Step>
       </Stepper>

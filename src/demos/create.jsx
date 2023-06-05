@@ -1,14 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useField } from 'react-final-form'; // eslint-disable-line
-import {
-  Create,
-  SimpleForm,
-  TextInput,
-  required,
-  DateInput,
-  SelectInput,
-} from 'react-admin';
+import { Create, SimpleForm, TextInput, required, DateInput, SelectInput } from 'react-admin';
 
 const CreateDemo = ({ dispatch, topics, ...props }) => (
   <Create {...props}>
@@ -31,9 +24,7 @@ const CreateDemo = ({ dispatch, topics, ...props }) => (
 );
 
 const mapStateToProps = (state) => {
-  const topics = state.custom.topics
-    ? state.custom.topics
-    : [];
+  const topics = state.custom.topics ? state.custom.topics : [];
 
   return { topics };
 };

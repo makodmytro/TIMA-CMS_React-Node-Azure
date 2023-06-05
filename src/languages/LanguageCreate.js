@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Create, required, SimpleForm, TextInput,
-} from 'react-admin';
+import { Create, required, SimpleForm, TextInput } from 'react-admin';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 
 const LanguageCreate = (props) => (

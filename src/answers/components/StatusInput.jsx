@@ -1,13 +1,7 @@
 import React from 'react';
 import { Form } from 'react-final-form';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-  SelectInput,
-  TextInput,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate, SelectInput, TextInput } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import SaveIcon from '@material-ui/icons/Save';
 import Typography from '@material-ui/core/Typography';
@@ -55,9 +49,7 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <Box p={2}>
-        <Typography>
-          {translate('misc.add_comment')}
-        </Typography>
+        <Typography>{translate('misc.add_comment')}</Typography>
       </Box>
       <Box p={2}>
         <Form
@@ -78,30 +70,14 @@ const StatusCommentDialog = ({ open, onClose, record }) => {
           render={({ handleSubmit, valid }) => {
             return (
               <form onSubmit={handleSubmit}>
-                <TextInput
-                  source="text"
-                  label="resources.answers.fields.text"
-                  multiline
-                  fullWidth
-                  rows={5}
-                />
+                <TextInput source="text" label="resources.answers.fields.text" multiline fullWidth rows={5} />
 
                 <Box textAlign="right" mt={2}>
-                  <Button
-                    type="button"
-                    onClick={onClose}
-                    variant="outlined"
-                    color="secondary"
-                  >
+                  <Button type="button" onClick={onClose} variant="outlined" color="secondary">
                     {translate('misc.cancel')}
                   </Button>
                   &nbsp;
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={!valid}
-                  >
+                  <Button type="submit" variant="contained" color="primary" disabled={!valid}>
                     {translate('misc.save')}
                   </Button>
                 </Box>
@@ -133,7 +109,11 @@ const StatusInput = ({ record, disabled, preSubmitFn }) => {
       notify('The record has been updated');
     } catch (err) {
       // refresh();
-      const msg = err?.message || (err?.body?.code ? translate(`resources.users.workflow.errors.${err.body.code}`) : err?.body?.message || 'We could not execute the action');
+      const msg =
+        err?.message ||
+        (err?.body?.code
+          ? translate(`resources.users.workflow.errors.${err.body.code}`)
+          : err?.body?.message || 'We could not execute the action');
       notify(msg, 'error');
     }
   };
@@ -166,9 +146,11 @@ const StatusInput = ({ record, disabled, preSubmitFn }) => {
           render={({ handleSubmit, valid, pristine }) => {
             return (
               <form
-                style={{ display: `${!record?.FollowupQuestions && 'flex'}`,
+                style={{
+                  display: `${!record?.FollowupQuestions && 'flex'}`,
                   justifyContent: `${!record?.FollowupQuestions && 'space-between'}`,
-                  alignItems: `${!record?.FollowupQuestions && 'center'}` }}
+                  alignItems: `${!record?.FollowupQuestions && 'center'}`,
+                }}
                 onSubmit={handleSubmit}
               >
                 <Box display="flex">
@@ -181,32 +163,37 @@ const StatusInput = ({ record, disabled, preSubmitFn }) => {
                       disabled={disabledCombined}
                       fullWidth
                     />
-                    {
-                      (disabledCombined) && (
-                        <Typography variant="body2">
-                          {translate('misc.can_not_change_status')}
-                        </Typography>
-                      )
-                    }
+                    {disabledCombined && <Typography variant="body2">{translate('misc.can_not_change_status')}</Typography>}
                   </Box>
                   {record?.FollowupQuestions && (
                     <Box flex={1} textAlign="center" mt={2}>
-                      <Button type="button" onClick={() => setOpen(true)} variant="contained" color="secondary" disabled={disabledCombined} size="small">
+                      <Button
+                        type="button"
+                        onClick={() => setOpen(true)}
+                        variant="contained"
+                        color="secondary"
+                        disabled={disabledCombined}
+                        size="small"
+                      >
                         {translate('misc.add_comment')}
                       </Button>
                     </Box>
                   )}
-
                 </Box>
                 {record?.FollowupQuestions && record?.FollowupQuestions?.length !== 0 && (
                   <Box mb={3}>
-                    <Alert severity="info">
-                      {translate('resources.answers.status.followup_status')}
-                    </Alert>
+                    <Alert severity="info">{translate('resources.answers.status.followup_status')}</Alert>
                   </Box>
                 )}
-                <Button style={{ height: '40px', marginBottom: `${!record?.FollowupQuestions && '15px'}` }} type="submit" variant="contained" color="primary" disabled={disabledCombined || !valid || pristine}>
-                  <SaveIcon style={{ fontSize: '18px' }} />&nbsp; {translate('misc.save')}
+                <Button
+                  style={{ height: '40px', marginBottom: `${!record?.FollowupQuestions && '15px'}` }}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={disabledCombined || !valid || pristine}
+                >
+                  <SaveIcon style={{ fontSize: '18px' }} />
+                  &nbsp; {translate('misc.save')}
                 </Button>
               </form>
             );
@@ -224,22 +211,17 @@ const StatusInputSection = ({ record, disabled, preSubmitFn }) => {
     <Box width="100%">
       {record?.FollowupQuestions ? (
         <Accordion defaultExpanded>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-
-            <Typography>
-              {translate('resources.answers.status.status')}
-            </Typography>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+            <Typography>{translate('resources.answers.status.status')}</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
             <StatusInput record={record} disabled={disabled} preSubmitFn={preSubmitFn} />
           </AccordionDetails>
         </Accordion>
-      ) : <StatusInput record={record} disabled={disabled} preSubmitFn={preSubmitFn} />}
+      ) : (
+        <StatusInput record={record} disabled={disabled} preSubmitFn={preSubmitFn} />
+      )}
     </Box>
   );
 };

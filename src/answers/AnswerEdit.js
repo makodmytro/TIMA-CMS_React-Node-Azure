@@ -38,8 +38,8 @@ const useStyles = makeStyles(() => ({
     top: '50%',
     left: '50%',
     marginTop: -12,
-    marginLeft: -12
-  }
+    marginLeft: -12,
+  },
 }));
 
 const AnswerEdit = () => {
@@ -61,7 +61,7 @@ const AnswerEdit = () => {
     try {
       const { data } = await dataProvider.update('answers', {
         id,
-        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt'])
+        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']),
       });
 
       if (data.fk_languageId !== answer.fk_languageId) {
@@ -80,8 +80,8 @@ const AnswerEdit = () => {
       setIsLoading(true);
       const { data } = await dataProvider.summarizeAnswer('answers', {
         data: {
-          text
-        }
+          text,
+        },
       });
       if (data.summary) {
         summarizeRef.current = data.summary;
@@ -112,8 +112,8 @@ const AnswerEdit = () => {
         id: questions[i].id,
         data: {
           fk_languageId,
-          fk_topicId
-        }
+          fk_topicId,
+        },
       });
 
       i += 1;
@@ -148,7 +148,7 @@ const AnswerEdit = () => {
             mutators={{
               replaceWithSummarized: (args, state, { changeValue }) => {
                 changeValue(state, 'text', () => summarized);
-              }
+              },
             }}
             enableReinitialize
             render={({ form, handleSubmit, valid, values }) => {
@@ -193,7 +193,7 @@ const AnswerEdit = () => {
                               <Fade
                                 in={isLoading}
                                 style={{
-                                  transitionDelay: isLoading ? '800ms' : '0ms'
+                                  transitionDelay: isLoading ? '800ms' : '0ms',
                                 }}
                                 unmountOnExit
                               >

@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Edit,
-  SimpleForm,
-  Toolbar,
-  SaveButton,
-} from 'react-admin';
+import { Edit, SimpleForm, Toolbar, SaveButton } from 'react-admin';
 import { connect } from 'react-redux';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';
 import QrDialog from './components/qr-dialog';
@@ -23,19 +18,10 @@ const CustomToolbar = (props) => {
 
   return (
     <Toolbar {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SaveButton
-        label="ra.action.save"
-        redirect="list"
-        submitOnEnter
-        disabled={props.pristine || (disableEdit && !admin)}
-      />
+      <SaveButton label="ra.action.save" redirect="list" submitOnEnter disabled={props.pristine || (disableEdit && !admin)} />
       <ShowQuestions size="medium" ml={1} record={props?.record} />
       {props.record.globalTopic || HIDE_SHOW_QR ? null : <QrDialog ml={1} />}
-      {
-        !(disableDelete || !admin) && (
-          <DeleteDialog />
-        )
-      }
+      {!(disableDelete || !admin) && <DeleteDialog />}
     </Toolbar>
   );
 };
@@ -53,9 +39,7 @@ const TopicEdit = ({ languages, dispatch, ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : {};
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
   return {
     languages,

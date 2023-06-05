@@ -9,10 +9,13 @@ const dataProvider = simpleRestProvider(baseApi, httpClient);
 const updateSessionUser = (data) => {
   const stored = JSON.parse(sessionStorage.getItem('user'));
 
-  sessionStorage.setItem('user', JSON.stringify({
-    ...stored,
-    ...data,
-  }));
+  sessionStorage.setItem(
+    'user',
+    JSON.stringify({
+      ...stored,
+      ...data,
+    })
+  );
 };
 
 const getResourceAssociations = (resource) => {
@@ -46,13 +49,7 @@ const getResourceAssociations = (resource) => {
 const cleanBody = (body, resource) => {
   switch (resource) {
     case 'users': {
-      const b = pick(body, [
-        'isAdmin',
-        'isActive',
-        'groups',
-        'name',
-        'email',
-      ]);
+      const b = pick(body, ['isAdmin', 'isActive', 'groups', 'name', 'email']);
 
       if (body.password && body.change_password) {
         b.password = body.password;
@@ -73,12 +70,8 @@ const getListUrl = (initialUrl, resource, _params) => {
   if (_params) {
     const { field, order } = params.sort || {};
 
-    const {
-      q, unanswered, groupRelated, topLevelOnly, isContextOnly, ...restFilter
-    } = params.filter || {};
-    const {
-      from, to, active, search, ...filter
-    } = restFilter;
+    const { q, unanswered, groupRelated, topLevelOnly, isContextOnly, ...restFilter } = params.filter || {};
+    const { from, to, active, search, ...filter } = restFilter;
 
     if (unanswered) {
       filter.fk_answerId = null;
@@ -161,7 +154,8 @@ const resDataProvider = {
         };
       }
 
-      if (resource === 'users') { // hack "Groups"
+      if (resource === 'users') {
+        // hack "Groups"
         json.data = json.data.map((j) => {
           return {
             ...j,
@@ -185,8 +179,7 @@ const resDataProvider = {
   },
   getMany: async (resource, params) => {
     const query = {
-      filter: params.ids && params.ids.length > 0
-        ? JSON.stringify({ id: params.ids }) : null,
+      filter: params.ids && params.ids.length > 0 ? JSON.stringify({ id: params.ids }) : null,
     };
 
     const url = `${baseApi}/${resource}?${stringify(query)}`;
@@ -447,11 +440,15 @@ const resDataProvider = {
   ask: async (resource, params) => {
     const { token, ...rest } = params.data;
 
-    const { json } = await httpClient(`${baseApi}/questions/ask`, {
-      method: 'POST',
-      body: JSON.stringify(rest),
-      headers: new Headers({ Authorization: `Bearer ${token}` }),
-    }, true);
+    const { json } = await httpClient(
+      `${baseApi}/questions/ask`,
+      {
+        method: 'POST',
+        body: JSON.stringify(rest),
+        headers: new Headers({ Authorization: `Bearer ${token}` }),
+      },
+      true
+    );
 
     return { data: json };
   },

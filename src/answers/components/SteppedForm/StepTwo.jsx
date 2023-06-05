@@ -5,20 +5,9 @@ import debounce from 'lodash/debounce';
 import arrayMutators from 'final-form-arrays'; // eslint-disable-line
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import {
-  ArrayInput,
-  SimpleFormIterator,
-  TextInput,
-  useTranslate,
-  useDataProvider,
-  required,
-} from 'react-admin';
+import { ArrayInput, SimpleFormIterator, TextInput, useTranslate, useDataProvider, required } from 'react-admin';
 
-const StepTwo = ({
-  initialValues,
-  onSubmit,
-  onBack,
-}) => {
+const StepTwo = ({ initialValues, onSubmit, onBack }) => {
   const translate = useTranslate();
   const dataProvider = useDataProvider();
 
@@ -51,7 +40,7 @@ const StepTwo = ({
         return onSubmit({ questions: questions.filter((q) => q && q.text) });
       }}
       mutators={{
-        ...arrayMutators
+        ...arrayMutators,
       }}
       initialValues={initialValues}
       validate={async (values) => {
@@ -69,7 +58,7 @@ const StepTwo = ({
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <ArrayInput source="questions" label="">
-              <SimpleFormIterator disableRemove={(values.questions.length === 1)}>
+              <SimpleFormIterator disableRemove={values.questions.length === 1}>
                 <TextInput label="resources.questions.fields.text" source="text" validate={tryToValidate} fullWidth />
               </SimpleFormIterator>
             </ArrayInput>

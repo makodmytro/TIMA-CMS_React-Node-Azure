@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import {
-  DateField,
-  List,
-  ReferenceField,
-  TextField,
-  useRedirect,
-  useTranslate,
-  useListContext,
-  useDataProvider,
-} from 'react-admin';
+import { DateField, List, ReferenceField, TextField, useRedirect, useTranslate, useListContext, useDataProvider } from 'react-admin';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,10 +10,7 @@ import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import ListActions, {
-  getVisibleColumns,
-  handleColumnsChange,
-} from '../../common/components/ListActions';
+import ListActions, { getVisibleColumns, handleColumnsChange } from '../../common/components/ListActions';
 import ApprovedSwitchField from '../components/approved-swtich-field';
 import TopicSelectCell from '../../common/components/TopicSelectCell';
 import { Language } from '../../common/components/fields-values-by-fk';
@@ -35,9 +23,7 @@ import styles from './styles';
 import { useDisabledApprove } from '../../hooks';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
-const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS
-  ? process.env.REACT_APP_HIDE_FIELDS_ANSWERS.split(',')
-  : [];
+const HIDDEN_FIELDS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS ? process.env.REACT_APP_HIDE_FIELDS_ANSWERS.split(',') : [];
 
 if (!USE_WORKFLOW) {
   HIDDEN_FIELDS.push('status');
@@ -59,13 +45,9 @@ const columns = [
 ].filter((c) => !HIDDEN_FIELDS.includes(c.key));
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : {};
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
-  const topics = state.admin.resources.topics
-    ? state.admin.resources.topics.data
-    : {};
+  const topics = state.admin.resources.topics ? state.admin.resources.topics.data : {};
 
   return { topics, languages };
 };
@@ -82,15 +64,10 @@ const WrapTopicSelect = (props) => {
   );
 };
 const WrapApprovedSwitch = (props) => {
-  return (
-    <ApprovedSwitchField label="resources.answers.fields.approved" {...props} disabled={useDisabledApprove(props?.record?.fk_topicId)} />
-  );
+  return <ApprovedSwitchField label="resources.answers.fields.approved" {...props} disabled={useDisabledApprove(props?.record?.fk_topicId)} />;
 };
 
-const CustomGridItem = ({
-  record,
-  visibleColumns,
-}) => {
+const CustomGridItem = ({ record, visibleColumns }) => {
   const classes = styles();
   const redirect = useRedirect();
 
@@ -105,84 +82,69 @@ const CustomGridItem = ({
 
   return (
     <>
-      <TableRow
-        className={classes.cursor}
-        onClick={link(record.id)}
-      >
-        {
-          visibleColumns.includes('fk_questionId') && (
-            <TableCell>
-              <AnswerRelatedQuestionField label="resources.answers.fields.fk_questionId" record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('text') && (
-            <TableCell>
-              <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} hideRelatedQuestions />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('spokenText') && (
-            <TableCell>
-              <TextField source="spokenText" label="resources.answers.fields.spokenText" sortBy="spokenText" record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('fk_languageId') && (
-            <TableCell>
-              <Language label="resources.answers.fields.fk_languageId" sortBy="fk_languageId" record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('fk_createdByUserId') && (
-            <TableCell>
-              <ReferenceField source="fk_createdByUserId" label="resources.answers.fields.fk_createdByUserId" sortBy="fk_createdByUserId" reference="users" link={false} record={record} basePath="answers">
-                <TextField source="name" />
-              </ReferenceField>
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('status') && (
-            <TableCell>
-              <EditableStatusField record={record}>
-                <StatusField source="status" label="resources.answers.fields.status" sortable={false} record={record} />
-              </EditableStatusField>
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('fk_topicId') && (
-            <TableCell>
-              <WrapTopicSelect label="resources.answers.fields.fk_topicId" record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('approved') && (
-            <TableCell>
-              <WrapApprovedSwitch label="resources.answers.fields.approved" record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('tags') && (
-            <TableCell>
-              <TextField source="tags" label="resources.answers.fields.tags" sortable={false} record={record} />
-            </TableCell>
-          )
-        }
-        {
-          visibleColumns.includes('contentLastUpdatedAt') && (
-            <TableCell>
-              <DateField source="contentLastUpdatedAt" showTime record={record} />
-            </TableCell>
-          )
-        }
+      <TableRow className={classes.cursor} onClick={link(record.id)}>
+        {visibleColumns.includes('fk_questionId') && (
+          <TableCell>
+            <AnswerRelatedQuestionField label="resources.answers.fields.fk_questionId" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('text') && (
+          <TableCell>
+            <AnswerTextField label="resources.answers.fields.text" sortBy="text" record={record} hideRelatedQuestions />
+          </TableCell>
+        )}
+        {visibleColumns.includes('spokenText') && (
+          <TableCell>
+            <TextField source="spokenText" label="resources.answers.fields.spokenText" sortBy="spokenText" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('fk_languageId') && (
+          <TableCell>
+            <Language label="resources.answers.fields.fk_languageId" sortBy="fk_languageId" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('fk_createdByUserId') && (
+          <TableCell>
+            <ReferenceField
+              source="fk_createdByUserId"
+              label="resources.answers.fields.fk_createdByUserId"
+              sortBy="fk_createdByUserId"
+              reference="users"
+              link={false}
+              record={record}
+              basePath="answers"
+            >
+              <TextField source="name" />
+            </ReferenceField>
+          </TableCell>
+        )}
+        {visibleColumns.includes('status') && (
+          <TableCell>
+            <EditableStatusField record={record}>
+              <StatusField source="status" label="resources.answers.fields.status" sortable={false} record={record} />
+            </EditableStatusField>
+          </TableCell>
+        )}
+        {visibleColumns.includes('fk_topicId') && (
+          <TableCell>
+            <WrapTopicSelect label="resources.answers.fields.fk_topicId" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('approved') && (
+          <TableCell>
+            <WrapApprovedSwitch label="resources.answers.fields.approved" record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('tags') && (
+          <TableCell>
+            <TextField source="tags" label="resources.answers.fields.tags" sortable={false} record={record} />
+          </TableCell>
+        )}
+        {visibleColumns.includes('contentLastUpdatedAt') && (
+          <TableCell>
+            <DateField source="contentLastUpdatedAt" showTime record={record} />
+          </TableCell>
+        )}
         <TableCell>
           <DropDownMenu record={record} />
         </TableCell>
@@ -196,24 +158,14 @@ const CustomGrid = ({ visibleColumns }) => {
   const classes = styles();
   const translate = useTranslate();
 
-  const Th = ({ label, field }) => (visibleColumns.includes(field) ? (
-    <TableCell
-      className={classes.thead}
-      onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}
-    >
-      {translate(label)}&nbsp;
-      {
-        field === currentSort.field && currentSort.order === 'DESC' && (
-          <ArrowUp size="small" />
-        )
-      }
-      {
-        field === currentSort.field && currentSort.order === 'ASC' && (
-          <ArrowDown size="small" />
-        )
-      }
-    </TableCell>
-  ) : null);
+  const Th = ({ label, field }) =>
+    visibleColumns.includes(field) ? (
+      <TableCell className={classes.thead} onClick={() => setSort(field, currentSort.order === 'ASC' ? 'DESC' : 'ASC')}>
+        {translate(label)}&nbsp;
+        {field === currentSort.field && currentSort.order === 'DESC' && <ArrowUp size="small" />}
+        {field === currentSort.field && currentSort.order === 'ASC' && <ArrowDown size="small" />}
+      </TableCell>
+    ) : null;
 
   return (
     <Grid container spacing={2}>
@@ -235,16 +187,9 @@ const CustomGrid = ({ visibleColumns }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                ids.map((id) => (
-                  <CustomGridItem
-                    key={id}
-                    record={data[id]}
-                    basePath={basePath}
-                    visibleColumns={visibleColumns}
-                  />
-                ))
-              }
+              {ids.map((id) => (
+                <CustomGridItem key={id} record={data[id]} basePath={basePath} visibleColumns={visibleColumns} />
+              ))}
             </TableBody>
           </Table>
         </Box>
@@ -253,9 +198,7 @@ const CustomGrid = ({ visibleColumns }) => {
   );
 };
 
-const AnswerList = ({
-  languages, topics, dispatch, ...props
-}) => {
+const AnswerList = ({ languages, topics, dispatch, ...props }) => {
   const [disableCreate, setDisableCreate] = React.useState(false);
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'answers'));
   const dataProvider = useDataProvider();
@@ -274,14 +217,14 @@ const AnswerList = ({
     <>
       <List
         {...props}
-        actions={(
+        actions={
           <ListActions
             visibleColumns={visibleColumns}
             onColumnsChange={handleColumnsChange('answers', setVisibleColumns)}
             columns={columns}
             disableCreate={disableCreate}
           />
-        )}
+        }
         empty={false}
         filters={<Filters languages={languages} topics={topics} />}
         bulkActionButtons={false}

@@ -28,21 +28,11 @@ const CreateForm = ({ onSubmit, disabled }) => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <MarkdownInput
-                label="resources.answers.fields.text"
-                source="text"
-                disabled={disabled}
-              />
+              <MarkdownInput label="resources.answers.fields.text" source="text" disabled={disabled} />
             </Grid>
             <Grid item xs={12}>
               <Box pt={2}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                  disabled={!valid || disabled}
-                >
+                <Button type="submit" color="primary" variant="contained" fullWidth disabled={!valid || disabled}>
                   {translate('resources.answers.create')}
                 </Button>
               </Box>

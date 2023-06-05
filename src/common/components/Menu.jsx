@@ -1,14 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
-import {
-  MenuItemLink,
-  getResources,
-  useLocale,
-  useSetLocale,
-  useTranslate,
-  useDataProvider,
-} from 'react-admin';
+import { MenuItemLink, getResources, useLocale, useSetLocale, useTranslate, useDataProvider } from 'react-admin';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -75,101 +68,78 @@ const Menu = ({ onMenuClick, logout }) => {
   return (
     <>
       <Box py={2}>
-        {
-          !HIDE_MENU_ITEMS.includes('dashboard') && (
+        {!HIDE_MENU_ITEMS.includes('dashboard') && (
+          <MenuItemLink to="/" primaryText={translate('Dashboard')} leftIcon={<HomeIcon />} onClick={onMenuClick} sidebarIsOpen={open} />
+        )}
+
+        {resources
+          .filter((r) => {
+            return r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name) && (!ADMIN_MENUS.includes(r.name) || isAdmin);
+          })
+          .map((resource) => (
             <MenuItemLink
-              to="/"
-              primaryText={translate('Dashboard')}
-              leftIcon={<HomeIcon />}
-              onClick={onMenuClick}
+              key={resource.name}
+              to={`/${resource.name}`}
+              primaryText={translate(`resources.${resource.name}.name`, { smart_count: 2 })}
+              leftIcon={resource.icon ? <resource.icon /> : <DefaultIcon />}
+              onClick={onClick(resource.name)}
               sidebarIsOpen={open}
             />
-          )
-        }
-
-        {
-          resources
-            .filter((r) => {
-              return (r.name !== 'groups' && !HIDE_MENU_ITEMS.includes(r.name)) && (!ADMIN_MENUS.includes(r.name) || isAdmin);
-            })
-            .map((resource) => (
-              <MenuItemLink
-                key={resource.name}
-                to={`/${resource.name}`}
-                primaryText={translate(`resources.${resource.name}.name`, { smart_count: 2 })}
-                leftIcon={
-                  resource.icon ? <resource.icon /> : <DefaultIcon />
-                }
-                onClick={onClick(resource.name)}
-                sidebarIsOpen={open}
-              />
-            ))
-        }
-        <MenuItemLink
-          to="/test-ask"
-          primaryText={translate('Test')}
-          leftIcon={<DemoIcon />}
-          onClick={onMenuClick}
-          sidebarIsOpen={open}
-        />
+          ))}
+        <MenuItemLink to="/test-ask" primaryText={translate('Test')} leftIcon={<DemoIcon />} onClick={onMenuClick} sidebarIsOpen={open} />
         {isXSmall && logout}
       </Box>
-      {
-        open && (
-          <div
-            style={{
-              position: 'fixed', bottom: 5, left: 5, fontSize: 10,
-            }}
-          >
-            {
-              isSyncInProgress && isAdmin && (
-                <Box mb={2} textAlign="center">
-                  <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
-                    {translate('Topic sync in progress')}
-                  </Typography>
-                  &nbsp; <CircularProgress color="primary" size={15} />
-                </Box>
-              )
-            }
-            {
-              !isSyncInProgress && !!nextSyncScheduled && isAdmin && (
-                <Box mb={2} textAlign="center">
-                  <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
-                    {translate('Topic Sync Scheduled')}: <br />
-                    {(new Date(nextSyncScheduled)).toLocaleString(navigator.language, { dateStyle: 'short', timeStyle: 'short' })}
-                  </Typography>
-                </Box>
-              )
-            }
-            <Box textAlign="center">
-              <Typography variant="body2" component="span">DE</Typography>
-              &nbsp;
-              <Switch size="small" checked={locale === 'en'} onChange={onLocaleChange} />
-              &nbsp;
-              <Typography variant="body2" component="span">EN</Typography>
+      {open && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 5,
+            left: 5,
+            fontSize: 10,
+          }}
+        >
+          {isSyncInProgress && isAdmin && (
+            <Box mb={2} textAlign="center">
+              <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                {translate('Topic sync in progress')}
+              </Typography>
+              &nbsp; <CircularProgress color="primary" size={15} />
             </Box>
-            <div>
-              CMS Build:
-              <span style={{ float: 'right' }}>
-                {process.env.REACT_APP_VERSION}
-              </span>
-            </div>
-            <div>
-              Backend Build:
-              <span style={{ float: 'right' }}>
-                {backend}
-              </span>
-            </div>
-            {baseApi}
-            <Box mt={2}>
-              <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
+          )}
+          {!isSyncInProgress && !!nextSyncScheduled && isAdmin && (
+            <Box mb={2} textAlign="center">
+              <Typography variant="body2" style={{ fontSize: '0.8rem' }} component="span">
+                {translate('Topic Sync Scheduled')}: <br />
+                {new Date(nextSyncScheduled).toLocaleString(navigator.language, { dateStyle: 'short', timeStyle: 'short' })}
+              </Typography>
             </Box>
+          )}
+          <Box textAlign="center">
+            <Typography variant="body2" component="span">
+              DE
+            </Typography>
+            &nbsp;
+            <Switch size="small" checked={locale === 'en'} onChange={onLocaleChange} />
+            &nbsp;
+            <Typography variant="body2" component="span">
+              EN
+            </Typography>
+          </Box>
+          <div>
+            CMS Build:
+            <span style={{ float: 'right' }}>{process.env.REACT_APP_VERSION}</span>
           </div>
-        )
-      }
-
+          <div>
+            Backend Build:
+            <span style={{ float: 'right' }}>{backend}</span>
+          </div>
+          {baseApi}
+          <Box mt={2}>
+            <BugReport cmsVersion={process.env.REACT_APP_VERSION} backendVersion={backend} />
+          </Box>
+        </div>
+      )}
     </>
-
   );
 };
 

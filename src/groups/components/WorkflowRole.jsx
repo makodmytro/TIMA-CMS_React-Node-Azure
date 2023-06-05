@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  AutocompleteInput,
-  useTranslate,
-} from 'react-admin';
+import { AutocompleteInput, useTranslate } from 'react-admin';
 import { useSelector } from 'react-redux';
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
@@ -17,7 +14,8 @@ const WorkflowRole = (props) => {
   return (
     <AutocompleteInput
       choices={options.map((o) => ({
-        id: o.value, name: translate(`resources.users.workflow.roles.${o.name}`),
+        id: o.value,
+        name: translate(`resources.users.workflow.roles.${o.name}`),
       }))}
       allowEmpty
       emptyText={translate('misc.none')}

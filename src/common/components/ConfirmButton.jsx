@@ -1,21 +1,8 @@
 import React from 'react';
-import {
-  Confirm,
-} from 'react-admin';
-import {
-  Button,
-} from '@material-ui/core';
+import { Confirm } from 'react-admin';
+import { Button } from '@material-ui/core';
 
-const ConfirmButton = ({
-  onConfirm,
-  onCancel,
-  component,
-  title,
-  content,
-  buttonText,
-  confirmButtonText,
-  cancelButtonText,
-}) => {
+const ConfirmButton = ({ onConfirm, onCancel, component, title, content, buttonText, confirmButtonText, cancelButtonText }) => {
   const [open, setOpen] = React.useState(false);
 
   const onButtonClick = (e) => {
@@ -55,16 +42,12 @@ const ConfirmButton = ({
           ...(cancelButtonText ? { cancel: cancelButtonText } : {}),
         }}
       />
-      {
-        !!component && React.cloneElement(component, { onClick: onButtonClick })
-      }
-      {
-        !component && (
-          <Button variant="contained" size="small" color="secondary" onClick={onButtonClick}>
-            {buttonText}
-          </Button>
-        )
-      }
+      {!!component && React.cloneElement(component, { onClick: onButtonClick })}
+      {!component && (
+        <Button variant="contained" size="small" color="secondary" onClick={onButtonClick}>
+          {buttonText}
+        </Button>
+      )}
     </>
   );
 };

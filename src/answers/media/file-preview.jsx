@@ -30,10 +30,7 @@ export const Image = ({ src }) => {
   return (
     <div className={classes.previewContainer}>
       <div>
-        <img
-          src={src}
-          alt="preview"
-        />
+        <img src={src} alt="preview" />
       </div>
     </div>
   );
@@ -50,7 +47,7 @@ export const ImagePreview = ({ file }) => {
     fr.readAsDataURL(file);
   }, [file]);
 
-  return (<Image src={src} />);
+  return <Image src={src} />;
 };
 
 export const Audio = ({ src }) => {
@@ -74,7 +71,7 @@ export const AudioPreview = ({ file }) => {
     setSrc(URL.createObjectURL(file));
   }, [file]);
 
-  return (<Audio src={src} />);
+  return <Audio src={src} />;
 };
 
 export const Video = ({ src }) => {
@@ -98,7 +95,7 @@ export const VideoPreview = ({ file }) => {
     setSrc(URL.createObjectURL(file));
   }, [file]);
 
-  return (<Video src={src} />);
+  return <Video src={src} />;
 };
 
 const FilePreview = (props) => {
@@ -109,21 +106,15 @@ const FilePreview = (props) => {
   const { rawFile } = props.record;
 
   if (rawFile.type.startsWith('image/')) {
-    return (
-      <ImagePreview file={rawFile} />
-    );
+    return <ImagePreview file={rawFile} />;
   }
 
   if (rawFile.type.startsWith('audio/')) {
-    return (
-      <AudioPreview file={rawFile} />
-    );
+    return <AudioPreview file={rawFile} />;
   }
 
   if (rawFile.type.startsWith('video/')) {
-    return (
-      <VideoPreview file={rawFile} />
-    );
+    return <VideoPreview file={rawFile} />;
   }
 
   return null;

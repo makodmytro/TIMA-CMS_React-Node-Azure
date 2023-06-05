@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Box,
-} from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Table from './Table';
 
 const List = ({ record }) => {

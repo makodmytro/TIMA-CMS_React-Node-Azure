@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { cloneElement } from 'react';
-import {
-  CreateButton,
-  ExportButton,
-  sanitizeListRestProps,
-  TopToolbar,
-  useListContext,
-} from 'react-admin';
+import { CreateButton, ExportButton, sanitizeListRestProps, TopToolbar, useListContext } from 'react-admin';
 import ColumnConfig from './ColumnConfig';
 import defaultColumns from '../../default-columns.json';
 import { useDisabledCreate, useIsAdmin } from '../../hooks';
@@ -57,27 +51,9 @@ export const handleColumnsChange = (resource, callback) => (columns) => {
 };
 
 const ListActions = (props) => {
-  const {
-    className,
-    exporter,
-    filters,
-    maxResults,
-    columns,
-    visibleColumns,
-    onColumnsChange,
-    disableCreate,
-    createButtonLabel,
-    ...rest
-  } = props;
-  const {
-    currentSort,
-    resource,
-    displayedFilters,
-    filterValues,
-    basePath,
-    showFilter,
-    total,
-  } = useListContext();
+  const { className, exporter, filters, maxResults, columns, visibleColumns, onColumnsChange, disableCreate, createButtonLabel, ...rest } =
+    props;
+  const { currentSort, resource, displayedFilters, filterValues, basePath, showFilter, total } = useListContext();
   let disabled = false;
 
   if (resource === 'questions' || resource === 'answers') {
@@ -88,16 +64,17 @@ const ListActions = (props) => {
 
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
-      {filters && cloneElement(filters, {
-        resource,
-        showFilter,
-        displayedFilters,
-        filterValues,
-        context: 'button',
-      })}
-      { /* some rendering bug probably */ }
-      { disabled && <CreateButton basePath={basePath} disabled {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
-      { !disabled && <CreateButton basePath={basePath} {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
+      {filters &&
+        cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button',
+        })}
+      {/* some rendering bug probably */}
+      {disabled && <CreateButton basePath={basePath} disabled {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
+      {!disabled && <CreateButton basePath={basePath} {...(createButtonLabel ? { label: createButtonLabel } : {})} />}
 
       <ExportButton
         disabled={total === 0 || disabled}
@@ -106,15 +83,7 @@ const ListActions = (props) => {
         filterValues={filterValues}
         maxResults={maxResults}
       />
-      {columns && (
-        <ColumnConfig
-          resource={resource}
-          columns={columns}
-          visible={visibleColumns}
-          onChange={onColumnsChange}
-        />
-      )}
-
+      {columns && <ColumnConfig resource={resource} columns={columns} visible={visibleColumns} onChange={onColumnsChange} />}
     </TopToolbar>
   );
 };

@@ -1,11 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  Create,
-  SimpleForm,
-  Title,
-  useTranslate,
-} from 'react-admin';
+import { Create, SimpleForm, Title, useTranslate } from 'react-admin';
 import { Box } from '@material-ui/core';
 import SteppedForm from './components/SteppedForm';
 import CustomTopToolbar from '../common/components/custom-top-toolbar';

@@ -4,17 +4,10 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {
-  useTranslate,
-  useNotify,
-  useDataProvider,
-} from 'react-admin';
+import { useTranslate, useNotify, useDataProvider } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
-const StepAnalyzeKB = ({
-  initialValues,
-  onKBDataReady,
-}) => {
+const StepAnalyzeKB = ({ initialValues, onKBDataReady }) => {
   const notify = useNotify();
   const dataProvider = useDataProvider();
   const translate = useTranslate();
@@ -77,28 +70,22 @@ const StepAnalyzeKB = ({
 
   return (
     <Box textAlign="center">
-      {
-        !analyzing && (
-          <Button onClick={analizeKB} variant="contained" color="primary">
-            {translate('import.step_analyze_submit_button')}
-          </Button>
-        )
-      }
-      {
-        analyzing && (
-          <Box>
-            <Typography>
-              {translate('import.analyzing_kb')}
-            </Typography>
-            <Box p={2}>
-              <CircularProgress />
-            </Box>
-            <Button component={Link} to="/topics" variant="outlined">
-              {translate('misc.cancel')}
-            </Button>
+      {!analyzing && (
+        <Button onClick={analizeKB} variant="contained" color="primary">
+          {translate('import.step_analyze_submit_button')}
+        </Button>
+      )}
+      {analyzing && (
+        <Box>
+          <Typography>{translate('import.analyzing_kb')}</Typography>
+          <Box p={2}>
+            <CircularProgress />
           </Box>
-        )
-      }
+          <Button component={Link} to="/topics" variant="outlined">
+            {translate('misc.cancel')}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -46,21 +46,30 @@ const AnswerCreate = () => {
   };
 
   const onSubmit = async (values) => {
-    const {
-      fk_languageId, fk_topicId, text, tags, spokenText, questions,
-    } = values;
+    const { fk_languageId, fk_topicId, text, tags, spokenText, questions } = values;
 
     try {
       const { data } = await dataProvider.create('answers', {
         data: {
-          fk_languageId, fk_topicId, text, tags, spokenText,
+          fk_languageId,
+          fk_topicId,
+          text,
+          tags,
+          spokenText,
         },
       });
 
       await Promise.all(
-        questions.filter((q) => q.text).map((q) => createQuestion({
-          fk_languageId, fk_topicId, text: q.text, fk_answerId: data.id,
-        })),
+        questions
+          .filter((q) => q.text)
+          .map((q) =>
+            createQuestion({
+              fk_languageId,
+              fk_topicId,
+              text: q.text,
+              fk_answerId: data.id,
+            })
+          )
       );
 
       notify('The answer was created successfully');
@@ -70,28 +79,29 @@ const AnswerCreate = () => {
     }
   };
 
-  const questionExists = (fk_languageId, fk_topicId) => memoize(async (value) => {
-    if (!fk_languageId || !fk_topicId || !value) {
-      return null;
-    }
-
-    const { data } = await dataProvider.getList('questions', {
-      pagination: { perPage: 1, page: 1 },
-      filter: {
-        text: value,
-        fk_topicId,
-        fk_languageId,
-      },
-    });
-
-    if (data && data.length) {
-      if (data[0].text.toLowerCase() === value.toLowerCase()) {
-        return translate('resources.questions.duplicated');
+  const questionExists = (fk_languageId, fk_topicId) =>
+    memoize(async (value) => {
+      if (!fk_languageId || !fk_topicId || !value) {
+        return null;
       }
-    }
 
-    return null;
-  });
+      const { data } = await dataProvider.getList('questions', {
+        pagination: { perPage: 1, page: 1 },
+        filter: {
+          text: value,
+          fk_topicId,
+          fk_languageId,
+        },
+      });
+
+      if (data && data.length) {
+        if (data[0].text.toLowerCase() === value.toLowerCase()) {
+          return translate('resources.questions.duplicated');
+        }
+      }
+
+      return null;
+    });
 
   return (
     <Box boxShadow={3} p={2} borderRadius={3} mt={2}>
@@ -104,13 +114,17 @@ const AnswerCreate = () => {
         initialValues={{
           fk_languageId: _languages && _languages.length === 1 ? _languages[0].id : null,
           fk_topicId: null,
-          questions: [{
-            text: '',
-          }, {
-            text: '',
-          }, {
-            text: '',
-          }],
+          questions: [
+            {
+              text: '',
+            },
+            {
+              text: '',
+            },
+            {
+              text: '',
+            },
+          ],
           text: '',
           spokenText: '',
           tags: '',
@@ -131,21 +145,17 @@ const AnswerCreate = () => {
         render={({ handleSubmit, submitting, values }) => {
           return (
             <form onSubmit={handleSubmit} autoComplete="off">
-              {
-                _languages.length > 1 && (
-                  <ReferenceInput
-                    source="fk_languageId"
-                    label="resources.answers.fields.fk_languageId"
-                    reference="languages"
-                    validate={required()}
-                    fullWidth
-                  >
-                    <SelectInput
-                      optionText="name"
-                    />
-                  </ReferenceInput>
-                )
-              }
+              {_languages.length > 1 && (
+                <ReferenceInput
+                  source="fk_languageId"
+                  label="resources.answers.fields.fk_languageId"
+                  reference="languages"
+                  validate={required()}
+                  fullWidth
+                >
+                  <SelectInput optionText="name" />
+                </ReferenceInput>
+              )}
               <Box pt={2}>
                 <TopicSelect
                   source="fk_topicId"
@@ -157,7 +167,7 @@ const AnswerCreate = () => {
 
               <Box pb={2} mb={2} borderBottom="1px dashed #D5D5D5">
                 <ArrayInput source="questions" label="misc.questions">
-                  <SimpleFormIterator disableRemove={(values.questions.length === 3)}>
+                  <SimpleFormIterator disableRemove={values.questions.length === 3}>
                     <TextInput
                       label="resources.questions.fields.text"
                       source="text"
@@ -168,20 +178,9 @@ const AnswerCreate = () => {
                 </ArrayInput>
               </Box>
 
-              <MarkdownInput
-                label="resources.answers.fields.text"
-                source="text"
-              />
-              {
-                !USE_WORKFLOW && (
-                  <ApprovedInput source="approved" label="resources.answers.fields.approved" />
-                )
-              }
-              {
-                admin && (
-                  <TagsInput source="tags" label="resources.answers.fields.tags" />
-                )
-              }
+              <MarkdownInput label="resources.answers.fields.text" source="text" />
+              {!USE_WORKFLOW && <ApprovedInput source="approved" label="resources.answers.fields.approved" />}
+              {admin && <TagsInput source="tags" label="resources.answers.fields.tags" />}
               <Button variant="contained" color="primary" type="submit" disabled={submitting}>
                 {translate('misc.create')}
               </Button>

@@ -102,12 +102,7 @@ const QrDialog = ({ record, fullWidth, ml }) => {
           </Box>
         </DialogContent>
         <DialogActions className={classes.actions}>
-          <Button
-            type="button"
-            onClick={() => window.print()}
-            variant="contained"
-            color="secondary"
-          >
+          <Button type="button" onClick={() => window.print()} variant="contained" color="secondary">
             {translate('misc.print')}
           </Button>
         </DialogActions>

@@ -25,13 +25,9 @@ const ActionsRow = ({ record }) => {
     <Box mb={1} display="flex">
       <Box flex={6}>
         <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
             <Typography>
-              {record?.RelatedQuestions?.length || 0}  {translate('resources.answers.related_questions')}
+              {record?.RelatedQuestions?.length || 0} {translate('resources.answers.related_questions')}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

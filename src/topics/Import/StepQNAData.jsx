@@ -2,17 +2,9 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import {
-  TextInput,
-  useTranslate,
-  required,
-} from 'react-admin';
+import { TextInput, useTranslate, required } from 'react-admin';
 
-const StepFour = ({
-  initialValues,
-  onSubmit,
-  onBack,
-}) => {
+const StepFour = ({ initialValues, onSubmit, onBack }) => {
   const translate = useTranslate();
 
   return (
@@ -23,12 +15,7 @@ const StepFour = ({
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box>
-              <TextInput
-                source="qnaApiEndpoint"
-                label="resources.topics.fields.qnaApiEndpoint"
-                fullWidth
-                validate={required()}
-              />
+              <TextInput source="qnaApiEndpoint" label="resources.topics.fields.qnaApiEndpoint" fullWidth validate={required()} />
               <TextInput
                 source="qnaSubscriptionKey"
                 label="resources.topics.fields.qnaSubscriptionKey"
@@ -37,12 +24,7 @@ const StepFour = ({
                 fullWidth
                 validate={required()}
               />
-              <TextInput
-                source="qnaApiVersion"
-                label="resources.topics.fields.qnaApiVersion"
-                fullWidth
-                validate={required()}
-              />
+              <TextInput source="qnaApiVersion" label="resources.topics.fields.qnaApiVersion" fullWidth validate={required()} />
             </Box>
             <Box textAlign="right">
               <Button type="button" variant="outlined" color="primary" size="small" onClick={() => onBack(values)}>

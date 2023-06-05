@@ -3,7 +3,7 @@ import englishMessages from 'ra-language-english';
 const english = {
   ...englishMessages,
   appbar: {
-    languageSelect: 'Language'
+    languageSelect: 'Language',
   },
   Test: 'Test',
   Dashboard: 'Dashboard',
@@ -57,7 +57,7 @@ const english = {
     change_language: "Changing an answers's language will also have an effect its topic and the related question's topics",
     confirm_media_delete: 'Are you sure you want to delete this media file?',
     unlink_confirmation: 'Are you sure you want to unlink the answer from the question?',
-    change_language_confirmation: "Changing a question's language will also have an effect in the topic"
+    change_language_confirmation: "Changing a question's language will also have an effect in the topic",
   },
   misc: {
     bug_report_success: 'Thank you for reporting this issue. A ticket was created with ID',
@@ -172,7 +172,7 @@ const english = {
     department: 'Department',
     topic_group: 'Topic group',
     topic: 'Topic',
-    answer_form_pristine_error: 'Please save your answer first.'
+    answer_form_pristine_error: 'Please save your answer first.',
   },
   resources: {
     topics: {
@@ -190,13 +190,13 @@ const english = {
         kb_integration: 'KB integration',
         qna: 'Knowledge Base settings',
         qna_lang_studio: 'Language Studio Project settings',
-        group: 'Related Group'
+        group: 'Related Group',
       },
       kbIntegration: {
         microsoft_language_studio: 'Microsoft Language Studio',
         microsoft_qna_maker: 'Microsoft QnA Maker',
         amazon_lex: 'Amazon Lex (not enabled)',
-        gpt3: 'GPT3 Questions API (not enabled)'
+        gpt3: 'GPT3 Questions API (not enabled)',
       },
       permissions: {
         group: 'Group',
@@ -207,7 +207,7 @@ const english = {
         no_permissions: 'This topic has no permissions yet',
         all_assigned: 'All the groups are already assigned',
         create_new: 'Create new permission',
-        manage_permissions: 'Manage permissions'
+        manage_permissions: 'Manage permissions',
       },
       fields: {
         name: 'Name',
@@ -234,14 +234,14 @@ const english = {
         qnaMetadataKeyOptions: {
           fb: 'fb (Department)',
           tg: 'tg (Topic group)',
-          th: 'th (Topic)'
+          th: 'th (Topic)',
         },
         qnaMetadataValue: 'Metadata value',
         kbIntegration: 'KB Integration',
         startSync: 'Pull data from QNA now?',
         fk_managedByGroupId: 'Managed by group',
-        qnaEndpointKey: 'QNA endpoint key'
-      }
+        qnaEndpointKey: 'QNA endpoint key',
+      },
     },
     languages: {
       name: 'Language |||| Languages',
@@ -250,8 +250,8 @@ const english = {
         name: 'Name',
         code: 'Code',
         welcomeText: 'Welcome Text',
-        welcomeButton: 'Button Text'
-      }
+        welcomeButton: 'Button Text',
+      },
     },
     questions: {
       name: 'Question |||| Questions',
@@ -290,10 +290,10 @@ const english = {
         ignored: 'Ignored',
         status: 'Status',
         contextOnly: 'Context only',
-        context: 'Context'
+        context: 'Context',
       },
       add_related: 'Add Question',
-      add_followup: 'Add Followup'
+      add_followup: 'Add Followup',
     },
     answers: {
       name: 'Answer |||| Answers',
@@ -320,20 +320,20 @@ const english = {
       steps: {
         topic: 'Select topic',
         questions: 'Create questions',
-        answer: 'Create the answer'
+        answer: 'Create the answer',
       },
       intent_entity: {
         text: 'Intent/Entity (admin only)',
         intent: 'Intent',
         entity: 'Entity',
-        answerId: 'Answer Id'
+        answerId: 'Answer Id',
       },
       status: {
         createdAt: 'Date',
         updatedBy: 'Editor',
         followup_status: 'This QnA has follow-up answers, please check if their status should be changed as well',
         status: 'Status',
-        comment: 'Comment'
+        comment: 'Comment',
       },
       fields: {
         filter: 'Answer or Question',
@@ -349,19 +349,19 @@ const english = {
         tags: 'Tags',
         status: 'Status',
         isContextOnly: 'Context only',
-        contentLastUpdatedAt: 'Updated'
-      }
+        contentLastUpdatedAt: 'Updated',
+      },
     },
     sources: {
       name: 'Source |||| Sources',
       fields: {
         text: 'Text',
         fk_languageId: 'Language',
-        updatedAt: 'Updated'
-      }
+        updatedAt: 'Updated',
+      },
     },
     'stats/sessions': {
-      name: 'Session |||| Sessions'
+      name: 'Session |||| Sessions',
     },
     sessions: {
       name: 'Session |||| Sessions',
@@ -384,8 +384,8 @@ const english = {
         topicName: 'Topic',
         questionText: 'Question',
         answerText: 'Answer',
-        score: 'Score'
-      }
+        score: 'Score',
+      },
     },
     users: {
       name: 'User |||| Users',
@@ -396,7 +396,7 @@ const english = {
         role: 'Workflow role',
         roles: {
           EDITOR: 'Editor',
-          REVIEWER: 'Reviewer'
+          REVIEWER: 'Reviewer',
         },
         status: {
           EDITING: 'Editing',
@@ -407,14 +407,14 @@ const english = {
           INTEGRATION_ERROR: 'Integration error',
           DEPLOYED_ON_TEST: 'Deployed on Test',
           INTEGRATION_TESTS_OK: 'Integration tests passed',
-          DEPLOYED_ON_PRODUCTION: 'Deployed on Production'
+          DEPLOYED_ON_PRODUCTION: 'Deployed on Production',
         },
 
         errors: {
           MIN_3_QUESTIONS: 'At least 3 questions are required when creating a new answer',
           MAX_1_PARENT_FOR_CONTEXT_ONLY:
-            'This follow up QnA has more than 1 parent. If you set it to "context only", it will be triggered for all parent responses only in context'
-        }
+            'This follow up QnA has more than 1 parent. If you set it to "context only", it will be triggered for all parent responses only in context',
+        },
       },
       fields: {
         id: 'ID',
@@ -429,8 +429,8 @@ const english = {
         related_groups: 'Related groups',
         password: 'Password',
         password_confirm: 'Password confirm',
-        roles: 'Roles'
-      }
+        roles: 'Roles',
+      },
     },
     groups: {
       name: 'Group |||| Groups',
@@ -444,8 +444,8 @@ const english = {
         id: 'ID',
         name: 'Name',
         createdAt: 'Created at',
-        workflowRole: 'Workflow role'
-      }
+        workflowRole: 'Workflow role',
+      },
     },
     audit: {
       name: 'Audit |||| Audit',
@@ -453,15 +453,15 @@ const english = {
         1: 'Added',
         2: 'Updated',
         3: 'Deleted',
-        4: 'Login'
+        4: 'Login',
       },
       fields: {
         fk_userId: 'User',
         entityName: 'Entity',
         actionType: 'Action',
         createdAt: 'Date',
-        updatedAt: 'Date'
-      }
+        updatedAt: 'Date',
+      },
     },
     import: {
       step_kb: 'step_kb',
@@ -480,12 +480,12 @@ const english = {
       metadata_value_label: 'metadata_value_label',
       metadata_value_view_content: 'metadata_value_view_content',
       ready_to_process_single_topic: 'ready_to_process_single_topic',
-      metadata_key_label: 'metadata_key_label'
+      metadata_key_label: 'metadata_key_label',
     },
     demos: {
-      name: 'Demo |||| Demos'
-    }
-  }
+      name: 'Demo |||| Demos',
+    },
+  },
 };
 
 export default english;

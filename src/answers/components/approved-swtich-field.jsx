@@ -1,11 +1,6 @@
 import React from 'react';
 import Switch from '@material-ui/core/Switch';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  usePermissions,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, usePermissions } from 'react-admin';
 
 const ApprovedSwitchField = ({ record, disabled }) => {
   const { permissions } = usePermissions();
@@ -17,7 +12,7 @@ const ApprovedSwitchField = ({ record, disabled }) => {
   const updateApproved = async (approved) => {
     const data = {
       approved,
-      approvedAt: approved ? (new Date()).toISOString() : null,
+      approvedAt: approved ? new Date().toISOString() : null,
       approvedBy_editorId: approved ? permissions?.userId : null,
     };
     try {

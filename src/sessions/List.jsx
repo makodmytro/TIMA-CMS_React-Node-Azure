@@ -19,10 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Form } from 'react-final-form';
 import { Language, Topic } from '../common/components/fields-values-by-fk';
-import ListActions, {
-  getVisibleColumns,
-  handleColumnsChange,
-} from '../common/components/ListActions';
+import ListActions, { getVisibleColumns, handleColumnsChange } from '../common/components/ListActions';
 import { DateTimeInput } from '../common/components/datetime-picker';
 
 const styles = makeStyles(() => ({
@@ -46,15 +43,10 @@ const styles = makeStyles(() => ({
   },
 }));
 
-const Filters = ({
-  languages, topics, countries, permissions, ...props
-}) => {
+const Filters = ({ languages, topics, countries, permissions, ...props }) => {
   const classes = styles();
   const translate = useTranslate();
-  const {
-    filterValues,
-    setFilters,
-  } = useListContext();
+  const { filterValues, setFilters } = useListContext();
 
   if (props.context === 'button') {
     return null;
@@ -74,7 +66,6 @@ const Filters = ({
       const topic = topics[event.target.value];
       if (topic) {
         const language = languages[topic.fk_languageId];
-
         if (language) {
           setFilters({
             ...filterValues,
@@ -117,15 +108,9 @@ const Filters = ({
             allowEmpty
             perPage={100}
             onChange={handleTopicChange}
-            filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
-              : null}
+            filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId } : null}
           >
-            <SelectInput
-              optionText="name"
-              className={classes.select}
-              allowEmpty
-              emptyText={translate('misc.none')}
-            />
+            <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.none')} />
           </ReferenceInput>
           <DateTimeInput
             label="resources.sessions.fields.from"
@@ -155,17 +140,8 @@ const Filters = ({
             choices={countries}
             onChange={() => handleSubmit()}
           />
-          {
-            permissions && permissions?.allowDemo === true && (
-              <TextInput
-                source="demoCode"
-                label="Code"
-                onChange={() => handleSubmit()}
-              />
-            )
-          }
+          {permissions && permissions?.allowDemo === true && <TextInput source="demoCode" label="Code" onChange={() => handleSubmit()} />}
         </form>
-
       )}
     </Form>
   );
@@ -183,9 +159,7 @@ const DemoLink = ({ record }) => (
   </Button>
 );
 
-const QuestionList = ({
-  permissions, languages, topics, dispatch, ...props
-}) => {
+const QuestionList = ({ permissions, languages, topics, dispatch, ...props }) => {
   const [countries, setCountries] = React.useState([]);
   const dataProvider = useDataProvider();
 
@@ -223,46 +197,27 @@ const QuestionList = ({
   return (
     <List
       {...props}
-      filters={(
-        <Filters
-          languages={languages}
-          topics={topics}
-          countries={countries}
-          permissions={permissions}
-        />
-      )}
+      filters={<Filters languages={languages} topics={topics} countries={countries} permissions={permissions} />}
       bulkActionButtons={false}
-      actions={(
-        <ListActions
-          visibleColumns={visibleColumns}
-          onColumnsChange={handleColumnsChange('sessions', setVisibleColumns)}
-          columns={columns}
-        />
-      )}
+      actions={
+        <ListActions visibleColumns={visibleColumns} onColumnsChange={handleColumnsChange('sessions', setVisibleColumns)} columns={columns} />
+      }
       sort={{
         field: 'updatedAt',
         order: 'DESC',
       }}
     >
       <Datagrid rowClick="show">
-        {
-          columns
-            .filter((col) => visibleColumns.includes(col.key))
-            .map((col) => React.cloneElement(col.el, { key: col.key }))
-        }
+        {columns.filter((col) => visibleColumns.includes(col.key)).map((col) => React.cloneElement(col.el, { key: col.key }))}
       </Datagrid>
     </List>
   );
 };
 
 const mapStateToProps = (state) => {
-  const languages = state.admin.resources.languages
-    ? state.admin.resources.languages.data
-    : [];
+  const languages = state.admin.resources.languages ? state.admin.resources.languages.data : [];
 
-  const topics = state.admin.resources.topics
-    ? state.admin.resources.topics.data
-    : [];
+  const topics = state.admin.resources.topics ? state.admin.resources.topics.data : [];
 
   return { topics, languages };
 };

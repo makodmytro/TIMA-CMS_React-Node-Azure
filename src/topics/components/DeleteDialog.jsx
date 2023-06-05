@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useRefresh,
-  useNotify,
-  useRedirect,
-  useTranslate,
-  useDataProvider,
-} from 'react-admin';
+import { useRefresh, useNotify, useRedirect, useTranslate, useDataProvider } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -66,7 +60,7 @@ export default (props) => {
         }}
         title={`${translate('resources.topics.delete')}?`}
         confirmationText={translate('resources.topics.delete')}
-        content={(
+        content={
           <Box px={10} mt={2}>
             <Typography align="center" variant="body2">
               {translate('misc.you_will_lose')}:
@@ -88,13 +82,11 @@ export default (props) => {
                   &nbsp;
                   {!!content && <>({content.permissions || 0})</>}
                 </Typography>
-                <Typography variant="body2">
-                  - {translate('resources.topics.delete_cascade_four')}
-                </Typography>
+                <Typography variant="body2">- {translate('resources.topics.delete_cascade_four')}</Typography>
               </Box>
             </Box>
           </Box>
-        )}
+        }
       />
     </>
   );

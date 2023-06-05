@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  useTranslate,
-  Confirm,
-  useNotify,
-  useDataProvider,
-} from 'react-admin';
-import {
-  Box,
-} from '@material-ui/core';
+import { useTranslate, Confirm, useNotify, useDataProvider } from 'react-admin';
+import { Box } from '@material-ui/core';
 import Table from './Table';
 import useAnswer from '../../useAnswer';
 

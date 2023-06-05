@@ -32,13 +32,7 @@ const styles = makeStyles((theme) => ({
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST || '1';
 
-const Row = ({
-  record,
-  columnsToDisplay,
-  onSync,
-  setOpen,
-  level,
-}) => {
+const Row = ({ record, columnsToDisplay, onSync, setOpen, level }) => {
   const [expanded, setExpanded] = React.useState(false);
   const history = useHistory();
 
@@ -47,7 +41,8 @@ const Row = ({
   const bgColor = (lv) => {
     if (lv === 2) {
       return '#B0B4BA';
-    } if (lv === 1) {
+    }
+    if (lv === 1) {
       return '#91B4B9';
     }
     return 'initial';
@@ -57,50 +52,36 @@ const Row = ({
     <>
       <TableRow style={{ backgroundColor: bgColor(level), cursor: 'pointer' }} onClick={() => history.push(`/topics/${record?.id}`)}>
         <TableCell>
-          {
-            !!record.ChildTopics && record.ChildTopics.length > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-
-                    setExpanded(!expanded);
-                  }}
-                  style={{ color: level ? 'white' : '#3F4349' }}
-                >
-                  { !expanded && <AddIcon fontSize="small" /> }
-                  { expanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
-          }
-        </TableCell>
-        {
-          !level && columnsToDisplay
-            .map((col, ii) => {
-              return (
-                <TableCell key={ii}>
-                  {cloneElement(col.el, { key: col.key, record })}
-                </TableCell>
-              );
-            })
-        }
-        {
-          level && level > 0 && (
+          {!!record.ChildTopics && record.ChildTopics.length > 0 && TOPICS_ENABLE_TREE_LIST === '1' && (
             <>
-              <TableCell style={{ paddingLeft: `${30 * level}px` }}>
-                {cloneElement(columns[0].el, { key: columns[0].key, record })}
-              </TableCell>
-              {
-                (Array.from(Array(columnsToDisplay.length - 1).keys())).map((v, i) => (
-                  <TableCell key={i}>&nbsp;</TableCell>
-                ))
-              }
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  setExpanded(!expanded);
+                }}
+                style={{ color: level ? 'white' : '#3F4349' }}
+              >
+                {!expanded && <AddIcon fontSize="small" />}
+                {expanded && <MinusIcon fontSize="small" />}
+              </IconButton>
             </>
-          )
-        }
+          )}
+        </TableCell>
+        {!level &&
+          columnsToDisplay.map((col, ii) => {
+            return <TableCell key={ii}>{cloneElement(col.el, { key: col.key, record })}</TableCell>;
+          })}
+        {level && level > 0 && (
+          <>
+            <TableCell style={{ paddingLeft: `${30 * level}px` }}>{cloneElement(columns[0].el, { key: columns[0].key, record })}</TableCell>
+            {Array.from(Array(columnsToDisplay.length - 1).keys()).map((v, i) => (
+              <TableCell key={i}>&nbsp;</TableCell>
+            ))}
+          </>
+        )}
         <TableCell>
           <ListDropdownMenu
             onSync={onSync}
@@ -110,40 +91,18 @@ const Row = ({
           />
         </TableCell>
       </TableRow>
-      {
-        expanded && record.ChildTopics && !!record.ChildTopics.length && (
-          <>
-            {
-              record.ChildTopics.map((child, iii) => (
-                <Row
-                  record={child}
-                  columnsToDisplay={columnsToDisplay}
-                  onSync={onSync}
-                  setOpen={setOpen}
-                  key={iii}
-                  level={(level || 0) + 1}
-                />
-              ))
-            }
-          </>
-        )
-      }
+      {expanded && record.ChildTopics && !!record.ChildTopics.length && (
+        <>
+          {record.ChildTopics.map((child, iii) => (
+            <Row record={child} columnsToDisplay={columnsToDisplay} onSync={onSync} setOpen={setOpen} key={iii} level={(level || 0) + 1} />
+          ))}
+        </>
+      )}
     </>
   );
 };
 
-const TableView = ({
-  columnsToDisplay,
-  records,
-  setOpen,
-  onSync,
-  count,
-  pagination,
-  setPage,
-  setPageSize,
-  onSortClick,
-  currentSort,
-}) => {
+const TableView = ({ columnsToDisplay, records, setOpen, onSync, count, pagination, setPage, setPageSize, onSortClick, currentSort }) => {
   const translate = useTranslate();
   const classes = styles();
 
@@ -153,40 +112,28 @@ const TableView = ({
         <TableHead>
           <TableRow>
             <TableCell>&nbsp;</TableCell>
-            {
-              columnsToDisplay.map((c) => (
-                <TableCell key={c.key} onClick={() => onSortClick(c.key)} className={classes.thead}>
-                  {translate(`resources.topics.fields.${c.key}`)}
-                  {
-                    c.key === currentSort.field && currentSort.order === 'DESC' && (
-                      <ArrowUp size="small" />
-                    )
-                  }
-                  {
-                    c.key === currentSort.field && currentSort.order === 'ASC' && (
-                      <ArrowDown size="small" />
-                    )
-                  }
-                </TableCell>
-              ))
-            }
+            {columnsToDisplay.map((c) => (
+              <TableCell key={c.key} onClick={() => onSortClick(c.key)} className={classes.thead}>
+                {translate(`resources.topics.fields.${c.key}`)}
+                {c.key === currentSort.field && currentSort.order === 'DESC' && <ArrowUp size="small" />}
+                {c.key === currentSort.field && currentSort.order === 'ASC' && <ArrowDown size="small" />}
+              </TableCell>
+            ))}
             <TableCell>&nbsp;</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {
-            records.map((record, i) => (
-              <Row
-                key={i}
-                {...{
-                  record,
-                  setOpen,
-                  onSync,
-                  columnsToDisplay,
-                }}
-              />
-            ))
-          }
+          {records.map((record, i) => (
+            <Row
+              key={i}
+              {...{
+                record,
+                setOpen,
+                onSync,
+                columnsToDisplay,
+              }}
+            />
+          ))}
         </TableBody>
       </Table>
       <Box textAlign="right">
@@ -205,7 +152,9 @@ const TableView = ({
           }}
           labelRowsPerPage={translate('ra.navigation.page_rows_per_page')}
           nextIconButtonText={translate('ra.navigation.next')}
-          labelDisplayedRows={({ from, to, count: total }) => translate('ra.navigation.page_range_info', { offsetBegin: from, offsetEnd: to, total })}
+          labelDisplayedRows={({ from, to, count: total }) =>
+            translate('ra.navigation.page_range_info', { offsetBegin: from, offsetEnd: to, total })
+          }
         />
       </Box>
     </>

@@ -1,12 +1,7 @@
 import React, { cloneElement, useState } from 'react';
-import {
-  Datagrid, DateField, List, TextField,
-} from 'react-admin';
+import { Datagrid, DateField, List, TextField } from 'react-admin';
 import { PlayableTextField } from '../common/components/playable-text';
-import ListActions, {
-  getVisibleColumns,
-  handleColumnsChange,
-} from '../common/components/ListActions';
+import ListActions, { getVisibleColumns, handleColumnsChange } from '../common/components/ListActions';
 
 const LanguageList = (props) => {
   const columns = [
@@ -21,17 +16,14 @@ const LanguageList = (props) => {
     {
       key: 'welcomeText',
       el: <PlayableTextField source="welcomeText" getLanguageFromRecord={(r) => r.code} />,
-
     },
     {
       key: 'welcomeButton',
       el: <TextField source="welcomeButton" />,
-
     },
     {
       key: 'updatedAt',
       el: <DateField source="updatedAt" showTime />,
-
     },
   ];
 
@@ -40,19 +32,14 @@ const LanguageList = (props) => {
   return (
     <List
       {...props}
-      actions={(
-        <ListActions
-          visibleColumns={visibleColumns}
-          onColumnsChange={handleColumnsChange('languages', setVisibleColumns)}
-          columns={columns}
-        />
-      )}
+      actions={
+        <ListActions visibleColumns={visibleColumns} onColumnsChange={handleColumnsChange('languages', setVisibleColumns)} columns={columns} />
+      }
       bulkActionButtons={false}
       sort={{ field: 'updatedAt', order: 'DESC' }}
     >
       <Datagrid rowClick="edit">
-        {columns.filter((col) => visibleColumns.includes(col.key))
-          .map((col) => cloneElement(col.el, { key: col.key }))}
+        {columns.filter((col) => visibleColumns.includes(col.key)).map((col) => cloneElement(col.el, { key: col.key }))}
       </Datagrid>
     </List>
   );

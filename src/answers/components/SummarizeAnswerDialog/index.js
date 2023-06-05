@@ -1,1 +1,1 @@
-export { default } from './SummarizeAnswerDialog'
+export { default } from './SummarizeAnswerDialog';
