@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDataProvider, useNotify, useTranslate } from 'react-admin';
-import { Box, FormControl, IconButton, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { Close, Edit } from '@material-ui/icons';
 import useAnswer from '../../useAnswer';
 
@@ -51,29 +51,15 @@ const EditableIntentEntityField = ({ record, type, children }) => {
         {editMode ? (
           <>
             <FormControl fullWidth>
-              <InputLabel
-                id={`change-label-${record.id}`}
-                style={{
-                  transform: 'translate(12px, 7px) scale(0.75)',
+              <TextField
+                onKeyDown={(ev) => {
+                  if (ev.key === 'Enter') {
+                    setEditMode(false);
+                    ev.preventDefault();
+                  }
                 }}
-              >
-                {type === 'intent' ? translate('resources.answers.intent_entity.intent') : translate('resources.answers.intent_entity.entity') }
-              </InputLabel>
-              <Select
-                labelId={`change-label-${record.id}`}
-                size="small"
-                value={1}
-                onChange={(e) => handleChange(e.target.value)}
-                variant="filled"
-                margin="dense"
-                fullWidth
-              >
-                {intentOptions.map((o) => (
-                  <MenuItem key={o.id} value={o.id}>
-                    {o.name}
-                  </MenuItem>
-                ))}
-              </Select>
+                label={translate('resources.answers.intent_entity.intent')}
+              />
             </FormControl>
 
             <IconButton onClick={() => setEditMode(false)} size="medium">
