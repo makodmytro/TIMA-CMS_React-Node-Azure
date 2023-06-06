@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useRefresh, useDataProvider, useNotify, Title, CreateButton, useVersion, useTranslate } from 'react-admin';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Alert from '@material-ui/lab/Alert';
 import { getVisibleColumns, handleColumnsChange } from '../../common/components/ListActions';
@@ -16,24 +16,35 @@ const TOPICS_ENABLE_TREE_LIST = process.env.REACT_APP_TOPICS_ENABLE_TREE_LIST ||
 const TopicList = () => {
   const admin = useIsAdmin();
   const version = useVersion();
-  const [open, setOpen] = React.useState(null);
+  const [open, setOpen] = useState(null);
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const translate = useTranslate();
-  const [records, setResults] = React.useState(null);
-  const [pagination, setPagination] = React.useState({
+  const [records, setResults] = useState(null);
+  const [pagination, setPagination] = useState({
     perPage: 10,
     page: 1,
   });
-  const [form, setForm] = React.useState({
+  const [form, setForm] = useState({
     q: '',
     fk_languageId: null,
   });
-  const [sort, setSort] = React.useState({ field: 'name', order: 'ASC' });
-  const [count, setCount] = React.useState(0);
-  const { search } = useLocation();
-  const querystring = new URLSearchParams(search);
+  const [sort, setSort] = useState({ field: 'name', order: 'ASC' });
+  const [count, setCount] = useState(0);
+  const { search, pathname } = useLocation();
+  const history = useHistory();
+  const querystring = useMemo(() => new URLSearchParams(search), [search]);
+
+  const setSearchParams = useCallback(() => {
+    const pageNo = parseInt(querystring.get('pageNo'), 10);
+    if (pageNo && pageNo <= count / pagination.perPage + 1) {
+      setPagination({
+        ...pagination,
+        page: pageNo,
+      });
+    }
+  }, [querystring, count, pagination.perPage]);
 
   const onSubmit = async (values = form, paging = pagination, _sort = sort) => {
     setForm(values);
@@ -49,8 +60,10 @@ const TopicList = () => {
         sort: _sort,
       });
 
+      console.log('data', data);
       setResults(data);
       setCount(total);
+      setSearchParams();
     } catch (e) {} // eslint-disable-line
   };
 
@@ -66,6 +79,9 @@ const TopicList = () => {
       ...pagination,
       page: page + 1,
     });
+    const params = new URLSearchParams({ pageNo: page + 1 });
+    console.log(params);
+    history.replace({ pathname, search: params.toString() });
 
     if (submit) {
       onSubmit(form, { perPage: pagination.perPage, page: page + 1 });
@@ -91,7 +107,22 @@ const TopicList = () => {
     onSubmit(form);
   }, []);
 
-  useRecursiveTimeout(() => onSubmit(), 1000 * 30);
+  useEffect(() => {
+    // setSearchParams();
+    const pageNo = parseInt(querystring.get('pageNo'), 10);
+    if (pageNo && pageNo <= count / pagination.perPage + 1) {
+      setPagination((p) => ({
+        ...p,
+        page: pageNo,
+      }));
+      onSubmit(form, { ...pagination, page: pageNo });
+    }
+  }, [count, querystring]);
+
+  // useEffect(() => {
+  // }, [pagination.page, pagination.perPage])
+
+  // useRecursiveTimeout(() => onSubmit(), 1000 * 30);
 
   const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns(columns, 'topics'));
 
