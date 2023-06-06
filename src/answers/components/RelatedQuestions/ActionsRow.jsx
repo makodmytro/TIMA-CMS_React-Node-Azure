@@ -67,20 +67,22 @@ const ActionsRow = ({ record }) => {
         )}
       </Box>
       <Box flex={1} pl={2} pt={1} textAlign="center">
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          type="button"
-          onClick={() => {
-            setCreateOpen(true);
-            setRelatedOpen(true);
-          }}
-          disabled={disabled}
-          fullWidth
-        >
-          {translate('resources.questions.add_related')}
-        </Button>
+        {!editRawContent && (
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            type="button"
+            onClick={() => {
+              setCreateOpen(true);
+              setRelatedOpen(true);
+            }}
+            disabled={disabled}
+            fullWidth
+          >
+            {translate('resources.questions.add_related')}
+          </Button>
+        )}
         <Button
           size="small"
           variant="contained"
