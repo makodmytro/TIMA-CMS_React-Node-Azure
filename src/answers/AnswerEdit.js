@@ -23,6 +23,7 @@ import { useIsAdmin } from '../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 const SHOW_GPT_SUMMARIZE = process.env.REACT_APP_FEATURE_GPT_SUMMARIZE ?? false;
+const HIDE_ANSWER_INTENT = process.env.REACT_APP_HIDE_ANSWER_INTENT ? process.env.REACT_APP_HIDE_ANSWER_INTENT === '1' : true
 
 const HiddenField = ({ children, fieldName }) => {
   if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
@@ -135,7 +136,7 @@ const AnswerEdit = () => {
     <>
       <CustomTopToolbar />
       <StatusWarning record={answer} />
-      {answer && isAdmin && <IntentEntity record={answer} />}
+      {!HIDE_ANSWER_INTENT && answer && isAdmin && <IntentEntity record={answer} />}
       <RelatedQuestionsActionsRow record={answer} />
       <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
         {translate('misc.editing_answer')}
