@@ -24,11 +24,11 @@ const TopicList = () => {
   const [records, setResults] = useState(null);
   const [pagination, setPagination] = useState({
     perPage: 10,
-    page: 1
+    page: 1,
   });
   const [form, setForm] = useState({
     q: '',
-    fk_languageId: null
+    fk_languageId: null,
   });
   const [sort, setSort] = useState({ field: 'name', order: 'ASC' });
   const [count, setCount] = useState(0);
@@ -41,7 +41,7 @@ const TopicList = () => {
     if (pageNo && pageNo <= count / pagination.perPage + 1) {
       setPagination({
         ...pagination,
-        page: pageNo
+        page: pageNo,
       });
     }
   }, [querystring, count, pagination.perPage]);
@@ -54,13 +54,13 @@ const TopicList = () => {
         filter: {
           ...(values.q ? { q: values.q } : {}),
           ...(values.fk_languageId ? { fk_languageId: values.fk_languageId } : {}),
-          topLevelOnly: TOPICS_ENABLE_TREE_LIST
+          topLevelOnly: TOPICS_ENABLE_TREE_LIST,
         },
         pagination: paging,
-        sort: _sort
+        sort: _sort,
       });
 
-      console.log('data', data)
+      console.log('data', data);
       setResults(data);
       setCount(total);
       setSearchParams();
@@ -77,7 +77,7 @@ const TopicList = () => {
   const setPage = (page, submit = true) => {
     setPagination({
       ...pagination,
-      page: page + 1
+      page: page + 1,
     });
     const params = new URLSearchParams({ pageNo: page + 1 });
     console.log(params);
@@ -91,7 +91,7 @@ const TopicList = () => {
   const setPageSize = (val) => {
     setPagination({
       page: 1,
-      perPage: val
+      perPage: val,
     });
 
     onSubmit(form, { perPage: val, page: 1 });
@@ -113,7 +113,7 @@ const TopicList = () => {
     if (pageNo && pageNo <= count / pagination.perPage + 1) {
       setPagination({
         ...pagination,
-        page: pageNo
+        page: pageNo,
       });
     }
   }, [count, querystring]);
@@ -125,7 +125,7 @@ const TopicList = () => {
   const onSync = async (id) => {
     try {
       await dataProvider.topicSync(null, {
-        id
+        id,
       });
 
       notify('Sync scheduled');

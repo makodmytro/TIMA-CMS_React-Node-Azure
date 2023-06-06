@@ -42,7 +42,7 @@ const mapStateToProps = (state) => {
   const languages = state.admin.resources.languages ? state.admin.resources.languages.data : {};
 
   return {
-    languages
+    languages,
   };
 };
 
