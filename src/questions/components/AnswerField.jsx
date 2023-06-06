@@ -15,31 +15,15 @@ const AnswerField = ({ record, afterLink, noLinkOnlyCreate }) => {
 
   if (!record.fk_answerId) {
     if (noLinkOnlyCreate) {
-      return (
-        <AnswerCreateDialog record={record} afterLink={afterLink} />
-      );
+      return <AnswerCreateDialog record={record} afterLink={afterLink} />;
     }
 
-    return (
-      <AnswerLinkDialog record={record} afterLink={afterLink} />
-    );
+    return <AnswerLinkDialog record={record} afterLink={afterLink} />;
   }
 
   const link = (
-    <Button
-      component={Link}
-      to={`/answers/${record.fk_answerId}/edit`}
-      size="small"
-      color="primary"
-      onClick={(e) => e.stopPropagation()}
-    >
-      {
-        !record.Answer && (
-          <>
-            {translate('misc.view_related_answer')}
-          </>
-        )
-      }
+    <Button component={Link} to={`/answers/${record.fk_answerId}/edit`} size="small" color="primary" onClick={(e) => e.stopPropagation()}>
+      {!record.Answer && <>{translate('misc.view_related_answer')}</>}
     </Button>
   );
 

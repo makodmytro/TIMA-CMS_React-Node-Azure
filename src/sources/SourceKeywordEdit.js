@@ -55,22 +55,18 @@ const SourceKeywordEdit = ({ record }) => {
     }
   };
 
-  const renderText = () => record.text.split(' ').map((word) => (
-    <span
-      key={`${Math.random()}-${word}`}
-      className={classNames(classes.word, { [classes.marked]: keywords[word] })}
-      onClick={handleWordClick(word)}
-    >
-      {word}
-    </span>
-  ));
+  const renderText = () =>
+    record.text.split(' ').map((word) => (
+      <span
+        key={`${Math.random()}-${word}`}
+        className={classNames(classes.word, { [classes.marked]: keywords[word] })}
+        onClick={handleWordClick(word)}
+      >
+        {word}
+      </span>
+    ));
 
-  return (
-    <Card className={classes.container}>
-      {renderText()}
-    </Card>
-
-  );
+  return <Card className={classes.container}>{renderText()}</Card>;
 };
 
 export default SourceKeywordEdit;

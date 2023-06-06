@@ -2,20 +2,10 @@ import React, { useMemo } from 'react';
 import { Form } from 'react-final-form';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import {
-  TextInput,
-  useTranslate,
-  BooleanInput,
-  SelectInput,
-  required,
-} from 'react-admin';
+import { TextInput, useTranslate, BooleanInput, SelectInput, required } from 'react-admin';
 import { useSelector } from 'react-redux';
 
-const StepFour = ({
-  initialValues,
-  onSubmit,
-  onBack,
-}) => {
+const StepFour = ({ initialValues, onSubmit, onBack }) => {
   const translate = useTranslate();
   const [state, setState] = React.useState({
     kbIntegration: '1',
@@ -43,10 +33,12 @@ const StepFour = ({
                   source="qnaMetadataKey"
                   label="resources.topics.fields.qnaMetadataKey"
                   validate={TOPICS_METADATA && required()}
-                  choices={[{
-                    id: TOPICS_METADATA_KEYS[0],
-                    name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
-                  }]}
+                  choices={[
+                    {
+                      id: TOPICS_METADATA_KEYS[0],
+                      name: translate(`resources.topics.fields.qnaMetadataKeyOptions.${TOPICS_METADATA_KEYS[0]}`) || TOPICS_METADATA_KEYS[0],
+                    },
+                  ]}
                   margin="dense"
                   fullWidth
                 />
@@ -64,18 +56,8 @@ const StepFour = ({
                 label="resources.topics.fields.qnaMetadataValue"
                 fullWidth
               />
-              <TextInput
-                source="qnaApiEndpoint"
-                label="resources.topics.fields.qnaApiEndpoint"
-                fullWidth
-              />
-              {state.kbIntegration === '0' ? (
-                <TextInput
-                  source="qnaApiVersion"
-                  label="resources.topics.fields.qnaApiVersion"
-                  fullWidth
-                />
-              ) : null}
+              <TextInput source="qnaApiEndpoint" label="resources.topics.fields.qnaApiEndpoint" fullWidth />
+              {state.kbIntegration === '0' ? <TextInput source="qnaApiVersion" label="resources.topics.fields.qnaApiVersion" fullWidth /> : null}
               <TextInput
                 source="qnaSubscriptionKey"
                 label="resources.topics.fields.qnaSubscriptionKey"

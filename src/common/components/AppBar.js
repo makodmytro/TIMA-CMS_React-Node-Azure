@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  AppBar,
-  UserMenu,
-  MenuItemLink,
-  usePermissions,
-  useTranslate,
-  Logout,
-} from 'react-admin';
+import { AppBar, UserMenu, MenuItemLink, usePermissions, useTranslate, Logout } from 'react-admin';
 import { useMsal } from '@azure/msal-react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -65,11 +58,12 @@ const MyUserMenu = (props) => {
   return (
     <UserMenu
       {...props}
-      icon={(
+      icon={
         <>
-          <small>{permissions?.userName}</small> &nbsp;<AccountCircleIcon />
+          <small>{permissions?.userName}</small> &nbsp;
+          <AccountCircleIcon />
         </>
-      )}
+      }
     >
       <ProfileMenu />
     </UserMenu>
@@ -87,9 +81,7 @@ const CustomLogout = () => {
     sessionStorage.clear();
   };
 
-  return (
-    <Logout onClick={onClick} />
-  );
+  return <Logout onClick={onClick} />;
 };
 
 const MyAppBar = (props) => {
@@ -98,10 +90,9 @@ const MyAppBar = (props) => {
 
   const style = USE_ALT_THEME
     ? {
-      backgroundImage:
-          'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
-      color: 'white',
-    }
+        backgroundImage: 'radial-gradient(circle at 100% 14em, #3F4349 0%, #246974 100%)',
+        color: 'white',
+      }
     : { backgroundColor: '#fafafa' };
 
   const LogoElement = () => {
@@ -133,12 +124,7 @@ const MyAppBar = (props) => {
       style={style}
       logout={USE_AZURE_LOGIN === '1' && sessionStorage.getItem('azure-login') === '1' ? <CustomLogout /> : <Logout />}
     >
-      <Typography
-        variant="h6"
-        color="inherit"
-        className={classes.title}
-        id="react-admin-title"
-      />
+      <Typography variant="h6" color="inherit" className={classes.title} id="react-admin-title" />
       <LogoElement />
     </AppBar>
   );

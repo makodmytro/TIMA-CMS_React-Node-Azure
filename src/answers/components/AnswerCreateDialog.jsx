@@ -1,27 +1,12 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-  useTranslate,
-  TextInput,
-  required,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh, useTranslate, TextInput, required } from 'react-admin';
 import { useSelector } from 'react-redux';
-import {
-  Dialog,
-  Button,
-  IconButton,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import { Dialog, Button, IconButton, Typography, Box } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
-const Filters = ({
-  onCreateSubmit,
-}) => {
+const Filters = ({ onCreateSubmit }) => {
   const translate = useTranslate();
 
   return (
@@ -35,14 +20,7 @@ const Filters = ({
                 <TextInput label="resources.answers.fields.text" source="text" fullWidth autoComplete="no" validate={required()} />
               </Box>
               <Box flex={1} ml={1} pt={2}>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="small"
-                  type="submit"
-                  fullWidth
-                  disabled={submitting}
-                >
+                <Button color="primary" variant="contained" size="small" type="submit" fullWidth disabled={submitting}>
                   {translate('resources.answers.create')}
                 </Button>
               </Box>
@@ -102,25 +80,23 @@ const AnswerLinkDialog = ({ record, afterLink }) => {
 
   return (
     <>
-      {
-        open && (
-          <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
-            <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
-              <Box flex="2">
-                <Typography>{translate('resources.answers.create')}</Typography>
-              </Box>
-              <Box flex="1" textAlign="right">
-                <IconButton onClick={() => setOpen(false)} size="small">
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              </Box>
+      {open && (
+        <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth disableBackdropClick onClick={(e) => e.stopPropagation()}>
+          <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
+            <Box flex="2">
+              <Typography>{translate('resources.answers.create')}</Typography>
             </Box>
-            <Box p={2}>
-              <Filters onCreateSubmit={onCreateSubmit} />
+            <Box flex="1" textAlign="right">
+              <IconButton onClick={() => setOpen(false)} size="small">
+                <CloseIcon fontSize="small" />
+              </IconButton>
             </Box>
-          </Dialog>
-        )
-      }
+          </Box>
+          <Box p={2}>
+            <Filters onCreateSubmit={onCreateSubmit} />
+          </Box>
+        </Dialog>
+      )}
 
       <Button
         size="small"

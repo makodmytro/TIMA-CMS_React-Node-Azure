@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-} from 'react-admin';
+import { useDataProvider, useNotify } from 'react-admin';
 import QuestionsSearchCreateDialog from '../../../questions/components/SearchCreateDialog';
 import useAnswer from '../../useAnswer';
 
@@ -30,7 +27,7 @@ const SearchCreateDialog = ({ record, open, onClose }) => {
             id: record.id,
             question_id: id,
           });
-        }),
+        })
       );
 
       notify('The questions were set as follow up');

@@ -3,13 +3,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { Form } from 'react-final-form'; // eslint-disable-line
-import {
-  useDataProvider,
-  SelectInput,
-  required,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, SelectInput, required, useNotify, useTranslate } from 'react-admin';
 import { format, sub } from 'date-fns';
 import Alert from '@material-ui/lab/Alert';
 import SessionCharts from './sessions-charts';
@@ -50,33 +44,14 @@ const Filters = ({ onSubmit, initialValues }) => {
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3}>
-              <DateInput
-                source="from"
-                fullWidth
-                clearable={false}
-                inputVariant="filled"
-                label="From"
-                disableFuture
-              />
+              <DateInput source="from" fullWidth clearable={false} inputVariant="filled" label="From" disableFuture />
             </Grid>
             <Grid item xs={12} sm={4} md={3}>
-              <DateInput
-                source="until"
-                fullWidth
-                clearable={false}
-                inputVariant="filled"
-                label="To"
-                disableFuture
-              />
+              <DateInput source="until" fullWidth clearable={false} inputVariant="filled" label="To" disableFuture />
             </Grid>
             <Grid item xs={12} sm={4} md={3}>
               <Box pt={2}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                >
+                <Button type="submit" color="primary" variant="contained" fullWidth>
                   {translate('misc.search')}
                 </Button>
               </Box>
@@ -130,18 +105,12 @@ const PastSessions = () => {
         <Filters onSubmit={fetch} initialValues={initialValues} />
       </Box>
       <Box>
-        {
-          !!sessions.length && (
-            <SessionCharts sessions={sessions} />
-          )
-        }
-        {
-          !sessions.length && (
-            <Alert severity="info" elevation={3}>
-              {translate('resources.sessions.no_results')}
-            </Alert>
-          )
-        }
+        {!!sessions.length && <SessionCharts sessions={sessions} />}
+        {!sessions.length && (
+          <Alert severity="info" elevation={3}>
+            {translate('resources.sessions.no_results')}
+          </Alert>
+        )}
       </Box>
     </Box>
   );

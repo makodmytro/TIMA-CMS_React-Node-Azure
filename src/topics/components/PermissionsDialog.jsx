@@ -1,21 +1,7 @@
 import React from 'react';
-import {
-  Dialog,
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  CircularProgress,
-} from '@material-ui/core';
+import { Dialog, Box, Button, IconButton, Typography, CircularProgress } from '@material-ui/core';
 import { Form } from 'react-final-form'; // eslint-disable-line
-import {
-  useDataProvider,
-  useNotify,
-  SelectInput,
-  BooleanInput,
-  Confirm,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, SelectInput, BooleanInput, Confirm, useTranslate } from 'react-admin';
 import CloseIcon from '@material-ui/icons/Close';
 import TrashIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
@@ -29,9 +15,7 @@ const Bool = ({ v }) => {
   return <CloseIcon fontSize="small" />;
 };
 
-const PermissionForm = ({
-  initialValues, onSubmit, groups, isEdit, loading,
-}) => {
+const PermissionForm = ({ initialValues, onSubmit, groups, isEdit, loading }) => {
   const translate = useTranslate();
 
   return (
@@ -127,7 +111,7 @@ const PermissionForm = ({
                   disabled={!valid || loading}
                   size="small"
                 >
-                  { isEdit ? translate('misc.save') : translate('misc.create') }
+                  {isEdit ? translate('misc.save') : translate('misc.create')}
                 </Button>
               </Box>
             </Box>
@@ -138,11 +122,7 @@ const PermissionForm = ({
   );
 };
 
-const PermissionsDialog = ({
-  id,
-  onClose,
-  open,
-}) => {
+const PermissionsDialog = ({ id, onClose, open }) => {
   const translate = useTranslate();
   const dataProvider = useDataProvider();
   const notify = useNotify();
@@ -233,7 +213,9 @@ const PermissionsDialog = ({
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth disableBackdropClick>
       <Box p={2} display="flex" borderBottom="1px solid #D5D5D5">
         <Box flex="2">
-          <Typography>{translate('resources.topics.permissions.manage_permissions')}: <b>{topic?.name}</b></Typography>
+          <Typography>
+            {translate('resources.topics.permissions.manage_permissions')}: <b>{topic?.name}</b>
+          </Typography>
         </Box>
         <Box flex="1" textAlign="right">
           <IconButton onClick={onClose} size="small">
@@ -242,122 +224,125 @@ const PermissionsDialog = ({
         </Box>
       </Box>
       <Box p={2}>
-        {
-          !!deleting && (
-            <Confirm
-              isOpen={!!deleting}
-              loading={false}
-              title={translate('misc.delete')}
-              content={translate('Are you sure you want to delete the permission?')}
-              onConfirm={onDelete}
-              onClose={onDeleteCancel}
-              confirm={translate('misc.delete')}
-              cancel={translate('misc.cancel')}
-            />
-          )
-        }
-        {
-          !topic && (<Box textAlign="text-center"><Typography variant="body2">{translate('misc.loading')}...</Typography></Box>)
-        }
-        {
-          !!topic && !topic?.PermissionSets?.length && !loading && (
-            <Box py={2}><Typography variant="body2">{translate('resources.topics.permissions.no_permissions')}</Typography></Box>
-          )
-        }
-        {
-          loading && (
-            <Box textAlign="center">
-              <CircularProgress color="secondary" />
-            </Box>
-          )
-        }
-        {
-          !!topic && !!topic?.PermissionSets?.length && !loading && (
-            <Box pt={2} pb={4} mb={2} boxShadow={3} px={2}>
-              <Box display="flex" mb={2} borderBottom="1px solid #D5D5D5" pb={1}>
-                <Box flex="1">{translate('resources.topics.permissions.group')}</Box>
-                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.view')}</Box>
-                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.edit')}</Box>
-                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.delete')}</Box>
-                <Box textAlign="center" flex="1">{translate('resources.topics.permissions.manage')}</Box>
-                <Box flex="1">&nbsp;</Box>
+        {!!deleting && (
+          <Confirm
+            isOpen={!!deleting}
+            loading={false}
+            title={translate('misc.delete')}
+            content={translate('Are you sure you want to delete the permission?')}
+            onConfirm={onDelete}
+            onClose={onDeleteCancel}
+            confirm={translate('misc.delete')}
+            cancel={translate('misc.cancel')}
+          />
+        )}
+        {!topic && (
+          <Box textAlign="text-center">
+            <Typography variant="body2">{translate('misc.loading')}...</Typography>
+          </Box>
+        )}
+        {!!topic && !topic?.PermissionSets?.length && !loading && (
+          <Box py={2}>
+            <Typography variant="body2">{translate('resources.topics.permissions.no_permissions')}</Typography>
+          </Box>
+        )}
+        {loading && (
+          <Box textAlign="center">
+            <CircularProgress color="secondary" />
+          </Box>
+        )}
+        {!!topic && !!topic?.PermissionSets?.length && !loading && (
+          <Box pt={2} pb={4} mb={2} boxShadow={3} px={2}>
+            <Box display="flex" mb={2} borderBottom="1px solid #D5D5D5" pb={1}>
+              <Box flex="1">{translate('resources.topics.permissions.group')}</Box>
+              <Box textAlign="center" flex="1">
+                {translate('resources.topics.permissions.view')}
               </Box>
-              {
-                topic.PermissionSets.map((ps, i) => {
-                  if (editting === i) {
-                    return (
-                      <PermissionForm
-                        key={i}
-                        initialValues={{
-                          group_id: ps.fk_groupId,
-                          edit: ps.edit,
-                          delete: ps.delete,
-                          view: ps.view,
-                          manage: ps.manage,
-                        }}
-                        onSubmit={onSubmit}
-                        groups={allGroups}
-                        isEdit
-                      />
-                    );
-                  }
-
-                  return (
-                    <Box display="flex" key={i} mb={1}>
-                      <Box flex="1">{ps.Group.name}</Box>
-                      <Box flex="1" textAlign="center"><Bool v={ps.view} /></Box>
-                      <Box flex="1" textAlign="center"><Bool v={ps.edit} /></Box>
-                      <Box flex="1" textAlign="center"><Bool v={ps.delete} /></Box>
-                      <Box flex="1" textAlign="center"><Bool v={ps.manage} /></Box>
-                      <Box flex="1" textAlign="center">
-                        <IconButton size="small" color="secondary" onClick={() => setEditting(i)}>
-                          <PencilIcon fontSize="small" />
-                        </IconButton>
-                        &nbsp;
-                        <IconButton size="small" onClick={() => setDeleting(ps.fk_groupId)}>
-                          <TrashIcon fontSize="small" style={{ color: '#7e0404' }} />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  );
-                })
+              <Box textAlign="center" flex="1">
+                {translate('resources.topics.permissions.edit')}
+              </Box>
+              <Box textAlign="center" flex="1">
+                {translate('resources.topics.permissions.delete')}
+              </Box>
+              <Box textAlign="center" flex="1">
+                {translate('resources.topics.permissions.manage')}
+              </Box>
+              <Box flex="1">&nbsp;</Box>
+            </Box>
+            {topic.PermissionSets.map((ps, i) => {
+              if (editting === i) {
+                return (
+                  <PermissionForm
+                    key={i}
+                    initialValues={{
+                      group_id: ps.fk_groupId,
+                      edit: ps.edit,
+                      delete: ps.delete,
+                      view: ps.view,
+                      manage: ps.manage,
+                    }}
+                    onSubmit={onSubmit}
+                    groups={allGroups}
+                    isEdit
+                  />
+                );
               }
-            </Box>
-          )
-        }
-        {
-          !groups.length && !loading && (
-            <Box>
-              <Typography variant="body2">
-                {translate('resources.topics.permissions.all_assigned')}
-              </Typography>
-            </Box>
-          )
-        }
-        {
-          !!groups.length && !loading && (
-            <>
-              <Box borderBottom="1px solid #D5D5D5" mb={2}>
-                <Typography>{translate('resources.topics.permissions.create_new')}</Typography>
-              </Box>
-              <Box boxShadow={3}>
-                <PermissionForm
-                  initialValues={{
-                    group_id: null,
-                    edit: false,
-                    delete: false,
-                    view: false,
-                    manage: false,
-                  }}
-                  onSubmit={onSubmit}
-                  groups={groups}
-                  loading={loading}
-                />
-              </Box>
-            </>
-          )
-        }
 
+              return (
+                <Box display="flex" key={i} mb={1}>
+                  <Box flex="1">{ps.Group.name}</Box>
+                  <Box flex="1" textAlign="center">
+                    <Bool v={ps.view} />
+                  </Box>
+                  <Box flex="1" textAlign="center">
+                    <Bool v={ps.edit} />
+                  </Box>
+                  <Box flex="1" textAlign="center">
+                    <Bool v={ps.delete} />
+                  </Box>
+                  <Box flex="1" textAlign="center">
+                    <Bool v={ps.manage} />
+                  </Box>
+                  <Box flex="1" textAlign="center">
+                    <IconButton size="small" color="secondary" onClick={() => setEditting(i)}>
+                      <PencilIcon fontSize="small" />
+                    </IconButton>
+                    &nbsp;
+                    <IconButton size="small" onClick={() => setDeleting(ps.fk_groupId)}>
+                      <TrashIcon fontSize="small" style={{ color: '#7e0404' }} />
+                    </IconButton>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+        )}
+        {!groups.length && !loading && (
+          <Box>
+            <Typography variant="body2">{translate('resources.topics.permissions.all_assigned')}</Typography>
+          </Box>
+        )}
+        {!!groups.length && !loading && (
+          <>
+            <Box borderBottom="1px solid #D5D5D5" mb={2}>
+              <Typography>{translate('resources.topics.permissions.create_new')}</Typography>
+            </Box>
+            <Box boxShadow={3}>
+              <PermissionForm
+                initialValues={{
+                  group_id: null,
+                  edit: false,
+                  delete: false,
+                  view: false,
+                  manage: false,
+                }}
+                onSubmit={onSubmit}
+                groups={groups}
+                loading={loading}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Dialog>
   );

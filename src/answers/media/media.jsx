@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-  Confirm,
-  FileInput,
-  useTranslate,
-} from 'react-admin';
+import { useDataProvider, useNotify, Confirm, FileInput, useTranslate } from 'react-admin';
 import { Form } from 'react-final-form'; // eslint-disable-line
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
@@ -26,20 +20,14 @@ import useAnswer from '../useAnswer';
 
 const Icon = ({ media }) => {
   if (media.type.startsWith('image')) {
-    return (
-      <ImageIcon />
-    );
+    return <ImageIcon />;
   }
 
   if (media.type.startsWith('audio')) {
-    return (
-      <AudioIcon />
-    );
+    return <AudioIcon />;
   }
 
-  return (
-    <VideoIcon />
-  );
+  return <VideoIcon />;
 };
 
 const MediaList = ({ answer }) => {
@@ -93,7 +81,8 @@ const MediaList = ({ answer }) => {
     }
   };
 
-  const upload = async (values) => { // eslint-disable-line
+  const upload = async (values) => {
+    // eslint-disable-line
     try {
       await dataProvider.uploadAnswerMedia(null, {
         id: answer.id,
@@ -124,61 +113,46 @@ const MediaList = ({ answer }) => {
         onConfirm={destroy}
         onClose={deleteMediaClosed}
       />
-      <PreviewDialog
-        open={open}
-        onClose={onClose}
-        media={media}
-      />
-      {
-        !answer.AnswerMedia.length && (
-          <Alert severity="info" elevation={3}>
-            {translate('resources.answers.no_media')}
-          </Alert>
-        )
-      }
-      {
-        !!answer.AnswerMedia.length && (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>{translate('misc.type')}</TableCell>
-                <TableCell>&nbsp;</TableCell>
-                <TableCell>&nbsp;</TableCell>
+      <PreviewDialog open={open} onClose={onClose} media={media} />
+      {!answer.AnswerMedia.length && (
+        <Alert severity="info" elevation={3}>
+          {translate('resources.answers.no_media')}
+        </Alert>
+      )}
+      {!!answer.AnswerMedia.length && (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{translate('misc.type')}</TableCell>
+              <TableCell>&nbsp;</TableCell>
+              <TableCell>&nbsp;</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {answer.AnswerMedia.map((m, i) => (
+              <TableRow key={i}>
+                <TableCell>{m.type}</TableCell>
+                <TableCell>
+                  <Button type="button" onClick={() => onOpen(m)} size="small" variant="outlined">
+                    <Icon media={m} /> {translate('misc.view')}
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    style={{ borderColor: 'red', color: 'red' }}
+                    size="small"
+                    type="button"
+                    onClick={() => deleteMediaClicked(m.id)}
+                    variant="outlined"
+                  >
+                    {translate('ra.action.delete')}
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {
-                answer.AnswerMedia.map((m, i) => (
-                  <TableRow key={i}>
-                    <TableCell>{m.type}</TableCell>
-                    <TableCell>
-                      <Button
-                        type="button"
-                        onClick={() => onOpen(m)}
-                        size="small"
-                        variant="outlined"
-                      >
-                        <Icon media={m} /> {translate('misc.view')}
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        style={{ borderColor: 'red', color: 'red' }}
-                        size="small"
-                        type="button"
-                        onClick={() => deleteMediaClicked(m.id)}
-                        variant="outlined"
-                      >
-                        {translate('ra.action.delete')}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              }
-            </TableBody>
-          </Table>
-        )
-      }
+            ))}
+          </TableBody>
+        </Table>
+      )}
       <Box my={2}>
         <hr />
         <Typography>{translate('resources.answers.upload_media')}</Typography>
@@ -187,9 +161,7 @@ const MediaList = ({ answer }) => {
           initialValues={{
             file: null,
           }}
-          render={({
-            handleSubmit, values, form, submitting,
-          }) => {
+          render={({ handleSubmit, values, form, submitting }) => {
             return (
               <form onSubmit={(e) => handleSubmit(e).then(form.reset)}>
                 <Grid container spacing={2}>
@@ -201,18 +173,8 @@ const MediaList = ({ answer }) => {
                   <Grid item xs={12} container justify="center">
                     <Grid item xs={12} sm={4}>
                       <Box pt={2}>
-                        <Button
-                          type="submit"
-                          color="primary"
-                          variant="contained"
-                          fullWidth
-                          disabled={!values.file || submitting}
-                        >
-                          {
-                            submitting
-                              ? translate('misc.uploading')
-                              : translate('misc.upload')
-                          }
+                        <Button type="submit" color="primary" variant="contained" fullWidth disabled={!values.file || submitting}>
+                          {submitting ? translate('misc.uploading') : translate('misc.upload')}
                         </Button>
                       </Box>
                     </Grid>

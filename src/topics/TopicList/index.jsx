@@ -175,7 +175,7 @@ const TopicList = () => {
                 setPage,
                 setPageSize,
                 onSortClick,
-                currentSort: sort
+                currentSort: sort,
               }}
             />
           </>

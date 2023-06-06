@@ -1,13 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  Edit,
-  SimpleForm,
-  TextInput,
-  required,
-  DateInput,
-  SelectInput,
-} from 'react-admin';
+import { Edit, SimpleForm, TextInput, required, DateInput, SelectInput } from 'react-admin';
 
 const EditDemo = ({ dispatch, topics, ...props }) => (
   <Edit {...props} undoable={false}>
@@ -31,9 +24,7 @@ const EditDemo = ({ dispatch, topics, ...props }) => (
 );
 
 const mapStateToProps = (state) => {
-  const topics = state.custom.topics
-    ? state.custom.topics
-    : [];
+  const topics = state.custom.topics ? state.custom.topics : [];
 
   return { topics };
 };

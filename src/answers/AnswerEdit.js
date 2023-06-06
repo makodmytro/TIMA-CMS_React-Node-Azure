@@ -23,6 +23,7 @@ import { useIsAdmin } from '../hooks';
 
 const HIDE_FIELDS_TOPICS = process.env.REACT_APP_HIDE_FIELDS_ANSWERS?.split(',') || [];
 const SHOW_GPT_SUMMARIZE = process.env.REACT_APP_FEATURE_GPT_SUMMARIZE ?? false;
+const HIDE_ANSWER_INTENT = process.env.REACT_APP_HIDE_ANSWER_INTENT ? process.env.REACT_APP_HIDE_ANSWER_INTENT === '1' : true
 
 const HiddenField = ({ children, fieldName }) => {
   if (HIDE_FIELDS_TOPICS.includes(fieldName)) {
@@ -38,8 +39,8 @@ const useStyles = makeStyles(() => ({
     top: '50%',
     left: '50%',
     marginTop: -12,
-    marginLeft: -12
-  }
+    marginLeft: -12,
+  },
 }));
 
 const AnswerEdit = () => {
@@ -61,7 +62,7 @@ const AnswerEdit = () => {
     try {
       const { data } = await dataProvider.update('answers', {
         id,
-        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt'])
+        data: omit(values, ['RelatedQuestions', 'FollowupQuestions', 'WorkflowChanges', 'AnswerMedia', 'createdAt', 'deletedAt', 'updatedAt']),
       });
 
       if (data.fk_languageId !== answer.fk_languageId) {
@@ -80,8 +81,8 @@ const AnswerEdit = () => {
       setIsLoading(true);
       const { data } = await dataProvider.summarizeAnswer('answers', {
         data: {
-          text
-        }
+          text,
+        },
       });
       if (data.summary) {
         summarizeRef.current = data.summary;
@@ -112,8 +113,8 @@ const AnswerEdit = () => {
         id: questions[i].id,
         data: {
           fk_languageId,
-          fk_topicId
-        }
+          fk_topicId,
+        },
       });
 
       i += 1;
@@ -135,7 +136,7 @@ const AnswerEdit = () => {
     <>
       <CustomTopToolbar />
       <StatusWarning record={answer} />
-      {answer && isAdmin && <IntentEntity record={answer} />}
+      {!HIDE_ANSWER_INTENT && answer && isAdmin && <IntentEntity record={answer} />}
       <RelatedQuestionsActionsRow record={answer} />
       <Typography variant="h6" style={{ textTransform: 'uppercase' }}>
         {translate('misc.editing_answer')}
@@ -148,7 +149,7 @@ const AnswerEdit = () => {
             mutators={{
               replaceWithSummarized: (args, state, { changeValue }) => {
                 changeValue(state, 'text', () => summarized);
-              }
+              },
             }}
             enableReinitialize
             render={({ form, handleSubmit, valid, values }) => {
@@ -193,7 +194,7 @@ const AnswerEdit = () => {
                               <Fade
                                 in={isLoading}
                                 style={{
-                                  transitionDelay: isLoading ? '800ms' : '0ms'
+                                  transitionDelay: isLoading ? '800ms' : '0ms',
                                 }}
                                 unmountOnExit
                               >

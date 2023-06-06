@@ -27,7 +27,7 @@ export const useTopicsTree = () => {
     const now = +new Date();
 
     if (!loading) {
-      if (!topics.length || (!timestamp || (now - timestamp) / 1000 > 120)) {
+      if (!topics.length || !timestamp || (now - timestamp) / 1000 > 120) {
         fetch();
       }
     }

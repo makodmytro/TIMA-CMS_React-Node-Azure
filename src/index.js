@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PublicClientApplication } from '@azure/msal-browser';
-import {
-  MsalProvider,
-} from '@azure/msal-react';
+import { MsalProvider } from '@azure/msal-react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Sentry from '@sentry/react';
@@ -28,29 +26,23 @@ if (process.env.REACT_APP_SENTRY_DSN) {
 
 const Wrapper = ({ children }) => {
   if (USE_AZURE_LOGIN === '1') {
-    return (
-      <MsalProvider instance={msalInstance}>
-        {children}
-      </MsalProvider>
-    );
+    return <MsalProvider instance={msalInstance}>{children}</MsalProvider>;
   }
 
-  return (
-    <div>{children}</div>
-  );
+  return <div>{children}</div>;
 };
 
 ReactDOM.render(
   <Sentry.ErrorBoundary fallback="An error has occurred">
-  <ClearBrowserCacheBoundary auto fallback="Loading..." duration={2000}>
-    <Wrapper>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <App />
-      </MuiPickersUtilsProvider>
-    </Wrapper>
-  </ClearBrowserCacheBoundary>
+    <ClearBrowserCacheBoundary auto fallback="Loading..." duration={2000}>
+      <Wrapper>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <App />
+        </MuiPickersUtilsProvider>
+      </Wrapper>
+    </ClearBrowserCacheBoundary>
   </Sentry.ErrorBoundary>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

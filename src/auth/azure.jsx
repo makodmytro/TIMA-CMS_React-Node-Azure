@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useAuthProvider,
-  useDataProvider,
-  useRedirect,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { useAuthProvider, useDataProvider, useRedirect, useNotify, useTranslate } from 'react-admin';
 import { useStore } from 'react-redux';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { Typography, Box, Button } from '@material-ui/core';
@@ -47,10 +41,7 @@ const Authenticated = ({ setLoading }) => {
       if (success) {
         if (USE_WORKFLOW) {
           try {
-            const [roles, status] = await Promise.all([
-              dataProvider.workflowRoles(),
-              dataProvider.workflowStatus(),
-            ]);
+            const [roles, status] = await Promise.all([dataProvider.workflowRoles(), dataProvider.workflowStatus()]);
             store.dispatch({ type: 'CUSTOM_WORKFLOW_ROLES_FETCH_SUCCESS', payload: roles.data });
             store.dispatch({ type: 'CUSTOM_WORKFLOW_STATUS_FETCH_SUCCESS', payload: status.data });
           } catch (e) {} // eslint-disable-line
@@ -102,32 +93,28 @@ const Authenticated = ({ setLoading }) => {
   return (
     <Box>
       {AZURE_LOGIN && (
-      <Button onClick={login} fullWidth variant="outlined" {...USE_ALT_THEME ? { style: { color: 'white' }, color: 'secondary' } : {}}>
-        <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
-      </Button>
+        <Button onClick={login} fullWidth variant="outlined" {...(USE_ALT_THEME ? { style: { color: 'white' }, color: 'secondary' } : {})}>
+          <img src={Logo} alt="ms" width="20px" /> &nbsp;&nbsp;{translate('misc.azure_login')}
+        </Button>
       )}
-      {
-        error && (
-          <Box textAlign="center" mt={15} display="flex" justifyContent="center">
-            <Box p={2} width="40vw">
-              <Alert severity="info" elevation={3}>
-                {translate('misc.azure_403')}
-              </Alert>
-              <Box mt={2}>
-                <Typography onClick={onClick} variant="body2" style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }}>
-                  {translate('ra.auth.logout')}
-                </Typography>
-              </Box>
+      {error && (
+        <Box textAlign="center" mt={15} display="flex" justifyContent="center">
+          <Box p={2} width="40vw">
+            <Alert severity="info" elevation={3}>
+              {translate('misc.azure_403')}
+            </Alert>
+            <Box mt={2}>
+              <Typography onClick={onClick} variant="body2" style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }}>
+                {translate('ra.auth.logout')}
+              </Typography>
             </Box>
           </Box>
-        )
-      }
+        </Box>
+      )}
     </Box>
   );
 };
 
 export default ({ setLoading }) => {
-  return (
-    <Authenticated setLoading={setLoading} />
-  );
+  return <Authenticated setLoading={setLoading} />;
 };

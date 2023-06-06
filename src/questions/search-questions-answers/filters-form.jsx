@@ -1,11 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form'; // eslint-disable-line
-import {
-  SelectInput,
-  TextInput,
-  BooleanInput,
-  useTranslate,
-} from 'react-admin';
+import { SelectInput, TextInput, BooleanInput, useTranslate } from 'react-admin';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -38,55 +33,35 @@ const Filters = ({ onSubmit, initialValues }) => {
                   fullWidth
                 />
               </Grid>
-              {
-                values.type === 'questions' && (
-                  <>
-                    {
-                      !USE_WORKFLOW && (
-                        <Grid item xs={12} sm={4} md={3}>
-                          <SelectInput
-                            label="Approved"
-                            source="approved"
-                            choices={[
-                              { id: '__none__', name: translate('misc.both') },
-                              { id: true, name: translate('misc.only_approved_questions') },
-                              { id: false, name: translate('misc.only_not_approved_questions') },
-                            ]}
-                            fullWidth
-                          />
-                        </Grid>
-                      )
-                    }
-                    {
-                      !HIDE_IGNORED && (
-                        <Grid item xs={12} sm={4} md={3}>
-                          <BooleanInput
-                            label="resources.questions.fields.ignored"
-                            source="ignored"
-                            alwaysOn
-                            onChange={() => handleSubmit()}
-                          />
-                        </Grid>
-                      )
-                    }
-
-                  </>
-                )
-              }
+              {values.type === 'questions' && (
+                <>
+                  {!USE_WORKFLOW && (
+                    <Grid item xs={12} sm={4} md={3}>
+                      <SelectInput
+                        label="Approved"
+                        source="approved"
+                        choices={[
+                          { id: '__none__', name: translate('misc.both') },
+                          { id: true, name: translate('misc.only_approved_questions') },
+                          { id: false, name: translate('misc.only_not_approved_questions') },
+                        ]}
+                        fullWidth
+                      />
+                    </Grid>
+                  )}
+                  {!HIDE_IGNORED && (
+                    <Grid item xs={12} sm={4} md={3}>
+                      <BooleanInput label="resources.questions.fields.ignored" source="ignored" alwaysOn onChange={() => handleSubmit()} />
+                    </Grid>
+                  )}
+                </>
+              )}
               <Grid item xs={12} sm={4} md={3}>
-                <BooleanInput
-                  label="resources.questions.fields.all_topics"
-                  source="all_topics"
-                />
+                <BooleanInput label="resources.questions.fields.all_topics" source="all_topics" />
               </Grid>
               <Grid item xs={12} sm={4} md={3}>
                 <Box pt={2}>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                  >
+                  <Button type="submit" color="primary" variant="contained" fullWidth>
                     {translate('misc.search')}
                   </Button>
                 </Box>

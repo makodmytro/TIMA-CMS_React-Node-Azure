@@ -16,11 +16,11 @@ export const msalConfig = {
     authority: AZURE_AUTHORITY,
     redirectUri: AZURE_REDIRECT_URI, // eslint-disable-line
     postLogoutRedirectUri: AZURE_LOGOUT_REDIRECT_URI, // Indicates the page to navigate after logout.
-    navigateToLoginRequestUrl: false,
+    navigateToLoginRequestUrl: false
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
-    storeAuthStateInCookie: false, // Set this to 'true' if you are having issues on IE11 or Edge
+    storeAuthStateInCookie: false // Set this to 'true' if you are having issues on IE11 or Edge
   },
   system: {
     loggerOptions: {
@@ -62,14 +62,14 @@ export const loginRequest = {
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 export const graphConfig = {
-  graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
+  graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me'
 };
 
 /**
  * Attaches a given access token to a MS Graph API call. Returns information about the user
  * @param accessToken
  */
- export async function callMsGraph(accessToken) {
+export async function callMsGraph(accessToken) {
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
 
@@ -81,6 +81,6 @@ export const graphConfig = {
   };
 
   return fetch(graphConfig.graphMeEndpoint, options)
-    .then(response => response.json())
-    .catch(error => console.log(error));
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
 }

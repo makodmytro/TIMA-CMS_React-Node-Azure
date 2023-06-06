@@ -1,13 +1,6 @@
 import * as React from 'react';
 import orderBy from 'lodash/orderBy';
-import {
-  TextField,
-  DateField,
-  useDataProvider,
-  useRedirect,
-  useNotify,
-  useTranslate,
-} from 'react-admin';
+import { TextField, DateField, useDataProvider, useRedirect, useNotify, useTranslate } from 'react-admin';
 import { useParams, Link } from 'react-router-dom'; // eslint-disable-line
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -91,16 +84,11 @@ const QuestionLink = ({ record }) => {
   const classes = styles();
 
   if (!record.questionText) {
-    return (
-      <>-</>
-    );
+    return <>-</>;
   }
 
   return (
-    <Link
-      to={`/questions/${record.fk_questionId}`}
-      className={classes.link}
-    >
+    <Link to={`/questions/${record.fk_questionId}`} className={classes.link}>
       {record.questionText}
     </Link>
   );
@@ -126,34 +114,21 @@ const AnswerLink = ({ record }) => {
   }
 
   return (
-    <Link
-      to={`/answers/${record.fk_answerId}`}
-      className={classes.link}
-    >
+    <Link to={`/answers/${record.fk_answerId}`} className={classes.link}>
       {record.answerText.substr(0, 100)}...
     </Link>
   );
 };
 
-const TableView = ({
-  records, setSort, sortBy, sortDir,
-}) => {
+const TableView = ({ records, setSort, sortBy, sortDir }) => {
   const classes = styles();
   const translate = useTranslate();
 
   const SortableHeader = ({ label, field }) => (
     <TableCell className={classes.thead} onClick={() => setSort(field)}>
       {translate(label)}&nbsp;
-      {
-        field === sortBy && sortDir === true && (
-          <ArrowUp size="small" />
-        )
-      }
-      {
-        field === sortBy && sortDir === false && (
-          <ArrowDown size="small" />
-        )
-      }
+      {field === sortBy && sortDir === true && <ArrowUp size="small" />}
+      {field === sortBy && sortDir === false && <ArrowDown size="small" />}
     </TableCell>
   );
 
@@ -169,27 +144,25 @@ const TableView = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {
-          records.map((record, i) => (
-            <TableRow key={i} style={{ backgroundColor: record.fk_answerId ? 'transparent' : '#ff000030' }}>
-              <TableCell>
-                <DateField source="createdAt" record={record} showTime />
-              </TableCell>
-              <TableCell>
-                <TextField source="topicName" record={record} />
-              </TableCell>
-              <TableCell>
-                <QuestionLink record={record} />
-              </TableCell>
-              <TableCell>
-                <AnswerLink record={record} />
-              </TableCell>
-              <TableCell>
-                <TextField source="score" record={record} />
-              </TableCell>
-            </TableRow>
-          ))
-        }
+        {records.map((record, i) => (
+          <TableRow key={i} style={{ backgroundColor: record.fk_answerId ? 'transparent' : '#ff000030' }}>
+            <TableCell>
+              <DateField source="createdAt" record={record} showTime />
+            </TableCell>
+            <TableCell>
+              <TextField source="topicName" record={record} />
+            </TableCell>
+            <TableCell>
+              <QuestionLink record={record} />
+            </TableCell>
+            <TableCell>
+              <AnswerLink record={record} />
+            </TableCell>
+            <TableCell>
+              <TextField source="score" record={record} />
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
@@ -201,70 +174,52 @@ const ChatView = ({ records }) => {
 
   return (
     <Box p={2}>
-      {
-        records.map((record, i) => (
-          <Box key={i} my={2}>
-            <Box mt={1} className={classes.inputContainer}>
-              <div className={classes.input}>
-                <Typography component="span">
-                  {record.inputText}
+      {records.map((record, i) => (
+        <Box key={i} my={2}>
+          <Box mt={1} className={classes.inputContainer}>
+            <div className={classes.input}>
+              <Typography component="span">{record.inputText}</Typography>
+              {record.fk_questionId && (
+                <Typography align="right" className={classes.resourceLink}>
+                  <Link to={`/questions/${record.fk_questionId}`}>[{translate('misc.view')}]</Link>
                 </Typography>
-                {
-                  record.fk_questionId && (
-                    <Typography align="right" className={classes.resourceLink}>
-                      <Link to={`/questions/${record.fk_questionId}`}>
-                        [{translate('misc.view')}]
-                      </Link>
-                    </Typography>
-                  )
-                }
-              </div>
-            </Box>
-            <Box className={classes.inputContainer}>
-              <Typography variant="body2" component="div" className={classes.date}>
-                {format(new Date(record.createdAt), 'yyyy-MM-dd HH:mm')}
-              </Typography>
-            </Box>
-            <Box mt={1}>
-              <img src={Logo} alt="logo" width="60px" />
-              <div className={classes.output}>
-                <Typography component="span">
-                  {record.outputText}
-                </Typography>
-                {
-                  record.fk_answerId && (
-                    <Typography className={classes.resourceLink}>
-                      <Link to={`/answers/${record.fk_answerId}`}>
-                        [{translate('misc.view')}]
-                      </Link>
-                    </Typography>
-                  )
-                }
-              </div>
-              {
-                record.suggestedQuestions && !!record.suggestedQuestions.length && (
-                  <>
-                    <div className={classes.output}>
-                      <Typography component="span">
-                        {
-                          record.suggestedQuestions.map((sq, ii) => (
-                            <span key={ii}>
-                              <Link to={`/questions/${sq.id}`}>
-                                {ii + 1}. {sq.text}
-                              </Link>
-                              <br />
-                            </span>
-                          ))
-                        }
-                      </Typography>
-                    </div>
-                  </>
-                )
-              }
-            </Box>
+              )}
+            </div>
           </Box>
-        ))
-      }
+          <Box className={classes.inputContainer}>
+            <Typography variant="body2" component="div" className={classes.date}>
+              {format(new Date(record.createdAt), 'yyyy-MM-dd HH:mm')}
+            </Typography>
+          </Box>
+          <Box mt={1}>
+            <img src={Logo} alt="logo" width="60px" />
+            <div className={classes.output}>
+              <Typography component="span">{record.outputText}</Typography>
+              {record.fk_answerId && (
+                <Typography className={classes.resourceLink}>
+                  <Link to={`/answers/${record.fk_answerId}`}>[{translate('misc.view')}]</Link>
+                </Typography>
+              )}
+            </div>
+            {record.suggestedQuestions && !!record.suggestedQuestions.length && (
+              <>
+                <div className={classes.output}>
+                  <Typography component="span">
+                    {record.suggestedQuestions.map((sq, ii) => (
+                      <span key={ii}>
+                        <Link to={`/questions/${sq.id}`}>
+                          {ii + 1}. {sq.text}
+                        </Link>
+                        <br />
+                      </span>
+                    ))}
+                  </Typography>
+                </div>
+              </>
+            )}
+          </Box>
+        </Box>
+      ))}
     </Box>
   );
 };
@@ -327,32 +282,13 @@ const SessionShow = () => {
       <CustomTopToolbar />
       <FormGroup row>
         <FormControlLabel
-          control={(
-            <Switch
-              value={form.chat}
-              checked={form.chat}
-              onChange={(e) => setForm({ chat: e.target.checked })}
-            />
-          )}
+          control={<Switch value={form.chat} checked={form.chat} onChange={(e) => setForm({ chat: e.target.checked })} />}
           label={translate('resources.sessions.chat_view')}
         />
       </FormGroup>
       <Box mb={2} boxShadow={3}>
-        {
-          !form.chat && (
-            <TableView
-              records={records}
-              setSort={setSort}
-              sortBy={sortBy}
-              sortDir={sortDir}
-            />
-          )
-        }
-        {
-          form.chat && (
-            <ChatView records={records} />
-          )
-        }
+        {!form.chat && <TableView records={records} setSort={setSort} sortBy={sortBy} sortDir={sortDir} />}
+        {form.chat && <ChatView records={records} />}
       </Box>
     </>
   );

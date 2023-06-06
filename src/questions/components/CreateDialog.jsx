@@ -1,27 +1,10 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-  required,
-  TextInput,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate, required, TextInput } from 'react-admin';
 import { Form } from 'react-final-form';
-import {
-  Dialog,
-  Box,
-  Typography,
-  IconButton,
-  Button,
-} from '@material-ui/core';
+import { Dialog, Box, Typography, IconButton, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-const CreateDialog = ({
-  open,
-  onClose,
-  onSuccess,
-  initialValues,
-}) => {
+const CreateDialog = ({ open, onClose, onSuccess, initialValues }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const translate = useTranslate();
@@ -54,9 +37,7 @@ const CreateDialog = ({
           </Typography>
         </Box>
         <Box flex={1} textAlign="right">
-          <IconButton
-            onClick={onClose}
-          >
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -71,19 +52,9 @@ const CreateDialog = ({
           render={({ handleSubmit }) => {
             return (
               <form onSubmit={handleSubmit} autoComplete="off">
-                <TextInput
-                  label="resources.questions.fields.text"
-                  source="text"
-                  validate={required()}
-                  fullWidth
-                />
+                <TextInput label="resources.questions.fields.text" source="text" validate={required()} fullWidth />
                 <Box textAlign="right" py={2}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    size="small"
-                  >
+                  <Button variant="contained" color="primary" type="submit" size="small">
                     {translate('misc.save')}
                   </Button>
                 </Box>

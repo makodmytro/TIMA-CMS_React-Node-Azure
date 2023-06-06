@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  useTranslate,
-  useDataProvider,
-  useNotify,
-  BooleanField,
-} from 'react-admin';
+import { useTranslate, useDataProvider, useNotify, BooleanField } from 'react-admin';
 import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -26,9 +21,7 @@ import ContextOnlySwitchField from '../../../questions/components/ContextOnlySwi
 
 const USE_WORKFLOW = process.env.REACT_APP_USE_WORKFLOW === '1';
 
-const FollowupQuestionsTable = ({
-  record,
-}) => {
+const FollowupQuestionsTable = ({ record }) => {
   const languages = useSelector((state) => state.admin.resources?.languages?.data);
   const translate = useTranslate();
   const dataProvider = useDataProvider();
@@ -48,11 +41,7 @@ const FollowupQuestionsTable = ({
   };
 
   if (!record || !record.FollowupQuestions || !record.FollowupQuestions.length) {
-    return (
-      <Alert severity="info">
-        {translate('resources.questions.no_followup')}
-      </Alert>
-    );
+    return <Alert severity="info">{translate('resources.questions.no_followup')}</Alert>;
   }
 
   return (
@@ -60,86 +49,81 @@ const FollowupQuestionsTable = ({
       <TableHead>
         <TableRow>
           <TableCell>{translate('resources.questions.fields.text')}</TableCell>
-          {
-            !USE_WORKFLOW && (
-              <>
-                <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
-                <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
-              </>
-            )
-          }
+          {!USE_WORKFLOW && (
+            <>
+              <TableCell>{translate('resources.questions.fields.approved')}</TableCell>
+              <TableCell>{translate('resources.questions.use_as_suggestion')}</TableCell>
+            </>
+          )}
           <TableCell>&nbsp;</TableCell>
           <TableCell>{translate('resources.questions.fields.contextOnly')}</TableCell>
           <TableCell>&nbsp;</TableCell>
           <TableCell>&nbsp;</TableCell>
-
         </TableRow>
       </TableHead>
       <TableBody>
-        {
-          (record.FollowupQuestions || [])
-            .filter((r) => {
-              if (record.fk_answerId) {
-                return r.id !== record.id;
-              }
+        {(record.FollowupQuestions || [])
+          .filter((r) => {
+            if (record.fk_answerId) {
+              return r.id !== record.id;
+            }
 
-              return true;
-            })
-            .map((related, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <PlayableTextField
-                    source="text"
-                    getLanguageFromRecord={(r) => {
-                      return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
-                    }}
-                    record={{ ...related }}
-                  />
-                </TableCell>
-                {
-                    !USE_WORKFLOW && (
-                      <>
-                        <TableCell>
-                          <ApprovedSwitchField record={related} disabled={disabledApproved} />
-                        </TableCell>
-                        <TableCell>
-                          <UseAsSuggestionSwitchField record={related} disabled={disabled} />
-                        </TableCell>
-                      </>
+            return true;
+          })
+          .map((related, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <PlayableTextField
+                  source="text"
+                  getLanguageFromRecord={(r) => {
+                    return languages[r.fk_languageId] ? languages[r.fk_languageId].code : null;
+                  }}
+                  record={{ ...related }}
+                />
+              </TableCell>
+              {!USE_WORKFLOW && (
+                <>
+                  <TableCell>
+                    <ApprovedSwitchField record={related} disabled={disabledApproved} />
+                  </TableCell>
+                  <TableCell>
+                    <UseAsSuggestionSwitchField record={related} disabled={disabled} />
+                  </TableCell>
+                </>
+              )}
+              <TableCell>
+                <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
+              </TableCell>
+              <TableCell>
+                <ContextOnlySwitchField disabled={related.isDuplicated} record={related} afterEdit={refresh} />
+              </TableCell>
+              <TableCell>
+                <StatusInputSection record={related.Answer} disabled={false} />
+              </TableCell>
+              <TableCell>
+                <DropdownMenu
+                  record={{ ...related }}
+                  editInline
+                  disabled={disabled}
+                  onEditCallback={refresh}
+                  deleteComponent={
+                    record?.allowDelete !== false && (
+                      <Button
+                        onClick={() => onDelete(related.id)}
+                        type="button"
+                        size="small"
+                        style={{ justifyContent: 'flex-start', color: '#d64242' }}
+                        disabled={record?.allowDelete === false}
+                        fullWidth
+                      >
+                        <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
+                      </Button>
                     )
                   }
-                <TableCell>
-                  <AnswerField record={related} afterLink={refresh} noLinkOnlyCreate={related.Answer !== undefined} />
-                </TableCell>
-                <TableCell>
-                  <ContextOnlySwitchField disabled={related.isDuplicated} record={related} afterEdit={refresh} />
-                </TableCell>
-                <TableCell>
-                  <StatusInputSection record={related.Answer} disabled={false} />
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu
-                    record={{ ...related }}
-                    editInline
-                    disabled={disabled}
-                    onEditCallback={refresh}
-                    deleteComponent={record?.allowDelete !== false && (
-                    <Button
-                      onClick={() => onDelete(related.id)}
-                      type="button"
-                      size="small"
-                      style={{ justifyContent: 'flex-start', color: '#d64242' }}
-                      disabled={record?.allowDelete === false}
-                      fullWidth
-                    >
-                      <DeleteIcon style={{ fontSize: '20px' }} /> &nbsp;{translate('misc.delete')}
-                    </Button>
-                    )}
-                  />
-                </TableCell>
-              </TableRow>
-            ))
-        }
+                />
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

@@ -1,7 +1,5 @@
 import React from 'react'; // eslint-disable-line
-import {
-  usePermissions,
-} from 'react-admin';
+import { usePermissions } from 'react-admin';
 
 // function non-hook to use in other places
 export const boolDisabledEdit = (permissions, id, fallback = true) => {
@@ -84,7 +82,8 @@ export const useRecursiveTimeout = (callback, delay) => {
     savedCallback.current = callback;
   }, [callback]);
 
-  React.useEffect(() => { // eslint-disable-line
+  React.useEffect(() => {
+    // eslint-disable-line
     let id;
     function tick() {
       const ret = savedCallback.current();

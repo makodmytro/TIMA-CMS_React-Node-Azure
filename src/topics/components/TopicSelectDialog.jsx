@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  useTranslate,
-  TextField,
-} from 'react-admin';
+import { useTranslate, TextField } from 'react-admin';
 import isEqual from 'lodash/isEqual';
 import Checkbox from '@material-ui/core/Checkbox';
 import Table from '@material-ui/core/Table';
@@ -24,14 +21,7 @@ import { useTopicsTree } from '../useTopics';
 
 const TOPICS_TREE_CHILD_COLOR = process.env.REACT_APP_TOPICS_TREE_CHILD_COLOR || '498ca752';
 
-const Row = ({
-  record,
-  selected,
-  toggleSelected,
-  expanded,
-  toggleExpanded,
-  level,
-}) => {
+const Row = ({ record, selected, toggleSelected, expanded, toggleExpanded, level }) => {
   const bg = !level ? 'initial' : `#${(parseInt(TOPICS_TREE_CHILD_COLOR, 16) + 32 * level).toString(16)}`;
   const isExpanded = expanded.includes(record.id);
 
@@ -44,30 +34,29 @@ const Row = ({
 
     return acc + ct.ChildTopics.filter((ctt) => selected.includes(ctt.id)).length;
   }, 0);
-  const indeterminateGrandchildren = grandChildrenSelected && (grandChildrenSelected + childrenSelected) !== (grandChildren + record.ChildTopics.length) && grandChildren > 0;
+  const indeterminateGrandchildren =
+    grandChildrenSelected && grandChildrenSelected + childrenSelected !== grandChildren + record.ChildTopics.length && grandChildren > 0;
 
   return (
     <>
       <TableRow style={{ backgroundColor: bg, cursor: 'pointer' }}>
         <TableCell>
-          {
-            !!record.ChildTopics && record.ChildTopics.length > 0 && (
-              <>
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
+          {!!record.ChildTopics && record.ChildTopics.length > 0 && (
+            <>
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-                    return toggleExpanded(record.id);
-                  }}
-                >
-                  { !isExpanded && <AddIcon fontSize="small" /> }
-                  { isExpanded && <MinusIcon fontSize="small" /> }
-                </IconButton>
-              </>
-            )
-          }
+                  return toggleExpanded(record.id);
+                }}
+              >
+                {!isExpanded && <AddIcon fontSize="small" />}
+                {isExpanded && <MinusIcon fontSize="small" />}
+              </IconButton>
+            </>
+          )}
         </TableCell>
         <TableCell style={level ? { paddingLeft: `${30 * level}px` } : {}}>
           <TextField record={record} source="name" />
@@ -82,37 +71,28 @@ const Row = ({
           />
         </TableCell>
       </TableRow>
-      {
-        isExpanded && record.ChildTopics && record.ChildTopics.length > 0 && (
-          <>
-            {
-              record.ChildTopics.map((child, iii) => (
-                <Row
-                  record={child}
-                  {...{
-                    selected,
-                    toggleSelected,
-                    expanded,
-                    toggleExpanded,
-                  }}
-                  key={iii}
-                  level={(level || 0) + 1}
-                />
-              ))
-            }
-          </>
-        )
-      }
+      {isExpanded && record.ChildTopics && record.ChildTopics.length > 0 && (
+        <>
+          {record.ChildTopics.map((child, iii) => (
+            <Row
+              record={child}
+              {...{
+                selected,
+                toggleSelected,
+                expanded,
+                toggleExpanded,
+              }}
+              key={iii}
+              level={(level || 0) + 1}
+            />
+          ))}
+        </>
+      )}
     </>
   );
 };
 
-export default function TopicSelectDialog({
-  open,
-  onConfirm,
-  onClose,
-  initialValues,
-}) {
+export default function TopicSelectDialog({ open, onConfirm, onClose, initialValues }) {
   const translate = useTranslate();
   const { topics, loading } = useTopicsTree();
   const [selected, setSelected] = React.useState([]);
@@ -213,7 +193,12 @@ export default function TopicSelectDialog({
         return acc + gcSelected;
       }, 0);
 
-      if (topic.ChildTopics.length && childrenSelected === topic.ChildTopics.length && grandChildren === grandChildrenSelected && !selected.includes(topic.id)) {
+      if (
+        topic.ChildTopics.length &&
+        childrenSelected === topic.ChildTopics.length &&
+        grandChildren === grandChildrenSelected &&
+        !selected.includes(topic.id)
+      ) {
         ids.push(topic.id);
       }
 
@@ -267,33 +252,27 @@ export default function TopicSelectDialog({
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
         <DialogTitle id="form-dialog-title">
           <Box display="flex">
-            <Box flex={2}>
-              {translate('resources.topics.filter_by_topics')}
-            </Box>
+            <Box flex={2}>{translate('resources.topics.filter_by_topics')}</Box>
             <Box flex={1} textAlign="right">
-              {
-                loading > 0 && <CircularProgress color="primary" size={20} />
-              }
+              {loading > 0 && <CircularProgress color="primary" size={20} />}
             </Box>
           </Box>
         </DialogTitle>
         <DialogContent>
           <Table>
             <TableBody>
-              {
-                topics.map((record, i) => (
-                  <Row
-                    key={i}
-                    record={record}
-                    {...{
-                      selected,
-                      toggleSelected,
-                      expanded,
-                      toggleExpanded,
-                    }}
-                  />
-                ))
-              }
+              {topics.map((record, i) => (
+                <Row
+                  key={i}
+                  record={record}
+                  {...{
+                    selected,
+                    toggleSelected,
+                    expanded,
+                    toggleExpanded,
+                  }}
+                />
+              ))}
             </TableBody>
           </Table>
         </DialogContent>
@@ -309,20 +288,10 @@ export default function TopicSelectDialog({
           >
             {translate('misc.clear')}
           </Button>
-          <Button
-            onClick={onClose}
-            color="secondary"
-            variant="outlined"
-            size="small"
-          >
+          <Button onClick={onClose} color="secondary" variant="outlined" size="small">
             {translate('misc.cancel')}
           </Button>
-          <Button
-            onClick={() => onConfirm(selected)}
-            color="primary"
-            variant="outlined"
-            size="small"
-          >
+          <Button onClick={() => onConfirm(selected)} color="primary" variant="outlined" size="small">
             {translate('misc.confirm')}
           </Button>
         </DialogActions>

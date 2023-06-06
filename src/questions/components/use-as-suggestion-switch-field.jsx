@@ -1,10 +1,6 @@
 import React from 'react';
 import Switch from '@material-ui/core/Switch';
-import {
-  useDataProvider,
-  useNotify,
-  useRefresh,
-} from 'react-admin';
+import { useDataProvider, useNotify, useRefresh } from 'react-admin';
 
 const UseAsSuggestionSwitchField = ({ record, disabled }) => {
   const dataProvider = useDataProvider();

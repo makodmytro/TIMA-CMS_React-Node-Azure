@@ -1,17 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  List,
-  Datagrid,
-  TextInput,
-  Filter,
-  DateField,
-  EditButton,
-  DeleteButton,
-  TextField,
-  BooleanInput,
-  FunctionField,
-} from 'react-admin';
+import { List, Datagrid, TextInput, Filter, DateField, EditButton, DeleteButton, TextField, BooleanInput, FunctionField } from 'react-admin';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -56,11 +45,7 @@ const DemoUrl = ({ record }) => {
     <div>
       {record.demoUrl}&nbsp;
       <Tooltip title="Copied to clipboard" open={open} placement="bottom">
-        <IconButton
-          type="button"
-          color="primary"
-          onClick={onClick}
-        >
+        <IconButton type="button" color="primary" onClick={onClick}>
           <CopyIcon />
         </IconButton>
       </Tooltip>
@@ -85,30 +70,15 @@ const Code = ({ record }) => (
 const DemosFilters = (props) => {
   return (
     <Filter {...props}>
-      <TextInput
-        source="search"
-        label="Text"
-        alwaysOn
-      />
-      <TextInput
-        source="code"
-        label="Code"
-        alwaysOn
-      />
+      <TextInput source="search" label="Text" alwaysOn />
+      <TextInput source="code" label="Code" alwaysOn />
       <BooleanInput source="active" label="Active" alwaysOn />
     </Filter>
   );
 };
 
 const DemosList = (props) => (
-  <List
-    {...props}
-    bulkActionButtons={false}
-    filters={(
-      <DemosFilters />
-    )}
-    filterDefaultValues={{ active: true }}
-  >
+  <List {...props} bulkActionButtons={false} filters={<DemosFilters />} filterDefaultValues={{ active: true }}>
     <Datagrid rowClick="edit">
       <LinkField label="Link" />
       <DemoUrl label="Demo URL" />

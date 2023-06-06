@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  ReferenceInput,
-  SelectInput,
-  BooleanInput,
-  TextInput,
-  useListContext,
-  useTranslate,
-} from 'react-admin';
+import { ReferenceInput, SelectInput, BooleanInput, TextInput, useListContext, useTranslate } from 'react-admin';
 import { useSelector } from 'react-redux';
 import { Form } from 'react-final-form';
 import Button from '@material-ui/core/Button';
@@ -25,10 +18,7 @@ const Filters = ({ languages, topics, ...props }) => {
   const [open, setOpen] = React.useState(false);
   const translate = useTranslate();
   const status = useSelector((state) => state.custom.workflowStatus);
-  const {
-    filterValues,
-    setFilters,
-  } = useListContext();
+  const { filterValues, setFilters } = useListContext();
 
   if (props.context === 'button') {
     return null;
@@ -76,26 +66,24 @@ const Filters = ({ languages, topics, ...props }) => {
             <Typography style={{ transform: 'uppercase' }}>{translate('misc.filters')}</Typography>
           </Box>
           <TextInput label="resources.answers.fields.filter" source="q" alwaysOn onChange={() => handleSubmit()} />
-          {
-            languages?.length > 1 && (
-              <ReferenceInput
-                onChange={() => handleSubmit()}
-                label="resources.answers.fields.fk_languageId"
-                source="fk_languageId"
-                reference="languages"
-                alwaysOn
+          {languages?.length > 1 && (
+            <ReferenceInput
+              onChange={() => handleSubmit()}
+              label="resources.answers.fields.fk_languageId"
+              source="fk_languageId"
+              reference="languages"
+              alwaysOn
+              allowEmpty
+            >
+              <SelectInput
+                disabled={Boolean(filterValues.fk_topicId)}
+                optionText="name"
+                className={classes.select}
                 allowEmpty
-              >
-                <SelectInput
-                  disabled={Boolean(filterValues.fk_topicId)}
-                  optionText="name"
-                  className={classes.select}
-                  allowEmpty
-                  emptyText={translate('misc.all')}
-                />
-              </ReferenceInput>
-            )
-          }
+                emptyText={translate('misc.all')}
+              />
+            </ReferenceInput>
+          )}
 
           <ReferenceInput
             onChange={() => handleSubmit()}
@@ -108,79 +96,62 @@ const Filters = ({ languages, topics, ...props }) => {
           >
             <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.all')} />
           </ReferenceInput>
-          {
-            TOPICS_ENABLE_TREE_LIST === '1' && (
-              <Box display="inline-flex" style={{ verticalAlign: 'top', flexDirection: 'column' }} pb={4}>
-                <Button onClick={() => setOpen(true)}>
-                  {translate('resources.topics.filter_by_topics')} {filterValues.fk_topicId ? `(${filterValues.fk_topicId.length})` : ''}
-                </Button>
-                <TopicSelectDialog
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  onConfirm={onTopicFilterConfirm}
-                  initialValues={filterValues.fk_topicId || []}
-                />
-              </Box>
-            )
-          }
-          {
-            TOPICS_ENABLE_TREE_LIST !== '1' && (
-              <ReferenceInput
-                label="resources.answers.fields.fk_topicId"
-                source="fk_topicId"
-                reference="topics"
-                alwaysOn
-                allowEmpty
-                perPage={100}
-                onChange={handleTopicChange}
-                filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId }
-                  : null}
-              >
-                <SelectInput
-                  optionText="name"
-                  className={classes.select}
-                  allowEmpty
-                  emptyText={translate('misc.all')}
-                />
-              </ReferenceInput>
-            )
-          }
-          {
-            !USE_WORKFLOW && (
-              <SelectInput
-                label="resources.answers.fields.approved"
-                source="approved"
-                allowEmpty
-                emptyText={translate('misc.both')}
-                onChange={() => handleSubmit()}
-                defaultValue=""
-                choices={[
-                  { id: true, name: <DoneIcon color="primary" /> },
-                  { id: false, name: <ClearIcon /> },
-                ]}
+          {TOPICS_ENABLE_TREE_LIST === '1' && (
+            <Box display="inline-flex" style={{ verticalAlign: 'top', flexDirection: 'column' }} pb={4}>
+              <Button onClick={() => setOpen(true)}>
+                {translate('resources.topics.filter_by_topics')} {filterValues.fk_topicId ? `(${filterValues.fk_topicId.length})` : ''}
+              </Button>
+              <TopicSelectDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                onConfirm={onTopicFilterConfirm}
+                initialValues={filterValues.fk_topicId || []}
               />
-            )
-          }
-          {
-            USE_WORKFLOW && (
-              <SelectInput
-                label="resources.answers.fields.status"
-                source="status"
-                allowEmpty
-                emptyText={translate('misc.all')}
-                onChange={() => handleSubmit()}
-                defaultValue=""
-                choices={status.map((s) => ({
-                  id: s.value, name: translate(`resources.users.workflow.status.${s.name}`),
-                }))}
-              />
-            )
-          }
-          <BooleanInput
-            source="isContextOnly"
-            label="resources.answers.fields.isContextOnly"
-            onChange={() => handleSubmit()}
-          />
+            </Box>
+          )}
+          {TOPICS_ENABLE_TREE_LIST !== '1' && (
+            <ReferenceInput
+              label="resources.answers.fields.fk_topicId"
+              source="fk_topicId"
+              reference="topics"
+              alwaysOn
+              allowEmpty
+              perPage={100}
+              onChange={handleTopicChange}
+              filter={filterValues.fk_languageId ? { fk_languageId: filterValues.fk_languageId } : null}
+            >
+              <SelectInput optionText="name" className={classes.select} allowEmpty emptyText={translate('misc.all')} />
+            </ReferenceInput>
+          )}
+          {!USE_WORKFLOW && (
+            <SelectInput
+              label="resources.answers.fields.approved"
+              source="approved"
+              allowEmpty
+              emptyText={translate('misc.both')}
+              onChange={() => handleSubmit()}
+              defaultValue=""
+              choices={[
+                { id: true, name: <DoneIcon color="primary" /> },
+                { id: false, name: <ClearIcon /> },
+              ]}
+            />
+          )}
+          {USE_WORKFLOW && (
+            <SelectInput
+              label="resources.answers.fields.status"
+              source="status"
+              allowEmpty
+              emptyText={translate('misc.all')}
+              onChange={() => handleSubmit()}
+              defaultValue=""
+              choices={status.map((s) => ({
+                id: s.value,
+                name: translate(`resources.users.workflow.status.${s.name}`),
+              }))}
+            />
+          )}
+          <BooleanInput source="isContextOnly" label="resources.answers.fields.isContextOnly" onChange={() => handleSubmit()} />
         </form>
       )}
     </Form>

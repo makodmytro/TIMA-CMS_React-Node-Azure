@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  ReferenceInput,
-  required,
-  SelectInput,
-  TextInput,
-  useTranslate,
-  useDataProvider,
-} from 'react-admin';
+import { ReferenceInput, required, SelectInput, TextInput, useTranslate, useDataProvider } from 'react-admin';
 import { useLocation } from 'react-router-dom';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
@@ -30,9 +23,7 @@ export const Qna = (props) => {
 
   return (
     <>
-      <Typography>
-        {translate('misc.qna')}
-      </Typography>
+      <Typography>{translate('misc.qna')}</Typography>
       <TextInput
         source="qnaMetadataKey"
         label="resources.topics.fields.qnaMetadataKey"
@@ -64,11 +55,21 @@ const FormFields = (props) => {
   const {
     input: { value: fkLanguageId, onChange: changeLanguage },
   } = useField('fk_languageId');
-  const { input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange } } = useField('fk_parentTopicId');
-  const { input: { onChange: qnaApiEndpointChange } } = useField('qnaApiEndpoint');
-  const { input: { onChange: qnaApiVersionChange } } = useField('qnaApiVersion');
-  const { input: { onChange: qnaSubscriptionKeyChange } } = useField('qnaSubscriptionKey');
-  const { input: { onChange: qnaKnowledgeBaseIdChange } } = useField('qnaKnowledgeBaseId');
+  const {
+    input: { value: fkParentTopicId, onChange: onFkParentTopicIdChange },
+  } = useField('fk_parentTopicId');
+  const {
+    input: { onChange: qnaApiEndpointChange },
+  } = useField('qnaApiEndpoint');
+  const {
+    input: { onChange: qnaApiVersionChange },
+  } = useField('qnaApiVersion');
+  const {
+    input: { onChange: qnaSubscriptionKeyChange },
+  } = useField('qnaSubscriptionKey');
+  const {
+    input: { onChange: qnaKnowledgeBaseIdChange },
+  } = useField('qnaKnowledgeBaseId');
 
   const getLang = (r) => {
     if (!r || !r.fk_languageId || !props.languages[r.fk_languageId]) {
@@ -125,23 +126,13 @@ const FormFields = (props) => {
           label="resources.topics.fields.name"
         />
       </HiddenField>
-      {
-        _languages && _languages.length > 1 && (
-          <HiddenField fieldName="fk_languageId">
-            <ReferenceInput
-              validate={required()}
-              source="fk_languageId"
-              reference="languages"
-              label="resources.topics.fields.language"
-              fullWidth
-            >
-              <SelectInput
-                optionText="name"
-              />
-            </ReferenceInput>
-          </HiddenField>
-        )
-      }
+      {_languages && _languages.length > 1 && (
+        <HiddenField fieldName="fk_languageId">
+          <ReferenceInput validate={required()} source="fk_languageId" reference="languages" label="resources.topics.fields.language" fullWidth>
+            <SelectInput optionText="name" />
+          </ReferenceInput>
+        </HiddenField>
+      )}
       <HiddenField fieldName="fk_parentTopicId">
         <TopicSelect
           source="fk_parentTopicId"

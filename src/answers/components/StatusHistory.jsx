@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  useDataProvider,
-  useTranslate,
-  useNotify,
-  DateField,
-  TextField,
-  FunctionField,
-} from 'react-admin';
+import { useDataProvider, useTranslate, useNotify, DateField, TextField, FunctionField } from 'react-admin';
 import { useSelector, useDispatch } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -76,7 +69,9 @@ const StatusHistory = ({ record }) => {
         const _prev = status.find((s) => s.value === r.previousStatus);
 
         if (_prev) {
-          return `${translate(`resources.users.workflow.status.${_prev?.name}`)} -> ${translate(`resources.users.workflow.status.${_new?.name}`)}`;
+          return `${translate(`resources.users.workflow.status.${_prev?.name}`)} -> ${translate(
+            `resources.users.workflow.status.${_new?.name}`
+          )}`;
         }
       }
 
@@ -93,14 +88,8 @@ const StatusHistory = ({ record }) => {
   return (
     <Box width="100%">
       <Accordion defaultExpanded>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>
-            {translate('resources.answers.status_history')}
-          </Typography>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+          <Typography>{translate('resources.answers.status_history')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box width="100%" flex={1}>
@@ -114,24 +103,22 @@ const StatusHistory = ({ record }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {
-                  history.map((row, i) => (
-                    <TableRow key={i}>
-                      <TableCell>
-                        <DateField record={row} source="createdAt" showTime />
-                      </TableCell>
-                      <TableCell>
-                        <TextField record={row} source="updatedBy" />
-                      </TableCell>
-                      <TableCell>
-                        <FunctionField record={row} render={render} />
-                      </TableCell>
-                      <TableCell>
-                        <TextField record={row} source="comment" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                }
+                {history.map((row, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <DateField record={row} source="createdAt" showTime />
+                    </TableCell>
+                    <TableCell>
+                      <TextField record={row} source="updatedBy" />
+                    </TableCell>
+                    <TableCell>
+                      <FunctionField record={row} render={render} />
+                    </TableCell>
+                    <TableCell>
+                      <TextField record={row} source="comment" />
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </Box>

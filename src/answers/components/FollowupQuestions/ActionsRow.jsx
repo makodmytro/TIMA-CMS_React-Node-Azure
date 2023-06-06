@@ -38,11 +38,7 @@ const ActionsRow = ({ record }) => {
         </Box>
         <Box flex={6}>
           <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
-            >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Typography>
                 {record.FollowupQuestions?.length || 0} {translate('resources.answers.followup_questions')}
               </Typography>

@@ -3,17 +3,10 @@ import { Form } from 'react-final-form';
 import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import {
-  SelectInput,
-  useTranslate,
-  required,
-} from 'react-admin';
+import { SelectInput, useTranslate, required } from 'react-admin';
 import TopicSelect from '../../../topics/components/TopicSelect';
 
-const StepOne = ({
-  initialValues,
-  onSubmit,
-}) => {
+const StepOne = ({ initialValues, onSubmit }) => {
   const translate = useTranslate();
   const languages = useSelector((s) => s.custom.languages);
 

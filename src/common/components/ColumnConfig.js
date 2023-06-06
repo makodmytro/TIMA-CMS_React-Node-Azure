@@ -17,9 +17,7 @@ const cleanResourceName = (resource) => {
   return resource === 'stats/sessions' ? 'sessions' : resource;
 };
 
-const ColumnConfig = ({
-  columns, visible, onChange, resource,
-}) => {
+const ColumnConfig = ({ columns, visible, onChange, resource }) => {
   const translate = useTranslate();
   const LANGUAGE_COLUMN = process.env.REACT_APP_HIDE_LANGUAGE_COLUMN === '1';
   const TAGS_COLUMN = process.env.REACT_APP_HIDE_TAGS_COLUMN === '1';
@@ -41,36 +39,24 @@ const ColumnConfig = ({
 
   return (
     <>
-      <Button
-        color="primary"
-        size="small"
-        onClick={() => setOpen(true)}
-      >
+      <Button color="primary" size="small" onClick={() => setOpen(true)}>
         <SettingsIcon size="small" /> {translate('misc.columns')}
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">
-          {translate('misc.columns_config')}
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">{translate('misc.columns_config')}</DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" alignItems="flex-start">
-            {newColumns.map((col) => (
-              col
-              && (
-              <FormControlLabel
-                key={col.key}
-                control={(
-                  <Checkbox
-                    checked={isChecked(col)}
-                    onChange={handleCheckboxClick(col)}
-                    name={col.key}
+            {newColumns.map(
+              (col) =>
+                col && (
+                  <FormControlLabel
+                    key={col.key}
+                    control={<Checkbox checked={isChecked(col)} onChange={handleCheckboxClick(col)} name={col.key} />}
+                    label={translate(`resources.${cleanResourceName(resource)}.fields.${col.key}`)}
                   />
-                )}
-                label={translate(`resources.${cleanResourceName(resource)}.fields.${col.key}`)}
-              />
-              )
-            ))}
+                )
+            )}
           </Box>
         </DialogContent>
         <DialogActions>

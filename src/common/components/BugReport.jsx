@@ -1,19 +1,7 @@
 import React from 'react';
-import {
-  Button,
-  Dialog,
-  Box,
-  Typography,
-  TextField,
-  IconButton,
-} from '@material-ui/core';
+import { Button, Dialog, Box, Typography, TextField, IconButton } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import {
-  useDataProvider,
-  useNotify,
-  useTranslate,
-  usePermissions,
-} from 'react-admin';
+import { useDataProvider, useNotify, useTranslate, usePermissions } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import RequestTrack from '../../request-track';
@@ -73,34 +61,29 @@ const BugReport = ({ cmsVersion, backendVersion }) => {
           </Box>
         </Box>
         <Box p={2}>
-          {
-            !ticketId && (
-              <>
-                <TextField
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  variant="outlined"
-                  multiline
-                  rows={5}
-                  fullWidth
-                  label={translate('misc.bug_report_text')}
-                />
-                <Box mt={2} textAlign="right">
-                  <Button onClick={onSubmit} disabled={!text} variant="contained" color="primary">
-                    {translate('misc.submit')}
-                  </Button>
-                </Box>
-              </>
-            )
-          }
-          {
-            !!ticketId && (
-              <Alert severity="success" elevation={3}>
-                {translate('misc.bug_report_success')} #{ticketId}
-              </Alert>
-            )
-          }
-
+          {!ticketId && (
+            <>
+              <TextField
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                variant="outlined"
+                multiline
+                rows={5}
+                fullWidth
+                label={translate('misc.bug_report_text')}
+              />
+              <Box mt={2} textAlign="right">
+                <Button onClick={onSubmit} disabled={!text} variant="contained" color="primary">
+                  {translate('misc.submit')}
+                </Button>
+              </Box>
+            </>
+          )}
+          {!!ticketId && (
+            <Alert severity="success" elevation={3}>
+              {translate('misc.bug_report_success')} #{ticketId}
+            </Alert>
+          )}
         </Box>
       </Dialog>
     </Box>

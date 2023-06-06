@@ -10,7 +10,7 @@ import {
   TableHead,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditableIntentEntityField from '../EditableIntentEntityField';
@@ -37,12 +37,12 @@ const IntentEntity = ({ record }) => {
               <TableBody>
                 <TableRow>
                   <TableCell>
-                    <EditableIntentEntityField record={record}>
+                    <EditableIntentEntityField record={record} type="intent">
                       <span>Beantragung von</span>
                     </EditableIntentEntityField>
                   </TableCell>
                   <TableCell>
-                    <EditableIntentEntityField record={record}>
+                    <EditableIntentEntityField record={record} type="entity">
                       <span>HR_Elterngeld</span>
                     </EditableIntentEntityField>
                   </TableCell>

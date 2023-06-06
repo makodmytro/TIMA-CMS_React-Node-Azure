@@ -3,27 +3,20 @@ import { Form } from 'react-final-form';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  useTranslate,
-  SelectInput,
-  required,
-} from 'react-admin';
+import { useTranslate, SelectInput, required } from 'react-admin';
 import Alert from '@material-ui/lab/Alert';
 
-const StepKB = ({
-  initialValues,
-  onSubmit,
-  onBack,
-}) => {
+const StepKB = ({ initialValues, onSubmit, onBack }) => {
   const translate = useTranslate();
   const [options, setOptions] = React.useState([]);
   const [error, setError] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
   const f = async () => {
-    let url = initialValues.qnaApiVersion === '4'
-      ? `${initialValues.qnaApiEndpoint}/qnamaker/v4.0/knowledgebases`
-      : `${initialValues.qnaApiEndpoint}/qnamaker/knowledgebases`;
+    let url =
+      initialValues.qnaApiVersion === '4'
+        ? `${initialValues.qnaApiEndpoint}/qnamaker/v4.0/knowledgebases`
+        : `${initialValues.qnaApiEndpoint}/qnamaker/knowledgebases`;
 
     fetch(url, {
       headers: {
@@ -53,9 +46,7 @@ const StepKB = ({
   if (error) {
     return (
       <Box p={2}>
-        <Alert severity="error">
-          {translate('import.error_fetching_knowledgebases')}
-        </Alert>
+        <Alert severity="error">{translate('import.error_fetching_knowledgebases')}</Alert>
       </Box>
     );
   }
@@ -72,9 +63,7 @@ const StepKB = ({
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      render={({
-        handleSubmit, valid, values, submitting,
-      }) => {
+      render={({ handleSubmit, valid, values, submitting }) => {
         return (
           <form onSubmit={handleSubmit} autoComplete="off">
             <Box>
@@ -98,13 +87,7 @@ const StepKB = ({
                 {translate('misc.back')}
               </Button>
               &nbsp;
-              <Button
-                type="submit"
-                disabled={!valid || submitting}
-                variant="contained"
-                color="secondary"
-                size="small"
-              >
+              <Button type="submit" disabled={!valid || submitting} variant="contained" color="secondary" size="small">
                 {translate('misc.next')}
               </Button>
             </Box>
