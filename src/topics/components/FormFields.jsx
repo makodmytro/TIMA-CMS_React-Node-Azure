@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
-import React, { useMemo, useState } from 'react';
-import { ReferenceInput, SelectInput, TextInput, required, useDataProvider, useTranslate } from 'react-admin';
+import React, { useMemo } from 'react';
+import { FormDataConsumer, ReferenceInput, SelectInput, TextInput, required, useDataProvider, useTranslate } from 'react-admin';
 import { useField } from 'react-final-form';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -30,14 +30,13 @@ export const Advanced = (props) => {
   );
 };
 
-export const Qna = (props) => {
+export const Qna = ({ record, disabled, fkParentTopicId, ...props }) => {
   const translate = useTranslate();
   const TOPICS_METADATA = process.env.REACT_APP_TOPICS_METADATA_REQUIRED === '1';
   const TOPICS_METADATA_KEYS = process.env.REACT_APP_TOPICS_METADATA_KEYS ? process.env.REACT_APP_TOPICS_METADATA_KEYS.split(',') : ['', '', ''];
   const existedKey = !TOPICS_METADATA_KEYS.includes(props?.record?.qnaMetadataKey);
 
   const topics = useSelector((state) => state.admin.resources.topics.data);
-  const [qnaSourceType, setQnaSourceType] = useState(props?.record?.qnaSourceType || 0);
 
   const { search } = useLocation();
 
@@ -75,7 +74,7 @@ export const Qna = (props) => {
           source="qnaMetadataKey"
           label="resources.topics.fields.qnaMetadataKey"
           validate={TOPICS_METADATA && required()}
-          choices={[...qnaMetadataKeyChoices, existedKey && { id: props?.record?.qnaMetadataKey, name: props?.record?.qnaMetadataKey }]}
+          choices={[...qnaMetadataKeyChoices, existedKey && { id: record.qnaMetadataKey, name: record.qnaMetadataKey }]}
           margin="dense"
           initialValue={qnaMetadataKeyChoices.length === 1 ? qnaMetadataKeyChoices[0].id : null}
           fullWidth
@@ -85,20 +84,20 @@ export const Qna = (props) => {
           source="qnaMetadataKey"
           label="resources.topics.fields.qnaMetadataKey"
           validate={TOPICS_METADATA && required()}
-          record={props.record}
+          record={record}
           fullWidth
-          disabled={props.disabled === true}
+          disabled={disabled === true}
         />
       )}
       <TextInput
         source="qnaMetadataValue"
         label="resources.topics.fields.qnaMetadataValue"
         validate={TOPICS_METADATA && required()}
-        record={props.record}
+        record={record}
         fullWidth
-        disabled={props.disabled === true}
+        disabled={disabled === true}
       />
-      {!props?.fkParentTopicId && (
+      {!fkParentTopicId && (
         <>
           <SelectInput
             source="qnaSourceType"
@@ -111,62 +110,69 @@ export const Qna = (props) => {
             margin="dense"
             initialValue={1}
             fullWidth
-            onChange={(e) => setQnaSourceType(e.target.value)}
           />
           <TextInput
             source="qnaApiEndpoint"
             label="resources.topics.fields.qnaApiEndpoint"
-            record={props.record}
+            record={record}
             fullWidth
-            disabled={props.disabled === true}
+            disabled={disabled === true}
           />
-          {qnaSourceType === 1 ? (
-            <TextInput
-              source="qnaLangStudioApiVersion"
-              label="resources.topics.fields.qnaLangStudioApiVersion"
-              record={props.record}
-              validate={required()}
-              fullWidth
-              initialValue="2021-10-01"
-              disabled={props.disabled === true}
-            />
-          ) : (
-            <TextInput
-              source="qnaApiVersion"
-              label="resources.topics.fields.qnaApiVersion"
-              validate={required()}
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-          )}
+          <FormDataConsumer>
+            {({ formData }) =>
+              formData.qnaSourceType && formData.qnaSourceType === 1 ? (
+                <TextInput
+                  source="qnaLangStudioApiVersion"
+                  label="resources.topics.fields.qnaLangStudioApiVersion"
+                  record={record}
+                  validate={required()}
+                  fullWidth
+                  initialValue="2021-10-01"
+                  disabled={disabled === true}
+                />
+              ) : (
+                <TextInput
+                  source="qnaApiVersion"
+                  label="resources.topics.fields.qnaApiVersion"
+                  validate={required()}
+                  record={record}
+                  fullWidth
+                  disabled={disabled === true}
+                />
+              )
+            }
+          </FormDataConsumer>
           <TextInput
             source="qnaSubscriptionKey"
             label="resources.topics.fields.qnaSubscriptionKey"
-            record={props.record}
+            record={record}
             fullWidth
-            disabled={props.disabled === true}
-            type={props.disabled ? 'password' : 'text'}
+            disabled={disabled === true}
+            type={disabled ? 'password' : 'text'}
           />
-          {qnaSourceType === 1 ? (
-            <TextInput
-              source="qnaProjectName"
-              label="resources.topics.fields.qnaProjectName"
-              record={props.record}
-              validate={required()}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-          ) : (
-            <TextInput
-              source="qnaKnowledgeBaseId"
-              label="resources.topics.fields.qnaKnowledgeBaseId"
-              validate={required()}
-              record={props.record}
-              fullWidth
-              disabled={props.disabled === true}
-            />
-          )}
+          <FormDataConsumer>
+            {({ formData }) =>
+              formData.qnaSourceType && formData.qnaSourceType === 1 ? (
+                <TextInput
+                  source="qnaProjectName"
+                  label="resources.topics.fields.qnaProjectName"
+                  record={record}
+                  validate={required()}
+                  fullWidth
+                  disabled={disabled === true}
+                />
+              ) : (
+                <TextInput
+                  source="qnaKnowledgeBaseId"
+                  label="resources.topics.fields.qnaKnowledgeBaseId"
+                  validate={required()}
+                  record={record}
+                  fullWidth
+                  disabled={disabled === true}
+                />
+              )
+            }
+          </FormDataConsumer>
         </>
       )}
     </>
@@ -338,7 +344,7 @@ const FormFields = (props) => {
       </HiddenField>
       {(!fkParentTopicId || admin) && (
         <HiddenField fieldName="qna">
-          <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />
+          {props.record && <Qna {...props} disabled={disabled && !admin} fkParentTopicId={fkParentTopicId} />}
         </HiddenField>
       )}
     </>
