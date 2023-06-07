@@ -327,7 +327,7 @@ const english = {
         text: 'Intent/Entity (admin only)',
         intent: 'Intent',
         entity: 'Entity',
-        answerId: 'Answer Id',
+        answerId: 'Answer ID',
       },
       status: {
         createdAt: 'Date',
