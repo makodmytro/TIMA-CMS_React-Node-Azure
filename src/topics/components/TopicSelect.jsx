@@ -163,7 +163,7 @@ const MultiTopicSelect = ({
       if (topic.ChildTopics?.length > 0) {
         onChange(null);
 
-        setTopicsChild(topic.ChildTopics.filter((t) => isHasChildTopics(t) && (filterFunction?.(t) || true)));
+        setTopicsChild(topic.ChildTopics.filter((t) => filterFunction?.(t) || true));
       }
 
       if (!topic.ChildTopics?.length || anyLevelSelectable) {
